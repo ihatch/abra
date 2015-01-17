@@ -14,7 +14,6 @@
 #import "ABClock.h"
 #import "ABLine.h"
 #import "ABUI.h"
-//#import "ABWordBehavior.h"
 #import <pop/POP.h>
 
 
@@ -39,9 +38,7 @@
         self.locked = YES;
         self.isSelfDestructing = NO;
         
-        CGFloat fontSize = [ABUI isIpad] ? ABRA_FONT_SIZE : ABRA_FONT_SIZE / 1.8;
-        
-        self.font = [UIFont fontWithName:ABRA_FONT size:fontSize];
+        self.font = [UIFont fontWithName:ABRA_FONT size:[ABUI abraFontSize]];
         [self resizeFrameToFitString];
 
         self.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
@@ -185,62 +182,3 @@
 @end
 
 
-
-
-
-/*
- 
- Removed old code:
- 
- 
- moveToXPosition:
- 
- //    CGFloat delay = (0.12 * self.lineNumber); //speed * ABF(0.25);
- //    [UIView animateWithDuration:duration delay:delay options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
- //        self.center = CGPointMake([self convertLeftToCenter:x], self.center.y);
- //    } completion:^(BOOL finished) {}];
-
- 
- 
- 
-  init: 
- 
- self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self];
- 
-
- 
- 
- 
- - (void) animateXWithInitialVelocity:(CGPoint)initialVelocity andTargetPoint:(CGPoint)targetPoint {
- if(!self.abWordBehavior) {
- self.abWordBehavior = [[ABWordBehavior alloc] initWithItem:self];
- }
- 
- self.abWordBehavior.targetPoint = targetPoint;
- self.abWordBehavior.velocity = initialVelocity;
- [self.animator addBehavior:self.abWordBehavior];
- }
- 
-
- 
- //        UITapGestureRecognizer *tapGesture =
- //        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTap)];
- //        [self addGestureRecognizer:tapGesture];
- 
- 
- //
- //-(void) labelTap {
- //
- ////    NSLog(@"%@", @"TAP");
- //    [self.parentLine mutateChildAtLinePosition:self.linePosition];
- //
- //    [UIView animateWithDuration:3 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
- //        self.alpha = 0.5;
- //    } completion:^(BOOL finished) {}];
- //
- //}
- //
- //
-
- 
- */

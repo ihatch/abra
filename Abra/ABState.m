@@ -208,16 +208,14 @@ static ABState *ABStateInstance = NULL;
     NSArray *stanza = [ABScript linesAtStanzaNumber:currentStanza];
     prevStanzaLines = stanza;
     
-    int lineHeight = [ABUI isIpad] ? ABRA_LINE_HEIGHT : [ABUI screenHeight] / 14;
-
-    
+    int lineHeight = [ABUI abraLineHeight];
     CGFloat heightOffset = ([ABUI screenHeight] - (lineHeight * ABRA_NUMBER_OF_LINES)) / 2;
     if(![ABUI isIpad]) heightOffset = heightOffset / 2;
     
     ABLines = [[NSMutableArray alloc] init];
     
     int p = 0;
-    for(int s=ABRA_START_LINE; s<ABRA_START_LINE + ABRA_NUMBER_OF_LINES; s++) {
+    for(int s = ABRA_START_LINE; s < ABRA_START_LINE + ABRA_NUMBER_OF_LINES; s ++) {
         NSArray *words = (s < [stanza count]) ? stanza[s] : [ABScript emptyLine];
         CGFloat y = heightOffset + (p++ * lineHeight);
         [ABLines addObject:[[ABLine alloc] initWithWords:words andYPosition:y andHeight:lineHeight andLineNumber:s]];

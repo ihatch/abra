@@ -23,40 +23,25 @@
     
     CGRect frame;
     NSString *text;
+    fontSize = [ABUI abraFlowersFontSize];
 
     if([type isEqualToString:@"forward"]) {
         frame = CGRectMake(950, 300, 50, 50);
         colorOffset = 0.1;
         text = @"1";
-        fontSize = ABRA_FLOWERS_FONT_SIZE;
     }
 
     else if([type isEqualToString:@"backward"]) {
         frame = CGRectMake(24, 300, 50, 50);
         colorOffset = 0.9;
         text = @"2";
-        fontSize = ABRA_FLOWERS_FONT_SIZE;
-    }
-
-    else if([type isEqualToString:@"accelerate"]) {
-        frame = CGRectMake(490, 40, 50, 50);
-        colorOffset = 0;
-        text = @"X";
-        fontSize = ABRA_FLOWERS_FONT_SIZE;
-    }
-
-    else if([type isEqualToString:@"decelerate"]) {
-        frame = CGRectMake(490, 620, 50, 50);
-        colorOffset = 0;
-        text = @"x";
-        fontSize = ABRA_FLOWERS_FONT_SIZE;
     }
 
     else if([type isEqualToString:@"reset"]) {
         frame = CGRectMake(80, 48, 50, 50);
         colorOffset = 0;
         text = @"v";
-        fontSize = ABRA_FLOWERS_FONT_SIZE * 1.2;
+        fontSize = fontSize * 1.2;
         offsetIsStanzaSpecific = YES;
     }
 

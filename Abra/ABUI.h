@@ -28,6 +28,14 @@
 + (UIView *) createCenteredModalWithWidth:(CGFloat)w andHeight:(CGFloat)h;
 + (UIView *) createModalWithFrame:(CGRect)frame;
 
+
++ (CGFloat) abraFontSize;
++ (CGFloat) abraFontMargin;
++ (CGFloat) abraLineHeight;
++ (CGFloat) abraFlowersFontSize;
+
+
+
 + (BOOL) isIpadAir;
 + (BOOL) isIpad;
 + (CGFloat) screenWidth;

@@ -10,7 +10,6 @@
 
 @class POPBasicAnimation;
 @class ABScriptWord;
-//@class ABWordBehavior;
 @class ABLine;
 
 @interface ABWord : UILabel
@@ -28,8 +27,6 @@
 @property (nonatomic) NSString *abWordID;
 
 @property (nonatomic) UIDynamicAnimator *animator;
-//@property (nonatomic, strong) ABWordBehavior *abWordBehavior;
-
 @property (nonatomic) POPBasicAnimation *animationX;
 @property (nonatomic) POPBasicAnimation *animationAlpha;
 @property (nonatomic) POPBasicAnimation *animationSize;

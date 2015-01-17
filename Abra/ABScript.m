@@ -93,7 +93,7 @@ static ABScript *ABScriptInstance = NULL;
 
 // Dice coefficient lookiup table
 - (void) parseDiceCoefficientDictionary {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"dice2" ofType:@"txt"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"dice" ofType:@"txt"];
     NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     NSArray *entries = [rawText componentsSeparatedByString:@"\n"];
     diceDictionary = [NSMutableDictionary dictionary];

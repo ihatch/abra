@@ -116,7 +116,7 @@
     
     for(int i=0, l=(int)[map count]; i<l; i++) {
 
-        ABWord *word = [[ABWord alloc] init];
+        ABWord *word;
 
         // Create new word object
         if([[map objectAtIndex:i] isEqual: @(-1)]) {
@@ -194,13 +194,13 @@
         ABWord *w = [lineWords objectAtIndex:i];
         CGFloat wordWidth = [w width];
         if(!w.marginLeft && prevMarginRight) {
-            if(prevMarginRight) total -= ABRA_FONT_MARGIN;
+            if(prevMarginRight) total -= [ABUI abraFontMargin];
         }
         
         [xPositions addObject:[NSNumber numberWithFloat:total]];
 
         if(w.marginRight) {
-            total += ABRA_FONT_MARGIN;
+            total += [ABUI abraFontMargin];
             prevMarginRight = YES;
         } else {
             prevMarginRight = NO;

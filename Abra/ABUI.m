@@ -11,9 +11,9 @@
 #import "ABScript.h"
 #import "ABConstants.h"
 
+
 @implementation ABUI
 
-CGSize screenSize;
 UIColor *normalColor;
 UIColor *selectedColor;
 
@@ -26,10 +26,35 @@ static ABUI *ABUIInstance = NULL;
     @synchronized(self) {
         if (ABUIInstance == NULL) ABUIInstance = [[ABUI alloc] init];
     }
+    
     normalColor = [ABUI goldColor];
     selectedColor = [ABUI goldColor];
 
 }
+
+
+
+
+
+
+
++ (CGFloat) abraFontSize {
+    return 21.0;
+}
+
++ (CGFloat) abraFontMargin {
+    return 8.0;
+}
+
++ (CGFloat) abraLineHeight {
+    return 44.0;
+}
+
++ (CGFloat) abraFlowersFontSize {
+    return 30.0;
+}
+
+
 
 
 
@@ -178,7 +203,7 @@ static ABUI *ABUIInstance = NULL;
     textField.backgroundColor = [UIColor blackColor];
     textField.font = [UIFont fontWithName:ABRA_FONT size:18];
     textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    textField.TextAlignment = NSTextAlignmentCenter;
+    textField.textAlignment = NSTextAlignmentCenter;
 
     textField.keyboardAppearance = UIKeyboardAppearanceDark;
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -257,32 +282,15 @@ static ABUI *ABUIInstance = NULL;
 
 
 + (CGFloat) screenWidth {
-    if(!screenSize.width) {
-        CGRect rect = [self currentScreenBoundsForOrientation];
-        screenSize = rect.size;
-    }
-    return screenSize.width;
+    return [self currentScreenBoundsForOrientation].size.width;
 }
 
 + (CGFloat) screenHeight {
-    if(!screenSize.height) {
-        CGRect rect = [self currentScreenBoundsForOrientation];
-        screenSize = rect.size;
-    }
-    return screenSize.height;
+    return [self currentScreenBoundsForOrientation].size.height;
 }
 
 + (CGRect) currentScreenBoundsForOrientation {
-    
     CGRect screenBounds = [UIScreen mainScreen].bounds;
-    CGFloat width = CGRectGetWidth(screenBounds);
-    CGFloat height = CGRectGetHeight(screenBounds);
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    if(UIInterfaceOrientationIsPortrait(interfaceOrientation)){
-        screenBounds.size = CGSizeMake(width, height);
-    } else if(UIInterfaceOrientationIsLandscape(interfaceOrientation)){
-        screenBounds.size = CGSizeMake(height, width);
-    }
     return screenBounds;
 }
 

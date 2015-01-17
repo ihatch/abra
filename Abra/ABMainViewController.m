@@ -30,7 +30,7 @@
 
 @implementation ABMainViewController
 
-ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackAccelerate, *feedbackDecelerate, *feedbackReset;
+ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
 UIView *infoView;
 ABBlackCurtain *curtain;
 ABBlackCurtain *infoCurtain;
@@ -63,6 +63,8 @@ BOOL carouselIsAnimating;
 
     screenHeight = [ABUI screenHeight];
     screenWidth = [ABUI screenWidth];
+    NSLog(@"%f screenWidth", screenWidth);
+    NSLog(@"%f screenHeight", screenHeight);
     
     isIpad = [ABUI isIpad];
     isIpadAir = [ABUI isIpadAir];
@@ -86,13 +88,10 @@ BOOL carouselIsAnimating;
 ///////////
 
 - (void) initLines {
-
     NSMutableArray *lines = [ABState initLines];
-    
     for(int i=0; i < [lines count]; i ++) {
         [self.view addSubview:[lines objectAtIndex:i]];
     }
-
     ABLines = [NSArray arrayWithArray:lines];
 }
 
@@ -117,8 +116,7 @@ BOOL carouselIsAnimating;
 	self.carousel.dataSource = nil;
 }
 
-- (void) viewDidUnload
-{
+- (void) viewDidUnload {
     [super viewDidUnload];
     self.carousel = nil;
     self.navItem = nil;
@@ -228,7 +226,7 @@ BOOL carouselIsAnimating;
     [ABClock updateLastInteractionTime];
 }
 
-- (void) carouselFlash {
+- (void)carouselFlash {
     carouselIsAnimating = YES;
     [UIView animateWithDuration:0.4 animations:^() {
         _carousel.alpha = 1.0;
@@ -288,14 +286,10 @@ BOOL carouselIsAnimating;
     
     feedbackForward = [[ABGestureArrow alloc] initWithType:@"forward"];
     feedbackBackward = [[ABGestureArrow alloc] initWithType:@"backward"];
-//    feedbackAccelerate = [[ABGestureArrow alloc] initWithType:@"accelerate"];
-//    feedbackDecelerate = [[ABGestureArrow alloc] initWithType:@"decelerate"];
     feedbackReset = [[ABGestureArrow alloc] initWithType:@"reset"];
     
     [self.view addSubview:feedbackForward];
     [self.view addSubview:feedbackBackward];
-//    [self.view addSubview:feedbackAccelerate];
-//    [self.view addSubview:feedbackDecelerate];
     [self.view addSubview:feedbackReset];
 }
 
@@ -325,17 +319,6 @@ BOOL carouselIsAnimating;
     rightEdge.delegate = self;
     [self.view addGestureRecognizer:rightEdge];
 
-    
-    // Swipes
-//    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
-//    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
-//    [self.view addGestureRecognizer:swipeLeft];
-//    
-//    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
-//    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
-//    [self.view addGestureRecognizer:swipeRight];
-
-    
     // Long press
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
     [self.view addGestureRecognizer:longPress];
@@ -348,8 +331,6 @@ BOOL carouselIsAnimating;
     
     // Pan
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
-//    [pan requireGestureRecognizerToFail:swipeLeft];
-//    [pan requireGestureRecognizerToFail:swipeRight];
     [self.view addGestureRecognizer:pan];
 
 }
@@ -380,10 +361,6 @@ BOOL carouselIsAnimating;
 
 - (IBAction) tap:(UITapGestureRecognizer *)gesture {
 
-//    [ABClock updateLastInteractionTime];
-//    if([ABState attemptGesture] == NO) return;
-//    [ABState increaseMutation];
-    
     CGPoint point = [gesture locationInView:self.view];
     ABLine *line = [self checkLinesForPoint:point];
     if(line == nil) return;
@@ -441,15 +418,6 @@ BOOL carouselIsAnimating;
             if(line == nil) return;
             [line longPress:[self.view convertPoint:point toView:line]];
 
-            //
-//            CGPoint point = [gesture locationInView:self.view];
-//            ABLine *line = [self checkLinesForPoint:point];
-//            if(line == nil) return;
-//            int target = [line checkPoint:point];
-//            if(target == -1) return;
-//            [self carouselFlash];
-            
-//        } else if(gesture.state == UIGestureRecognizerStateEnded) {
         }
     }
 }
@@ -503,69 +471,12 @@ BOOL carouselIsAnimating;
 
 
 
-- (IBAction) swipe:(UISwipeGestureRecognizer *)gesture {
-    
-    if([ABState attemptGesture] == NO) return;
-
-    if (gesture.direction == UISwipeGestureRecognizerDirectionLeft) {
-        [ABClock updateLastInteractionTime];
-        [self moveForward];
-    }
-    
-    if (gesture.direction == UISwipeGestureRecognizerDirectionRight) {
-        [ABClock updateLastInteractionTime];
-        [self moveBackward];
-    }
-
-    if (gesture.direction == UISwipeGestureRecognizerDirectionUp ||
-        gesture.direction == UISwipeGestureRecognizerDirectionDown) {
-        [self speedModal];
-    }
-
-}
-
-
-
-
-
-
 
 
 
 ////////////////////////
 // MODALS / INFO VIEW //
 ////////////////////////
-
-
-//
-//- (void) initButtons {
-//    graftButton = [[UILabel alloc] initWithFrame:CGRectMake(905, 655, 50, 50)];
-//    graftButton.font = [UIFont fontWithName:ABRA_FLOWERS_FONT size:26];
-//    graftButton.text = @"k";
-//    graftButton.textAlignment = NSTextAlignmentCenter;
-//    graftButton.textColor = [ABUI goldColor];
-//    graftButton.alpha = 0.5;
-//    [self.view addSubview:graftButton];
-//    
-//    playButton = [[UILabel alloc] initWithFrame:CGRectMake(940, 690, 50, 50)];
-//    playButton.font = [UIFont fontWithName:ABRA_FLOWERS_FONT size:15];
-//    playButton.text = @"a";
-//    playButton.textAlignment = NSTextAlignmentCenter;
-//    playButton.textColor = [ABUI goldColor];
-//    playButton.alpha = 0.5;
-//    [self.view addSubview:playButton];
-//
-//    shareButton = [[UILabel alloc] initWithFrame:CGRectMake(955, 640, 50, 50)];
-//    shareButton.font = [UIFont fontWithName:ABRA_FLOWERS_FONT size:32];
-//    shareButton.text = @"o";
-//    shareButton.textAlignment = NSTextAlignmentCenter;
-//    shareButton.textColor = [ABUI goldColor];
-//    shareButton.alpha = 0.5;
-//    [self.view addSubview:shareButton];
-//
-//}
-//
-//
 
 
 - (void) speedModal {
@@ -617,8 +528,6 @@ BOOL carouselIsAnimating;
     
     [ABClock setSpeedTo:speedSliderNumber];
     [curtain hide];
-    [feedbackDecelerate flash];
-    [feedbackAccelerate flash];
 }
 
 
@@ -663,8 +572,6 @@ BOOL carouselIsAnimating;
 - (void) initInfoView {
     
     UIButton *infoButton = [ABUI createInfoButtonWithFrame:CGRectMake(970, 35, 28, 28)];
-//    UIButton *infoButton = [ABUI createInfoButtonWithFrame:CGRectMake(965, 674, 36, 36)];
-//    UIButton *infoButton = [ABUI createInfoButtonWithFrame:CGRectMake(975, 54, 36, 36)];
     [infoButton addTarget:self action:@selector(triggerInfoViewButton) forControlEvents:(UIControlEvents)UIControlEventTouchUpInside];
     [self.view addSubview:infoButton];
     
@@ -672,13 +579,6 @@ BOOL carouselIsAnimating;
     infoCurtain.destroyOnFadeOut = NO;
     infoView = [ABUI createInfoViewWithFrame:CGRectMake(80, 0, 864, 768)];
 
-//    UILabel *modeLabel = [ABUI createAppModeSelectorLabel];
-//    [infoView addSubview:modeLabel];
-    
-//    UISegmentedControl *segmentedControl = [ABUI createAppModeSelector];
-//    [segmentedControl addTarget:self action:@selector(modeValueChanged:) forControlEvents: UIControlEventValueChanged];
-    
-//    [infoView addSubview:segmentedControl];
     [infoCurtain addSubview:infoView];
     [self.view addSubview:infoCurtain];
 }
@@ -706,35 +606,10 @@ BOOL carouselIsAnimating;
 
 
 
-
-
-
-
-
-
-
-
-
-
 - (void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
 @end
 
-
-/*
- 
- 
- 
- //    UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(respondToSwipeGesture:)];
- //    swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
- ////    [self.view addGestureRecognizer:swipeUp];
- //
- //    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(respondToSwipeGesture:)];
- //    swipeDown.direction = UISwipeGestureRecognizerDirectionDown;
- ////    [self.view addGestureRecognizer:swipeDown];
- 
-
- */
 
