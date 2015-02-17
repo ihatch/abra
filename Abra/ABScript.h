@@ -29,6 +29,8 @@
 
 + (NSArray *) mutateRandomWordInLine:(NSArray *)line;
 + (NSArray *) mutateOneWordInLine:(NSArray *)line atWordIndex:(int)index;
++ (NSArray *) pruneOneWordInLine:(NSArray *)line atWordIndex:(int)index;
++ (NSArray *) multiplyOneWordInLine:(NSArray *)line atWordIndex:(int)index;
 + (NSArray *) explodeOneWordInLine:(NSArray *)line atWordIndex:(int)index;
 
 

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		075B2AC71A917D7F00763915 /* ABData.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AC51A917D7F00763915 /* ABData.m */; };
+		075B2AC81A917D7F00763915 /* ABDice.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AC61A917D7F00763915 /* ABDice.m */; };
+		075B2ACB1A917FF900763915 /* ABControlPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2ACA1A917FF900763915 /* ABControlPanel.m */; };
+		075B2ACE1A91938100763915 /* ui_down_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 075B2ACD1A91938100763915 /* ui_down_arrow.png */; };
 		07A8000C1A69DD8B00BE71C9 /* a_76.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8000A1A69DD8B00BE71C9 /* a_76.png */; };
 		07A8000D1A69DD8B00BE71C9 /* a_152.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8000B1A69DD8B00BE71C9 /* a_152.png */; };
 		07A8000F1A69DD9600BE71C9 /* a_60.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8000E1A69DD9600BE71C9 /* a_60.png */; };
@@ -62,6 +66,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		075B2AC41A917D7F00763915 /* ABData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABData.h; sourceTree = "<group>"; };
+		075B2AC51A917D7F00763915 /* ABData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABData.m; sourceTree = "<group>"; };
+		075B2AC61A917D7F00763915 /* ABDice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABDice.m; sourceTree = "<group>"; };
+		075B2AC91A917FF900763915 /* ABControlPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABControlPanel.h; sourceTree = "<group>"; };
+		075B2ACA1A917FF900763915 /* ABControlPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABControlPanel.m; sourceTree = "<group>"; };
+		075B2ACC1A91821A00763915 /* ABDice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ABDice.h; path = ../ABDice.h; sourceTree = "<group>"; };
+		075B2ACD1A91938100763915 /* ui_down_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ui_down_arrow.png; sourceTree = "<group>"; };
 		07A8000A1A69DD8B00BE71C9 /* a_76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a_76.png; sourceTree = "<group>"; };
 		07A8000B1A69DD8B00BE71C9 /* a_152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a_152.png; sourceTree = "<group>"; };
 		07A8000E1A69DD9600BE71C9 /* a_60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a_60.png; sourceTree = "<group>"; };
@@ -186,6 +197,10 @@
 		C604FA041850F7550076CC96 /* Script */ = {
 			isa = PBXGroup;
 			children = (
+				075B2AC41A917D7F00763915 /* ABData.h */,
+				075B2AC51A917D7F00763915 /* ABData.m */,
+				075B2ACC1A91821A00763915 /* ABDice.h */,
+				075B2AC61A917D7F00763915 /* ABDice.m */,
 				C604FA051850F7790076CC96 /* ABScript.h */,
 				C604FA061850F7790076CC96 /* ABScript.m */,
 				C60EB08818A5E9340090BBEB /* ABScriptWord.h */,
@@ -212,6 +227,7 @@
 		C66636CC187DA6C70046E8DE /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				075B2ACD1A91938100763915 /* ui_down_arrow.png */,
 				C6DE547A18BD6B95000A3DAB /* abra_logos_horiz.png */,
 				C6DE548018BD89EB000A3DAB /* abra_logos_horiz2.png */,
 				C6A8B01918B8105B001D3C01 /* a_29.png */,
@@ -322,6 +338,8 @@
 				C63DF2E918A31861002D1EC4 /* ABGestureArrow.m */,
 				C6A8B02918B9A628001D3C01 /* ABBlackCurtain.h */,
 				C6A8B02A18B9A628001D3C01 /* ABBlackCurtain.m */,
+				075B2AC91A917FF900763915 /* ABControlPanel.h */,
+				075B2ACA1A917FF900763915 /* ABControlPanel.m */,
 			);
 			name = "UI UIViews";
 			sourceTree = "<group>";
@@ -463,6 +481,7 @@
 				C68B9ECD185FAF0D007D2BDB /* release_notes.md in Resources */,
 				C6E73A01184BED4600A2A5C3 /* InfoPlist.strings in Resources */,
 				C6E73A09184BED4600A2A5C3 /* Default.png in Resources */,
+				075B2ACE1A91938100763915 /* ui_down_arrow.png in Resources */,
 				C605E2021888C99A007770E2 /* IMFeFlow2.otf in Resources */,
 				C6CF48F818A7057D00C43C14 /* gold1.jpg in Resources */,
 				C6E73A0B184BED4600A2A5C3 /* Default@2x.png in Resources */,
@@ -528,12 +547,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				075B2AC71A917D7F00763915 /* ABData.m in Sources */,
 				C63DF2EA18A31861002D1EC4 /* ABGestureArrow.m in Sources */,
 				C6A8B02B18B9A628001D3C01 /* ABBlackCurtain.m in Sources */,
 				C6591B2D185D258F001144FC /* ABConstants.m in Sources */,
 				C604FA071850F7790076CC96 /* ABScript.m in Sources */,
 				C6E73A03184BED4600A2A5C3 /* main.m in Sources */,
 				C6E73A07184BED4600A2A5C3 /* ABAppDelegate.m in Sources */,
+				075B2ACB1A917FF900763915 /* ABControlPanel.m in Sources */,
 				C619F5F8185A55690073DD32 /* ABMatch.m in Sources */,
 				C6F76F8B1851220A00BCFAF3 /* ABLine.m in Sources */,
 				C6E73A13184BED4600A2A5C3 /* ABMainViewController.m in Sources */,
@@ -542,6 +563,7 @@
 				C6E73A1E184BFA7400A2A5C3 /* ABWord.m in Sources */,
 				C60EB08A18A5E9340090BBEB /* ABScriptWord.m in Sources */,
 				C6A9D9DF187C5FBD0087F956 /* ABClock.m in Sources */,
+				075B2AC81A917D7F00763915 /* ABDice.m in Sources */,
 				C6A8B02F18BAB0EC001D3C01 /* ABUI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

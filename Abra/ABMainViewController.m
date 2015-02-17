@@ -15,6 +15,7 @@
 #import "ABUI.h"
 #import "ABGestureArrow.h"
 #import "ABBlackCurtain.h"
+#import "ABControlPanel.h"
 #import "iCarousel.h"
 #import "TestFlight.h"
 
@@ -32,13 +33,12 @@
 
 ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
 UIView *infoView;
-ABBlackCurtain *curtain;
+ABBlackCurtain *graftCurtain;
+UIButton *infoButton;
 ABBlackCurtain *infoCurtain;
 CGPoint touchStart;
 
 UILabel *graftButton, *playButton, *shareButton;
-
-
 NSArray *ABLines;
 
 UILabel *speedDisplay;
@@ -50,6 +50,9 @@ BOOL isIpad;
 BOOL isIpadAir;
 
 
+ABControlPanel *controlPanel;
+
+
 
 BOOL carouselIsAnimating;
 
@@ -58,6 +61,8 @@ BOOL carouselIsAnimating;
    
     self.view.backgroundColor = [UIColor blackColor];
     self.view.userInteractionEnabled = YES;
+    
+    [ABUI setMainViewReference:self.view];
     
     speedSliderNumber = 1.0;
 
@@ -76,6 +81,9 @@ BOOL carouselIsAnimating;
     [self initInfoView];
     
     
+    // Top control panel
+    controlPanel = [[ABControlPanel alloc] initWithMainView:self.view];
+    [self.view addSubview:controlPanel];
     
 }
 
@@ -505,10 +513,10 @@ BOOL carouselIsAnimating;
     [b addTarget:self action:@selector(setSpeed:) forControlEvents:UIControlEventTouchUpInside];
     [modal addSubview:b];
     
-    curtain = [[ABBlackCurtain alloc] init];
-    [self.view addSubview:curtain];
-    [curtain addSubview:modal];
-    [curtain show];
+//    curtain = [[ABBlackCurtain alloc] init];
+//    [self.view addSubview:curtain];
+//    [curtain addSubview:modal];
+//    [curtain show];
 }
 
 
@@ -527,7 +535,7 @@ BOOL carouselIsAnimating;
 - (void) setSpeed:(UIButton *)button {
     
     [ABClock setSpeedTo:speedSliderNumber];
-    [curtain hide];
+//    [curtain hide];
 }
 
 
@@ -550,10 +558,10 @@ BOOL carouselIsAnimating;
     textField.delegate = self;
     [modal addSubview:textField];
 
-    curtain = [[ABBlackCurtain alloc] init];
-    [self.view addSubview:curtain];
-    [curtain addSubview:modal];
-    [curtain show];
+    graftCurtain = [[ABBlackCurtain alloc] init];
+    [self.view addSubview:graftCurtain];
+    [graftCurtain addSubview:modal];
+    [graftCurtain show];
     
     [textField becomeFirstResponder];
 }
@@ -563,7 +571,7 @@ BOOL carouselIsAnimating;
     
     [textField resignFirstResponder];
     [ABState graftText:textField.text];
-    [curtain hide];
+    [graftCurtain hide];
 
     return YES;
 }
@@ -571,8 +579,9 @@ BOOL carouselIsAnimating;
 
 - (void) initInfoView {
     
-    UIButton *infoButton = [ABUI createInfoButtonWithFrame:CGRectMake(970, 35, 28, 28)];
-    [infoButton addTarget:self action:@selector(triggerInfoViewButton) forControlEvents:(UIControlEvents)UIControlEventTouchUpInside];
+    infoButton = [ABUI createInfoButtonWithFrame:CGRectMake(970, 20, 28, 28)];
+    
+    [infoButton addTarget:self action:@selector(triggerInfoViewButton) forControlEvents:(UIControlEvents)UIControlEventTouchDown];
     [self.view addSubview:infoButton];
     
     infoCurtain = [[ABBlackCurtain alloc] init];
@@ -594,7 +603,11 @@ BOOL carouselIsAnimating;
 
 
 - (void) triggerInfoViewButton {
-    [infoCurtain show];
+    
+    
+    [controlPanel triggerWithInfoButton:infoButton];
+    
+//    [infoCurtain show];
 }
 
 

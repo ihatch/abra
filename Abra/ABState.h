@@ -8,7 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum { MUTATE, GRAFT, MULTIPLY, PRUNE, ERASE } InteractivityMode;
+
+
 @interface ABState : NSObject
+
 
 + (NSMutableArray *) initLines;
 
@@ -46,6 +50,10 @@
 + (void) absentlyMutate;
 
 + (void) updatePrevStanzaLinesWithLine:(NSArray *)newLine atIndex:(int)lineNumber;
+
++ (void) setInteractivityModeTo:(InteractivityMode)mode;
+
++ (InteractivityMode) getCurrentInteractivityMode;
 
 
 @end

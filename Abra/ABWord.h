@@ -22,6 +22,7 @@
 @property (nonatomic) BOOL marginRight;
 @property (nonatomic) int sourceStanza;
 @property (nonatomic) BOOL isGrafted;
+@property (nonatomic) BOOL isErased;
 @property (nonatomic) int lineNumber;
 @property (nonatomic) int linePosition;
 @property (nonatomic) NSString *abWordID;
@@ -42,6 +43,7 @@
 - (void) moveToXPosition:(CGFloat)x;
 - (void) setXPosition:(CGFloat)x;
 - (void) dim;
+- (void) erase;
 - (void) selfDestruct;
 - (void) selfDestructMorph;
 

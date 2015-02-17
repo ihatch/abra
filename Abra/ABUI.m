@@ -11,13 +11,19 @@
 #import "ABScript.h"
 #import "ABConstants.h"
 
+#define kScreenWidth [UIScreen mainScreen].bounds.size.width
+#define kScreenHeight [UIScreen mainScreen].bounds.size.height
+
 
 @implementation ABUI
 
 UIColor *normalColor;
 UIColor *selectedColor;
 
+UIView *mainView;
 
+UIButton *infoButton;
+UIView *infoView;
 
 
 static ABUI *ABUIInstance = NULL;
@@ -29,18 +35,27 @@ static ABUI *ABUIInstance = NULL;
     
     normalColor = [ABUI goldColor];
     selectedColor = [ABUI goldColor];
-
 }
 
 
++ (void) setMainViewReference:(UIView *)view {
+    mainView = view;
+}
 
-
++ (UIView *) getMainViewReference {
+    return mainView;
+}
 
 
 
 + (CGFloat) abraFontSize {
     return 21.0;
 }
+
++ (CGFloat) abraOptionsFontSize {
+    return 21.0;
+}
+
 
 + (CGFloat) abraFontMargin {
     return 8.0;
@@ -112,39 +127,17 @@ static ABUI *ABUIInstance = NULL;
 }
 
 + (UIColor *) darkGoldColor {
-    return [UIColor colorWithHue:0.07 saturation:0.2 brightness:0.25 alpha:1];
+    return [UIColor colorWithHue:0.07 saturation:0.4 brightness:0.4 alpha:1];
+}
+
++ (UIColor *) darkGoldBackgroundColor {
+    return [UIColor colorWithHue:0.07 saturation:0.4 brightness:0.2 alpha:1];
 }
 
 
 
 
 
-
-///////////////////////
-// APP MODE SELECTOR //
-///////////////////////
-
-
-+ (UILabel *) createAppModeSelectorLabel {
-    UILabel *modeLabel = [[UILabel alloc] initWithFrame:CGRectMake(587, 655, 200, 20)];
-    modeLabel.textColor = [ABUI darkGoldColor];
-    modeLabel.text = @"App mode:";
-    modeLabel.font = [UIFont systemFontOfSize:12.0f];
-    return modeLabel;
-}
-
-+ (UISegmentedControl *) createAppModeSelector {
-    UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"standalone", @"in book"]];
-    
-    UIFont *font = [UIFont boldSystemFontOfSize:12.0f];
-    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
-    [segmentedControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    
-    segmentedControl.frame = CGRectMake(587, 680, 160, 30);
-    segmentedControl.selectedSegmentIndex = 0;
-    segmentedControl.tintColor = [ABUI darkGoldColor];
-    return segmentedControl;
-}
 
 
 /////////////////
@@ -153,15 +146,39 @@ static ABUI *ABUIInstance = NULL;
 
 
 + (UIButton *) createInfoButtonWithFrame:(CGRect)frame {
-    UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+    infoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     infoButton.frame = frame;
     infoButton.tintColor = [ABUI goldColor];
     infoButton.alpha = 0.5;
+    [infoButton setImage:[UIImage imageNamed:@"ui_down_arrow.png"] forState:UIControlStateNormal];
     return infoButton;
 }
 
++ (void) moveInfoButtonDown {
+    
+    CGRect frame = infoButton.frame;
+    [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+        infoButton.frame = CGRectMake(frame.origin.x, frame.origin.y + 65, frame.size.width, frame.size.height);
+    } completion:^(BOOL finished) {
+
+    }];
+}
+
++ (void) moveInfoButtonUp {
+
+    CGRect frame = infoButton.frame;
+    [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+        infoButton.frame = CGRectMake(frame.origin.x, frame.origin.y - 65, frame.size.width, frame.size.height);
+    } completion:^(BOOL finished) {
+        
+    }];
+
+}
+
+
+
 + (UIView *) createInfoViewWithFrame:(CGRect)frame {
-    UIView *infoView = [[UIView alloc] initWithFrame:CGRectMake(80, 0, 864, 768)];
+    infoView = [[UIView alloc] initWithFrame:CGRectMake(80, 0, 864, 768)];
     infoView.backgroundColor = [UIColor blackColor];
     UIWebView *infoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 864, 768)]; //  self.view.bounds
     infoWebView.backgroundColor = [UIColor blackColor];
@@ -267,6 +284,25 @@ static ABUI *ABUIInstance = NULL;
 }
 
 
+
+///////////////////
+// CONTROL PANEL //
+///////////////////
+
+
++ (UIView *) createControlPanel:(CGRect)frame {
+    
+    UIView *modal = [[UIView alloc] initWithFrame:frame];
+    [modal.layer setBorderWidth:1.0f];
+    [modal.layer setBorderColor:[ABUI progressHueColor].CGColor];
+    modal.userInteractionEnabled = YES;
+    modal.backgroundColor = [UIColor blackColor];
+    return modal;
+}
+
+
+
+
 ///////////////////////
 // SCREEN DIMENSIONS //
 ///////////////////////
@@ -282,16 +318,15 @@ static ABUI *ABUIInstance = NULL;
 
 
 + (CGFloat) screenWidth {
-    return [self currentScreenBoundsForOrientation].size.width;
+    return kScreenWidth;
 }
 
 + (CGFloat) screenHeight {
-    return [self currentScreenBoundsForOrientation].size.height;
+    return kScreenHeight;
 }
 
 + (CGRect) currentScreenBoundsForOrientation {
-    CGRect screenBounds = [UIScreen mainScreen].bounds;
-    return screenBounds;
+    return [UIScreen mainScreen].bounds;
 }
 
 

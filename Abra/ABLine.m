@@ -278,32 +278,64 @@
 
 
 - (void) touch:(CGPoint)point {
-    
-    int target = [self checkPoint:point];
-    if(target == -1) return;
-    NSArray *newLine = [ABScript mutateOneWordInLine:lineScriptWords atWordIndex:target];
-    isMorphing = YES;
-    [self changeWordsToWords:newLine];
-    isMorphing = NO;
-    [ABState updatePrevStanzaLinesWithLine:newLine atIndex:self.lineNumber];
+    [self touchOrTap:point];
 
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@: line %i", @"touch", self.lineNumber]];
 }
 
 
 
 - (void) tap:(CGPoint)point {
+    [self touchOrTap:point];
+}
+
+
+
+
+- (void) touchOrTap:(CGPoint)point {
     
     int target = [self checkPoint:point];
     if(target == -1) return;
-    NSArray *newLine = [ABScript mutateOneWordInLine:lineScriptWords atWordIndex:target];
-    isMorphing = YES;
-    [self changeWordsToWords:newLine];
-    isMorphing = NO;
-    [ABState updatePrevStanzaLinesWithLine:newLine atIndex:self.lineNumber];
+    
+    InteractivityMode mode = [ABState getCurrentInteractivityMode];
+    ABWord *w = lineWords[target];
+    
+    if(mode == MUTATE) {
+        if(w.isErased) return;
+        NSArray *newLine = [ABScript mutateOneWordInLine:lineScriptWords atWordIndex:target];
+        isMorphing = YES;
+        [self changeWordsToWords:newLine];
+        isMorphing = NO;
+        [ABState updatePrevStanzaLinesWithLine:newLine atIndex:self.lineNumber];
+    }
+    
+    if(mode == PRUNE) {
+        NSArray *newLine = [ABScript pruneOneWordInLine:lineScriptWords atWordIndex:target];
+        isMorphing = YES;
+        [self changeWordsToWords:newLine];
+        isMorphing = NO;
+        [ABState updatePrevStanzaLinesWithLine:newLine atIndex:self.lineNumber];
+    }
 
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@: line %i", @"tap", self.lineNumber]];
+    if(mode == MULTIPLY) {
+        if(w.isErased) return;
+        NSArray *newLine = [ABScript multiplyOneWordInLine:lineScriptWords atWordIndex:target];
+        isMorphing = YES;
+        [self changeWordsToWords:newLine];
+        isMorphing = NO;
+        [ABState updatePrevStanzaLinesWithLine:newLine atIndex:self.lineNumber];
+    }
+ 
+    if(mode == ERASE) {
+        if(w.isErased) return;
+        [lineWords[target] erase];
+    }
+    
+
+    
+    [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@: line %i", @"touch", self.lineNumber]];
 }
+
+
 
 
 

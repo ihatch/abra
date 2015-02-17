@@ -11,7 +11,7 @@
 #import "ABConstants.h"
 #import "ABScriptWord.h"
 
-typedef enum { DICE, RANDOM, EXPLODE } mutationType;
+typedef enum { DICE, RANDOM, EXPLODE, CUT, CLONE } mutationType;
 
 @implementation ABScript
 
@@ -458,6 +458,14 @@ static ABScript *ABScriptInstance = NULL;
     }
 }
 
++ (NSArray *) pruneOneWordInLine:(NSArray *)line atWordIndex:(int)index {
+    return [ABScript mutateOneWordInLine:line atIndex:index withMutationType:CUT];
+}
+
++ (NSArray *) multiplyOneWordInLine:(NSArray *)line atWordIndex:(int)index {
+    return [ABScript mutateOneWordInLine:line atIndex:index withMutationType:CLONE];
+}
+
 
 
 + (NSArray *) mutateOneWordInLine:(NSArray *)line atIndex:(int)index withMutationType:(mutationType)type {
@@ -472,6 +480,10 @@ static ABScript *ABScriptInstance = NULL;
         newWords = [ABScript mutate:oldWord andLocalWords:line mutationLevel:5 lineLength:(int)[line count]];
     } else if(type == EXPLODE) {
         newWords = [ABScript splitWordIntoLetters:oldWord];
+    } else if(type == CUT) {
+        newWords = @[];
+    } else if(type == CLONE) {
+        newWords = @[oldWord, oldWord];
     }
     
     for(int i=0; i < [newWords count]; i ++) {

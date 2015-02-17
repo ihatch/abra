@@ -10,19 +10,24 @@
 
 @interface ABUI : NSObject <UIWebViewDelegate>
 
++ (void) setMainViewReference:(UIView *)view;
++ (UIView *) getMainViewReference;
+
+
 + (UIColor *) progressHueColor;
 + (UIColor *) progressHueColorWithOffset:(CGFloat)colorOffset;
 + (UIColor *) progressHueColorPreciselyWithOffset:(CGFloat)colorOffset;
 + (UIColor *) progressHueColorForStanza:(int)stanza;
 + (UIColor *) goldColor;
 + (UIColor *) darkGoldColor;
-
-+ (UILabel *) createAppModeSelectorLabel;
-+ (UISegmentedControl *) createAppModeSelector;
++ (UIColor *) darkGoldBackgroundColor;
 
 + (UIButton *) createInfoButtonWithFrame:(CGRect)frame;
 + (UIButton *) createInfoViewWithFrame:(CGRect)frame;
 + (UITextField *) createTextFieldWithFrame:(CGRect)frame;
+
++ (void) moveInfoButtonDown;
++ (void) moveInfoButtonUp;
 
 + (UIButton *) createButtonWithFrame:(CGRect)frame title:(NSString *)title;
 + (UIView *) createCenteredModalWithWidth:(CGFloat)w andHeight:(CGFloat)h;

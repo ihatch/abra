@@ -37,6 +37,7 @@
         self.isNew = YES;
         self.locked = YES;
         self.isSelfDestructing = NO;
+        self.isErased = NO;
         
         self.font = [UIFont fontWithName:ABRA_FONT size:[ABUI abraFontSize]];
         [self resizeFrameToFitString];
@@ -81,7 +82,7 @@
 
     CGFloat speed = [self speed];
     CGFloat randomSize = 0.95f + ABF(0.1);
-    CGFloat delay = speed * (0.2 + ABF(1.0));
+    CGFloat delay = speed * (0.2 + ABF(0.5));
     CGFloat duration = speed * (2.25 + ABF(2.8));
 
     if(isGrafted || sourceStanza == -1) {
@@ -101,6 +102,7 @@
 
 
 - (void) dim {
+    if(self.isErased) return;
     CGFloat speed = [self speed];
     [UIView animateWithDuration:(speed * 1.5) delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         self.alpha = 0.8;
@@ -139,6 +141,17 @@
     
     [self pop_addAnimation:self.animationX forKey:[NSString stringWithFormat:@"%@%@", @"x-", [self abWordID]]];
 }
+
+
+
+- (void) erase {
+    self.isErased = YES;
+    CGFloat speed = [self speed];
+    [UIView animateWithDuration:(speed * 1.5) delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+        self.alpha = 0;
+    } completion:^(BOOL finished) {}];
+}
+
 
 
 - (void) selfDestruct {

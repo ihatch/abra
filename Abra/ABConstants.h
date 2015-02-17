@@ -18,6 +18,9 @@ extern int const ABRA_START_LINE;
 extern int const ABRA_NUMBER_OF_LINES;
 extern int const ABRA_START_STANZA;
 
+extern BOOL const ABRA_ABSENTLY_MUTATE;
+
+
 extern NSString *const ABRA_FONT;
 extern NSString *const ABRA_FLOWERS_FONT;
 

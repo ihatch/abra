@@ -34,6 +34,8 @@ int const ABRA_START_LINE = 0;
 int const ABRA_NUMBER_OF_LINES = 11;
 int const ABRA_START_STANZA = 0;
 
+BOOL const ABRA_ABSENTLY_MUTATE = YES;
+
 NSString *const ABRA_FONT = @"IM FELL Great Primer PRO";
 NSString *const ABRA_FLOWERS_FONT = @"IM FELL FLOWERS 2";
 

@@ -79,12 +79,14 @@ static ABClock *ABClockInstance = NULL;
     if(modifier > 20) modifier = 20;
 //    NSLog(@"%d", modifier);
 
-    if ((float)currentTime - (float)lastInteractionTime > 5 &&
-        (float)currentTime - (float)initTime > 15 && ABI(25 - (modifier)) == 0) {
-        NSLog(@"%@", @"absently mutate");
-        [ABState absentlyMutate];
+    if(ABRA_ABSENTLY_MUTATE) {
+        if ((float)currentTime - (float)lastInteractionTime > 5 &&
+            (float)currentTime - (float)initTime > 15 && ABI(25 - (modifier)) == 0) {
+            NSLog(@"%@", @"absently mutate");
+            [ABState absentlyMutate];
+        }
     }
-
+    
 }
 
 

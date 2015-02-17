@@ -33,6 +33,7 @@ typedef enum { FORWARD, BACKWARD } ScriptDirection;
 ScriptDirection scriptDirection;
 
 typedef enum { REMIX, NORMAL } TransitionType;
+InteractivityMode currentInteractivityMode;
 
 NSDate *lastDialSetTime;
 int dialThrottleMs;
@@ -62,6 +63,8 @@ static ABState *ABStateInstance = NULL;
         lastGestureTime = CACurrentMediaTime();
         isInitialized = YES;
         preventGestures = NO;
+        
+        currentInteractivityMode = MUTATE;
         
         [ABClock start];
         
@@ -101,6 +104,16 @@ static ABState *ABStateInstance = NULL;
 ///////////
 // MODEL //
 ///////////
+
++ (void) setInteractivityModeTo:(InteractivityMode)mode {
+    currentInteractivityMode = mode;
+}
+
++ (InteractivityMode) getCurrentInteractivityMode {
+    return currentInteractivityMode;
+}
+
+
 
 
 + (BOOL) isRunningInBookMode {
@@ -335,7 +348,7 @@ static ABState *ABStateInstance = NULL;
 
 
 + (void) absentlyMutate {
-
+    
 //    CGFloat level = ABF(0.12);
     int i = ABI((int)([prevStanzaLines count]));
     NSArray *newLine = [ABScript mutateRandomWordInLine:prevStanzaLines[i]];
