@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Pods-Abra-PEPhotoCropEditor.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Abra-pop.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -17,12 +22,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>C16A10AF298C4E67834CE304</key>
+		<key>A32EC12CA85AB17C52DF328D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D66C4DC4526449B6B417DD0E</key>
+		<key>C57396FFB83E8B139E25C745</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DB1CEBFDE2BDC74D3BCAD1D3</key>
 		<dict>
 			<key>primary</key>
 			<true/>

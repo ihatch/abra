@@ -1,10 +1,13 @@
 PODS:
+  - PEPhotoCropEditor (1.3.1)
   - pop (1.0.6)
 
 DEPENDENCIES:
+  - PEPhotoCropEditor
   - pop (~> 1.0)
 
 SPEC CHECKSUMS:
+  PEPhotoCropEditor: ec3d241673c914d5c561166d00cd07f6b91194e8
   pop: e518794da38942c05255eb64b36d894e70cb4f00
 
-COCOAPODS: 0.33.1
+COCOAPODS: 0.35.0
