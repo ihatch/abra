@@ -18,7 +18,7 @@
 #import "ABControlPanel.h"
 #import "iCarousel.h"
 #import "TestFlight.h"
-
+#import "PECropViewController.h"
 
 @interface ABMainViewController () <iCarouselDataSource, iCarouselDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate>
 
@@ -82,10 +82,13 @@ BOOL carouselIsAnimating;
     
     
     // Top control panel
-    controlPanel = [[ABControlPanel alloc] initWithMainView:self.view];
+    controlPanel = [[ABControlPanel alloc] initWithMainView:self];
     [self.view addSubview:controlPanel];
     
 }
+
+
+
 
 
 
@@ -144,7 +147,7 @@ BOOL carouselIsAnimating;
 	self.carousel.dataSource = self;
     self.carousel.alpha = 0.0;
     self.carousel.scrollSpeed = 0.3;
-    self.carousel.clipsToBounds = YES;
+    self.carousel.clipsToBounds = NO;
 	
     //add carousel to view
 	[self.view addSubview:_carousel];

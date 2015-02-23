@@ -13,6 +13,7 @@
 #import <Social/Social.h>
 #import <Accounts/Accounts.h>
 
+
 // #import <QuartzCore/QuartzCore.h>
 
 @implementation ABControlPanel
@@ -22,13 +23,14 @@
 BOOL isOpen, isAnimating;
 UIButton *barTriggerButton;
 CGRect panelFrame;
-UIView *mainView;
+ABMainViewController *mainViewController;
+PECropViewController *cropViewController;
 
 UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButton, *autoplayButton, *shareButton, *settingsButton, *helpButton;
 
-- (id) initWithMainView:(UIView *)main {
+- (id) initWithMainView:(ABMainViewController *)main {
     
-    mainView = main;
+    mainViewController = main;
     panelFrame = CGRectMake(-1, -67, 1026, 66);
 
     self = [super initWithFrame:panelFrame];
@@ -93,6 +95,7 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
     [pruneButton setSelected:NO];
     [eraseButton setSelected:NO];
     [ABState setInteractivityModeTo:GRAFT];
+    [mainViewController textFieldModal];
 }
 
 - (void) multiplyButtonPressed {
@@ -135,8 +138,51 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
 }
 
 - (void) shareButtonPressed {
-    [self SavePhotoOnClick];
+    
+    [barTriggerButton setHidden:YES];
+    [self setHidden:YES];
+    
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+        UIGraphicsBeginImageContextWithOptions(self.window.bounds.size, NO, [UIScreen mainScreen].scale);
+    else
+        UIGraphicsBeginImageContext(self.window.bounds.size);
+    
+//    [self.window.layer renderInContext:UIGraphicsGetCurrentContext()];
+    [mainViewController.view drawViewHierarchyInRect:mainViewController.view.bounds afterScreenUpdates:YES];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    [barTriggerButton setHidden:NO];
+    [self setHidden:NO];
+//    [mainViewController.view :snapshotView];
+    //now we will position the image, X/Y away from top left corner to get the portion we want
+//
+//    CGSize size = CGSizeMake(self.window.bounds.size.width, self.window.bounds.size.height - 60);
+//    
+//    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+//        UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
+//    else
+//        UIGraphicsBeginImageContext(size);
+//
+//    UIGraphicsBeginImageContext(CGSizeMake(self.window.bounds.size.width, self.window.bounds.size.height - 60));
+//    [image drawAtPoint:CGPointMake(0, -60)];
+//    UIImage *croppedImage = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+    
+    cropViewController = [[PECropViewController alloc] init];
+    cropViewController.delegate = self;
+    cropViewController.image = image;
+    //controller.image = self.imageView.image;
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cropViewController];
+    [mainViewController presentViewController:navigationController animated:YES completion:nil];
+    
+//    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+
 }
+
+
+
 
 - (void) settingsButtonPressed {
 }
@@ -144,6 +190,14 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
 - (void) infoButtonPressed {
 }
 
+
+-(UIImage *)cropImage:(UIImage *)image rect:(CGRect)cropRect
+{
+    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
+    UIImage *img = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    return img;
+}
 
 
 - (void)SavePhotoOnClick {
@@ -159,8 +213,39 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
 //    NSData * data = UIImagePNGRepresentation(image);
 //    [data writeToFile:@"foo.png" atomically:YES];
     
+    cropViewController = [[PECropViewController alloc] init];
+    cropViewController.delegate = self;
+    cropViewController.image = image;
+    //controller.image = self.imageView.image;
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cropViewController];
+    [mainViewController presentViewController:navigationController animated:YES completion:nil];
+    
     UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
 }
+
+
+
+
+
+
+
+- (void) cropViewControllerDidCancel:(PECropViewController *)controller {
+    [cropViewController dismissViewControllerAnimated:YES completion:NULL];
+//    self.imageView.image = croppedImage;
+}
+
+- (void) cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage {
+    [cropViewController dismissViewControllerAnimated:YES completion:NULL];
+    UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil);
+//    self.imageView.image = croppedImage;
+}
+
+
+
+
+
+
 
 
 - (UIButton *) controlButtonWithText:(NSString *)text andFrame:(CGRect)frame {

@@ -10,7 +10,7 @@
 
 @interface ABGestureArrow : UILabel
 
-- (id)initWithType:(NSString *)type;
+- (id) initWithType:(NSString *)type;
 - (void) flash;
 
 @end

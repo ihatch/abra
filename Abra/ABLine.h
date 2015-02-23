@@ -12,7 +12,6 @@
 
 - (id) initWithWords:(NSArray *)words andYPosition:(CGFloat)y andHeight:(CGFloat)lineHeight andLineNumber:(int)lineNum;
 - (void) changeWordsToWords:(NSArray *) words;
-- (void) mutateChildAtLinePosition:(int)linePosition;
 - (void) touch:(CGPoint)point;
 - (void) tap:(CGPoint)point;
 - (void) longPress:(CGPoint)point;

@@ -17,14 +17,9 @@
 
 @implementation ABUI
 
-UIColor *normalColor;
-UIColor *selectedColor;
-
-UIView *mainView;
-
+UIView *infoView, *mainView;
+UIColor *normalColor, *selectedColor;
 UIButton *infoButton;
-UIView *infoView;
-
 
 static ABUI *ABUIInstance = NULL;
 
@@ -101,7 +96,7 @@ static ABUI *ABUIInstance = NULL;
     CGFloat hue = p + (colorOffset + (ABF(0.10) - 0.05));
     if(hue > 1) hue -= 1;
     if(hue < 0) hue += 1;
-    return [UIColor colorWithHue:hue saturation:(0.4 + s) brightness:0.92 alpha:1];
+    return [UIColor colorWithHue:hue saturation:(0.4 + s) brightness:1 alpha:1];
 }
 
 + (UIColor *) progressHueColorPreciselyWithOffset:(CGFloat)colorOffset {
@@ -109,7 +104,7 @@ static ABUI *ABUIInstance = NULL;
     CGFloat hue = p + colorOffset;
     if(hue > 1) hue -= 1;
     if(hue < 0) hue += 1;
-    return [UIColor colorWithHue:hue saturation:0.5 brightness:0.92 alpha:1];
+    return [UIColor colorWithHue:hue saturation:0.5 brightness:1 alpha:1];
 }
 
 + (UIColor *) progressHueColorForStanza:(int)stanza {
@@ -119,7 +114,7 @@ static ABUI *ABUIInstance = NULL;
     CGFloat hue = p + (0 + (ABF(0.10) - 0.05));
     if(hue > 1) hue -= 1;
     if(hue < 0) hue += 1;
-    return [UIColor colorWithHue:hue saturation:(0.4 + s) brightness:0.92 alpha:1];
+    return [UIColor colorWithHue:hue saturation:(0.4 + s) brightness:1 alpha:1];
 }
 
 + (UIColor *) goldColor {
@@ -127,11 +122,11 @@ static ABUI *ABUIInstance = NULL;
 }
 
 + (UIColor *) darkGoldColor {
-    return [UIColor colorWithHue:0.07 saturation:0.4 brightness:0.4 alpha:1];
+    return [UIColor colorWithHue:0.07 saturation:0.4 brightness:0.45 alpha:1];
 }
 
 + (UIColor *) darkGoldBackgroundColor {
-    return [UIColor colorWithHue:0.07 saturation:0.4 brightness:0.2 alpha:1];
+    return [UIColor colorWithHue:0.07 saturation:0.4 brightness:0.25 alpha:1];
 }
 
 
@@ -216,7 +211,7 @@ static ABUI *ABUIInstance = NULL;
     UITextField *textField = [[UITextField alloc] initWithFrame:frame];
     textField.borderStyle = UITextBorderStyleRoundedRect;
     textField.textColor = [UIColor whiteColor];
-    textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"text to graft" attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:0.24 alpha:1]}];
+    textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"words to graft" attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:0.24 alpha:1]}];
     textField.backgroundColor = [UIColor blackColor];
     textField.font = [UIFont fontWithName:ABRA_FONT size:18];
     textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;

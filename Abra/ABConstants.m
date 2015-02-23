@@ -17,6 +17,7 @@
 CGFloat ABF(CGFloat multiplier) {
     return ((float)rand() / RAND_MAX) * multiplier;
 }
+
 int ABI(int max) {
     return (int) arc4random_uniform(max);
 }
@@ -26,9 +27,8 @@ int ABI(int max) {
 // CONSTANTS //
 ///////////////
 
-
-
 @implementation ABConstants
+
 
 int const ABRA_START_LINE = 0;
 int const ABRA_NUMBER_OF_LINES = 11;
@@ -54,5 +54,6 @@ CGFloat const ABRA_WORD_FADE_IN_DURATION = 400;
 CGFloat const ABRA_GESTURE_FEEDBACK_FADE_DURATION = 0.65;
 CGFloat const ABRA_GESTURE_TIME_BUFFER = 0.75;
 CGFloat const ABRA_TICKER_INTERVAL = 0.2;
+
 
 @end

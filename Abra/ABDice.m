@@ -112,24 +112,9 @@ NSDictionary *charArrayCache;
 
 
 
+
 + (NSDictionary *) topCoreMatchesForLexicon:(NSArray *)lexicon {
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    [prefs removeObjectForKey:@"coreLexiconSimilarityTable"];
-    
-    [prefs synchronize];
-    
-    if([prefs objectForKey:@"coreLexiconSimilarityTable"] && false) {
-        NSLog(@"Core table found.");
-        
-//        return (__bridge NSDictionary *)(CFPropertyListCreateDeepCopy(kCFAllocatorDefault,
-//                                                               (__bridge CFPropertyListRef)([prefs objectForKey:@"coreLexiconSimilarityTable"]),
-//                                                               kCFPropertyListImmutable));
-
- //       return [NSDictionary dictionaryWithDictionary:[prefs objectForKey:@"coreLexiconSimilarityTable"]];
-    }
-
     NSMutableDictionary *tops = [NSMutableDictionary dictionary];
     [ABDice initCacheWithLexicon:lexicon];
     
@@ -140,42 +125,7 @@ NSDictionary *charArrayCache;
         NSLog(@"%@", term);
     }
 
-    
-    
-    
-    // NSDictionary *c = [NSDictionary dictionaryWithDictionary:tops];
-    
-//    NSDictionary *newDictionary =
-//    (__bridge NSDictionary *)(CFPropertyListCreateDeepCopy(kCFAllocatorDefault,
-//                                                           (__bridge CFPropertyListRef)(tops),
-//                                                           kCFPropertyListImmutable));
-    
-    ABData *data = [[ABData alloc] initWithCoder:[[NSCoder alloc] init]];
-    
-    data.coreSimilarityIndex = tops;
-
-    
-    //@{@"coreSimilarityIndex": tops};
-//
-//    NSDictionary *bridgeDict =
-//    (__bridge NSDictionary *)(CFPropertyListCreateDeepCopy(kCFAllocatorDefault,
-//                                                           (__bridge CFPropertyListRef)(tops),
-//                                                           kCFPropertyListImmutable));
-//    
-//    [prefs setObject:tops forKey:@"coreLexiconSimilarityTable"];
-//
-//    NSDictionary *prefDict = [prefs objectForKey:@"coreLexiconSimilarityTable"];
-//    
-    
-//    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:data];
-//    [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"abraData"];
-    
-    NSData *notesData = [[NSUserDefaults standardUserDefaults] objectForKey:@"abraData"];
-    NSArray *core = [NSKeyedUnarchiver unarchiveObjectWithData:notesData];
-    
-    NSLog(@"dfgdfg");
-    NSLog(@"dfgdfg");
-    
+    NSLog(@"hello");
     
     return tops;
 }

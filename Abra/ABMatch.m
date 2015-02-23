@@ -19,7 +19,6 @@
     NSMutableDictionary *wordLocations;
     NSMutableDictionary *pastLocations;
     NSMutableDictionary *futureLocations;
-
 }
 
 

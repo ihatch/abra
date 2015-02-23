@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PECropViewController.h"
+#import "ABMainViewController.h"
 
 @class POPBasicAnimation;
 
-@interface ABControlPanel : UIView
+@interface ABControlPanel : UIView <PECropViewControllerDelegate>
 
-- (id) initWithMainView:(UIView *)main;
+- (id) initWithMainView:(ABMainViewController *)main;
 - (void) triggerWithInfoButton:(UIButton *)infoButton;
 - (void) open;
 - (void) close;

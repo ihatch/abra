@@ -16,6 +16,8 @@
 #import "ABClock.h"
 #import "ABLine.h"
 #import "ABWord.h"
+#import "ABMutate.h"
+#import "ABDictionary.h"
 #import "TestFlight.h"
 
 @implementation ABState
@@ -279,7 +281,7 @@ static ABState *ABStateInstance = NULL;
     }
     
     if(mutationLevel > 0) {
-        newLines = [ABScript remixStanza:newLines andOldStanza:prevStanzaLines atMutationLevel:mutationLevel];
+        newLines = [ABMutate remixStanza:newLines andOldStanza:prevStanzaLines atMutationLevel:mutationLevel];
         mutationLevel --;
     }
     
@@ -351,7 +353,7 @@ static ABState *ABStateInstance = NULL;
     
 //    CGFloat level = ABF(0.12);
     int i = ABI((int)([prevStanzaLines count]));
-    NSArray *newLine = [ABScript mutateRandomWordInLine:prevStanzaLines[i]];
+    NSArray *newLine = [ABMutate mutateRandomWordInLine:prevStanzaLines[i]];
     [ABState updatePrevStanzaLinesWithLine:newLine atIndex:i];
     [[ABLines objectAtIndex:i] changeWordsToWords:newLine];
 }
@@ -369,17 +371,20 @@ static ABState *ABStateInstance = NULL;
     [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@: %@", @"GRAFT", text]];
 
     NSArray *words = [ABScript parseGraftTextIntoScriptWords:text];
-    NSArray *stanzaLines = [ABScript graftText:words intoStanzaLines:prevStanzaLines];
-
-    // Trigger lines to change
-    int p = 0;
-    for(int s=ABRA_START_LINE; s<ABRA_START_LINE + ABRA_NUMBER_OF_LINES; s++) {
-        if(p >= [ABLines count]) continue;
-        NSArray *newWords = (s < [stanzaLines count]) ? stanzaLines[s] : [ABScript emptyLine];
-        [[ABLines objectAtIndex:p++] changeWordsToWords:newWords];
-    }
-
-    prevStanzaLines = stanzaLines;
+    [ABDictionary graftNewWords:words];
+//
+//    
+//    NSArray *stanzaLines = [ABScript graftText:words intoStanzaLines:prevStanzaLines];
+//
+//    // Trigger lines to change
+//    int p = 0;
+//    for(int s=ABRA_START_LINE; s<ABRA_START_LINE + ABRA_NUMBER_OF_LINES; s++) {
+//        if(p >= [ABLines count]) continue;
+//        NSArray *newWords = (s < [stanzaLines count]) ? stanzaLines[s] : [ABScript emptyLine];
+//        [[ABLines objectAtIndex:p++] changeWordsToWords:newWords];
+//    }
+//
+//    prevStanzaLines = stanzaLines;
 
 }
 

@@ -85,8 +85,10 @@
     CGFloat delay = speed * (0.2 + ABF(0.5));
     CGFloat duration = speed * (2.25 + ABF(2.8));
 
-    if(isGrafted || sourceStanza == -1) {
+    if(sourceStanza == -1) {
         self.textColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.6 alpha:1];
+    } else if(self.isGrafted) {
+        self.textColor = [ABUI progressHueColorForStanza:self.sourceStanza + ABI(5) - ABI(3)];
     } else {
         self.textColor = [ABUI progressHueColorForStanza:self.sourceStanza];
     }

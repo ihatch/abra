@@ -8,6 +8,8 @@
 
 #import "PECropViewController.h"
 #import "PECropView.h"
+#import <Social/Social.h>
+#import <Accounts/Accounts.h>
 
 @interface PECropViewController () <UIActionSheetDelegate>
 
@@ -55,9 +57,17 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.toolbar.translucent = NO;
 
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                          target:self
-                                                                                          action:@selector(cancel:)];
+    self.navigationController.toolbar.tintColor = [UIColor colorWithHue:0.10f saturation:(0.35) brightness:0.62 alpha:1];
+//    self.navigationController.navigationBar.tintColor = [UIColor colorWithHue:0.10f saturation:(0.35) brightness:0.62 alpha:1];
+    
+    [self.navigationController.toolbar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1]];
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"EuphemiaUCAS" size:14.0f]} forState:UIControlStateNormal];
+    
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+//                                                                                          target:self
+//                                                                                          action:@selector(cancel:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                            target:self
                                                                                            action:@selector(done:)];
@@ -66,16 +76,87 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
         UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                                        target:nil
                                                                                        action:nil];
-        UIBarButtonItem *constrainButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"Constrain", nil)
-                                                                            style:UIBarButtonItemStyleBordered
+
+        UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"📷 save to photos", nil)
+                                                                            style:UIBarButtonItemStylePlain
                                                                            target:self
-                                                                           action:@selector(constrain:)];
-        self.toolbarItems = @[flexibleSpace, constrainButton, flexibleSpace];
+                                                                           action:@selector(saveToCameraRoll:)];
+        
+        UIBarButtonItem *facebookButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"🐬 post to facebook", nil)
+                                                                            style:UIBarButtonItemStylePlain
+                                                                           target:self
+                                                                           action:@selector(postToFacebook:)];
+
+        UIBarButtonItem *twitterButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"🐥 post to twitter", nil)
+                                                                            style: UIBarButtonItemStylePlain
+                                                                           target:self
+                                                                           action:@selector(postToTwitter:)];
+
+        
+        self.toolbarItems = @[flexibleSpace, flexibleSpace, saveButton, flexibleSpace, facebookButton, flexibleSpace, twitterButton, flexibleSpace, flexibleSpace];
     }
     self.navigationController.toolbarHidden = self.toolbarHidden;
     
     self.cropView.image = self.image;
 }
+
+
+
+
+- (void) saveToCameraRoll:(id)sender {
+    UIImageWriteToSavedPhotosAlbum(self.cropView.croppedImage, nil, nil, nil);
+}
+
+- (void) postToFacebook:(id)sender {
+    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
+        // Initialize Compose View Controller
+        SLComposeViewController *vc = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+        // Configure Compose View Controller
+        [vc setInitialText:@"Mutating poetry with Abra - a-b-r-a.com"];
+        [vc addImage:self.cropView.croppedImage];
+        // Present Compose View Controller
+        [self presentViewController:vc animated:YES completion:nil];
+        
+    } else {
+        NSString *message = @"It seems that we cannot talk to Facebook at the moment or you have not yet added your Facebook account to this device. Go to the Settings app to add your Facebook account to this device.";
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }
+}
+
+- (void) postToTwitter:(id)sender {
+    
+    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
+        SLComposeViewController *vc = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+        [vc setInitialText:@"Mutating poetry with #AbraApp"];
+        [vc addImage:self.cropView.croppedImage];
+        [vc addURL: [NSURL URLWithString: @"http://a-b-r-a.com"]];
+        [self presentViewController:vc animated:YES completion:nil];
+        
+    } else {
+        NSString *message = @"It seems that we cannot talk to Twitter at the moment or you have not yet added your Twitter account to this device. Go to the Settings app to add your Twitter account to this device.";
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    
+    
+    
+    
+    SLComposeViewController *composeController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+    
+    [composeController setInitialText:@"look me"];
+    [composeController addImage:[UIImage imageNamed:@"image.png"]];
+    
+    [self presentViewController:composeController
+                       animated:YES completion:nil];
+}
+
+
+
+
+
+
 
 - (void)viewDidAppear:(BOOL)animated
 {

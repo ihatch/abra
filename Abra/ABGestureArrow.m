@@ -76,11 +76,8 @@
 
     UIColor *newColor;
     
-    if(offsetIsStanzaSpecific) {
-        newColor = [ABUI progressHueColorForStanza:colorOffset];
-    } else {
-        newColor = [ABUI progressHueColorPreciselyWithOffset:colorOffset];
-    }
+    if(offsetIsStanzaSpecific) newColor = [ABUI progressHueColorForStanza:colorOffset];
+    else newColor = [ABUI progressHueColorPreciselyWithOffset:colorOffset];
 
     [UIView animateWithDuration:ABRA_GESTURE_FEEDBACK_FADE_DURATION * 2 animations:^() {
         self.textColor = newColor;

@@ -10,4 +10,6 @@
 
 @interface ABMainViewController : UIViewController <UITextFieldDelegate>
 
+- (void) textFieldModal;
+
 @end

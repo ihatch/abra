@@ -8,11 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ABData : NSObject <NSCoding> {
-    NSDictionary *coreSimilarityIndex;
-}
+@interface ABData : NSObject
 
-@property (nonatomic, copy) NSDictionary *coreSimilarityIndex;
++ (void) saveCoreMutationsIndex:(NSDictionary *)dataDict;
++ (void) saveModifiedMutationsIndex:(NSDictionary *)dataDict;
++ (NSMutableDictionary *) loadCoreMutationsIndex;
++ (NSMutableDictionary *) loadModifiedMutationsIndex;
+
++ (NSArray *) loadRawStanzas;
++ (NSArray *) loadWordList;
++ (NSMutableDictionary *) loadDiceAdditionsAndAddToDictionary:(NSMutableDictionary *)diceDictionary;
+
+
 
 
 @end

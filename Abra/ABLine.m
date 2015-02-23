@@ -11,8 +11,8 @@
 #import "ABMatch.h"
 #import "ABWord.h"
 #import "ABLine.h"
-#import "ABScript.h"
 #import "ABScriptWord.h"
+#import "ABMutate.h"
 #import "ABUI.h"
 #import "TestFlight.h"
 
@@ -227,26 +227,14 @@
 - (ABWord *) newWordWithFrame: (CGRect)frame andScriptWord:(ABScriptWord *) scriptWord {
     ABWord *word = [[ABWord alloc] initWithFrame:frame andScriptWord:scriptWord];
     [self addSubview:word];
-//    [word setupGestures];
     return word;
-}
-
-
-
-
-
-- (void) mutateChildAtLinePosition:(int)linePosition {
-    NSLog(@"%@ %i", @"Mutate at position ", linePosition);
-    NSArray *newLine = [ABScript mutateOneWordInLine:lineScriptWords atWordIndex:linePosition];
-    [self changeWordsToWords:newLine];
-    [ABState updatePrevStanzaLinesWithLine:newLine atIndex:self.lineNumber];
 }
 
 
 - (int) checkPoint:(CGPoint)point {
     
     int target = -1;
-    
+
     for(int i=0; i<[lineWords count]; i++) {
         ABLine *w = [lineWords objectAtIndex:i];
         if(CGRectContainsPoint(w.frame, point)) {
@@ -263,33 +251,14 @@
 }
 
 
-- (NSArray *) shuffleArray:(NSArray *)array {
-    
-    NSMutableArray *am = [NSMutableArray arrayWithArray:array];
-    int count = (int)[am count];
-    for (int i = 0; i < count; ++i) {
-        int remainingCount = count - i;
-        int exchangeIndex = (i + arc4random_uniform(remainingCount));
-        [am exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
-    }
-    return [NSArray arrayWithArray:am];
-}
-
-
 
 - (void) touch:(CGPoint)point {
     [self touchOrTap:point];
-
 }
-
-
 
 - (void) tap:(CGPoint)point {
     [self touchOrTap:point];
 }
-
-
-
 
 - (void) touchOrTap:(CGPoint)point {
     
@@ -301,15 +270,23 @@
     
     if(mode == MUTATE) {
         if(w.isErased) return;
-        NSArray *newLine = [ABScript mutateOneWordInLine:lineScriptWords atWordIndex:target];
+        NSArray *newLine = [ABMutate mutateOneWordInLine:lineScriptWords atWordIndex:target];
         isMorphing = YES;
         [self changeWordsToWords:newLine];
         isMorphing = NO;
         [ABState updatePrevStanzaLinesWithLine:newLine atIndex:self.lineNumber];
     }
-    
+
+    if(mode == GRAFT) {
+        NSArray *newLine = [ABMutate graftOneWordInLine:lineScriptWords atWordIndex:target];
+        isMorphing = YES;
+        [self changeWordsToWords:newLine];
+        isMorphing = NO;
+        [ABState updatePrevStanzaLinesWithLine:newLine atIndex:self.lineNumber];
+    }
+
     if(mode == PRUNE) {
-        NSArray *newLine = [ABScript pruneOneWordInLine:lineScriptWords atWordIndex:target];
+        NSArray *newLine = [ABMutate pruneOneWordInLine:lineScriptWords atWordIndex:target];
         isMorphing = YES;
         [self changeWordsToWords:newLine];
         isMorphing = NO;
@@ -318,7 +295,7 @@
 
     if(mode == MULTIPLY) {
         if(w.isErased) return;
-        NSArray *newLine = [ABScript multiplyOneWordInLine:lineScriptWords atWordIndex:target];
+        NSArray *newLine = [ABMutate multiplyOneWordInLine:lineScriptWords atWordIndex:target];
         isMorphing = YES;
         [self changeWordsToWords:newLine];
         isMorphing = NO;
@@ -345,7 +322,7 @@
     int target = [self checkPoint:point];
     if(target == -1) return;
     
-    NSArray *newLine = [ABScript explodeOneWordInLine:lineScriptWords atWordIndex:target];
+    NSArray *newLine = [ABMutate explodeOneWordInLine:lineScriptWords atWordIndex:target];
     
     isMorphing = YES;
     [self changeWordsToWords:newLine];
@@ -362,7 +339,7 @@
     int target = [self checkPoint:point];
     if(target == -1) return;
     
-    NSArray *newLine = [ABScript explodeOneWordInLine:lineScriptWords atWordIndex:target];
+    NSArray *newLine = [ABMutate explodeOneWordInLine:lineScriptWords atWordIndex:target];
 
     isMorphing = YES;
     [self changeWordsToWords:newLine];
