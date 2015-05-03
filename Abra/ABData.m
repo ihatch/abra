@@ -7,6 +7,7 @@
 //
 
 #import "ABData.h"
+#import "ABDice.h"
 
 @implementation ABData
 
@@ -14,9 +15,20 @@
 + (void) saveData:(NSDictionary *)dataDict forKey:(NSString *)key {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectoryPath = [paths objectAtIndex:0];
+
+
+    //documentsDirectoryPath = @"/Users/ianhatcher/Desktop/";
+    
     NSString *fileName = [@"abraData-" stringByAppendingString:key];
     NSString *filePath = [documentsDirectoryPath stringByAppendingPathComponent:fileName];
     [NSKeyedArchiver archiveRootObject:dataDict toFile:filePath];
+}
+
+
++ (void) DEVsaveDataToDesktop:(NSData *)data {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager createFileAtPath:@"/Users/Me/Desktop/data.dat" contents:data attributes:nil];
+
 }
 
 + (void) saveCoreMutationsIndex:(NSDictionary *)dataDict {
@@ -26,6 +38,7 @@
 + (void) saveModifiedMutationsIndex:(NSDictionary *)dataDict {
     [ABData saveData:dataDict forKey:@"modifiedMutationsTable"];
 }
+
 
 + (NSMutableDictionary *) loadCoreMutationsIndex {
     return [ABData loadMutableDataForKey:@"coreMutationsTable"];

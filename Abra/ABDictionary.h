@@ -12,6 +12,7 @@
 
 @interface ABDictionary : NSObject
 
++ (void) initCoreDictionary;
 
 + (void) setScriptWords:(NSMutableDictionary *) scriptWordsDictionary;
 + (void) addToScriptWords:(NSString *)text;

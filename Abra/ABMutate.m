@@ -26,6 +26,8 @@ static ABMutate *ABMutateInstance = NULL;
 
 
 
+
+
 + (NSArray *) mutate:(ABScriptWord *)targetWord andLocalWords:(NSArray *)localWords mutationLevel:(int)mutationLevel lineLength:(int)lineLength {
     
     NSArray *returnArray;
@@ -301,26 +303,33 @@ static ABMutate *ABMutateInstance = NULL;
 + (ABScriptWord *) throwDiceCoefficient:(ABScriptWord *)word {
     
     NSArray *dice = [ABDictionary diceForKey:word.text];
-    if(!dice) return [ABScript trulyRandomWord];
+    if(!dice) {
+        NSLog(@">> Dice match not found: %@", word.text);
+        return [ABScript trulyRandomWord];
+    }
     
     ABScriptWord *new = [ABScriptWord copyScriptWord:word];
     
     @try {
-        int range = 4 + (word.morphCount * 4);
+        int range = 4 + (word.morphCount * 7);
         int max = (int)[dice count];
         if(range > max) range = max;
         int randomIndex = ABI(range);
         NSString *w = [dice objectAtIndex:randomIndex];
-        if(!w) return word;
+        if(!w) {
+            NSLog(@">> Problematic dice match for: %@", word.text);
+            return word;
+        }
         if(![ABDictionary scriptWord:w]) [ABDictionary addToScriptWords:w];
-        NSLog(@"Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
+        NSLog(@"* Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
         new = [ABDictionary scriptWord:w];
     }
     @catch (NSException *exception) {
-        NSLog(@">> ERROR: %@", word.text);
+        NSLog(@">> DICE ERROR: %@", word.text);
     }
     @finally {
-        new.sourceStanza = word.sourceStanza + word.morphCount + 1;
+        // To make changes more colorful sooner, change this last digit:
+        new.sourceStanza = word.sourceStanza + word.morphCount + 2;
         return new;
     }
 }

@@ -125,7 +125,7 @@ NSDictionary *charArrayCache;
         NSLog(@"%@", term);
     }
 
-    NSLog(@"hello");
+    NSLog(@"Finished computing matches.");
     
     return tops;
 }

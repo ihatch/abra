@@ -41,4 +41,13 @@ extern CGFloat const ABRA_GESTURE_TIME_BUFFER;
 extern CGFloat const ABRA_TICKER_INTERVAL;
 
 
+
+
+// DEV CONSTS
+
+extern BOOL const GENERATE_CORE_DICTIONARY;
+
+
+
+
 @end

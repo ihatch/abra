@@ -15,9 +15,11 @@
 @interface ABControlPanel : UIView <PECropViewControllerDelegate>
 
 - (id) initWithMainView:(ABMainViewController *)main;
-- (void) triggerWithInfoButton:(UIButton *)infoButton;
+- (void) triggerWithButton:(UIButton *)button;
 - (void) open;
 - (void) close;
+
+- (void) setModeToMutate;
 
 @property (nonatomic) UIDynamicAnimator *animator;
 @property (nonatomic) POPBasicAnimation *animationY;

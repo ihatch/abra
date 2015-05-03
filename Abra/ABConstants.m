@@ -56,4 +56,14 @@ CGFloat const ABRA_GESTURE_TIME_BUFFER = 0.75;
 CGFloat const ABRA_TICKER_INTERVAL = 0.2;
 
 
+
+
+// DEV SETTINGS
+
+BOOL const GENERATE_CORE_DICTIONARY = YES;
+
+
+
+
+
 @end

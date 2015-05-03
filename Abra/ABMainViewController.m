@@ -17,8 +17,8 @@
 #import "ABBlackCurtain.h"
 #import "ABControlPanel.h"
 #import "iCarousel.h"
-#import "TestFlight.h"
 #import "PECropViewController.h"
+#import "emojis.h"
 
 @interface ABMainViewController () <iCarouselDataSource, iCarouselDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate>
 
@@ -34,15 +34,14 @@
 ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
 UIView *infoView;
 ABBlackCurtain *graftCurtain;
-UIButton *infoButton;
+UIButton *controlPanelTriggerButton;
 ABBlackCurtain *infoCurtain;
 CGPoint touchStart;
 
 UILabel *graftButton, *playButton, *shareButton;
 NSArray *ABLines;
 
-UILabel *speedDisplay;
-CGFloat speedSliderNumber;
+UITextField *graftTextField;
 
 CGFloat screenHeight;
 CGFloat screenWidth;
@@ -63,8 +62,6 @@ BOOL carouselIsAnimating;
     self.view.userInteractionEnabled = YES;
     
     [ABUI setMainViewReference:self.view];
-    
-    speedSliderNumber = 1.0;
 
     screenHeight = [ABUI screenHeight];
     screenWidth = [ABUI screenWidth];
@@ -80,16 +77,21 @@ BOOL carouselIsAnimating;
 //    [self initButtons];
     [self initInfoView];
     
+    [self initTextFieldModal];
     
     // Top control panel
     controlPanel = [[ABControlPanel alloc] initWithMainView:self];
     [self.view addSubview:controlPanel];
+
+    
+    [self devStartupTests];
     
 }
 
 
-
-
+- (void) devStartupTests {
+    
+}
 
 
 
@@ -133,6 +135,10 @@ BOOL carouselIsAnimating;
     self.navItem = nil;
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return NO;
+}
+
 - (void) initCarouselView {
     
     CGFloat carouselWidth = isIpad ? 624 : screenWidth / 1.5;
@@ -140,13 +146,12 @@ BOOL carouselIsAnimating;
     CGFloat carouselX = isIpad ? 200 : (screenWidth - carouselWidth) / 2;
     CGFloat carouselY = isIpad ? 612 : screenHeight - 90;
     
-    
 	self.carousel = [[iCarousel alloc] initWithFrame:CGRectMake(carouselX, carouselY, carouselWidth, carouselHeight)];
     self.carousel.type = iCarouselTypeRotary;
 	self.carousel.delegate = self;
 	self.carousel.dataSource = self;
     self.carousel.alpha = 0.0;
-    self.carousel.scrollSpeed = 0.3;
+    self.carousel.scrollSpeed = 0.15;
     self.carousel.clipsToBounds = NO;
 	
     //add carousel to view
@@ -160,10 +165,6 @@ BOOL carouselIsAnimating;
     [self.carousel setAlpha:0.8];
     [UIView commitAnimations];
     
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return NO;
 }
 
 - (NSInteger)numberOfItemsInCarousel:(iCarousel *)carousel {
@@ -200,13 +201,11 @@ BOOL carouselIsAnimating;
     return view;
 }
 
-
 - (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform {
     //implement 'flip3D' style carousel
     transform = CATransform3DRotate(transform, M_PI / 8.0f, 0.0f, 1.0f, 0.0f);
     return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * carousel.itemWidth);
 }
-
 
 - (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value {
     switch (option) {
@@ -214,13 +213,12 @@ BOOL carouselIsAnimating;
         case iCarouselOptionShowBackfaces: { return NO; }
         case iCarouselOptionSpacing: { return value * 1.01f; }
         case iCarouselOptionFadeMin: { return -0.1f; }
-        case iCarouselOptionFadeMax: { return 0.3f; }
-        case iCarouselOptionFadeRange: { return 2.0f; }
+        case iCarouselOptionFadeMax: { return 0.35f; }
+        case iCarouselOptionFadeRange: { return 1.1f; }
         case iCarouselOptionFadeMinAlpha: { return 0.30f; }
         default: { return value; }
     }
 }
-
 
 - (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel {
     [ABState manuallyTransitionStanzaToNumber:(int)carousel.currentItemIndex];
@@ -230,7 +228,6 @@ BOOL carouselIsAnimating;
 - (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel {
     carouselIsAnimating = YES;
 }
-
 
 - (void)carouselWillBeginDragging:(iCarousel *)carousel {
     carouselIsAnimating = YES;
@@ -249,8 +246,6 @@ BOOL carouselIsAnimating;
         }];
     }];
 }
-
-
 
 
 
@@ -279,8 +274,6 @@ BOOL carouselIsAnimating;
     [feedbackBackward flash];
     [ABState backward];
 }
-
-
 
 
 
@@ -356,7 +349,6 @@ BOOL carouselIsAnimating;
             return line;
         }
     }
-    
     return nil;
 }
 
@@ -490,109 +482,42 @@ BOOL carouselIsAnimating;
 ////////////////////////
 
 
-- (void) speedModal {
-    
-    UIView *modal = [ABUI createModalWithFrame:CGRectMake(362, 300, 300, 170)];
-    speedDisplay = [[UILabel alloc] initWithFrame:CGRectMake(20, 15, 250, 35)];
-    CGFloat rounded = roundf (speedSliderNumber * 100) / 100.0;
-    [speedDisplay setText:[NSString stringWithFormat:@"%.2f", rounded]];
-    speedDisplay.textColor = [ABUI goldColor];
-    speedDisplay.textAlignment = NSTextAlignmentCenter;
-    speedDisplay.font = [UIFont fontWithName:ABRA_FONT size:20];
-    [modal addSubview:speedDisplay];
-    
-    CGRect frame = CGRectMake(20, 65, 250.0, 30.0);
-    UISlider *slider = [[UISlider alloc] initWithFrame:frame];
-    [slider addTarget:self action:@selector(sliderAction:) forControlEvents:UIControlEventValueChanged];
-    [slider setBackgroundColor:[UIColor clearColor]];
-    slider.minimumValue = 0.2;
-    slider.maximumValue = 1.8;
-    slider.continuous = YES;
-    slider.value = speedSliderNumber;
-    
-    [modal addSubview:slider];
-    
-    UIButton *b = [ABUI createButtonWithFrame:CGRectMake(95, 105, 100, 40) title:@"set speed"];
-    [b addTarget:self action:@selector(setSpeed:) forControlEvents:UIControlEventTouchUpInside];
-    [modal addSubview:b];
-    
-//    curtain = [[ABBlackCurtain alloc] init];
-//    [self.view addSubview:curtain];
-//    [curtain addSubview:modal];
-//    [curtain show];
-}
-
-
-- (int) convertSpeedToDisplayNumber:(CGFloat)speed {
-    
-    if(speed == 1) return 100;
-    
-    if(speed < 1) {
-        return 100 + ((1 - speed) * 300);
-    } else {
-        return 100 - ((speed - 1) * 30);
-    }
-}
-
-
-- (void) setSpeed:(UIButton *)button {
-    
-    [ABClock setSpeedTo:speedSliderNumber];
-//    [curtain hide];
-}
-
-
-- (void) sliderAction:(UISlider *)slider {
-    
-    CGFloat value = (slider.value);
-    [slider setValue:value animated:NO];
-    CGFloat rounded = roundf (speedSliderNumber * 100) / 100.0;
-    int display = [self convertSpeedToDisplayNumber:rounded];
-    
-    [speedDisplay setText:[NSString stringWithFormat:@"%i", display]];
-    speedSliderNumber = value;
+- (void) initTextFieldModal {
+    UIView *modal = [ABUI createModalWithFrame:CGRectMake(362, 100, 300, 140)];
+    graftTextField = [ABUI createTextFieldWithFrame:CGRectMake(20, 20, 260, 100)];
+    graftTextField.delegate = self;
+    [modal addSubview:graftTextField];
+    graftCurtain = [[ABBlackCurtain alloc] init];
+    graftCurtain.destroyOnFadeOut = NO;
+    [self.view addSubview:graftCurtain];
+    [graftCurtain addSubview:modal];
 }
 
 
 - (void) textFieldModal {
-
-    UIView *modal = [ABUI createModalWithFrame:CGRectMake(362, 100, 300, 140)];
-    UITextField *textField = [ABUI createTextFieldWithFrame:CGRectMake(20, 20, 260, 100)];
-    textField.delegate = self;
-    [modal addSubview:textField];
-
-    graftCurtain = [[ABBlackCurtain alloc] init];
-    [self.view addSubview:graftCurtain];
-    [graftCurtain addSubview:modal];
+    [graftTextField becomeFirstResponder];
     [graftCurtain show];
-    
-    [textField becomeFirstResponder];
+
 }
 
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
+    [graftTextField resignFirstResponder];
     
-    [textField resignFirstResponder];
-    [ABState graftText:textField.text];
+    BOOL successfulGraft = [ABState graftText:textField.text];
+    if(successfulGraft == NO) [controlPanel setModeToMutate];
     [graftCurtain hide];
-
     return YES;
 }
 
 
 - (void) initInfoView {
     
-    infoButton = [ABUI createInfoButtonWithFrame:CGRectMake(970, 20, 28, 28)];
+    controlPanelTriggerButton = [ABUI createInfoButtonWithFrame:CGRectMake(960, 10, 53, 53)];
     
-    [infoButton addTarget:self action:@selector(triggerInfoViewButton) forControlEvents:(UIControlEvents)UIControlEventTouchDown];
-    [self.view addSubview:infoButton];
+    [controlPanelTriggerButton addTarget:self action:@selector(triggerInfoViewButton) forControlEvents:(UIControlEvents)UIControlEventTouchDown];
+    [self.view addSubview:controlPanelTriggerButton];
     
-    infoCurtain = [[ABBlackCurtain alloc] init];
-    infoCurtain.destroyOnFadeOut = NO;
-    infoView = [ABUI createInfoViewWithFrame:CGRectMake(80, 0, 864, 768)];
-
-    [infoCurtain addSubview:infoView];
-    [self.view addSubview:infoCurtain];
 }
 
 
@@ -606,11 +531,7 @@ BOOL carouselIsAnimating;
 
 
 - (void) triggerInfoViewButton {
-    
-    
-    [controlPanel triggerWithInfoButton:infoButton];
-    
-//    [infoCurtain show];
+    [controlPanel triggerWithButton:controlPanelTriggerButton];
 }
 
 
@@ -628,4 +549,48 @@ BOOL carouselIsAnimating;
 
 @end
 
+
+
+
+
+
+/*
+ 
+ 
+ 
+ 
+ NSArray *keys = [EMOJI_HASH allKeys];
+ NSString *emoji = @"";
+ for (NSString *key in keys) {
+ NSLog(@"%@", [EMOJI_HASH objectForKey:key]);
+ emoji = [emoji stringByAppendingString:[EMOJI_HASH objectForKey:key]];
+ }
+ 
+ emoji = @"😄😃😀😊☺️😉😍😘😚😗😙😜😝😛😳😁😔😌😒😞😣😢😂😭😪😥😰😅😓😩😫😨😱😠😡😤😖😆😋😷😎😴😵😲😟😦😧😈👿😮😬😐😕😯😶😇😏😑👲👳👮👷💂👶👦👧👨👩👴👵👱👼👸😺😸😻😽😼🙀😿😹😾👹👺🙈🙉🙊💀👽💩🔥✨🌟💫💥💢💦💧💤💨👂👀👃👅👄👍👎👌👊✊✌️👋✋👐👆👇👉👈🙌🙏☝️👏💪🚶🏃💃👫👪👬👭💏💑👯🙆🙅💁🙋💆💇💅👰🙎🙍🙇🎩👑👒👟👞👡👠👢👕👔👚👗🎽👖👘👙💼👜👝👛👓🎀🌂💄💛💙💜💚❤️💔💗💓💕💖💞💘💌💋💍💎👤👥💬👣💭🐶🐺🐱🐭🐹🐰🐸🐯🐨🐻🐷🐽🐮🐗🐵🐒🐴🐑🐘🐼🐧🐦🐤🐥🐣🐔🐍🐢🐛🐝🐜🐞🐌🐙🐚🐠🐟🐬🐳🐋🐄🐏🐀🐃🐅🐇🐉🐎🐐🐓🐕🐖🐁🐂🐲🐡🐊🐫🐪🐆🐈🐩🐾💐🌸🌷🍀🌹🌻🌺🍁🍃🍂🌿🌾🍄🌵🌴🌲🌳🌰🌱🌼🌐🌞🌝🌚🌑🌒🌓🌔🌕🌖🌗🌘🌜🌛🌙🌍🌎🌏🌋🌌🌠⭐️☀️⛅️☁️⚡️☔️❄️⛄️🌀🌁🌈🌊🎍💝🎎🎒🎓🎏🎆🎇🎐🎑🎃👻🎅🎄🎁🎋🎉🎊🎈🎌🔮🎥📷📹📼💿📀💽💾💻📱☎️📞📟📠📡📺📻🔊🔉🔈🔇🔔🔕📢📣⏳⌛️⏰⌚️🔓🔒🔏🔐🔑🔎💡🔦🔆🔅🔌🔋🔍🛁🛀🚿🚽🔧🔩🔨🚪🚬💣🔫🔪💊💉💰💴💵💷💶💳💸📲📧📥📤✉️📩📨📯📫📪📬📭📮📦📝📄📃📑📊📈📉📜📋📅📆📇📁📂✂️📌📎✒️✏️📏📐📕📗📘📙📓📔📒📚📖🔖📛🔬🔭📰🎨🎬🎤🎧🎼🎵🎶🎹🎻🎺🎷🎸👾🎮🃏🎴🀄️🎲🎯🏈🏀⚽️⚾️🎾🎱🏉🎳⛳️🚵🚴🏁🏇🏆🎿🏂🏊🏄🎣☕️🍵🍶🍼🍺🍻🍸🍹🍷🍴🍕🍔🍟🍗🍖🍝🍛🍤🍱🍣🍥🍙🍘🍚🍜🍲🍢🍡🍳🍞🍩🍮🍦🍨🍧🎂🍰🍪🍫🍬🍭🍯🍎🍏🍊🍋🍒🍇🍉🍓🍑🍈🍌🍐🍍🍠🍆🍅🌽🏠🏡🏫🏢🏣🏥🏦🏪🏩🏨💒⛪️🏬🏤🌇🌆🏯🏰⛺️🏭🗼🗾🗻🌄🌅🌃🗽🌉🎠🎡⛲️🎢🚢⛵️🚤🚣⚓️🚀✈️💺🚁🚂🚊🚉🚞🚆🚄🚅🚈🚇🚝🚋🚃🚎🚌🚍🚙🚘🚗🚕🚖🚛🚚🚨🚓🚔🚒🚑🚐🚲🚡🚟🚠🚜💈🚏🎫🚦🚥⚠️🚧🔰⛽️🏮🎰♨️🗿🎪🎭📍🚩🇬🇧🇷🇺🇫🇷🇯🇵🇰🇷🇩🇪🇨🇳🇺🇸1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣0️⃣🔟🔢#️⃣🔣⬆️⬇️⬅️➡️🔠🔡🔤↗️↖️↘️↙️↔️↕️🔄◀️▶️🔼🔽↩️↪️ℹ️⏪⏩⏫⏬⤵️⤴️🆗🔀🔁🔂🆕🆙🆒🆓🆖📶🎦🈁🈯️🈳🈵🈴🈲🉐🈹🈺🈶🈚️🚻🚹🚺🚼🚾🚰🚮🅿️♿️🚭🈷🈸🈂Ⓜ️🛂🛄🛅🛃🉑㊙️㊗️🆑🆘🆔🚫🔞📵🚯🚱🚳🚷🚸⛔️✳️❇️❎✅✴️💟🆚📳📴🅰🅱🆎🅾💠➿♻️♈️♉️♊️♋️♌️♍️♎️♏️♐️♑️♒️♓️⛎🔯🏧💹💲💱©®™❌‼️⁉️❗️❓❕❔⭕️🔝🔚🔙🔛🔜🔃🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕖🕗🕘🕙🕚🕡🕢🕣🕤🕥🕦✖️➕➖➗♠️♥️♣️♦️💮💯✔️☑️🔘🔗➰〰〽️🔱◼️◻️◾️◽️▪️▫️🔺🔲🔳⚫️⚪️🔴🔵🔻⬜️⬛️🔶🔷🔸🔹";
+ 
+ 
+ 
+ 
+ 
+ 
+ NSLog(@"%@", emoji);
+*/
+
+
+/*
+ 😄😃😀😊☺️😉😍😘😚😗😙😜😝😛😳😁😔😌😒😞😣😢😂😭😪😥😰😅😓😩😫😨😱😠😡😤😖😆😋😷😎😴😵😲😟😦😧😈👿😮😬😐😕😯😶😇😏😑👲👳👮👷💂👶👦👧👨👩👴👵👱👼👸😺😸😻😽😼🙀😿😹😾👹👺🙈🙉🙊💀👽💩🔥✨🌟💫💥💢💦💧💤💨👂👀👃👅👄👍👎👌👊✊✌️👋✋👐👆👇👉👈🙌🙏☝️👏💪🚶🏃💃👫👪👬👭💏💑👯🙆🙅💁🙋💆💇💅👰🙎🙍🙇🎩👑👒👟👞👡👠👢👕👔👚👗🎽👖👘👙💼👜👝👛👓🎀🌂💄💛💙💜💚❤️💔💗💓💕💖💞💘💌💋💍💎👤👥💬👣💭
+ 
+ 🐶🐺🐱🐭🐹🐰🐸🐯🐨🐻🐷🐽🐮🐗🐵🐒🐴🐑🐘🐼🐧🐦🐤🐥🐣🐔🐍🐢🐛🐝🐜🐞🐌🐙🐚🐠🐟🐬🐳🐋🐄🐏🐀🐃🐅🐇🐉🐎🐐🐓🐕🐖🐁🐂🐲🐡🐊🐫🐪🐆🐈🐩🐾💐🌸🌷🍀🌹🌻🌺🍁🍃🍂🌿🌾🍄🌵🌴🌲🌳🌰🌱🌼🌐🌞🌝🌚🌑🌒🌓🌔🌕🌖🌗🌘🌜🌛🌙🌍🌎🌏🌋🌌🌠⭐️☀️⛅️☁️⚡️☔️❄️⛄️🌀🌁🌈🌊
+ 
+ 🎍💝🎎🎒🎓🎏🎆🎇🎐🎑🎃👻🎅🎄🎁🎋🎉🎊🎈🎌🔮🎥📷📹📼💿📀💽💾💻📱☎️📞📟📠📡📺📻🔊🔉🔈🔇🔔🔕📢📣⏳⌛️⏰⌚️🔓🔒🔏🔐🔑🔎💡🔦🔆🔅🔌🔋🔍🛁🛀🚿🚽🔧🔩🔨🚪🚬💣🔫🔪💊💉💰💴💵💷💶💳💸📲Z📧📥📤✉️📩📨📯📫📪📬📭📮📦📝📄📃📑📊📈📉📜📋📅📆📇📁📂✂️📌📎✒️✏️📏📐📕📗📘📙📓📔📒📚📖🔖📛🔬🔭📰🎨🎬🎤🎧🎼🎵🎶🎹🎻🎺🎷🎸👾🎮🃏🎴🀄️🎲🎯🏈🏀⚽️⚾️🎾🎱🏉🎳⛳️🚵🚴🏁🏇🏆🎿🏂🏊🏄🎣☕️🍵🍶🍼🍺🍻🍸🍹🍷🍴🍕🍔🍟🍗🍖🍝🍛🍤🍱🍣🍥🍙🍘🍚🍜🍲🍢🍡🍳🍞🍩🍮🍦🍨🍧🎂🍰🍪🍫🍬🍭🍯🍎🍏🍊🍋🍒🍇🍉🍓🍑🍈🍌🍐🍍🍠🍆🍅🌽
+ 
+ 🏠🏡🏫🏢🏣🏥🏦🏪🏩🏨💒⛪️🏬🏤🌇🌆🏯🏰⛺️🏭🗼🗾🗻🌄🌅🌃🗽🌉🎠🎡⛲️🎢🚢⛵️🚤🚣⚓️🚀✈️💺🚁🚂🚊🚉🚞🚆🚄🚅🚈🚇🚝🚋🚃🚎🚌🚍🚙🚘🚗🚕🚖🚛🚚🚨🚓🚔🚒🚑🚐🚲🚡🚟🚠🚜💈🚏🎫🚦🚥⚠️🚧🔰⛽️🏮🎰♨️🗿🎪🎭📍🚩🇬🇧🇷🇺🇫🇷🇯🇵🇰🇷🇩🇪🇨🇳🇺🇸
+ 
+ 1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣0️⃣🔟🔢#️⃣🔣⬆️⬇️⬅️➡️🔠🔡🔤↗️↖️↘️↙️↔️↕️🔄◀️▶️🔼🔽↩️↪️ℹ️⏪⏩⏫⏬⤵️⤴️🆗🔀🔁🔂🆕🆙🆒🆓🆖📶🎦🈁🈯️🈳🈵🈴🈲🉐🈹🈺🈶🈚️🚻🚹🚺🚼🚾🚰🚮🅿️♿️🚭🈷🈸🈂Ⓜ️🛂🛄🛅🛃🉑㊙️㊗️🆑🆘🆔🚫🔞📵🚯🚱🚳🚷🚸⛔️✳️❇️❎✅✴️💟🆚📳📴🅰🅱🆎🅾💠➿♻️♈️♉️♊️♋️♌️♍️♎️♏️♐️♑️♒️♓️⛎🔯🏧💹💲💱©®™❌‼️⁉️❗️❓❕❔⭕️🔝🔚🔙🔛🔜🔃🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕖🕗🕘🕙🕚🕡🕢🕣🕤🕥🕦✖️➕➖➗♠️♥️♣️♦️💮💯✔️☑️🔘🔗➰〰〽️🔱◼️◻️◾️◽️▪️▫️🔺🔲🔳⚫️⚪️🔴🔵🔻⬜️⬛️🔶🔷🔸🔹
+ 
+ 
+ 
+ 
+ 
+ */
 

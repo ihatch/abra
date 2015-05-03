@@ -9,13 +9,13 @@
 #import "ABDictionary.h"
 #import "ABScriptWord.h"
 #import "ABData.h"
+#import "ABDice.h"
 
 @implementation ABDictionary
 
 NSMutableDictionary *diceDictionary;
 NSMutableDictionary *abScriptWordsDictionary;
 NSMutableArray *allWordObjs;
-
 NSMutableArray *userScriptWordsDictionary;   //  <<------ TODO
 NSMutableArray *graftsHistory;
 NSArray *currentUserGraftWords;
@@ -25,9 +25,26 @@ static ABDictionary *ABDictionaryInstance = NULL;
 + (void)initialize {
     @synchronized(self) {
         if (ABDictionaryInstance == NULL) ABDictionaryInstance = [[ABDictionary alloc] init];
-        diceDictionary = [ABData loadCoreMutationsIndex];
+        
+
+        
+    }
+}
+
+
+
++ (void) initCoreDictionary {
+    
+    diceDictionary = [ABData loadCoreMutationsIndex];
+
+    if(!diceDictionary) {
+        NSLog(@"%@", @"Generating dictionary ...");
+        diceDictionary = [NSMutableDictionary dictionaryWithDictionary:[ABDice topCoreMatchesForLexicon:[ABData loadWordList]]];
+        [ABData saveCoreMutationsIndex:diceDictionary];
+    } else {
         diceDictionary = [ABData loadDiceAdditionsAndAddToDictionary:diceDictionary];
     }
+
 }
 
 

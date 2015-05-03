@@ -26,7 +26,7 @@ typedef enum { MUTATE, GRAFT, MULTIPLY, PRUNE, ERASE } InteractivityMode;
 + (void) accelerate;
 + (void) decelerate;
 
-+ (void) graftText:(NSString *)text;
++ (BOOL) graftText:(NSString *)text;
 
 + (void) pause;
 + (void) resume;

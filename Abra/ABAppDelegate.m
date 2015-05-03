@@ -7,13 +7,19 @@
 //
 
 #import "ABAppDelegate.h"
-#import "TestFlight.h"
 #import "ABClock.h"
 
 @implementation ABAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [TestFlight takeOff:@"d6dae9b3-9270-4c46-a601-8900e5ebd4fc"];
+
+    // Preloads keyboard so there's no lag on initial keyboard appearance.
+    UITextField *lagFreeField = [[UITextField alloc] init];
+    [self.window addSubview:lagFreeField];
+    [lagFreeField becomeFirstResponder];
+    [lagFreeField resignFirstResponder];
+    [lagFreeField removeFromSuperview];
+
     return YES;
 }
 

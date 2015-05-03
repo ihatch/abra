@@ -25,10 +25,10 @@ static ABScript *ABScriptInstance = NULL;
     @synchronized(self) {
         if (ABScriptInstance == NULL) ABScriptInstance = [[ABScript alloc] init];
         [ABScriptInstance parseScriptFile];
+        [ABDictionary initCoreDictionary];
+        
     }
 }
-
-
 
 
 
@@ -115,7 +115,7 @@ static ABScript *ABScriptInstance = NULL;
                 [allWordObjs addObject:sw];
                 [linesObjs[j] addObject:sw];
                 [scriptWordsDictionary setObject:[ABScriptWord copyScriptWord:sw] forKey:text];
-
+                
             }
         }
         
@@ -129,6 +129,7 @@ static ABScript *ABScriptInstance = NULL;
 
     [ABDictionary setScriptWords:scriptWordsDictionary];
     [ABDictionary setAllWords:allWordObjs];
+    
 }
 
 

@@ -18,7 +18,6 @@
 #import "ABWord.h"
 #import "ABMutate.h"
 #import "ABDictionary.h"
-#import "TestFlight.h"
 
 @implementation ABState
 
@@ -366,26 +365,18 @@ static ABState *ABStateInstance = NULL;
 // GRAFT TEXT //
 ////////////////
 
-+ (void) graftText:(NSString *)text {
-
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@: %@", @"GRAFT", text]];
-
-    NSArray *words = [ABScript parseGraftTextIntoScriptWords:text];
++ (BOOL) graftText:(NSString *)text {
+    
+    NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSString *trimmed = [text stringByTrimmingCharactersInSet:whitespace];
+    if ([trimmed length] == 0) {
+        return NO;
+    }
+    
+    NSArray *words = [ABScript parseGraftTextIntoScriptWords:trimmed];
+    
     [ABDictionary graftNewWords:words];
-//
-//    
-//    NSArray *stanzaLines = [ABScript graftText:words intoStanzaLines:prevStanzaLines];
-//
-//    // Trigger lines to change
-//    int p = 0;
-//    for(int s=ABRA_START_LINE; s<ABRA_START_LINE + ABRA_NUMBER_OF_LINES; s++) {
-//        if(p >= [ABLines count]) continue;
-//        NSArray *newWords = (s < [stanzaLines count]) ? stanzaLines[s] : [ABScript emptyLine];
-//        [[ABLines objectAtIndex:p++] changeWordsToWords:newWords];
-//    }
-//
-//    prevStanzaLines = stanzaLines;
-
+    return YES;
 }
 
 

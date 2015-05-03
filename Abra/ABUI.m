@@ -146,10 +146,23 @@ static ABUI *ABUIInstance = NULL;
     infoButton.tintColor = [ABUI goldColor];
     infoButton.alpha = 0.5;
     [infoButton setImage:[UIImage imageNamed:@"ui_down_arrow.png"] forState:UIControlStateNormal];
+    [infoButton setImageEdgeInsets:UIEdgeInsetsMake(15, 15, 15, 15)];
+
     return infoButton;
 }
 
 + (void) moveInfoButtonDown {
+    
+    [UIView beginAnimations:@"rotate" context:nil];
+    [UIView setAnimationDuration:.5f];
+    if( CGAffineTransformEqualToTransform( infoButton.imageView.transform, CGAffineTransformIdentity ) )
+    {
+        infoButton.imageView.transform = CGAffineTransformMakeRotation(M_PI);
+    } else {
+        infoButton.imageView.transform = CGAffineTransformIdentity;
+    }
+    [UIView commitAnimations];
+    
     
     CGRect frame = infoButton.frame;
     [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
@@ -161,6 +174,18 @@ static ABUI *ABUIInstance = NULL;
 
 + (void) moveInfoButtonUp {
 
+    
+    [UIView beginAnimations:@"rotate" context:nil];
+    [UIView setAnimationDuration:.5f];
+    if( CGAffineTransformEqualToTransform( infoButton.imageView.transform, CGAffineTransformIdentity ) )
+    {
+        infoButton.imageView.transform = CGAffineTransformMakeRotation(M_PI);
+    } else {
+        infoButton.imageView.transform = CGAffineTransformIdentity;
+    }
+    [UIView commitAnimations];
+
+    
     CGRect frame = infoButton.frame;
     [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         infoButton.frame = CGRectMake(frame.origin.x, frame.origin.y - 65, frame.size.width, frame.size.height);

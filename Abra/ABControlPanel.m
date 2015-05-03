@@ -26,7 +26,7 @@ CGRect panelFrame;
 ABMainViewController *mainViewController;
 PECropViewController *cropViewController;
 
-UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButton, *autoplayButton, *shareButton, *settingsButton, *helpButton;
+UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButton, *autoplayButton, *shareButton, *settingsButton, *helpButton, *currentlySelected;
 
 - (id) initWithMainView:(ABMainViewController *)main {
     
@@ -49,8 +49,9 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
     int y = 20, h = 30;
     
     mutateButton = [self controlButtonWithText:@"🌀 mutate" andFrame:CGRectMake(50, y, 90, h)];
-    [mutateButton setSelected:YES];
     [mutateButton addTarget:self action:@selector(mutateButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [mutateButton setSelected:YES];
+    currentlySelected = mutateButton;
     
     graftButton = [self controlButtonWithText:@"🌱 graft" andFrame:CGRectMake(140, y, 80, h)];
     [graftButton addTarget:self action:@selector(graftButtonPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -78,50 +79,43 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
 }
 
 
+- (void) setModeToMutate {
+    [self mutateButtonPressed];
+}
+
+- (void) selectModeWithButton:(UIButton *)button {
+    if(currentlySelected) {
+        [currentlySelected setSelected:NO];
+//        [currentlySelected setHighlighted:NO];
+    }
+    [button setSelected:YES];
+    [button setHighlighted:YES];
+    currentlySelected = button;
+}
 
 - (void) mutateButtonPressed {
-    [mutateButton setSelected:YES];
-    [graftButton setSelected:NO];
-    [multiplyButton setSelected:NO];
-    [pruneButton setSelected:NO];
-    [eraseButton setSelected:NO];
+    [self selectModeWithButton:mutateButton];
     [ABState setInteractivityModeTo:MUTATE];
 }
 
 - (void) graftButtonPressed {
-    [mutateButton setSelected:NO];
-    [graftButton setSelected:YES];
-    [multiplyButton setSelected:NO];
-    [pruneButton setSelected:NO];
-    [eraseButton setSelected:NO];
+    [self selectModeWithButton:graftButton];
     [ABState setInteractivityModeTo:GRAFT];
     [mainViewController textFieldModal];
 }
 
 - (void) multiplyButtonPressed {
-    [mutateButton setSelected:NO];
-    [graftButton setSelected:NO];
-    [multiplyButton setSelected:YES];
-    [pruneButton setSelected:NO];
-    [eraseButton setSelected:NO];
+    [self selectModeWithButton:multiplyButton];
     [ABState setInteractivityModeTo:MULTIPLY];
 }
 
 - (void) pruneButtonPressed {
-    [mutateButton setSelected:NO];
-    [graftButton setSelected:NO];
-    [multiplyButton setSelected:NO];
-    [pruneButton setSelected:YES];
-    [eraseButton setSelected:NO];
+    [self selectModeWithButton:pruneButton];
     [ABState setInteractivityModeTo:PRUNE];
 }
 
 - (void) eraseButtonPressed {
-    [mutateButton setSelected:NO];
-    [graftButton setSelected:NO];
-    [multiplyButton setSelected:NO];
-    [pruneButton setSelected:NO];
-    [eraseButton setSelected:YES];
+    [self selectModeWithButton:eraseButton];
     [ABState setInteractivityModeTo:ERASE];
 }
 
@@ -154,25 +148,10 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
 
     [barTriggerButton setHidden:NO];
     [self setHidden:NO];
-//    [mainViewController.view :snapshotView];
-    //now we will position the image, X/Y away from top left corner to get the portion we want
-//
-//    CGSize size = CGSizeMake(self.window.bounds.size.width, self.window.bounds.size.height - 60);
-//    
-//    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
-//        UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
-//    else
-//        UIGraphicsBeginImageContext(size);
-//
-//    UIGraphicsBeginImageContext(CGSizeMake(self.window.bounds.size.width, self.window.bounds.size.height - 60));
-//    [image drawAtPoint:CGPointMake(0, -60)];
-//    UIImage *croppedImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
     
     cropViewController = [[PECropViewController alloc] init];
     cropViewController.delegate = self;
     cropViewController.image = image;
-    //controller.image = self.imageView.image;
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cropViewController];
     [mainViewController presentViewController:navigationController animated:YES completion:nil];
@@ -232,13 +211,11 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
 
 - (void) cropViewControllerDidCancel:(PECropViewController *)controller {
     [cropViewController dismissViewControllerAnimated:YES completion:NULL];
-//    self.imageView.image = croppedImage;
 }
 
 - (void) cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage {
     [cropViewController dismissViewControllerAnimated:YES completion:NULL];
-    UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil);
-//    self.imageView.image = croppedImage;
+//    UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil);
 }
 
 
@@ -262,7 +239,7 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
     [button setBackgroundImage:[self imageWithColor:[ABUI darkGoldBackgroundColor]] forState:UIControlStateSelected];
     button.adjustsImageWhenHighlighted = NO;
 
-    button.layer.cornerRadius = 10; // this value vary as per your desire
+    button.layer.cornerRadius = 10;
     button.clipsToBounds = YES;
     [self addSubview:button];
     return button;
@@ -283,39 +260,10 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
 
 
 
-///////////////////////
-// APP MODE SELECTOR //
-///////////////////////
 
 
-- (UILabel *) createAppModeSelectorLabel {
-    UILabel *modeLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 20, 80, 30)];
-    modeLabel.textColor = [ABUI darkGoldColor];
-    modeLabel.text = @"mode:";
-    modeLabel.font =  [UIFont fontWithName:@"EuphemiaUCAS" size:14.0f];
-    return modeLabel;
-}
-
-- (UISegmentedControl *) createAppModeSelector {
-    UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"🌀 mutate", @"🌱 graft"]];
-    
-    UIFont *font = [UIFont fontWithName:@"AppleSDGothicNeo-SemiBold" size:16.0f];
-    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
-    [segmentedControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    
-    segmentedControl.frame = CGRectMake(88, 20, 180, 30);
-    segmentedControl.selectedSegmentIndex = 0;
-    segmentedControl.tintColor = [ABUI darkGoldColor];
-    return segmentedControl;
-}
-
-
-
-
-
-
-- (void) triggerWithInfoButton:(UIButton *)infoButtonRef {
-    barTriggerButton = infoButtonRef;
+- (void) triggerWithButton:(UIButton *)button {
+    barTriggerButton = button;
     if(isAnimating) return;
     if(!isOpen) {
         [self open];

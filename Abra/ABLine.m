@@ -14,7 +14,6 @@
 #import "ABScriptWord.h"
 #import "ABMutate.h"
 #import "ABUI.h"
-#import "TestFlight.h"
 
 
 @implementation ABLine {
@@ -309,7 +308,6 @@
     
 
     
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@: line %i", @"touch", self.lineNumber]];
 }
 
 
@@ -329,7 +327,6 @@
     isMorphing = NO;
     [ABState updatePrevStanzaLinesWithLine:newLine atIndex:self.lineNumber];
 
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@: line %i", @"doubleTap", self.lineNumber]];
 }
 
 
@@ -346,7 +343,6 @@
     isMorphing = NO;
     [ABState updatePrevStanzaLinesWithLine:newLine atIndex:self.lineNumber];
 
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@: line %i", @"longPress", self.lineNumber]];
 }
 
 
