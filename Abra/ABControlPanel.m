@@ -26,12 +26,12 @@ CGRect panelFrame;
 ABMainViewController *mainViewController;
 PECropViewController *cropViewController;
 
-UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButton, *autoplayButton, *shareButton, *settingsButton, *helpButton, *currentlySelected;
+UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, *autoplayButton, *shareButton, *settingsButton, *helpButton, *currentlySelected;
 
 - (id) initWithMainView:(ABMainViewController *)main {
     
     mainViewController = main;
-    panelFrame = CGRectMake(-1, -67, 1026, 66);
+    panelFrame = CGRectMake(-1, [self iPadToUniversalH:-67], [self iPadToUniversalW:1026], [self iPadToUniversalH:66]);
 
     self = [super initWithFrame:panelFrame];
     if (self) {
@@ -44,37 +44,73 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
 }
 
 
+- (CGFloat) iPadToUniversalW:(CGFloat)n {
+    return [ABUI screenWidth] / (1024 / n);
+}
+
+- (CGFloat) iPadToUniversalH:(CGFloat)n {
+    return [ABUI screenHeight] / (768 / n);
+}
+
+
 - (void) initButtons {
     
-    int y = 20, h = 30;
+    int y = [ABUI iPadToUniversalH:20], h = [ABUI iPadToUniversalH:30];
     
-    mutateButton = [self controlButtonWithText:@"🌀 mutate" andFrame:CGRectMake(50, y, 90, h)];
+    CGFloat x1 = [self iPadToUniversalW:50];
+    CGFloat w1 = [self iPadToUniversalW:90];
+
+    CGFloat x2 = [self iPadToUniversalW:140];
+    CGFloat w2 = [self iPadToUniversalW:80];
+    
+    CGFloat x3 = [self iPadToUniversalW:220];
+    CGFloat w3 = [self iPadToUniversalW:100];
+    
+    CGFloat x4 = [self iPadToUniversalW:320];
+    CGFloat w4 = [self iPadToUniversalW:80];
+    
+    CGFloat x5 = [self iPadToUniversalW:400];
+    CGFloat w5 = [self iPadToUniversalW:80];
+    
+    CGFloat x6 = [self iPadToUniversalW:600];
+    CGFloat w6 = [self iPadToUniversalW:90];
+    
+    CGFloat x7 = [self iPadToUniversalW:700];
+    CGFloat w7 = [self iPadToUniversalW:105];
+    
+    CGFloat x8 = [self iPadToUniversalW:815];
+    CGFloat w8 = [self iPadToUniversalW:105];
+    
+    CGFloat x9 = [self iPadToUniversalW:920];
+    CGFloat w9 = [self iPadToUniversalW:60];
+    
+    mutateButton = [self controlButtonWithText:@"🌀 mutate" andFrame:CGRectMake(x1, y, w1, h)];
     [mutateButton addTarget:self action:@selector(mutateButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [mutateButton setSelected:YES];
     currentlySelected = mutateButton;
     
-    graftButton = [self controlButtonWithText:@"🌱 graft" andFrame:CGRectMake(140, y, 80, h)];
+    graftButton = [self controlButtonWithText:@"🌱 graft" andFrame:CGRectMake(x2, y, w2, h)];
     [graftButton addTarget:self action:@selector(graftButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    multiplyButton = [self controlButtonWithText:@"🌾 multiply" andFrame:CGRectMake(220, y, 100, h)];
-    [multiplyButton addTarget:self action:@selector(multiplyButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    magicButton = [self controlButtonWithText:@"✨ cadabra" andFrame:CGRectMake(x3, y, w3, h)];
+    [magicButton addTarget:self action:@selector(magicButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    pruneButton = [self controlButtonWithText:@"🍃 prune" andFrame:CGRectMake(320, y, 80, h)];
+    pruneButton = [self controlButtonWithText:@"🍃 prune" andFrame:CGRectMake(x4, y, w4, h)];
     [pruneButton addTarget:self action:@selector(pruneButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    eraseButton = [self controlButtonWithText:@"🍂 erase" andFrame:CGRectMake(400, y, 80, h)];
+    eraseButton = [self controlButtonWithText:@"🍂 erase" andFrame:CGRectMake(x5, y, w5, h)];
     [eraseButton addTarget:self action:@selector(eraseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    shareButton = [self controlButtonWithText:@"🚀 share" andFrame:CGRectMake(600, y, 90, h)];
+    shareButton = [self controlButtonWithText:@"🚀 share" andFrame:CGRectMake(x6, y, w6, h)];
     [shareButton addTarget:self action:@selector(shareButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    autoplayButton = [self controlButtonWithText:@"🌿 autoplay" andFrame:CGRectMake(700, y, 105, h)];
+    autoplayButton = [self controlButtonWithText:@"🌿 autoplay" andFrame:CGRectMake(x7, y, w7, h)];
     [autoplayButton addTarget:self action:@selector(autoplayButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    settingsButton = [self controlButtonWithText:@"🎁 settings" andFrame:CGRectMake(815, y, 105, h)];
+    settingsButton = [self controlButtonWithText:@"🎁 settings" andFrame:CGRectMake(x8, y, w8, h)];
     [settingsButton addTarget:self action:@selector(settingsButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    helpButton = [self controlButtonWithText:@"✨ info" andFrame:CGRectMake(920, y, 60, h)];
+    helpButton = [self controlButtonWithText:@"✨ info" andFrame:CGRectMake(x9, y, w9, h)];
     [helpButton addTarget:self action:@selector(infoButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 }
 
@@ -104,9 +140,9 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
     [mainViewController textFieldModal];
 }
 
-- (void) multiplyButtonPressed {
-    [self selectModeWithButton:multiplyButton];
-    [ABState setInteractivityModeTo:MULTIPLY];
+- (void) magicButtonPressed {
+    [self selectModeWithButton:magicButton];
+    [ABState setInteractivityModeTo:MAGIC];
 }
 
 - (void) pruneButtonPressed {
@@ -232,14 +268,14 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
     [button setTitleColor:[ABUI darkGoldColor] forState:UIControlStateNormal];
     [button setTitleColor:[ABUI darkGoldColor] forState:UIControlStateHighlighted];
     [button setTitleColor:[ABUI goldColor] forState:UIControlStateSelected];
-    button.titleLabel.font = [UIFont fontWithName:@"EuphemiaUCAS" size:14.0f];
+    button.titleLabel.font = [UIFont fontWithName:@"EuphemiaUCAS" size:([ABUI screenWidth] / 73.14)];  // 14.0f
     button.backgroundColor = [UIColor clearColor];
     [button setBackgroundImage:[self imageWithColor:[UIColor clearColor]] forState:UIControlStateNormal];
     [button setBackgroundImage:[self imageWithColor:[ABUI darkGoldBackgroundColor]] forState:UIControlStateHighlighted];
     [button setBackgroundImage:[self imageWithColor:[ABUI darkGoldBackgroundColor]] forState:UIControlStateSelected];
     button.adjustsImageWhenHighlighted = NO;
 
-    button.layer.cornerRadius = 10;
+    button.layer.cornerRadius = [self iPadToUniversalH:10];
     button.clipsToBounds = YES;
     [self addSubview:button];
     return button;
@@ -282,7 +318,7 @@ UIButton *mutateButton, *graftButton, *multiplyButton, *pruneButton, *eraseButto
     [ABUI moveInfoButtonDown];
 
     [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        self.frame = CGRectMake(panelFrame.origin.x, panelFrame.origin.y + 65, panelFrame.size.width, panelFrame.size.height);
+        self.frame = CGRectMake(panelFrame.origin.x, panelFrame.origin.y + [ABUI iPadToUniversalH:65], panelFrame.size.width, panelFrame.size.height);
     } completion:^(BOOL finished) {
         isOpen = YES;
         isAnimating = NO;

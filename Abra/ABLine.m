@@ -292,7 +292,7 @@
         [ABState updatePrevStanzaLinesWithLine:newLine atIndex:self.lineNumber];
     }
 
-    if(mode == MULTIPLY) {
+    if(mode == MAGIC) {
         if(w.isErased) return;
         NSArray *newLine = [ABMutate multiplyOneWordInLine:lineScriptWords atWordIndex:target];
         isMorphing = YES;

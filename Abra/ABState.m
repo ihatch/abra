@@ -224,7 +224,7 @@ static ABState *ABStateInstance = NULL;
     
     int lineHeight = [ABUI abraLineHeight];
     CGFloat heightOffset = ([ABUI screenHeight] - (lineHeight * ABRA_NUMBER_OF_LINES)) / 2;
-    if(![ABUI isIpad]) heightOffset = heightOffset / 2;
+    if([ABUI screenHeight] < 400) heightOffset = heightOffset / 1.5;
     
     ABLines = [[NSMutableArray alloc] init];
     
@@ -351,6 +351,7 @@ static ABState *ABStateInstance = NULL;
 + (void) absentlyMutate {
     
 //    CGFloat level = ABF(0.12);
+    if([prevStanzaLines count] == 0) return;
     int i = ABI((int)([prevStanzaLines count]));
     NSArray *newLine = [ABMutate mutateRandomWordInLine:prevStanzaLines[i]];
     [ABState updatePrevStanzaLinesWithLine:newLine atIndex:i];

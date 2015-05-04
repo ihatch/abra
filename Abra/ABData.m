@@ -16,7 +16,6 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectoryPath = [paths objectAtIndex:0];
 
-
     //documentsDirectoryPath = @"/Users/ianhatcher/Desktop/";
     
     NSString *fileName = [@"abraData-" stringByAppendingString:key];
@@ -24,13 +23,13 @@
     [NSKeyedArchiver archiveRootObject:dataDict toFile:filePath];
 }
 
-
-+ (void) DEVsaveDataToDesktop:(NSData *)data {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    [fileManager createFileAtPath:@"/Users/Me/Desktop/data.dat" contents:data attributes:nil];
-
-}
-
+//
+//+ (void) DEVsaveDataToDesktop:(NSData *)data {
+//    NSFileManager *fileManager = [NSFileManager defaultManager];
+//    [fileManager createFileAtPath:@"/Users/Me/Desktop/data.dat" contents:data attributes:nil];
+//
+//}
+//
 + (void) saveCoreMutationsIndex:(NSDictionary *)dataDict {
     [ABData saveData:dataDict forKey:@"coreMutationsTable"];
 }
@@ -51,6 +50,11 @@
 
 + (NSDictionary *) loadDataForKey:(NSString *)key {
 
+    if([key isEqualToString:@"coreMutationsTable"]) {
+        NSLog(@"%@", @"Loading precompiled core mutations data.");
+        return [ABData loadPrecompiledCoreData];
+    }
+    
     // look for saved data.
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectoryPath = [paths objectAtIndex:0];
@@ -64,6 +68,15 @@
     }
     return nil;
 }
+
+
++ (NSDictionary *) loadPrecompiledCoreData {
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"abraData-coreMutationsTable" ofType:@"dat"];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    NSDictionary *savedData = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    return savedData;
+}
+
 
 
 + (NSMutableDictionary *) loadMutableDataForKey:(NSString *)key {

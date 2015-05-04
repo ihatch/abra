@@ -40,6 +40,9 @@
 + (CGFloat) abraFlowersFontSize;
 
 
++ (CGFloat) iPadToUniversalW:(CGFloat)n;
++ (CGFloat) iPadToUniversalH:(CGFloat)n;
+
 
 + (BOOL) isIpadAir;
 + (BOOL) isIpad;

@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Abra/abraData-coreMutationsTable.dat">
+   </FileRef>
+   <FileRef
       location = "group:Abra.xcodeproj">
    </FileRef>
    <FileRef

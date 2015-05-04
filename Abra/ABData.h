@@ -14,6 +14,7 @@
 + (void) saveModifiedMutationsIndex:(NSDictionary *)dataDict;
 + (NSMutableDictionary *) loadCoreMutationsIndex;
 + (NSMutableDictionary *) loadModifiedMutationsIndex;
++ (NSDictionary *) loadPrecompiledCoreData;
 
 + (NSArray *) loadRawStanzas;
 + (NSArray *) loadWordList;

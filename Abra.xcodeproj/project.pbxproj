@@ -28,6 +28,7 @@
 		07B7D29A19AECE6A001194FD /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B7D29919AECE6A001194FD /* iCarousel.m */; };
 		07C9242F19B56E0A00CCFC9C /* dice.txt in Resources */ = {isa = PBXBuildFile; fileRef = 07C9242E19B56E0A00CCFC9C /* dice.txt */; };
 		07D6D1B11A69C008004970A3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07D6D1B01A69C008004970A3 /* Images.xcassets */; };
+		07FB60F51AF6BF7F00CDDB67 /* abraData-coreMutationsTable.dat in Resources */ = {isa = PBXBuildFile; fileRef = 07FB60F41AF6BF7F00CDDB67 /* abraData-coreMutationsTable.dat */; };
 		A1110549E1C24A4CBFD6C0DB /* libPods-Abra.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84407B0D15CE45E5804EAEEE /* libPods-Abra.a */; };
 		C604FA071850F7790076CC96 /* ABScript.m in Sources */ = {isa = PBXBuildFile; fileRef = C604FA061850F7790076CC96 /* ABScript.m */; };
 		C604FA0C1850FA5F0076CC96 /* script.txt in Resources */ = {isa = PBXBuildFile; fileRef = C604FA0B1850FA5F0076CC96 /* script.txt */; };
@@ -104,6 +105,7 @@
 		07B7D29919AECE6A001194FD /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		07C9242E19B56E0A00CCFC9C /* dice.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dice.txt; sourceTree = "<group>"; };
 		07D6D1B01A69C008004970A3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		07FB60F41AF6BF7F00CDDB67 /* abraData-coreMutationsTable.dat */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-coreMutationsTable.dat"; sourceTree = "<group>"; };
 		84407B0D15CE45E5804EAEEE /* libPods-Abra.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Abra.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86BA78A39E5E2AD47EE37330 /* Pods-Abra.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abra.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Abra/Pods-Abra.debug.xcconfig"; sourceTree = "<group>"; };
 		C604FA051850F7790076CC96 /* ABScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABScript.h; sourceTree = "<group>"; };
@@ -324,6 +326,7 @@
 		C66636CE187DA6D50046E8DE /* Text Resources */ = {
 			isa = PBXGroup;
 			children = (
+				07FB60F41AF6BF7F00CDDB67 /* abraData-coreMutationsTable.dat */,
 				C604FA0B1850FA5F0076CC96 /* script.txt */,
 				07C9242E19B56E0A00CCFC9C /* dice.txt */,
 				075B2AE31A992D9600763915 /* diceAdditions.txt */,
@@ -512,6 +515,7 @@
 				C6DE548118BD89EB000A3DAB /* abra_logos_horiz2.png in Resources */,
 				C6DE547918BD69DC000A3DAB /* abra_logos.png in Resources */,
 				C68B9ED118615C7B007D2BDB /* wordList.txt in Resources */,
+				07FB60F51AF6BF7F00CDDB67 /* abraData-coreMutationsTable.dat in Resources */,
 				07A8000C1A69DD8B00BE71C9 /* a_76.png in Resources */,
 				C6E73A01184BED4600A2A5C3 /* InfoPlist.strings in Resources */,
 				C6E73A09184BED4600A2A5C3 /* Default.png in Resources */,

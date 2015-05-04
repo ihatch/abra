@@ -141,17 +141,22 @@ BOOL carouselIsAnimating;
 
 - (void) initCarouselView {
     
-    CGFloat carouselWidth = isIpad ? 624 : screenWidth / 1.5;
-    CGFloat carouselHeight = isIpad ? 120 : 90;
-    CGFloat carouselX = isIpad ? 200 : (screenWidth - carouselWidth) / 2;
-    CGFloat carouselY = isIpad ? 612 : screenHeight - 90;
-    
+//    CGFloat carouselWidth = isIpad ? 624 : screenWidth / 1.5;
+//    CGFloat carouselHeight = isIpad ? 120 : 90;
+//    CGFloat carouselX = isIpad ? 200 : (screenWidth - carouselWidth) / 2;
+//    CGFloat carouselY = isIpad ? 612 : screenHeight - 90;
+
+    CGFloat carouselWidth = screenWidth / 1.64;
+    CGFloat carouselHeight = screenHeight / 6.4;
+    CGFloat carouselX = (screenWidth - carouselWidth) / 2;
+    CGFloat carouselY = screenHeight - carouselHeight - (screenHeight / 36);
+
 	self.carousel = [[iCarousel alloc] initWithFrame:CGRectMake(carouselX, carouselY, carouselWidth, carouselHeight)];
     self.carousel.type = iCarouselTypeRotary;
 	self.carousel.delegate = self;
 	self.carousel.dataSource = self;
     self.carousel.alpha = 0.0;
-    self.carousel.scrollSpeed = 0.15;
+    self.carousel.scrollSpeed = 0.19;
     self.carousel.clipsToBounds = NO;
 	
     //add carousel to view
@@ -176,7 +181,8 @@ BOOL carouselIsAnimating;
     
     // create new view if no view is available for recycling
     if (view == nil) {
-        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50.0f, 150.0f)];
+//        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50.0f, 100.0f)];
+        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, screenWidth / 20.48, screenHeight / 7.68)];
         view.contentMode = UIViewContentModeCenter;
         label = [[UILabel alloc] initWithFrame:view.bounds];
         label.tag = 1;
@@ -194,8 +200,8 @@ BOOL carouselIsAnimating;
     label.textAlignment = NSTextAlignmentCenter;
     //label.font = [label.font fontWithSize:40];
     
-    CGFloat fontSize = isIpad ? 30.0f : 20.0f;
-    label.font = [UIFont fontWithName:ABRA_FLOWERS_FONT size:fontSize];
+//    CGFloat fontSize = screenWidth / 34.13; //isIpad ? 30.0f : 20.0f;
+    label.font = [UIFont fontWithName:ABRA_FLOWERS_FONT size:(screenWidth / 34.13)];
     label.text = @"Q";
     
     return view;
@@ -211,11 +217,11 @@ BOOL carouselIsAnimating;
     switch (option) {
         case iCarouselOptionWrap: { return YES; }
         case iCarouselOptionShowBackfaces: { return NO; }
-        case iCarouselOptionSpacing: { return value * 1.01f; }
+        case iCarouselOptionSpacing: { return value * 1.21f; }
         case iCarouselOptionFadeMin: { return -0.1f; }
         case iCarouselOptionFadeMax: { return 0.35f; }
-        case iCarouselOptionFadeRange: { return 1.1f; }
-        case iCarouselOptionFadeMinAlpha: { return 0.30f; }
+        case iCarouselOptionFadeRange: { return 1.01f; }
+        case iCarouselOptionFadeMinAlpha: { return 0.26f; }
         default: { return value; }
     }
 }
@@ -513,7 +519,11 @@ BOOL carouselIsAnimating;
 
 - (void) initInfoView {
     
-    controlPanelTriggerButton = [ABUI createInfoButtonWithFrame:CGRectMake(960, 10, 53, 53)];
+    CGFloat x = screenWidth / 1.066;
+    CGFloat y = 10;
+    CGFloat d = screenWidth / 19.32;
+    
+    controlPanelTriggerButton = [ABUI createInfoButtonWithFrame:CGRectMake(x, y, d, d)];
     
     [controlPanelTriggerButton addTarget:self action:@selector(triggerInfoViewButton) forControlEvents:(UIControlEvents)UIControlEventTouchDown];
     [self.view addSubview:controlPanelTriggerButton];

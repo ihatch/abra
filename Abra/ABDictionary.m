@@ -38,14 +38,22 @@ static ABDictionary *ABDictionaryInstance = NULL;
     diceDictionary = [ABData loadCoreMutationsIndex];
 
     if(!diceDictionary) {
-        NSLog(@"%@", @"Generating dictionary ...");
-        diceDictionary = [NSMutableDictionary dictionaryWithDictionary:[ABDice topCoreMatchesForLexicon:[ABData loadWordList]]];
-        [ABData saveCoreMutationsIndex:diceDictionary];
+        NSLog(@"%@", @">> ERROR: CORE MUTATIONS TABLE NOT FOUND");
+        // [ABDictionary generateCoreDictionary];
     } else {
         diceDictionary = [ABData loadDiceAdditionsAndAddToDictionary:diceDictionary];
     }
 
 }
+
+
+// Only used in dev, and needs to be manually triggered
++ (void) generateCoreDictionary {
+    NSLog(@"%@", @"Generating dictionary ...");
+    diceDictionary = [NSMutableDictionary dictionaryWithDictionary:[ABDice topCoreMatchesForLexicon:[ABData loadWordList]]];
+    [ABData saveCoreMutationsIndex:diceDictionary];
+}
+
 
 
 

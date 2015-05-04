@@ -142,7 +142,13 @@ static ABMutate *ABMutateInstance = NULL;
     NSArray *newWords;
     
     if(type == DICE) {
-        newWords = @[[ABMutate throwDiceCoefficient:oldWord]];
+        if(ABI(40) == 0) {
+            newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
+        } else if(ABI(9) == 0) {
+            newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
+        } else {
+            newWords = @[[ABMutate throwDiceCoefficient:oldWord]];
+        }
     } else if(type == RANDOM) {
         newWords = [ABMutate mutate:oldWord andLocalWords:line mutationLevel:5 lineLength:(int)[line count]];
     } else if(type == EXPLODE) {
@@ -311,25 +317,31 @@ static ABMutate *ABMutateInstance = NULL;
     ABScriptWord *new = [ABScriptWord copyScriptWord:word];
     
     @try {
-        int range = 4 + (word.morphCount * 7);
+        int range = 4 + (word.morphCount * 3);
         int max = (int)[dice count];
         if(range > max) range = max;
-        int randomIndex = ABI(range);
-        NSString *w = [dice objectAtIndex:randomIndex];
-        if(!w) {
-            NSLog(@">> Problematic dice match for: %@", word.text);
-            return word;
+        if(range == max && ABI(1) == 0) {
+            new = [ABScript trulyRandomWord];
+            NSLog(@"Radical mutation: %@ -> %@", word.text, new.text);
+            new.morphCount = (int)(new.morphCount / 3);
+        } else {
+            int randomIndex = ABI(range);
+            NSString *w = [dice objectAtIndex:randomIndex];
+            if(!w) {
+                NSLog(@">> Problematic dice match for: %@", word.text);
+                return word;
+            }
+            if(![ABDictionary scriptWord:w]) [ABDictionary addToScriptWords:w];
+            NSLog(@"* Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
+            new = [ABDictionary scriptWord:w];
         }
-        if(![ABDictionary scriptWord:w]) [ABDictionary addToScriptWords:w];
-        NSLog(@"* Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
-        new = [ABDictionary scriptWord:w];
     }
     @catch (NSException *exception) {
         NSLog(@">> DICE ERROR: %@", word.text);
     }
     @finally {
         // To make changes more colorful sooner, change this last digit:
-        new.sourceStanza = word.sourceStanza + word.morphCount + 2;
+        new.sourceStanza = word.sourceStanza + ABI(word.morphCount) + 1;
         return new;
     }
 }

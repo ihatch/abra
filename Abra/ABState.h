@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum { MUTATE, GRAFT, MULTIPLY, PRUNE, ERASE } InteractivityMode;
+typedef enum { MUTATE, GRAFT, MAGIC, PRUNE, ERASE } InteractivityMode;
 
 
 @interface ABState : NSObject

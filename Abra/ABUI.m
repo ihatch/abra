@@ -43,26 +43,51 @@ static ABUI *ABUIInstance = NULL;
 
 
 
+
++ (CGFloat) iPadToUniversalW:(CGFloat)n {
+    return [ABUI screenWidth] / (1024 / n);
+}
+
++ (CGFloat) iPadToUniversalH:(CGFloat)n {
+    return [ABUI screenHeight] / (768 / n);
+}
+
+
+
+
 + (CGFloat) abraFontSize {
-    return 21.0;
+//    return 21.0;
+    if(kScreenHeight < 400) return kScreenHeight / 27;
+    return kScreenHeight / 36.5;
 }
 
 + (CGFloat) abraOptionsFontSize {
-    return 21.0;
+    if(kScreenHeight < 400) return kScreenHeight / 26;
+    return kScreenHeight / 36.5;
+//    return 21.0;
 }
 
 
 + (CGFloat) abraFontMargin {
-    return 8.0;
+    if(kScreenHeight < 400) return kScreenHeight / 75;
+    return kScreenHeight / 96;
+//    return 8.0;
 }
 
 + (CGFloat) abraLineHeight {
-    return 44.0;
+    if(kScreenHeight < 400) return kScreenHeight / 15;
+    return kScreenHeight / 17.45;
+//    return 44.0;
 }
 
 + (CGFloat) abraFlowersFontSize {
-    return 30.0;
+    if(kScreenHeight < 400) return kScreenHeight / 10;
+    return kScreenHeight / 25.6;
+//    return 30.0;
 }
+
+
+
 
 
 
@@ -146,7 +171,8 @@ static ABUI *ABUIInstance = NULL;
     infoButton.tintColor = [ABUI goldColor];
     infoButton.alpha = 0.5;
     [infoButton setImage:[UIImage imageNamed:@"ui_down_arrow.png"] forState:UIControlStateNormal];
-    [infoButton setImageEdgeInsets:UIEdgeInsetsMake(15, 15, 15, 15)];
+    CGFloat m = kScreenWidth / 68.26666666666667;
+    [infoButton setImageEdgeInsets:UIEdgeInsetsMake(m, m, m, m)];
 
     return infoButton;
 }
@@ -166,7 +192,7 @@ static ABUI *ABUIInstance = NULL;
     
     CGRect frame = infoButton.frame;
     [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        infoButton.frame = CGRectMake(frame.origin.x, frame.origin.y + 65, frame.size.width, frame.size.height);
+        infoButton.frame = CGRectMake(frame.origin.x, frame.origin.y + [ABUI iPadToUniversalH:65], frame.size.width, frame.size.height);
     } completion:^(BOOL finished) {
 
     }];
@@ -188,7 +214,7 @@ static ABUI *ABUIInstance = NULL;
     
     CGRect frame = infoButton.frame;
     [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        infoButton.frame = CGRectMake(frame.origin.x, frame.origin.y - 65, frame.size.width, frame.size.height);
+        infoButton.frame = CGRectMake(frame.origin.x, frame.origin.y - [ABUI iPadToUniversalH:65], frame.size.width, frame.size.height);
     } completion:^(BOOL finished) {
         
     }];
