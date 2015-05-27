@@ -17,7 +17,7 @@
 #import "ABLine.h"
 #import "ABWord.h"
 #import "ABMutate.h"
-#import "ABDictionary.h"
+#import "ABData.h"
 
 @implementation ABState
 
@@ -121,7 +121,7 @@ static ABState *ABStateInstance = NULL;
     return isInAutoplayMode;
 }
 
-+ (int) currentIndex {
++ (int) getCurrentStanza {
     return currentStanza;
 }
 
@@ -376,7 +376,7 @@ static ABState *ABStateInstance = NULL;
     
     NSArray *words = [ABScript parseGraftTextIntoScriptWords:trimmed];
     
-    [ABDictionary graftNewWords:words];
+    [ABData graftNewWords:words];
     return YES;
 }
 

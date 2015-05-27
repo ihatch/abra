@@ -22,12 +22,12 @@
 + (UIColor *) darkGoldColor;
 + (UIColor *) darkGoldBackgroundColor;
 
-+ (UIButton *) createInfoButtonWithFrame:(CGRect)frame;
++ (UIButton *) createControlPanelTriggerButtonWithFrame:(CGRect)frame;
 + (UIButton *) createInfoViewWithFrame:(CGRect)frame;
 + (UITextField *) createTextFieldWithFrame:(CGRect)frame;
 
-+ (void) moveInfoButtonDown;
-+ (void) moveInfoButtonUp;
++ (void) movePanelTriggerButtonDown;
++ (void) movePanelTriggerButtonUp;
 
 + (UIButton *) createButtonWithFrame:(CGRect)frame title:(NSString *)title;
 + (UIView *) createCenteredModalWithWidth:(CGFloat)w andHeight:(CGFloat)h;

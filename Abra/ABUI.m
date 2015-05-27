@@ -56,37 +56,25 @@ static ABUI *ABUIInstance = NULL;
 
 
 + (CGFloat) abraFontSize {
-//    return 21.0;
     if(kScreenHeight < 400) return kScreenHeight / 27;
-    return kScreenHeight / 36.5;
+    return kScreenHeight / 36.5;   //    return 21.0;
 }
-
 + (CGFloat) abraOptionsFontSize {
     if(kScreenHeight < 400) return kScreenHeight / 26;
-    return kScreenHeight / 36.5;
-//    return 21.0;
+    return kScreenHeight / 36.5;  //     21.0;
 }
-
-
 + (CGFloat) abraFontMargin {
     if(kScreenHeight < 400) return kScreenHeight / 75;
-    return kScreenHeight / 96;
-//    return 8.0;
+    return kScreenHeight / 96;   //     8.0;
 }
-
 + (CGFloat) abraLineHeight {
     if(kScreenHeight < 400) return kScreenHeight / 15;
-    return kScreenHeight / 17.45;
-//    return 44.0;
+    return kScreenHeight / 17.45;  //     44.0;
 }
-
 + (CGFloat) abraFlowersFontSize {
     if(kScreenHeight < 400) return kScreenHeight / 10;
-    return kScreenHeight / 25.6;
-//    return 30.0;
+    return kScreenHeight / 25.6;  //     30.0;
 }
-
-
 
 
 
@@ -116,7 +104,7 @@ static ABUI *ABUIInstance = NULL;
 }
 
 + (UIColor *) progressHueColorWithOffset:(CGFloat)colorOffset {
-    CGFloat p = [ABUI progressFloatForStanza:[ABState currentIndex]];
+    CGFloat p = [ABUI progressFloatForStanza:[ABState getCurrentStanza]];
     CGFloat s = ABF(0.1);
     CGFloat hue = p + (colorOffset + (ABF(0.10) - 0.05));
     if(hue > 1) hue -= 1;
@@ -125,7 +113,7 @@ static ABUI *ABUIInstance = NULL;
 }
 
 + (UIColor *) progressHueColorPreciselyWithOffset:(CGFloat)colorOffset {
-    CGFloat p = [ABUI progressFloatForStanza:[ABState currentIndex]];
+    CGFloat p = [ABUI progressFloatForStanza:[ABState getCurrentStanza]];
     CGFloat hue = p + colorOffset;
     if(hue > 1) hue -= 1;
     if(hue < 0) hue += 1;
@@ -160,12 +148,12 @@ static ABUI *ABUIInstance = NULL;
 
 
 
-/////////////////
-// INFO BUTTON //
-/////////////////
+//////////////////////////////////
+// CONTROL PANEL TRIGGER BUTTON //
+//////////////////////////////////
 
 
-+ (UIButton *) createInfoButtonWithFrame:(CGRect)frame {
++ (UIButton *) createControlPanelTriggerButtonWithFrame:(CGRect)frame {
     infoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     infoButton.frame = frame;
     infoButton.tintColor = [ABUI goldColor];
@@ -177,7 +165,7 @@ static ABUI *ABUIInstance = NULL;
     return infoButton;
 }
 
-+ (void) moveInfoButtonDown {
++ (void) movePanelTriggerButtonDown {
     
     [UIView beginAnimations:@"rotate" context:nil];
     [UIView setAnimationDuration:.5f];
@@ -198,7 +186,7 @@ static ABUI *ABUIInstance = NULL;
     }];
 }
 
-+ (void) moveInfoButtonUp {
++ (void) movePanelTriggerButtonUp {
 
     
     [UIView beginAnimations:@"rotate" context:nil];
@@ -251,6 +239,9 @@ static ABUI *ABUIInstance = NULL;
 - (void) showInfoWebView:(UIWebView *)webView {
     [webView setHidden:NO];
 }
+
+
+
 
 
 ////////////////

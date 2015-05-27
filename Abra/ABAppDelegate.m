@@ -8,6 +8,7 @@
 
 #import "ABAppDelegate.h"
 #import "ABClock.h"
+#import "ABMainViewController.h"
 
 @implementation ABAppDelegate
 
@@ -19,7 +20,7 @@
     [lagFreeField becomeFirstResponder];
     [lagFreeField resignFirstResponder];
     [lagFreeField removeFromSuperview];
-
+    
     return YES;
 }
 

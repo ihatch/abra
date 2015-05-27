@@ -12,7 +12,7 @@
 #import <pop/POP.h>
 #import <Social/Social.h>
 #import <Accounts/Accounts.h>
-
+#import "ABInfoView.h"
 
 // #import <QuartzCore/QuartzCore.h>
 
@@ -25,6 +25,8 @@ UIButton *barTriggerButton;
 CGRect panelFrame;
 ABMainViewController *mainViewController;
 PECropViewController *cropViewController;
+ABInfoView *infoView;
+
 
 UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, *autoplayButton, *shareButton, *settingsButton, *helpButton, *currentlySelected;
 
@@ -57,32 +59,37 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
     
     int y = [ABUI iPadToUniversalH:20], h = [ABUI iPadToUniversalH:30];
     
+    
+    
     CGFloat x1 = [self iPadToUniversalW:50];
     CGFloat w1 = [self iPadToUniversalW:90];
 
-    CGFloat x2 = [self iPadToUniversalW:140];
+    CGFloat x2 = [self iPadToUniversalW:145];
     CGFloat w2 = [self iPadToUniversalW:80];
     
-    CGFloat x3 = [self iPadToUniversalW:220];
-    CGFloat w3 = [self iPadToUniversalW:100];
+    CGFloat x3 = [self iPadToUniversalW:230];
+    CGFloat w3 = [self iPadToUniversalW:80];
     
-    CGFloat x4 = [self iPadToUniversalW:320];
+    CGFloat x4 = [self iPadToUniversalW:315];
     CGFloat w4 = [self iPadToUniversalW:80];
     
     CGFloat x5 = [self iPadToUniversalW:400];
-    CGFloat w5 = [self iPadToUniversalW:80];
+    CGFloat w5 = [self iPadToUniversalW:100];
     
-    CGFloat x6 = [self iPadToUniversalW:600];
-    CGFloat w6 = [self iPadToUniversalW:90];
     
-    CGFloat x7 = [self iPadToUniversalW:700];
-    CGFloat w7 = [self iPadToUniversalW:105];
     
-    CGFloat x8 = [self iPadToUniversalW:815];
-    CGFloat w8 = [self iPadToUniversalW:105];
+//    CGFloat x7 = [self iPadToUniversalW:700];
+//    CGFloat w7 = [self iPadToUniversalW:105];
+
+    CGFloat x7 = [self iPadToUniversalW:725];
+    CGFloat w7 = [self iPadToUniversalW:85];
+
+    CGFloat x8 = [self iPadToUniversalW:810];
+    CGFloat w8 = [self iPadToUniversalW:95];
     
-    CGFloat x9 = [self iPadToUniversalW:920];
-    CGFloat w9 = [self iPadToUniversalW:60];
+    CGFloat x9 = [self iPadToUniversalW:910];
+    CGFloat w9 = [self iPadToUniversalW:70];
+    
     
     mutateButton = [self controlButtonWithText:@"🌀 mutate" andFrame:CGRectMake(x1, y, w1, h)];
     [mutateButton addTarget:self action:@selector(mutateButtonPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -92,25 +99,25 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
     graftButton = [self controlButtonWithText:@"🌱 graft" andFrame:CGRectMake(x2, y, w2, h)];
     [graftButton addTarget:self action:@selector(graftButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    magicButton = [self controlButtonWithText:@"✨ cadabra" andFrame:CGRectMake(x3, y, w3, h)];
-    [magicButton addTarget:self action:@selector(magicButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    
-    pruneButton = [self controlButtonWithText:@"🍃 prune" andFrame:CGRectMake(x4, y, w4, h)];
+    pruneButton = [self controlButtonWithText:@"🍃 prune" andFrame:CGRectMake(x3, y, w3, h)];
     [pruneButton addTarget:self action:@selector(pruneButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    eraseButton = [self controlButtonWithText:@"🍂 erase" andFrame:CGRectMake(x5, y, w5, h)];
+    eraseButton = [self controlButtonWithText:@"🍂 erase" andFrame:CGRectMake(x4, y, w4, h)];
     [eraseButton addTarget:self action:@selector(eraseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    shareButton = [self controlButtonWithText:@"🚀 share" andFrame:CGRectMake(x6, y, w6, h)];
-    [shareButton addTarget:self action:@selector(shareButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    magicButton = [self controlButtonWithText:@"✨ cadabra" andFrame:CGRectMake(x5, y, w5, h)];
+    [magicButton addTarget:self action:@selector(magicButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    autoplayButton = [self controlButtonWithText:@"🌿 autoplay" andFrame:CGRectMake(x7, y, w7, h)];
-    [autoplayButton addTarget:self action:@selector(autoplayButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+//    autoplayButton = [self controlButtonWithText:@"🌿 autoplay" andFrame:CGRectMake(x7, y, w7, h)];
+//    [autoplayButton addTarget:self action:@selector(autoplayButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    settingsButton = [self controlButtonWithText:@"🎁 settings" andFrame:CGRectMake(x8, y, w8, h)];
-    [settingsButton addTarget:self action:@selector(settingsButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    shareButton = [self controlButtonWithText:@"🎁 share" andFrame:CGRectMake(x7, y, w7, h)];
+    [shareButton addTarget:self action:@selector(shareButtonPressed) forControlEvents:UIControlEventTouchUpInside]; // 🚀📷📡
+
+    settingsButton = [self controlButtonWithText:@"🌰 settings" andFrame:CGRectMake(x8, y, w8, h)];
+    [settingsButton addTarget:self action:@selector(settingsButtonPressed) forControlEvents:UIControlEventTouchUpInside]; // 🔩🎁🔩🎒🍎📦🌰
     
-    helpButton = [self controlButtonWithText:@"✨ info" andFrame:CGRectMake(x9, y, w9, h)];
+    helpButton = [self controlButtonWithText:@"🔮 info" andFrame:CGRectMake(x9, y, w9, h)];
     [helpButton addTarget:self action:@selector(infoButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 }
 
@@ -203,6 +210,8 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
 }
 
 - (void) infoButtonPressed {
+    infoView = [[ABInfoView alloc] initWithMainView:mainViewController];
+    [mainViewController.view addSubview:infoView];
 }
 
 
@@ -315,7 +324,7 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
     isAnimating = YES;
     
     [self.layer setBorderColor:[ABUI progressHueColor].CGColor];
-    [ABUI moveInfoButtonDown];
+    [ABUI movePanelTriggerButtonDown];
 
     [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         self.frame = CGRectMake(panelFrame.origin.x, panelFrame.origin.y + [ABUI iPadToUniversalH:65], panelFrame.size.width, panelFrame.size.height);
@@ -331,7 +340,7 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
     NSLog(@"%@", @"close control");
     isAnimating = YES;
 
-    [ABUI moveInfoButtonUp];
+    [ABUI movePanelTriggerButtonUp];
 
     [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         self.frame = panelFrame;

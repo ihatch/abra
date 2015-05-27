@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABMainViewController.m"
-            timestampString = "452375955.807503"
+            timestampString = "454286515.827142"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
-            landmarkName = "-shouldAutorotateToInterfaceOrientation:"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
+            landmarkName = "-initCarouselView"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

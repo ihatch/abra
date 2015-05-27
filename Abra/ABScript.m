@@ -11,7 +11,6 @@
 #import "ABData.h"
 #import "ABConstants.h"
 #import "ABScriptWord.h"
-#import "ABDictionary.h"
 
 typedef enum { DICE, RANDOM, EXPLODE, CUT, CLONE } mutationType;
 
@@ -25,10 +24,22 @@ static ABScript *ABScriptInstance = NULL;
     @synchronized(self) {
         if (ABScriptInstance == NULL) ABScriptInstance = [[ABScript alloc] init];
         [ABScriptInstance parseScriptFile];
-        [ABDictionary initCoreDictionary];
-        
     }
 }
+
+
+
+// Now this class is initialized by ABData, so this comes first:
+
++ (void) initScriptWithDataArray:(NSArray *)scriptDataArray {
+    script = scriptDataArray;
+    stanzaCount = [script count];
+}
+
++ (NSMutableDictionary *) initScriptAndParseScriptFile {
+    return [ABScriptInstance parseScriptFile];
+}
+
 
 
 
@@ -39,12 +50,13 @@ static ABScript *ABScriptInstance = NULL;
 
 
 // Create nested structure of word objects
-- (void) parseScriptFile {
+- (NSMutableDictionary *) parseScriptFile {
     
-    NSArray *rawStanzas = [ABData loadRawStanzas];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"script" ofType:@"txt"];
+    NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    NSArray *rawStanzas = [rawText componentsSeparatedByString:@"\n\n\n"];
 
     NSMutableDictionary *scriptWordsDictionary = [NSMutableDictionary dictionary];
-    NSMutableArray *allWordObjs  = [[NSMutableArray alloc] init];
     NSMutableArray *stanzas = [NSMutableArray array];
     NSMutableArray *stanzaObjs = [[NSMutableArray alloc] init];
     
@@ -78,10 +90,14 @@ static ABScript *ABScriptInstance = NULL;
 
                 NSString *text = lines[j][z];
                 
+                if([text isEqualToString:@""]) continue;
+                
                 if([text isEqualToString:@"estropheeeeeeeeeeeeeeeeeeeeeeeees"]) {
                     NSArray *parts = [self specialHandlingForCrazyEeeWordWithSourceStanza:i];
-                    [allWordObjs addObjectsFromArray:parts];
                     [linesObjs[j] addObjectsFromArray:parts];
+                    for (ABScriptWord *sw in parts) {
+                        [scriptWordsDictionary setObject:[ABScriptWord copyScriptWord:sw] forKey:text];
+                    }
                     continue;
                 }
                 
@@ -112,10 +128,8 @@ static ABScript *ABScriptInstance = NULL;
                 }
                 
                 lastWordObj = sw;
-                [allWordObjs addObject:sw];
                 [linesObjs[j] addObject:sw];
                 [scriptWordsDictionary setObject:[ABScriptWord copyScriptWord:sw] forKey:text];
-                
             }
         }
         
@@ -127,8 +141,12 @@ static ABScript *ABScriptInstance = NULL;
     script = [NSArray arrayWithArray:stanzaObjs];
     stanzaCount = (int)[stanzas count];
 
-    [ABDictionary setScriptWords:scriptWordsDictionary];
-    [ABDictionary setAllWords:allWordObjs];
+//    [ABData setABScriptWordsDictionary:scriptWordsDictionary];
+    NSMutableDictionary *scriptData = [[NSMutableDictionary alloc] init];
+    [scriptData setObject:script forKey:@"script"];
+    [scriptData setObject:scriptWordsDictionary forKey:@"scriptWordsDictionary"];
+    
+    return scriptData;
     
 }
 
@@ -211,7 +229,7 @@ static ABScript *ABScriptInstance = NULL;
 
 
 + (ABScriptWord *) trulyRandomWord {
-    return [ABDictionary randomFromAllWords];
+    return [ABData getRandomScriptWord];
 }
 
 

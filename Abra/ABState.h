@@ -17,7 +17,7 @@ typedef enum { MUTATE, GRAFT, MAGIC, PRUNE, ERASE } InteractivityMode;
 + (NSMutableArray *) initLines;
 
 + (BOOL) isRunningInBookMode;
-+ (int) currentIndex;
++ (int) getCurrentStanza;
 
 + (void) reset;
 + (void) clearMutations;

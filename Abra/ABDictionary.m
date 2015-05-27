@@ -16,38 +16,46 @@
 NSMutableDictionary *diceDictionary;
 NSMutableDictionary *abScriptWordsDictionary;
 NSMutableArray *allWordObjs;
-NSMutableArray *userScriptWordsDictionary;   //  <<------ TODO
+NSMutableArray *graftScriptWords;   //  <<------ TODO
 NSMutableArray *graftsHistory;
-NSArray *currentUserGraftWords;
+NSArray *currentGraftWords;
 
 static ABDictionary *ABDictionaryInstance = NULL;
 
 + (void)initialize {
     @synchronized(self) {
         if (ABDictionaryInstance == NULL) ABDictionaryInstance = [[ABDictionary alloc] init];
-        
-
-        
     }
 }
 
 
 
-+ (void) initCoreDictionary {
-    
-    diceDictionary = [ABData loadCoreMutationsIndex];
+///////////////////////////
+// INIT LISTS AND TABLES //
+///////////////////////////
 
++ (void) setAllWords:(NSMutableArray *)allWords {
+    allWordObjs = allWords;
+}
+
++ (void) setScriptWords:(NSMutableDictionary *) scriptWordsDictionary {
+    abScriptWordsDictionary = scriptWordsDictionary;
+}
+
+
++ (void) initCoreDictionary {
+    diceDictionary = [ABData loadCoreMutationsIndex];
     if(!diceDictionary) {
         NSLog(@"%@", @">> ERROR: CORE MUTATIONS TABLE NOT FOUND");
         // [ABDictionary generateCoreDictionary];
     } else {
         diceDictionary = [ABData loadDiceAdditionsAndAddToDictionary:diceDictionary];
     }
-
+    
 }
 
-
 // Only used in dev, and needs to be manually triggered
+// Thereafter saved as a local file
 + (void) generateCoreDictionary {
     NSLog(@"%@", @"Generating dictionary ...");
     diceDictionary = [NSMutableDictionary dictionaryWithDictionary:[ABDice topCoreMatchesForLexicon:[ABData loadWordList]]];
@@ -57,43 +65,18 @@ static ABDictionary *ABDictionaryInstance = NULL;
 
 
 
-+ (void) setScriptWords:(NSMutableDictionary *) scriptWordsDictionary {
-    abScriptWordsDictionary = scriptWordsDictionary;
-}
-
-// Add new words to lexicon
-+ (void) addToScriptWords:(NSString *)text {
-    ABScriptWord *sw = [[ABScriptWord alloc] initWithText:text sourceStanza:0];
-    [allWordObjs addObject:sw];
-    [abScriptWordsDictionary setObject:[ABScriptWord copyScriptWord:sw] forKey:text];
-}
+/////////////
+// GETTERS //
+/////////////
 
 + (ABScriptWord *) scriptWord:(NSString *)text {
     if(![abScriptWordsDictionary objectForKey:text]) return nil;
     return [abScriptWordsDictionary objectForKey:text];
 }
 
-
-
-
-+ (void) addToDice:(NSString *)text {
-    
-}
-
 + (NSMutableArray *) diceForKey:(NSString *)text {
     if(![diceDictionary objectForKey:text]) return nil;
     return [diceDictionary objectForKey:text];
-}
-
-
-
-
-+ (void) setAllWords:(NSMutableArray *)allWords {
-    allWordObjs = allWords;
-}
-
-+ (void) addToAllWords:(ABScriptWord *)word {
-    
 }
 
 + (ABScriptWord *) randomFromAllWords {
@@ -103,13 +86,50 @@ static ABDictionary *ABDictionaryInstance = NULL;
 
 
 
+
+
+//////////////
+// GRAFTING //
+//////////////
+
 + (void) graftNewWords:(NSArray *)words {
-    currentUserGraftWords = words;
+    // Run processes to update lookup tables
+    currentGraftWords = words;
 }
 
 + (ABScriptWord *) getWordToGraft {
-    return [currentUserGraftWords objectAtIndex:(arc4random() % [currentUserGraftWords count])];
+    return [currentGraftWords objectAtIndex:(arc4random() % [currentGraftWords count])];
 }
+
+
+
+
+
+
+/////////////
+// LEXICON //
+/////////////
+
+
+
+// Add new words to scriptWords list temporarily (not persistently)
++ (void) addToScriptWords:(NSString *)text {
+    ABScriptWord *sw = [[ABScriptWord alloc] initWithText:text sourceStanza:0];
+    [allWordObjs addObject:sw];
+    [abScriptWordsDictionary setObject:[ABScriptWord copyScriptWord:sw] forKey:text];
+}
+
++ (void) addToDice:(NSString *)text {
+    
+}
+
+
+
+
++ (void) addToAllWords:(ABScriptWord *)word {
+    
+}
+
 
 
 

@@ -12,6 +12,9 @@
 
 @interface ABScript : NSObject
 
++ (void) initScriptWithDataArray:(NSArray *)scriptDataArray;
++ (NSMutableDictionary *) initScriptAndParseScriptFile;
+
 + (id) linesAtStanzaNumber:(int)stanza;
 + (id) wordsAtStanzaNumber:(int)stanza andLineNumber:(int)line;
 + (id) emptyLine;

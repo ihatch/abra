@@ -320,8 +320,8 @@
     int target = [self checkPoint:point];
     if(target == -1) return;
     
-    NSArray *newLine = [ABMutate explodeOneWordInLine:lineScriptWords atWordIndex:target];
-    
+    NSArray *newLine = [ABMutate multiplyOneWordInLine:lineScriptWords atWordIndex:target];
+
     isMorphing = YES;
     [self changeWordsToWords:newLine];
     isMorphing = NO;

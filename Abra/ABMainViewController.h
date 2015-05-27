@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class ABInfoViewController;
+
 @interface ABMainViewController : UIViewController <UITextFieldDelegate>
+
+@property(strong,nonatomic)ABInfoViewController *infoViewController;
 
 - (void) textFieldModal;
 

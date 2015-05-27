@@ -7,13 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07597B341B13A70F006F6B5E /* ABInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07597B331B13A70F006F6B5E /* ABInfoView.m */; };
+		07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */; };
+		07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */; };
 		075B2AC71A917D7F00763915 /* ABData.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AC51A917D7F00763915 /* ABData.m */; };
 		075B2AC81A917D7F00763915 /* ABDice.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AC61A917D7F00763915 /* ABDice.m */; };
 		075B2ACB1A917FF900763915 /* ABControlPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2ACA1A917FF900763915 /* ABControlPanel.m */; };
 		075B2ACE1A91938100763915 /* ui_down_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 075B2ACD1A91938100763915 /* ui_down_arrow.png */; };
 		075B2AE41A992D9600763915 /* diceAdditions.txt in Resources */ = {isa = PBXBuildFile; fileRef = 075B2AE31A992D9600763915 /* diceAdditions.txt */; };
 		075B2AEA1A9945D200763915 /* ABMutate.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AE91A9945D200763915 /* ABMutate.m */; };
-		075B2AED1A9947F900763915 /* ABDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AEC1A9947F900763915 /* ABDictionary.m */; };
 		075B2AF61A9ABC4B00763915 /* a_87.png in Resources */ = {isa = PBXBuildFile; fileRef = 075B2AEF1A9ABC4B00763915 /* a_87.png */; };
 		075B2AF71A9ABC4B00763915 /* a_120.png in Resources */ = {isa = PBXBuildFile; fileRef = 075B2AF01A9ABC4B00763915 /* a_120.png */; };
 		075B2AF81A9ABC4B00763915 /* a_180.png in Resources */ = {isa = PBXBuildFile; fileRef = 075B2AF11A9ABC4B00763915 /* a_180.png */; };
@@ -28,7 +30,6 @@
 		07B7D29A19AECE6A001194FD /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B7D29919AECE6A001194FD /* iCarousel.m */; };
 		07C9242F19B56E0A00CCFC9C /* dice.txt in Resources */ = {isa = PBXBuildFile; fileRef = 07C9242E19B56E0A00CCFC9C /* dice.txt */; };
 		07D6D1B11A69C008004970A3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07D6D1B01A69C008004970A3 /* Images.xcassets */; };
-		07FB60F51AF6BF7F00CDDB67 /* abraData-coreMutationsTable.dat in Resources */ = {isa = PBXBuildFile; fileRef = 07FB60F41AF6BF7F00CDDB67 /* abraData-coreMutationsTable.dat */; };
 		A1110549E1C24A4CBFD6C0DB /* libPods-Abra.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84407B0D15CE45E5804EAEEE /* libPods-Abra.a */; };
 		C604FA071850F7790076CC96 /* ABScript.m in Sources */ = {isa = PBXBuildFile; fileRef = C604FA061850F7790076CC96 /* ABScript.m */; };
 		C604FA0C1850FA5F0076CC96 /* script.txt in Resources */ = {isa = PBXBuildFile; fileRef = C604FA0B1850FA5F0076CC96 /* script.txt */; };
@@ -76,6 +77,10 @@
 
 /* Begin PBXFileReference section */
 		03D01643C5EB0DC7B45A27D7 /* Pods-Abra.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abra.release.xcconfig"; path = "Pods/Target Support Files/Pods-Abra/Pods-Abra.release.xcconfig"; sourceTree = "<group>"; };
+		07597B321B13A70F006F6B5E /* ABInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABInfoView.h; sourceTree = "<group>"; };
+		07597B331B13A70F006F6B5E /* ABInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABInfoView.m; sourceTree = "<group>"; };
+		07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "_abraData-coreDiceDictionary"; sourceTree = "<group>"; };
+		07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-coreDiceDictionary"; sourceTree = "<group>"; };
 		075B2AC41A917D7F00763915 /* ABData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABData.h; sourceTree = "<group>"; };
 		075B2AC51A917D7F00763915 /* ABData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABData.m; sourceTree = "<group>"; };
 		075B2AC61A917D7F00763915 /* ABDice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABDice.m; sourceTree = "<group>"; };
@@ -86,8 +91,6 @@
 		075B2AE31A992D9600763915 /* diceAdditions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = diceAdditions.txt; sourceTree = "<group>"; };
 		075B2AE81A9945D200763915 /* ABMutate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABMutate.h; sourceTree = "<group>"; };
 		075B2AE91A9945D200763915 /* ABMutate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABMutate.m; sourceTree = "<group>"; };
-		075B2AEB1A9947F900763915 /* ABDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABDictionary.h; sourceTree = "<group>"; };
-		075B2AEC1A9947F900763915 /* ABDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABDictionary.m; sourceTree = "<group>"; };
 		075B2AEF1A9ABC4B00763915 /* a_87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a_87.png; sourceTree = "<group>"; };
 		075B2AF01A9ABC4B00763915 /* a_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a_120.png; sourceTree = "<group>"; };
 		075B2AF11A9ABC4B00763915 /* a_180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a_180.png; sourceTree = "<group>"; };
@@ -105,7 +108,6 @@
 		07B7D29919AECE6A001194FD /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		07C9242E19B56E0A00CCFC9C /* dice.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dice.txt; sourceTree = "<group>"; };
 		07D6D1B01A69C008004970A3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		07FB60F41AF6BF7F00CDDB67 /* abraData-coreMutationsTable.dat */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-coreMutationsTable.dat"; sourceTree = "<group>"; };
 		84407B0D15CE45E5804EAEEE /* libPods-Abra.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Abra.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86BA78A39E5E2AD47EE37330 /* Pods-Abra.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abra.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Abra/Pods-Abra.debug.xcconfig"; sourceTree = "<group>"; };
 		C604FA051850F7790076CC96 /* ABScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABScript.h; sourceTree = "<group>"; };
@@ -188,6 +190,8 @@
 		075B2AE21A9826CC00763915 /* Elements */ = {
 			isa = PBXGroup;
 			children = (
+				07597B321B13A70F006F6B5E /* ABInfoView.h */,
+				07597B331B13A70F006F6B5E /* ABInfoView.m */,
 				075B2AC91A917FF900763915 /* ABControlPanel.h */,
 				075B2ACA1A917FF900763915 /* ABControlPanel.m */,
 				C6A8B02918B9A628001D3C01 /* ABBlackCurtain.h */,
@@ -256,8 +260,6 @@
 				C604FA061850F7790076CC96 /* ABScript.m */,
 				075B2AC41A917D7F00763915 /* ABData.h */,
 				075B2AC51A917D7F00763915 /* ABData.m */,
-				075B2AEB1A9947F900763915 /* ABDictionary.h */,
-				075B2AEC1A9947F900763915 /* ABDictionary.m */,
 				075B2AE81A9945D200763915 /* ABMutate.h */,
 				075B2AE91A9945D200763915 /* ABMutate.m */,
 				C60EB08818A5E9340090BBEB /* ABScriptWord.h */,
@@ -326,7 +328,8 @@
 		C66636CE187DA6D50046E8DE /* Text Resources */ = {
 			isa = PBXGroup;
 			children = (
-				07FB60F41AF6BF7F00CDDB67 /* abraData-coreMutationsTable.dat */,
+				07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */,
+				07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */,
 				C604FA0B1850FA5F0076CC96 /* script.txt */,
 				07C9242E19B56E0A00CCFC9C /* dice.txt */,
 				075B2AE31A992D9600763915 /* diceAdditions.txt */,
@@ -513,9 +516,9 @@
 			files = (
 				C605E2011888C99A007770E2 /* IMFeFlow1.otf in Resources */,
 				C6DE548118BD89EB000A3DAB /* abra_logos_horiz2.png in Resources */,
+				07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */,
 				C6DE547918BD69DC000A3DAB /* abra_logos.png in Resources */,
 				C68B9ED118615C7B007D2BDB /* wordList.txt in Resources */,
-				07FB60F51AF6BF7F00CDDB67 /* abraData-coreMutationsTable.dat in Resources */,
 				07A8000C1A69DD8B00BE71C9 /* a_76.png in Resources */,
 				C6E73A01184BED4600A2A5C3 /* InfoPlist.strings in Resources */,
 				C6E73A09184BED4600A2A5C3 /* Default.png in Resources */,
@@ -538,6 +541,7 @@
 				075B2AFB1A9ABC4B00763915 /* black_1536x2048.png in Resources */,
 				C604FA0C1850FA5F0076CC96 /* script.txt in Resources */,
 				C6A8B01F18B8105B001D3C01 /* a_29.png in Resources */,
+				07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */,
 				075B2AFC1A9ABC4B00763915 /* black_2048x1536.png in Resources */,
 				07D6D1B11A69C008004970A3 /* Images.xcassets in Resources */,
 				C6A8B02118B8105B001D3C01 /* a_58.png in Resources */,
@@ -602,13 +606,13 @@
 				075B2ACB1A917FF900763915 /* ABControlPanel.m in Sources */,
 				C619F5F8185A55690073DD32 /* ABMatch.m in Sources */,
 				C6F76F8B1851220A00BCFAF3 /* ABLine.m in Sources */,
-				075B2AED1A9947F900763915 /* ABDictionary.m in Sources */,
 				C6E73A13184BED4600A2A5C3 /* ABMainViewController.m in Sources */,
 				075B2AEA1A9945D200763915 /* ABMutate.m in Sources */,
 				07A1A7EE1A9AF9980047F7F3 /* ABMagicString.m in Sources */,
 				07B7D29A19AECE6A001194FD /* iCarousel.m in Sources */,
 				C6591B2A185D1B9E001144FC /* ABState.m in Sources */,
 				C6E73A1E184BFA7400A2A5C3 /* ABWord.m in Sources */,
+				07597B341B13A70F006F6B5E /* ABInfoView.m in Sources */,
 				C60EB08A18A5E9340090BBEB /* ABScriptWord.m in Sources */,
 				C6A9D9DF187C5FBD0087F956 /* ABClock.m in Sources */,
 				075B2AC81A917D7F00763915 /* ABDice.m in Sources */,

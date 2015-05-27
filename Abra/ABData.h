@@ -7,20 +7,31 @@
 //
 
 #import <Foundation/Foundation.h>
+@class ABScriptWord;
 
 @interface ABData : NSObject
 
-+ (void) saveCoreMutationsIndex:(NSDictionary *)dataDict;
-+ (void) saveModifiedMutationsIndex:(NSDictionary *)dataDict;
-+ (NSMutableDictionary *) loadCoreMutationsIndex;
-+ (NSMutableDictionary *) loadModifiedMutationsIndex;
-+ (NSDictionary *) loadPrecompiledCoreData;
++ (void) initAbraData;
 
-+ (NSArray *) loadRawStanzas;
 + (NSArray *) loadWordList;
 + (NSMutableDictionary *) loadDiceAdditionsAndAddToDictionary:(NSMutableDictionary *)diceDictionary;
 
 
++ (void) saveAllDataToFile;
++ (void) saveScriptData:(NSArray *)script scriptWordsDictionary:(NSMutableDictionary *)scriptWordsDictionary;
 
+
++ (void) initCoreDictionary;
+
++ (void) setABScriptWordsDictionary:(NSMutableDictionary *) scriptWordsDictionary;
++ (void) addToScriptWords:(NSString *)text;
++ (ABScriptWord *) getRandomScriptWord;
++ (ABScriptWord *) getScriptWord:(NSString *)text;
+
++ (void) addToDice:(NSString *)text;
++ (NSMutableArray *) diceForKey:(NSString *)text;
+
++ (void) graftNewWords:(NSArray *)words;
++ (ABScriptWord *) getWordToGraft;
 
 @end

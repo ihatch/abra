@@ -12,7 +12,7 @@
 #import "ABScript.h"
 #import "ABScriptWord.h"
 #import "ABState.h"
-#import "ABDictionary.h"
+#import "ABData.h"
 
 @implementation ABMutate
 
@@ -48,7 +48,7 @@ static ABMutate *ABMutateInstance = NULL;
     if(ABI(20) < 10 && [targetWord isGrafted]) {
         if(ABI(2) == 0) {
             targetWord.isGrafted = NO;
-            targetWord.sourceStanza = [ABState currentIndex];
+            targetWord.sourceStanza = [ABState getCurrentStanza];
         }
         returnArray = [ABMutate sliceWordInHalf:targetWord];
     }
@@ -58,7 +58,7 @@ static ABMutate *ABMutateInstance = NULL;
         ABScriptWord *duplicate = [targetWord copy];
         if(ABI(2) == 0) {
             duplicate.isGrafted = NO;
-            duplicate.sourceStanza = [ABState currentIndex];
+            duplicate.sourceStanza = [ABState getCurrentStanza];
         }
         returnArray = @[targetWord, duplicate];
     }
@@ -156,7 +156,7 @@ static ABMutate *ABMutateInstance = NULL;
     } else if(type == CUT) {
         newWords = @[];
     } else if(type == GRAFTWORD) {
-        ABScriptWord *gw = [ABDictionary getWordToGraft];
+        ABScriptWord *gw = [ABData getWordToGraft];
         gw.sourceStanza = oldWord.sourceStanza;
         newWords = @[gw];
     } else if(type == CLONE) {
@@ -288,7 +288,7 @@ static ABMutate *ABMutateInstance = NULL;
 
 + (ABScriptWord *) randomWordWithMutationLevel:(CGFloat)mutationLevel {
     
-    int index = [ABState currentIndex];
+    int index = [ABState getCurrentStanza];
     
     CGFloat range = 10 + (mutationLevel * 4);
     int stanzaCount = [ABScript scriptStanzasCount];
@@ -308,7 +308,7 @@ static ABMutate *ABMutateInstance = NULL;
 
 + (ABScriptWord *) throwDiceCoefficient:(ABScriptWord *)word {
     
-    NSArray *dice = [ABDictionary diceForKey:word.text];
+    NSArray *dice = [ABData diceForKey:word.text];
     if(!dice) {
         NSLog(@">> Dice match not found: %@", word.text);
         return [ABScript trulyRandomWord];
@@ -331,9 +331,8 @@ static ABMutate *ABMutateInstance = NULL;
                 NSLog(@">> Problematic dice match for: %@", word.text);
                 return word;
             }
-            if(![ABDictionary scriptWord:w]) [ABDictionary addToScriptWords:w];
             NSLog(@"* Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
-            new = [ABDictionary scriptWord:w];
+            new = [ABData getScriptWord:w];
         }
     }
     @catch (NSException *exception) {

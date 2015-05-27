@@ -12,10 +12,12 @@
 #import "ABScript.h"
 #import "ABClock.h"
 #import "ABLine.h"
+#import "ABData.h"
 #import "ABUI.h"
 #import "ABGestureArrow.h"
 #import "ABBlackCurtain.h"
 #import "ABControlPanel.h"
+#import "ABInfoView.h"
 #import "iCarousel.h"
 #import "PECropViewController.h"
 #import "emojis.h"
@@ -32,10 +34,10 @@
 @implementation ABMainViewController
 
 ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
-UIView *infoView;
+//UIView *infoView;
 ABBlackCurtain *graftCurtain;
-UIButton *controlPanelTriggerButton;
 ABBlackCurtain *infoCurtain;
+UIButton *controlPanelTriggerButton;
 CGPoint touchStart;
 
 UILabel *graftButton, *playButton, *shareButton;
@@ -45,12 +47,10 @@ UITextField *graftTextField;
 
 CGFloat screenHeight;
 CGFloat screenWidth;
-BOOL isIpad;
-BOOL isIpadAir;
 
 
 ABControlPanel *controlPanel;
-
+ABInfoView *infoView;
 
 
 BOOL carouselIsAnimating;
@@ -61,6 +61,8 @@ BOOL carouselIsAnimating;
     self.view.backgroundColor = [UIColor blackColor];
     self.view.userInteractionEnabled = YES;
     
+    [ABData initAbraData];
+
     [ABUI setMainViewReference:self.view];
 
     screenHeight = [ABUI screenHeight];
@@ -68,24 +70,18 @@ BOOL carouselIsAnimating;
     NSLog(@"%f screenWidth", screenWidth);
     NSLog(@"%f screenHeight", screenHeight);
     
-    isIpad = [ABUI isIpad];
-    isIpadAir = [ABUI isIpadAir];
-    
     [self initLines];
     [self initGestures];
     [self initCarouselView];
-//    [self initButtons];
-    [self initInfoView];
-    
+    [self initControlPanelTrigger];
     [self initTextFieldModal];
     
     // Top control panel
     controlPanel = [[ABControlPanel alloc] initWithMainView:self];
     [self.view addSubview:controlPanel];
 
-    
+
     [self devStartupTests];
-    
 }
 
 
@@ -517,15 +513,15 @@ BOOL carouselIsAnimating;
 }
 
 
-- (void) initInfoView {
+- (void) initControlPanelTrigger {
     
     CGFloat x = screenWidth / 1.066;
     CGFloat y = 10;
     CGFloat d = screenWidth / 19.32;
     
-    controlPanelTriggerButton = [ABUI createInfoButtonWithFrame:CGRectMake(x, y, d, d)];
+    controlPanelTriggerButton = [ABUI createControlPanelTriggerButtonWithFrame:CGRectMake(x, y, d, d)];
     
-    [controlPanelTriggerButton addTarget:self action:@selector(triggerInfoViewButton) forControlEvents:(UIControlEvents)UIControlEventTouchDown];
+    [controlPanelTriggerButton addTarget:self action:@selector(triggerControlPanel) forControlEvents:(UIControlEvents)UIControlEventTouchDown];
     [self.view addSubview:controlPanelTriggerButton];
     
 }
@@ -540,7 +536,7 @@ BOOL carouselIsAnimating;
 }
 
 
-- (void) triggerInfoViewButton {
+- (void) triggerControlPanel {
     [controlPanel triggerWithButton:controlPanelTriggerButton];
 }
 
