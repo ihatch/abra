@@ -14,18 +14,18 @@
 
 @interface ABControlPanel : UIView <PECropViewControllerDelegate>
 
-- (id) initWithMainView:(ABMainViewController *)main;
-- (void) triggerWithButton:(UIButton *)button;
-- (void) open;
-- (void) close;
-
-- (void) setModeToMutate;
-
-
-- (CGFloat) iPadToUniversalW:(CGFloat)n;
-- (CGFloat) iPadToUniversalH:(CGFloat)n;
+- (id) init;
+- (void) openOrClose;
+- (void) selectMutate;
 
 - (UIButton *) controlButtonWithText:(NSString *)text andFrame:(CGRect)frame andAddToView:(BOOL)addToView;
+
+- (UIButton *) createArrowButton;
+- (void) moveArrowButtonDown;
+- (void) moveArrowButtonUp;
+
+
+
 
 
 @property (nonatomic) UIDynamicAnimator *animator;

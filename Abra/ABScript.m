@@ -12,7 +12,7 @@
 #import "ABConstants.h"
 #import "ABScriptWord.h"
 
-typedef enum { DICE, RANDOM, EXPLODE, CUT, CLONE } mutationType;
+typedef enum { DICE, RANDOM, EXPLODE, CLONE } mutationType;
 
 @implementation ABScript
 
@@ -178,6 +178,11 @@ static ABScript *ABScriptInstance = NULL;
 + (NSArray *) linesAtStanzaNumber:(int)stanza {
     if(stanza >= [script count]) return script[[script count] - 1];
     if(stanza < 0) return script[0];
+    NSArray *scriptStanza = script[stanza];
+    if([scriptStanza count] > ABRA_NUMBER_OF_LINES) {
+        scriptStanza = [scriptStanza subarrayWithRange:NSMakeRange(0, ABRA_NUMBER_OF_LINES)];
+    }
+    
     return script[stanza];
 }
 

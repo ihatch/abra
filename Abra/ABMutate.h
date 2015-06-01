@@ -7,22 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+@class ABScriptWord;
 
 @interface ABMutate : NSObject
 
-typedef enum { DICE, RANDOM, GRAFTWORD, EXPLODE, CUT, CLONE } mutationType;
-
+typedef enum { DICE, RANDOM, GRAFTWORD, EXPLODE, CLONE } mutationType;
 
 + (NSArray *) mutateLines:(NSArray *)stanza atMutationLevel:(int)mutationLevel;
 
-+ (NSArray *) mutateRandomWordInLine:(NSArray *)line;
-+ (NSArray *) mutateOneWordInLine:(NSArray *)line atWordIndex:(int)index;
-+ (NSArray *) pruneOneWordInLine:(NSArray *)line atWordIndex:(int)index;
-+ (NSArray *) graftOneWordInLine:(NSArray *)line atWordIndex:(int)index;
-+ (NSArray *) multiplyOneWordInLine:(NSArray *)line atWordIndex:(int)index;
-+ (NSArray *) explodeOneWordInLine:(NSArray *)line atWordIndex:(int)index;
-
-+ (NSArray *) alterOneWordInLine:(NSArray *)line atIndex:(int)index withMutationType:(mutationType)type;
++ (NSArray *) explodeWord:(ABScriptWord *)sw;
++ (NSArray *) multiplyWord:(ABScriptWord *)sw;
++ (NSArray *) graftWord:(ABScriptWord *)sw;
++ (NSArray *) mutateWord:(ABScriptWord *)sw inLine:(NSArray *)line;
 
 + (NSArray *) remixStanza:(NSArray *)stanza andOldStanza:(NSArray *)oldStanza atMutationLevel:(int)mutationLevel;
 + (NSArray *) remixStanza:(NSArray *)stanza andOldStanza:(NSArray *)oldStanza atMutationLevel:(int)mutationLevel andLimitTo:(int)limit;

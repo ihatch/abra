@@ -15,11 +15,6 @@
 
 + (NSArray *) loadWordList;
 
-
-// + (void) saveAllDataToFile;
-//+ (void) saveScriptData:(NSArray *)script scriptWordsDictionary:(NSMutableDictionary *)scriptWordsDictionary;
-
-
 + (void) initCoreDictionary;
 
 + (void) setABScriptWordsDictionary:(NSMutableDictionary *) scriptWordsDictionary;

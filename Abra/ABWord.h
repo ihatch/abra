@@ -23,9 +23,7 @@
 @property (nonatomic) int sourceStanza;
 @property (nonatomic) BOOL isGrafted;
 @property (nonatomic) BOOL isErased;
-@property (nonatomic) int lineNumber;
-@property (nonatomic) int linePosition;
-@property (nonatomic) NSString *abWordID;
+@property (nonatomic) NSString *wordID;
 
 @property (nonatomic) UIDynamicAnimator *animator;
 @property (nonatomic) POPBasicAnimation *animationX;

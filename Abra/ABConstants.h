@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+#define kScreenWidth [UIScreen mainScreen].bounds.size.width
+#define kScreenHeight [UIScreen mainScreen].bounds.size.height
+
+
 CGFloat ABF(CGFloat multiplier);
 int ABI(int max);
 

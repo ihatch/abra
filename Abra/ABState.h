@@ -21,6 +21,7 @@ typedef enum { MUTATE, GRAFT, MAGIC, PRUNE, ERASE } InteractivityMode;
 
 + (void) reset;
 + (void) clearMutations;
++ (void) turnPage:(int)direction;
 + (void) forward;
 + (void) backward;
 + (void) accelerate;

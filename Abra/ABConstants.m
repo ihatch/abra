@@ -31,7 +31,7 @@ int ABI(int max) {
 
 
 int const ABRA_START_LINE = 0;
-int const ABRA_NUMBER_OF_LINES = 11;
+int const ABRA_NUMBER_OF_LINES = 5;
 int const ABRA_START_STANZA = 0;
 
 BOOL const ABRA_ABSENTLY_MUTATE = YES;

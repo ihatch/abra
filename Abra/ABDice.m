@@ -181,7 +181,7 @@ NSMutableDictionary *diceDictionary;
     int matches = 0, i = 0, j = 0;
     
     while (i < n && j < m) {
-        NSComparisonResult result = [sChars[i] compare:tChars[j]];
+        NSComparisonResult result = [sChars[i] compare:tChars[j] options:NSDiacriticInsensitiveSearch];
         if (result == NSOrderedSame) {
             matches += 2;
             i++;

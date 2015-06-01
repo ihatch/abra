@@ -18,6 +18,10 @@
 - (void) doubleTap:(CGPoint)point;
 - (int) checkPoint:(CGPoint)point;
 
+- (void) absentlyMutate;
+- (void) replaceWordAtIndex:(int)index withArray:(NSArray *)newWords;
+
+
 @property (nonatomic) int lineNumber;
 
 @end

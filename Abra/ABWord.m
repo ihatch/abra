@@ -19,14 +19,13 @@
 
 @implementation ABWord
 
-@synthesize width, height, isNew, startPoint, marginLeft, marginRight, sourceStanza, lineNumber, isGrafted, animationX, animationAlpha, animationSize, abWordID, locked, isSelfDestructing;
+@synthesize width, height, isNew, startPoint, marginLeft, marginRight, sourceStanza, isGrafted, animationX, animationAlpha, animationSize, wordID, locked, isSelfDestructing;
 
 
 
 - (id) initWithFrame:(CGRect)frame andScriptWord:(ABScriptWord *) word {
     if(self = [super initWithFrame:frame]) {
 
-        self.lineNumber = 0;
         self.text = word.text;
 
         self.isGrafted = word.isGrafted;
@@ -46,6 +45,7 @@
         self.alpha = 0;
         
         self.userInteractionEnabled = NO;
+        self.wordID = [[NSUUID UUID] UUIDString];
         
     }
     
@@ -131,7 +131,7 @@
 
 - (void) setXPositionToCenter {
     startPoint = self.center;
-    CGFloat x = ([ABUI screenWidth] / 2) - ([self width] / 2);
+    CGFloat x = (kScreenWidth / 2) - ([self width] / 2);
     CGPoint newPoint = CGPointMake([self convertLeftToCenter:x], self.center.y);
     self.center = newPoint;
 }
@@ -149,7 +149,8 @@
     self.animationX.duration = duration;
     self.animationX.toValue = @([self convertLeftToCenter:x]);
     
-    [self pop_addAnimation:self.animationX forKey:[NSString stringWithFormat:@"%@%@", @"x-", [self abWordID]]];
+    // TODO: remove abWordID?
+    [self pop_addAnimation:self.animationX forKey:[NSString stringWithFormat:@"%@%@", @"x-", [self wordID]]];
 }
 
 

@@ -10,10 +10,6 @@
 
 @interface ABUI : NSObject <UIWebViewDelegate>
 
-+ (void) setMainViewReference:(UIView *)view;
-+ (UIView *) getMainViewReference;
-
-
 + (UIColor *) progressHueColor;
 + (UIColor *) progressHueColorWithOffset:(CGFloat)colorOffset;
 + (UIColor *) progressHueColorPreciselyWithOffset:(CGFloat)colorOffset;
@@ -21,13 +17,12 @@
 + (UIColor *) goldColor;
 + (UIColor *) darkGoldColor;
 + (UIColor *) darkGoldBackgroundColor;
++ (UIImage *)imageWithColor:(UIColor *)color;
 
-+ (UIButton *) createControlPanelTriggerButtonWithFrame:(CGRect)frame;
+
 + (UIButton *) createInfoViewWithFrame:(CGRect)frame;
 + (UITextField *) createTextFieldWithFrame:(CGRect)frame;
 
-+ (void) movePanelTriggerButtonDown;
-+ (void) movePanelTriggerButtonUp;
 
 + (UIButton *) createButtonWithFrame:(CGRect)frame title:(NSString *)title;
 + (UIView *) createCenteredModalWithWidth:(CGFloat)w andHeight:(CGFloat)h;
@@ -39,16 +34,13 @@
 + (CGFloat) abraLineHeight;
 + (CGFloat) abraFlowersFontSize;
 
-
 + (CGFloat) iPadToUniversalW:(CGFloat)n;
 + (CGFloat) iPadToUniversalH:(CGFloat)n;
 
 
+
 + (BOOL) isIpadAir;
 + (BOOL) isIpad;
-+ (CGFloat) screenWidth;
-+ (CGFloat) screenHeight;
-+ (CGRect) currentScreenBoundsForOrientation;
 
 
 

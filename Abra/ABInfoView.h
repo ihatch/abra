@@ -13,7 +13,7 @@
 
 @interface ABInfoView : UIView
 
-- (id) initWithMainViewReference:(UIView *)mainView andControlPanelReference:(ABControlPanel *)cPanel;
+- (id) init;
 
 
 @end

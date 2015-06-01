@@ -86,10 +86,6 @@ static ABData *ABDataInstance = NULL;
         [ABData saveData:diceDictionary forKey:@"coreDiceDictionary"];
     } else {
         [ABDice setDiceDictionary:diceDictionary];
-        
-        // TODO!
-
-    
     }
     
 }

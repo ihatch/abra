@@ -7,6 +7,7 @@
 //
 
 #import "ABBlackCurtain.h"
+#import "ABConstants.h"
 #import "ABState.h"
 
 @implementation ABBlackCurtain
@@ -17,7 +18,7 @@ BOOL ready;
 
 
 - (id) init {
-    self = [super initWithFrame:CGRectMake(0, 0, 1024, 768)];
+    self = [super initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
     if (self) {
         self.alpha = 0;
         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.6];
@@ -31,6 +32,7 @@ BOOL ready;
 - (void) show {
     [ABState disallowGestures];
     self.hidden = NO;
+    [self.superview bringSubviewToFront:self];
     [UIView animateWithDuration:0.7 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.alpha = 1;
     } completion:^(BOOL finished) {

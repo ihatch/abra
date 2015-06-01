@@ -33,24 +33,30 @@
 
 @implementation ABMainViewController
 
-ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
-ABBlackCurtain *graftCurtain, *infoCurtain;
-UIButton *controlPanelTriggerButton;
 CGPoint touchStart;
 
-UILabel *graftButton, *playButton, *shareButton;
-NSArray *ABLines;
+NSMutableArray *ABLines;
+ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
 
-UITextField *graftTextField;
+ABBlackCurtain *graftCurtain, *infoCurtain, *loadingCurtain;
 
-CGFloat screenHeight, screenWidth;
-
+UIButton *controlPanelArrowButton;
 ABControlPanel *controlPanel;
 ABInfoView *infoView;
-//UIView *contentView;
+UITextField *graftTextField;
 
 BOOL carouselIsAnimating;
+ABMainViewController *mainViewControllerInstance;
 
++ (ABMainViewController *) instance {
+    return mainViewControllerInstance;
+}
+
++ (void) initialize {
+    @synchronized(self) {
+        if (mainViewControllerInstance == NULL) mainViewControllerInstance = [[ABMainViewController alloc] init];
+    }
+}
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -60,23 +66,18 @@ BOOL carouselIsAnimating;
     
     [ABData initAbraData];
 
-    [ABUI setMainViewReference:self.view];
+    NSLog(@"%f screenWidth", kScreenWidth);
+    NSLog(@"%f screenHeight", kScreenHeight);
+    
+    // init lines
+    ABLines = [ABState initLines];
+    for(int i=0; i < [ABLines count]; i ++) [self.view addSubview:ABLines[i]];
 
-    screenHeight = [ABUI screenHeight];
-    screenWidth = [ABUI screenWidth];
-    NSLog(@"%f screenWidth", screenWidth);
-    NSLog(@"%f screenHeight", screenHeight);
-    
-//    contentView = [[UIView alloc] initWithFrame:self.view.frame];
-//    [self.view addSubview:contentView];
-    
-    [self initLines];
     [self initGestures];
-    [self initCarousel];
     [self initInfoView];
-    [self initTextFieldModal];
+    [self initGraftModal];
     [self initControlPanel];
-    
+    [self initCarousel];
 
     [self devStartupTests];
 }
@@ -88,9 +89,6 @@ BOOL carouselIsAnimating;
 }
 
 
-//- (UIView *) getContentView {
-//    return contentView;
-//}
 
 
 
@@ -99,20 +97,258 @@ BOOL carouselIsAnimating;
 
 
 
+///////////////////////////
+// NAVIGATION / GESTURES //
+///////////////////////////
 
-///////////
-// LINES //
-///////////
+- (void) initGestures {
 
-- (void) initLines {
-    NSMutableArray *lines = [ABState initLines];
-    for(int i=0; i < [lines count]; i ++) {
-        [self.view addSubview:[lines objectAtIndex:i]];
-    }
-    ABLines = [NSArray arrayWithArray:lines];
+    feedbackForward = [[ABGestureArrow alloc] initWithType:@"forward"];
+    feedbackBackward = [[ABGestureArrow alloc] initWithType:@"backward"];
+    feedbackReset = [[ABGestureArrow alloc] initWithType:@"reset"];
+    
+    [self.view addSubview:feedbackForward];
+    [self.view addSubview:feedbackBackward];
+    [self.view addSubview:feedbackReset];
+
+    
+    // Double tap
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
+    doubleTap.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:doubleTap];
+
+    // Tap
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    [tap requireGestureRecognizerToFail:doubleTap];
+    [self.view addGestureRecognizer:tap];
+
+    // Left swipe
+    UIScreenEdgePanGestureRecognizer *leftEdge = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(leftEdgeSwipe:)];
+    leftEdge.edges = UIRectEdgeLeft;
+    leftEdge.delegate = self;
+    [self.view addGestureRecognizer:leftEdge];
+
+    // Right swipe
+    UIScreenEdgePanGestureRecognizer *rightEdge = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(rightEdgeSwipe:)];
+    rightEdge.edges = UIRectEdgeRight;
+    rightEdge.delegate = self;
+    [self.view addGestureRecognizer:rightEdge];
+
+    // Long press
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
+    [self.view addGestureRecognizer:longPress];
+    
+    // Rotate
+    UIRotationGestureRecognizer *rotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotate:)];
+    [self.view addGestureRecognizer:rotate];
+    
+    // Pan
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+    [self.view addGestureRecognizer:pan];
+
 }
 
 
+- (ABLine *) checkLinesForPoint:(CGPoint) point {
+    for(int i=0; i<[ABLines count]; i++) {
+        ABLine *line = [ABLines objectAtIndex:i];
+        if(CGRectContainsPoint(line.frame, point)) {
+            [ABClock updateLastInteractionTime];
+            return line;
+        }
+    }
+    return nil;
+}
+
+- (void) pan:(UIPanGestureRecognizer *)gesture {
+    CGPoint point = [gesture locationInView:self.view];
+    ABLine *line = [self checkLinesForPoint:point];
+    if(line == nil) return;
+    [line touch:[self.view convertPoint:point toView:line]];
+}
+
+- (IBAction) tap:(UITapGestureRecognizer *)gesture {
+    CGPoint point = [gesture locationInView:self.view];
+    ABLine *line = [self checkLinesForPoint:point];
+    if(line == nil) return;
+    [line tap:[self.view convertPoint:point toView:line]];
+}
+
+- (IBAction) doubleTap:(UITapGestureRecognizer *)gesture {
+    CGPoint point = [gesture locationInView:self.view];
+    ABLine *line = [self checkLinesForPoint:point];
+    if(line == nil) return;
+    [line doubleTap:[self.view convertPoint:point toView:line]];
+}
+
+
+- (IBAction) rotate:(UIRotationGestureRecognizer *)gesture {
+    [ABClock updateLastInteractionTime];
+    
+    if(gesture.state == UIGestureRecognizerStateEnded) {
+        if(gesture.rotation > 0.3 || gesture.rotation < -0.3 ) {
+            [feedbackReset flash];
+            [ABState clearMutations];
+        }
+    }
+}
+
+
+- (IBAction) longPress:(UILongPressGestureRecognizer *)gesture {
+    [ABClock updateLastInteractionTime];
+    
+    if([ABState isRunningInBookMode]) {
+        if(gesture.state == UIGestureRecognizerStateBegan) {
+            if([ABState attemptGesture] == NO) return;
+            [ABState pause];
+        } else if(gesture.state == UIGestureRecognizerStateEnded) {
+            [ABState resume];
+        }
+        
+    } else {
+        if(gesture.state == UIGestureRecognizerStateBegan) {
+            CGPoint point = [gesture locationInView:self.view];
+            ABLine *line = [self checkLinesForPoint:point];
+            if(line == nil) return;
+            [line longPress:[self.view convertPoint:point toView:line]];
+        }
+    }
+}
+
+
+- (void) turnPage:(int)direction {
+    if(carouselIsAnimating) return;
+    [self.carousel scrollByNumberOfItems:direction duration:1.4f];
+    [self carouselFlash];
+    [feedbackBackward flash];
+    [ABState turnPage:direction];
+}
+
+- (void) edgeSwipeCheckWithGesture:(UIScreenEdgePanGestureRecognizer *)gesture andDirection:(int)direction {
+    if(gesture.state == UIGestureRecognizerStateBegan) {
+        touchStart = [gesture locationInView:self.view];
+        
+    } else if(gesture.state == UIGestureRecognizerStateEnded) {
+        CGPoint touchEnd = [gesture locationInView:self.view];
+        CGFloat xDist = (touchEnd.x - touchStart.x);
+        CGFloat yDist = (touchEnd.y - touchStart.y);
+        
+        // alter xDist comparator with direction
+        if(yDist < 100 && ((xDist < -40 && direction == 1) || (xDist > 40 && direction == -1))) {
+            [ABClock updateLastInteractionTime];
+            [self turnPage:direction];
+        }
+    }
+}
+
+- (IBAction) leftEdgeSwipe:(UIScreenEdgePanGestureRecognizer *)gesture {
+    [self edgeSwipeCheckWithGesture:gesture andDirection:-1];
+}
+
+- (IBAction) rightEdgeSwipe:(UIScreenEdgePanGestureRecognizer *)gesture {
+    [self edgeSwipeCheckWithGesture:gesture andDirection:1];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+
+
+
+
+
+
+///////////////////
+// CONTROL PANEL //
+///////////////////
+
+- (void) initControlPanel {
+    controlPanel = [[ABControlPanel alloc] init];
+    [self.view addSubview:controlPanel];
+    controlPanelArrowButton = [controlPanel createArrowButton];
+    [controlPanelArrowButton addTarget:self action:@selector(triggerControlPanel) forControlEvents:(UIControlEvents)UIControlEventTouchDown];
+    [self.view addSubview:controlPanelArrowButton];
+}
+
+- (void) triggerControlPanel {
+    [controlPanel openOrClose];
+}
+
+
+
+
+
+
+
+/////////////////
+// GRAFT MODAL //
+/////////////////
+
+- (void) initGraftModal {
+    UIView *modal = [ABUI createModalWithFrame:CGRectMake(362, 100, 300, 140)];
+    graftTextField = [ABUI createTextFieldWithFrame:CGRectMake(20, 20, 260, 100)];
+    graftTextField.delegate = self;
+    [modal addSubview:graftTextField];
+    graftCurtain = [[ABBlackCurtain alloc] init];
+    graftCurtain.destroyOnFadeOut = NO;
+    [self.view addSubview:graftCurtain];
+    [graftCurtain addSubview:modal];
+}
+
+- (void) showGraftModal {
+    [graftTextField becomeFirstResponder];
+    [graftCurtain show];
+}
+
+- (BOOL) textFieldShouldReturn:(UITextField *)textField {
+    [graftTextField resignFirstResponder];
+    BOOL successfulGraft = [ABState graftText:textField.text];
+    if(successfulGraft == NO) [controlPanel selectMutate];
+    [graftCurtain hide];
+    return YES;
+}
+
+
+
+
+
+
+///////////////
+// INFO VIEW //
+///////////////
+
+- (void) initInfoView {
+    infoCurtain = [[ABBlackCurtain alloc] init];
+    infoCurtain.destroyOnFadeOut = NO;
+    [self.view addSubview:infoCurtain];
+    infoView = [[ABInfoView alloc] init];
+    [infoCurtain addSubview:infoView];
+}
+
+- (void) showInfoView {
+    [infoCurtain show];
+}
+
+
+
+
+
+
+
+//////////////////
+// LOADING VIEW //
+//////////////////
+
+- (void) initLoading {
+    loadingCurtain = [[ABBlackCurtain alloc] init];
+    loadingCurtain.destroyOnFadeOut = NO;
+    [self.view addSubview:loadingCurtain];
+    
+}
+
+- (void) showLoading {
+    
+}
 
 
 
@@ -129,8 +365,8 @@ BOOL carouselIsAnimating;
 
 
 - (void) dealloc {
-	self.carousel.delegate = nil;
-	self.carousel.dataSource = nil;
+    self.carousel.delegate = nil;
+    self.carousel.dataSource = nil;
 }
 
 - (void) viewDidUnload {
@@ -139,54 +375,42 @@ BOOL carouselIsAnimating;
     self.navItem = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return NO;
-}
-
 - (void) initCarousel {
     
-//    CGFloat carouselWidth = isIpad ? 624 : screenWidth / 1.5;
-//    CGFloat carouselHeight = isIpad ? 120 : 90;
-//    CGFloat carouselX = isIpad ? 200 : (screenWidth - carouselWidth) / 2;
-//    CGFloat carouselY = isIpad ? 612 : screenHeight - 90;
-
-    CGFloat carouselWidth = screenWidth / 1.64;
-    CGFloat carouselHeight = screenHeight / 6.4;
-    CGFloat carouselX = (screenWidth - carouselWidth) / 2;
-    CGFloat carouselY = screenHeight - carouselHeight - (screenHeight / 36);
-
-	self.carousel = [[iCarousel alloc] initWithFrame:CGRectMake(carouselX, carouselY, carouselWidth, carouselHeight)];
+    CGFloat carouselWidth = kScreenWidth / 1.64;
+    CGFloat carouselHeight = kScreenHeight / 6.4;
+    CGFloat carouselX = (kScreenWidth - carouselWidth) / 2;
+    CGFloat carouselY = kScreenHeight - carouselHeight - (kScreenHeight / 36);
+    
+    self.carousel = [[iCarousel alloc] initWithFrame:CGRectMake(carouselX, carouselY, carouselWidth, carouselHeight)];
     self.carousel.type = iCarouselTypeRotary;
-	self.carousel.delegate = self;
-	self.carousel.dataSource = self;
+    self.carousel.delegate = self;
+    self.carousel.dataSource = self;
     self.carousel.alpha = 0.0;
     self.carousel.scrollSpeed = 0.19;
     self.carousel.clipsToBounds = NO;
-	
-    //add carousel to view
-	[self.view addSubview:_carousel];
+    
+    [self.view addSubview:_carousel];
     [self.view bringSubviewToFront:_carousel];
     
     carouselIsAnimating = NO;
-
+    
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:8.5];
     [self.carousel setAlpha:0.8];
     [UIView commitAnimations];
-    
 }
 
-- (NSInteger)numberOfItemsInCarousel:(iCarousel *)carousel {
+- (NSInteger) numberOfItemsInCarousel:(iCarousel *)carousel {
     return [ABScript totalStanzasCount];
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view {
+- (UIView *) carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view {
     UILabel *label = nil;
     
-    // create new view if no view is available for recycling
     if (view == nil) {
-//        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50.0f, 100.0f)];
-        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, screenWidth / 20.48, screenHeight / 7.68)];
+        // create new view if no view is available for recycling
+        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth / 20.48, kScreenHeight / 7.68)];
         view.contentMode = UIViewContentModeCenter;
         label = [[UILabel alloc] initWithFrame:view.bounds];
         label.tag = 1;
@@ -196,28 +420,24 @@ BOOL carouselIsAnimating;
         label = (UILabel *)[view viewWithTag:1];
     }
     
-    // remember to always set any properties of your carousel item views outside of the `if (view == nil) {...}` check or you'll get weird issues with item content appearing in the wrong place
+    // remember to always set any properties of your carousel item views outside of the `if (view == nil) {...}`
+    // check or you'll get weird issues with item content appearing in the wrong place
     label.backgroundColor = [UIColor clearColor];
     int intindex = (int)index;
     label.textColor = [ABUI progressHueColorForStanza:intindex];
-
     label.textAlignment = NSTextAlignmentCenter;
-    //label.font = [label.font fontWithSize:40];
-    
-//    CGFloat fontSize = screenWidth / 34.13; //isIpad ? 30.0f : 20.0f;
-    label.font = [UIFont fontWithName:ABRA_FLOWERS_FONT size:(screenWidth / 34.13)];
+    label.font = [UIFont fontWithName:ABRA_FLOWERS_FONT size:(kScreenWidth / 34.13)];
     label.text = @"Q";
     
     return view;
 }
 
-- (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform {
-    //implement 'flip3D' style carousel
+- (CATransform3D) carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform {
     transform = CATransform3DRotate(transform, M_PI / 8.0f, 0.0f, 1.0f, 0.0f);
     return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * carousel.itemWidth);
 }
 
-- (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value {
+- (CGFloat) carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value {
     switch (option) {
         case iCarouselOptionWrap: { return YES; }
         case iCarouselOptionShowBackfaces: { return NO; }
@@ -230,21 +450,21 @@ BOOL carouselIsAnimating;
     }
 }
 
-- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel {
+- (void) carouselDidEndScrollingAnimation:(iCarousel *)carousel {
     [ABState manuallyTransitionStanzaToNumber:(int)carousel.currentItemIndex];
     carouselIsAnimating = NO;
 }
 
-- (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel {
+- (void) carouselWillBeginScrollingAnimation:(iCarousel *)carousel {
     carouselIsAnimating = YES;
 }
 
-- (void)carouselWillBeginDragging:(iCarousel *)carousel {
+- (void) carouselWillBeginDragging:(iCarousel *)carousel {
     carouselIsAnimating = YES;
     [ABClock updateLastInteractionTime];
 }
 
-- (void)carouselFlash {
+- (void) carouselFlash {
     carouselIsAnimating = YES;
     [UIView animateWithDuration:0.4 animations:^() {
         _carousel.alpha = 1.0;
@@ -265,328 +485,10 @@ BOOL carouselIsAnimating;
 
 
 
-////////////////
-// NAVIGATION //
-////////////////
 
-- (void) moveForward {
-    if(carouselIsAnimating) return;
-    [self.carousel scrollByNumberOfItems:1 duration:1.4f];
-    [self carouselFlash];
-    [feedbackForward flash];
-    [ABState forward];
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return NO;
 }
-
-- (void) moveBackward {
-    if(carouselIsAnimating) return;
-    [self.carousel scrollByNumberOfItems:-1 duration:1.4f];
-    [self carouselFlash];
-    [feedbackBackward flash];
-    [ABState backward];
-}
-
-
-
-
-
-
-
-//////////////
-// GESTURES //
-//////////////
-
-
-- (void) initGestureFeedback {
-    
-    feedbackForward = [[ABGestureArrow alloc] initWithType:@"forward"];
-    feedbackBackward = [[ABGestureArrow alloc] initWithType:@"backward"];
-    feedbackReset = [[ABGestureArrow alloc] initWithType:@"reset"];
-    
-    [self.view addSubview:feedbackForward];
-    [self.view addSubview:feedbackBackward];
-    [self.view addSubview:feedbackReset];
-}
-
-
-- (void) initGestures {
-
-    [self initGestureFeedback];
-
-    // Tap
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-    [self.view addGestureRecognizer:tap];
-
-    // Double tap
-    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
-    doubleTap.numberOfTapsRequired = 2;
-    [self.view addGestureRecognizer:doubleTap];
-    
-    
-    UIScreenEdgePanGestureRecognizer *leftEdge = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(leftEdge:)];
-    leftEdge.edges = UIRectEdgeLeft;
-    leftEdge.delegate = self;
-    [self.view addGestureRecognizer:leftEdge];
-
-    
-    UIScreenEdgePanGestureRecognizer *rightEdge = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(rightEdge:)];
-    rightEdge.edges = UIRectEdgeRight;
-    rightEdge.delegate = self;
-    [self.view addGestureRecognizer:rightEdge];
-
-    // Long press
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
-    [self.view addGestureRecognizer:longPress];
-
-    
-    // Rotation
-    UIRotationGestureRecognizer *rotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotate:)];
-    [self.view addGestureRecognizer:rotate];
-    
-    
-    // Pan
-    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
-    [self.view addGestureRecognizer:pan];
-
-}
-
-
-- (ABLine *) checkLinesForPoint:(CGPoint) point {
-    
-    for(int i=0; i<[ABLines count]; i++) {
-        ABLine *line = [ABLines objectAtIndex:i];
-        if(CGRectContainsPoint(line.frame, point)) {
-            [ABClock updateLastInteractionTime];
-            return line;
-        }
-    }
-    return nil;
-}
-
-
-- (void) pan:(UIPanGestureRecognizer *)gesture {
-    
-    CGPoint point = [gesture locationInView:self.view];
-    ABLine *line = [self checkLinesForPoint:point];
-    if(line == nil) return;
-    [line touch:[self.view convertPoint:point toView:line]];
-}
-
-
-- (IBAction) tap:(UITapGestureRecognizer *)gesture {
-
-    CGPoint point = [gesture locationInView:self.view];
-    ABLine *line = [self checkLinesForPoint:point];
-    if(line == nil) return;
-    [self carouselFlash];
-    [line tap:[self.view convertPoint:point toView:line]];
-}
-
-
-- (IBAction) doubleTap:(UITapGestureRecognizer *)gesture {
-    
-    CGPoint point = [gesture locationInView:self.view];
-    ABLine *line = [self checkLinesForPoint:point];
-    if(line == nil) return;
-    [line doubleTap:[self.view convertPoint:point toView:line]];
-}
-
-
-- (IBAction) rotate:(UIRotationGestureRecognizer *)gesture {
-
-    [ABClock updateLastInteractionTime];
-    
-    if(gesture.state == UIGestureRecognizerStateEnded) {
-        if(gesture.rotation > 0.3) {
-            [self textFieldModal];
-
-        } else if(gesture.rotation < -0.3 ) {
-            [feedbackReset flash];
-            [ABState clearMutations];
-        }
-    }
-}
-
-
-- (IBAction) longPress:(UILongPressGestureRecognizer *)gesture {
-    
-    [ABClock updateLastInteractionTime];
-    
-    if([ABState isRunningInBookMode]) {
-
-        if(gesture.state == UIGestureRecognizerStateBegan) {
-
-            if([ABState attemptGesture] == NO) return;
-            [ABState pause];
-        
-        } else if(gesture.state == UIGestureRecognizerStateEnded) {
-            [ABState resume];
-        }
-        
-    } else {
-        
-        if(gesture.state == UIGestureRecognizerStateBegan) {
-    
-            CGPoint point = [gesture locationInView:self.view];
-            ABLine *line = [self checkLinesForPoint:point];
-            if(line == nil) return;
-            [line longPress:[self.view convertPoint:point toView:line]];
-
-        }
-    }
-}
-
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    return YES;
-}
-
-
-- (IBAction) leftEdge:(UIRotationGestureRecognizer *)gesture {
-    
-    if(gesture.state == UIGestureRecognizerStateBegan) {
-        touchStart = [gesture locationInView:self.view];
-
-    } else if(gesture.state == UIGestureRecognizerStateEnded) {
-
-        CGPoint touchEnd = [gesture locationInView:self.view];
-        CGFloat xDist = (touchEnd.x - touchStart.x);
-        CGFloat yDist = (touchEnd.y - touchStart.y);
-        
-        if(yDist < 100 && xDist > 40) {
-            [ABClock updateLastInteractionTime];
-            [self moveBackward];
-        }
-    }
-}
-
-
-
-- (IBAction) rightEdge:(UIRotationGestureRecognizer *)gesture {
-    
-    if(gesture.state == UIGestureRecognizerStateBegan) {
-        touchStart = [gesture locationInView:self.view];
-        NSLog(@"%@", @"START");
-    
-    } else if(gesture.state == UIGestureRecognizerStateEnded) {
-
-        CGPoint touchEnd = [gesture locationInView:self.view];
-        CGFloat xDist = (touchEnd.x - touchStart.x);
-        CGFloat yDist = (touchEnd.y - touchStart.y);
-
-        NSLog(@"%@ %f %f", @"END", xDist, yDist);
-
-        if(yDist < 100 && xDist < -40) {
-            [ABClock updateLastInteractionTime];
-            [self moveForward];
-        }
-    }
-}
-
-
-
-
-
-
-////////////////////////
-// MODALS / INFO VIEW //
-////////////////////////
-
-
-- (void) initTextFieldModal {
-    UIView *modal = [ABUI createModalWithFrame:CGRectMake(362, 100, 300, 140)];
-    graftTextField = [ABUI createTextFieldWithFrame:CGRectMake(20, 20, 260, 100)];
-    graftTextField.delegate = self;
-    [modal addSubview:graftTextField];
-    graftCurtain = [[ABBlackCurtain alloc] init];
-    graftCurtain.destroyOnFadeOut = NO;
-    [self.view addSubview:graftCurtain];
-    [graftCurtain addSubview:modal];
-}
-
-- (void) textFieldModal {
-    [graftTextField becomeFirstResponder];
-    [graftCurtain show];
-
-}
-
-- (BOOL) textFieldShouldReturn:(UITextField *)textField {
-    [graftTextField resignFirstResponder];
-    
-    BOOL successfulGraft = [ABState graftText:textField.text];
-    if(successfulGraft == NO) [controlPanel setModeToMutate];
-    [graftCurtain hide];
-    return YES;
-}
-
-
-
-// Top control panel
-- (void) initControlPanel {
-    controlPanel = [[ABControlPanel alloc] initWithMainView:self];
-    [self.view addSubview:controlPanel];
-    [self initControlPanelTrigger];
-}
-
-
-- (void) initControlPanelTrigger {
-    
-    CGFloat x = screenWidth / 1.066;
-    CGFloat y = 10;
-    CGFloat d = screenWidth / 19.32;
-    
-    controlPanelTriggerButton = [ABUI createControlPanelTriggerButtonWithFrame:CGRectMake(x, y, d, d)];
-    
-    [controlPanelTriggerButton addTarget:self action:@selector(triggerControlPanel) forControlEvents:(UIControlEvents)UIControlEventTouchDown];
-    [self.view addSubview:controlPanelTriggerButton];
-    
-}
-
-
-- (void) modeValueChanged:(UISegmentedControl *)segment {
-    if(segment.selectedSegmentIndex == 0) {
-        [ABState setModeToStandalone];
-    } else if(segment.selectedSegmentIndex == 1){
-        [ABState setModeToAutoplayMode];
-    }
-}
-
-
-- (void) triggerControlPanel {
-    [controlPanel triggerWithButton:controlPanelTriggerButton];
-}
-
-
-
-
-
-
-
-
-- (void) initInfoView {
-//    infoView = [[ABInfoView alloc] initWithMainViewReference:self.view];
-}
-
-
-
-
-
-- (void) showInfoView {
-    
-    infoView = [[ABInfoView alloc] initWithMainViewReference:self.view andControlPanelReference:controlPanel];
-    
-    infoCurtain = [[ABBlackCurtain alloc] init];
-    infoCurtain.destroyOnFadeOut = YES;
-    [self.view addSubview:infoCurtain];
-    [infoCurtain addSubview:infoView];
-
-    [infoCurtain show];
-    
-}
-
-
-
-
-
 
 - (void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -594,48 +496,4 @@ BOOL carouselIsAnimating;
 
 @end
 
-
-
-
-
-
-/*
- 
- 
- 
- 
- NSArray *keys = [EMOJI_HASH allKeys];
- NSString *emoji = @"";
- for (NSString *key in keys) {
- NSLog(@"%@", [EMOJI_HASH objectForKey:key]);
- emoji = [emoji stringByAppendingString:[EMOJI_HASH objectForKey:key]];
- }
- 
- emoji = @"😄😃😀😊☺️😉😍😘😚😗😙😜😝😛😳😁😔😌😒😞😣😢😂😭😪😥😰😅😓😩😫😨😱😠😡😤😖😆😋😷😎😴😵😲😟😦😧😈👿😮😬😐😕😯😶😇😏😑👲👳👮👷💂👶👦👧👨👩👴👵👱👼👸😺😸😻😽😼🙀😿😹😾👹👺🙈🙉🙊💀👽💩🔥✨🌟💫💥💢💦💧💤💨👂👀👃👅👄👍👎👌👊✊✌️👋✋👐👆👇👉👈🙌🙏☝️👏💪🚶🏃💃👫👪👬👭💏💑👯🙆🙅💁🙋💆💇💅👰🙎🙍🙇🎩👑👒👟👞👡👠👢👕👔👚👗🎽👖👘👙💼👜👝👛👓🎀🌂💄💛💙💜💚❤️💔💗💓💕💖💞💘💌💋💍💎👤👥💬👣💭🐶🐺🐱🐭🐹🐰🐸🐯🐨🐻🐷🐽🐮🐗🐵🐒🐴🐑🐘🐼🐧🐦🐤🐥🐣🐔🐍🐢🐛🐝🐜🐞🐌🐙🐚🐠🐟🐬🐳🐋🐄🐏🐀🐃🐅🐇🐉🐎🐐🐓🐕🐖🐁🐂🐲🐡🐊🐫🐪🐆🐈🐩🐾💐🌸🌷🍀🌹🌻🌺🍁🍃🍂🌿🌾🍄🌵🌴🌲🌳🌰🌱🌼🌐🌞🌝🌚🌑🌒🌓🌔🌕🌖🌗🌘🌜🌛🌙🌍🌎🌏🌋🌌🌠⭐️☀️⛅️☁️⚡️☔️❄️⛄️🌀🌁🌈🌊🎍💝🎎🎒🎓🎏🎆🎇🎐🎑🎃👻🎅🎄🎁🎋🎉🎊🎈🎌🔮🎥📷📹📼💿📀💽💾💻📱☎️📞📟📠📡📺📻🔊🔉🔈🔇🔔🔕📢📣⏳⌛️⏰⌚️🔓🔒🔏🔐🔑🔎💡🔦🔆🔅🔌🔋🔍🛁🛀🚿🚽🔧🔩🔨🚪🚬💣🔫🔪💊💉💰💴💵💷💶💳💸📲📧📥📤✉️📩📨📯📫📪📬📭📮📦📝📄📃📑📊📈📉📜📋📅📆📇📁📂✂️📌📎✒️✏️📏📐📕📗📘📙📓📔📒📚📖🔖📛🔬🔭📰🎨🎬🎤🎧🎼🎵🎶🎹🎻🎺🎷🎸👾🎮🃏🎴🀄️🎲🎯🏈🏀⚽️⚾️🎾🎱🏉🎳⛳️🚵🚴🏁🏇🏆🎿🏂🏊🏄🎣☕️🍵🍶🍼🍺🍻🍸🍹🍷🍴🍕🍔🍟🍗🍖🍝🍛🍤🍱🍣🍥🍙🍘🍚🍜🍲🍢🍡🍳🍞🍩🍮🍦🍨🍧🎂🍰🍪🍫🍬🍭🍯🍎🍏🍊🍋🍒🍇🍉🍓🍑🍈🍌🍐🍍🍠🍆🍅🌽🏠🏡🏫🏢🏣🏥🏦🏪🏩🏨💒⛪️🏬🏤🌇🌆🏯🏰⛺️🏭🗼🗾🗻🌄🌅🌃🗽🌉🎠🎡⛲️🎢🚢⛵️🚤🚣⚓️🚀✈️💺🚁🚂🚊🚉🚞🚆🚄🚅🚈🚇🚝🚋🚃🚎🚌🚍🚙🚘🚗🚕🚖🚛🚚🚨🚓🚔🚒🚑🚐🚲🚡🚟🚠🚜💈🚏🎫🚦🚥⚠️🚧🔰⛽️🏮🎰♨️🗿🎪🎭📍🚩🇬🇧🇷🇺🇫🇷🇯🇵🇰🇷🇩🇪🇨🇳🇺🇸1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣0️⃣🔟🔢#️⃣🔣⬆️⬇️⬅️➡️🔠🔡🔤↗️↖️↘️↙️↔️↕️🔄◀️▶️🔼🔽↩️↪️ℹ️⏪⏩⏫⏬⤵️⤴️🆗🔀🔁🔂🆕🆙🆒🆓🆖📶🎦🈁🈯️🈳🈵🈴🈲🉐🈹🈺🈶🈚️🚻🚹🚺🚼🚾🚰🚮🅿️♿️🚭🈷🈸🈂Ⓜ️🛂🛄🛅🛃🉑㊙️㊗️🆑🆘🆔🚫🔞📵🚯🚱🚳🚷🚸⛔️✳️❇️❎✅✴️💟🆚📳📴🅰🅱🆎🅾💠➿♻️♈️♉️♊️♋️♌️♍️♎️♏️♐️♑️♒️♓️⛎🔯🏧💹💲💱©®™❌‼️⁉️❗️❓❕❔⭕️🔝🔚🔙🔛🔜🔃🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕖🕗🕘🕙🕚🕡🕢🕣🕤🕥🕦✖️➕➖➗♠️♥️♣️♦️💮💯✔️☑️🔘🔗➰〰〽️🔱◼️◻️◾️◽️▪️▫️🔺🔲🔳⚫️⚪️🔴🔵🔻⬜️⬛️🔶🔷🔸🔹";
- 
- 
- 
- 
- 
- 
- NSLog(@"%@", emoji);
-*/
-
-
-/*
- 😄😃😀😊☺️😉😍😘😚😗😙😜😝😛😳😁😔😌😒😞😣😢😂😭😪😥😰😅😓😩😫😨😱😠😡😤😖😆😋😷😎😴😵😲😟😦😧😈👿😮😬😐😕😯😶😇😏😑👲👳👮👷💂👶👦👧👨👩👴👵👱👼👸😺😸😻😽😼🙀😿😹😾👹👺🙈🙉🙊💀👽💩🔥✨🌟💫💥💢💦💧💤💨👂👀👃👅👄👍👎👌👊✊✌️👋✋👐👆👇👉👈🙌🙏☝️👏💪🚶🏃💃👫👪👬👭💏💑👯🙆🙅💁🙋💆💇💅👰🙎🙍🙇🎩👑👒👟👞👡👠👢👕👔👚👗🎽👖👘👙💼👜👝👛👓🎀🌂💄💛💙💜💚❤️💔💗💓💕💖💞💘💌💋💍💎👤👥💬👣💭
- 
- 🐶🐺🐱🐭🐹🐰🐸🐯🐨🐻🐷🐽🐮🐗🐵🐒🐴🐑🐘🐼🐧🐦🐤🐥🐣🐔🐍🐢🐛🐝🐜🐞🐌🐙🐚🐠🐟🐬🐳🐋🐄🐏🐀🐃🐅🐇🐉🐎🐐🐓🐕🐖🐁🐂🐲🐡🐊🐫🐪🐆🐈🐩🐾💐🌸🌷🍀🌹🌻🌺🍁🍃🍂🌿🌾🍄🌵🌴🌲🌳🌰🌱🌼🌐🌞🌝🌚🌑🌒🌓🌔🌕🌖🌗🌘🌜🌛🌙🌍🌎🌏🌋🌌🌠⭐️☀️⛅️☁️⚡️☔️❄️⛄️🌀🌁🌈🌊
- 
- 🎍💝🎎🎒🎓🎏🎆🎇🎐🎑🎃👻🎅🎄🎁🎋🎉🎊🎈🎌🔮🎥📷📹📼💿📀💽💾💻📱☎️📞📟📠📡📺📻🔊🔉🔈🔇🔔🔕📢📣⏳⌛️⏰⌚️🔓🔒🔏🔐🔑🔎💡🔦🔆🔅🔌🔋🔍🛁🛀🚿🚽🔧🔩🔨🚪🚬💣🔫🔪💊💉💰💴💵💷💶💳💸📲Z📧📥📤✉️📩📨📯📫📪📬📭📮📦📝📄📃📑📊📈📉📜📋📅📆📇📁📂✂️📌📎✒️✏️📏📐📕📗📘📙📓📔📒📚📖🔖📛🔬🔭📰🎨🎬🎤🎧🎼🎵🎶🎹🎻🎺🎷🎸👾🎮🃏🎴🀄️🎲🎯🏈🏀⚽️⚾️🎾🎱🏉🎳⛳️🚵🚴🏁🏇🏆🎿🏂🏊🏄🎣☕️🍵🍶🍼🍺🍻🍸🍹🍷🍴🍕🍔🍟🍗🍖🍝🍛🍤🍱🍣🍥🍙🍘🍚🍜🍲🍢🍡🍳🍞🍩🍮🍦🍨🍧🎂🍰🍪🍫🍬🍭🍯🍎🍏🍊🍋🍒🍇🍉🍓🍑🍈🍌🍐🍍🍠🍆🍅🌽
- 
- 🏠🏡🏫🏢🏣🏥🏦🏪🏩🏨💒⛪️🏬🏤🌇🌆🏯🏰⛺️🏭🗼🗾🗻🌄🌅🌃🗽🌉🎠🎡⛲️🎢🚢⛵️🚤🚣⚓️🚀✈️💺🚁🚂🚊🚉🚞🚆🚄🚅🚈🚇🚝🚋🚃🚎🚌🚍🚙🚘🚗🚕🚖🚛🚚🚨🚓🚔🚒🚑🚐🚲🚡🚟🚠🚜💈🚏🎫🚦🚥⚠️🚧🔰⛽️🏮🎰♨️🗿🎪🎭📍🚩🇬🇧🇷🇺🇫🇷🇯🇵🇰🇷🇩🇪🇨🇳🇺🇸
- 
- 1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣0️⃣🔟🔢#️⃣🔣⬆️⬇️⬅️➡️🔠🔡🔤↗️↖️↘️↙️↔️↕️🔄◀️▶️🔼🔽↩️↪️ℹ️⏪⏩⏫⏬⤵️⤴️🆗🔀🔁🔂🆕🆙🆒🆓🆖📶🎦🈁🈯️🈳🈵🈴🈲🉐🈹🈺🈶🈚️🚻🚹🚺🚼🚾🚰🚮🅿️♿️🚭🈷🈸🈂Ⓜ️🛂🛄🛅🛃🉑㊙️㊗️🆑🆘🆔🚫🔞📵🚯🚱🚳🚷🚸⛔️✳️❇️❎✅✴️💟🆚📳📴🅰🅱🆎🅾💠➿♻️♈️♉️♊️♋️♌️♍️♎️♏️♐️♑️♒️♓️⛎🔯🏧💹💲💱©®™❌‼️⁉️❗️❓❕❔⭕️🔝🔚🔙🔛🔜🔃🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕖🕗🕘🕙🕚🕡🕢🕣🕤🕥🕦✖️➕➖➗♠️♥️♣️♦️💮💯✔️☑️🔘🔗➰〰〽️🔱◼️◻️◾️◽️▪️▫️🔺🔲🔳⚫️⚪️🔴🔵🔻⬜️⬛️🔶🔷🔸🔹
- 
- 
- 
- 
- 
- */
 

@@ -10,14 +10,12 @@
 #import "ABState.h"
 #import "ABScript.h"
 #import "ABConstants.h"
-
-#define kScreenWidth [UIScreen mainScreen].bounds.size.width
-#define kScreenHeight [UIScreen mainScreen].bounds.size.height
+#import "ABMainViewController.h"
 
 
 @implementation ABUI
 
-UIView *infoView, *mainView;
+UIView *infoView;
 UIColor *normalColor, *selectedColor;
 UIButton *infoButton;
 
@@ -33,23 +31,14 @@ static ABUI *ABUIInstance = NULL;
 }
 
 
-+ (void) setMainViewReference:(UIView *)view {
-    mainView = view;
-}
-
-+ (UIView *) getMainViewReference {
-    return mainView;
-}
-
-
 
 
 + (CGFloat) iPadToUniversalW:(CGFloat)n {
-    return [ABUI screenWidth] / (1024 / n);
+    return kScreenWidth / (1024 / n);
 }
 
 + (CGFloat) iPadToUniversalH:(CGFloat)n {
-    return [ABUI screenHeight] / (768 / n);
+    return kScreenHeight / (768 / n);
 }
 
 
@@ -142,72 +131,22 @@ static ABUI *ABUIInstance = NULL;
     return [UIColor colorWithHue:0.07 saturation:0.4 brightness:0.25 alpha:1];
 }
 
-
-
-
-
-
-
-//////////////////////////////////
-// CONTROL PANEL TRIGGER BUTTON //
-//////////////////////////////////
-
-
-+ (UIButton *) createControlPanelTriggerButtonWithFrame:(CGRect)frame {
-    infoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    infoButton.frame = frame;
-    infoButton.tintColor = [ABUI goldColor];
-    infoButton.alpha = 0.5;
-    [infoButton setImage:[UIImage imageNamed:@"ui_down_arrow.png"] forState:UIControlStateNormal];
-    CGFloat m = kScreenWidth / 68.26666666666667;
-    [infoButton setImageEdgeInsets:UIEdgeInsetsMake(m, m, m, m)];
-
-    return infoButton;
++ (UIImage *)imageWithColor:(UIColor *)color {
+    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 
-+ (void) movePanelTriggerButtonDown {
-    
-    [UIView beginAnimations:@"rotate" context:nil];
-    [UIView setAnimationDuration:.5f];
-    if( CGAffineTransformEqualToTransform( infoButton.imageView.transform, CGAffineTransformIdentity ) )
-    {
-        infoButton.imageView.transform = CGAffineTransformMakeRotation(M_PI);
-    } else {
-        infoButton.imageView.transform = CGAffineTransformIdentity;
-    }
-    [UIView commitAnimations];
-    
-    
-    CGRect frame = infoButton.frame;
-    [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        infoButton.frame = CGRectMake(frame.origin.x, frame.origin.y + [ABUI iPadToUniversalH:65], frame.size.width, frame.size.height);
-    } completion:^(BOOL finished) {
 
-    }];
-}
 
-+ (void) movePanelTriggerButtonUp {
 
-    
-    [UIView beginAnimations:@"rotate" context:nil];
-    [UIView setAnimationDuration:.5f];
-    if( CGAffineTransformEqualToTransform( infoButton.imageView.transform, CGAffineTransformIdentity ) )
-    {
-        infoButton.imageView.transform = CGAffineTransformMakeRotation(M_PI);
-    } else {
-        infoButton.imageView.transform = CGAffineTransformIdentity;
-    }
-    [UIView commitAnimations];
 
-    
-    CGRect frame = infoButton.frame;
-    [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        infoButton.frame = CGRectMake(frame.origin.x, frame.origin.y - [ABUI iPadToUniversalH:65], frame.size.width, frame.size.height);
-    } completion:^(BOOL finished) {
-        
-    }];
 
-}
 
 
 
@@ -346,26 +285,12 @@ static ABUI *ABUIInstance = NULL;
 
 
 + (BOOL) isIpad {
-    return [ABUI screenWidth] > 1023;
+    return kScreenWidth > 1023;
 }
 
 + (BOOL) isIpadAir {
-    return [ABUI screenWidth] > 1400;
+    return kScreenWidth > 1400;
 }
-
-
-+ (CGFloat) screenWidth {
-    return kScreenWidth;
-}
-
-+ (CGFloat) screenHeight {
-    return kScreenHeight;
-}
-
-+ (CGRect) currentScreenBoundsForOrientation {
-    return [UIScreen mainScreen].bounds;
-}
-
 
 
 

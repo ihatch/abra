@@ -12,10 +12,10 @@
 
 @interface ABMainViewController : UIViewController <UITextFieldDelegate>
 
-@property(strong,nonatomic)ABInfoViewController *infoViewController;
+@property (strong, nonatomic) ABInfoViewController *infoViewController;
 
-- (void) textFieldModal;
++ (ABMainViewController *) instance;
+- (void) showGraftModal;
 - (void) showInfoView;
-//- (UIView *) getContentView;
 
 @end

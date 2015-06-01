@@ -141,7 +141,14 @@ static ABState *ABStateInstance = NULL;
     [ABState manuallyTransitionStanzaWithIncrement:0];
 }
 
-
++ (void) turnPage:(int)direction {
+    if(isInAutoplayMode) {
+        if(direction == 1) scriptDirection = FORWARD;
+        if(direction == -1) scriptDirection = BACKWARD;
+    } else {
+        [ABState manuallyTransitionStanzaWithIncrement:direction];
+    }
+}
 
 + (void) forward {
     if(isInAutoplayMode) scriptDirection = FORWARD;
@@ -223,8 +230,8 @@ static ABState *ABStateInstance = NULL;
     prevStanzaLines = stanza;
     
     int lineHeight = [ABUI abraLineHeight];
-    CGFloat heightOffset = ([ABUI screenHeight] - (lineHeight * ABRA_NUMBER_OF_LINES)) / 2;
-    if([ABUI screenHeight] < 400) heightOffset = heightOffset / 1.5;
+    CGFloat heightOffset = (kScreenHeight - (lineHeight * ABRA_NUMBER_OF_LINES)) / 2;
+    if(kScreenHeight < 400) heightOffset = heightOffset / 1.5;
     
     ABLines = [[NSMutableArray alloc] init];
     
@@ -283,6 +290,11 @@ static ABState *ABStateInstance = NULL;
         newLines = [ABMutate remixStanza:newLines andOldStanza:prevStanzaLines atMutationLevel:mutationLevel];
         mutationLevel --;
     }
+    
+    if([newLines count] > ABRA_NUMBER_OF_LINES) {
+        newLines = [newLines subarrayWithRange:NSMakeRange(0, ABRA_NUMBER_OF_LINES)];
+    }
+
     
     currentStanza = index;
     prevStanzaLines = newLines;
@@ -349,13 +361,10 @@ static ABState *ABStateInstance = NULL;
 
 
 + (void) absentlyMutate {
-    
-//    CGFloat level = ABF(0.12);
     if([prevStanzaLines count] == 0) return;
-    int i = ABI((int)([prevStanzaLines count]));
-    NSArray *newLine = [ABMutate mutateRandomWordInLine:prevStanzaLines[i]];
-    [ABState updatePrevStanzaLinesWithLine:newLine atIndex:i];
-    [[ABLines objectAtIndex:i] changeWordsToWords:newLine];
+    int max = MIN([prevStanzaLines count], ABRA_NUMBER_OF_LINES);
+    int i = ABI(max);
+    [[ABLines objectAtIndex:i] absentlyMutate];
 }
 
 

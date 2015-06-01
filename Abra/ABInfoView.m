@@ -7,14 +7,15 @@
 //
 
 #import "ABInfoView.h"
-#import "ABState.h"
+#import "ABMainViewController.h"
 #import "ABControlPanel.h"
+#import "ABConstants.h"
+#import "ABState.h"
 #import "ABUI.h"
 #import <pop/POP.h>
 
 @implementation ABInfoView
 
-CGFloat screenWidth, screenHeight;
 CGRect infoContainerFrame, infoNavFrame, infoContentFrame;
 CGFloat margin;
 UIView *infoNav, *infoMain, *mainView, *infoNavView;
@@ -25,17 +26,11 @@ NSString *aboutHtml, *backgroundHtml, *paperbackHtml, *artistsBookHtml, *thxHtml
 UIButton *aboutButton, *backgroundButton, *paperbackButton, *artistsBookButton, *thxButton, *currentlySelected;
 
 
-- (id) initWithMainViewReference:(UIView *)main andControlPanelReference:(ABControlPanel *)cPanel {
+- (id) init {
     
-    mainView = main;
-    controlPanel = cPanel;
-    
-    screenWidth = [ABUI screenWidth];
-    screenHeight = [ABUI screenHeight];
-
     margin = 100;
-    CGFloat containerWidth = screenWidth - (margin * 2);
-    CGFloat containerHeight = screenHeight - (margin * 2);
+    CGFloat containerWidth = kScreenWidth - (margin * 2);
+    CGFloat containerHeight = kScreenHeight - (margin * 2);
     CGFloat navWidth = (containerWidth / 3.3);
     CGFloat contentWidth = containerWidth - navWidth;
     
@@ -46,7 +41,9 @@ UIButton *aboutButton, *backgroundButton, *paperbackButton, *artistsBookButton, 
     self = [super initWithFrame:infoContainerFrame];
 
     if (self) {
-        
+
+//        mainView = [ABMainViewController instance].view;
+
         self.alpha = 1;
         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.4];
         self.hidden = NO;
@@ -65,7 +62,6 @@ UIButton *aboutButton, *backgroundButton, *paperbackButton, *artistsBookButton, 
         [self addSubview:contentView];
 
         [self initButtons];
-        
         [self initInfoContents];
         [self showContents:aboutHtml];
         
