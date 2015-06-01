@@ -14,11 +14,10 @@
 + (void) initAbraData;
 
 + (NSArray *) loadWordList;
-+ (NSMutableDictionary *) loadDiceAdditionsAndAddToDictionary:(NSMutableDictionary *)diceDictionary;
 
 
-+ (void) saveAllDataToFile;
-+ (void) saveScriptData:(NSArray *)script scriptWordsDictionary:(NSMutableDictionary *)scriptWordsDictionary;
+// + (void) saveAllDataToFile;
+//+ (void) saveScriptData:(NSArray *)script scriptWordsDictionary:(NSMutableDictionary *)scriptWordsDictionary;
 
 
 + (void) initCoreDictionary;
@@ -28,10 +27,8 @@
 + (ABScriptWord *) getRandomScriptWord;
 + (ABScriptWord *) getScriptWord:(NSString *)text;
 
-+ (void) addToDice:(NSString *)text;
-+ (NSMutableArray *) diceForKey:(NSString *)text;
-
 + (void) graftNewWords:(NSArray *)words;
 + (ABScriptWord *) getWordToGraft;
++ (ABScriptWord *) getPastGraftWord;  // TODO: integrate
 
 @end

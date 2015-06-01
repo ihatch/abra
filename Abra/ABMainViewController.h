@@ -15,5 +15,7 @@
 @property(strong,nonatomic)ABInfoViewController *infoViewController;
 
 - (void) textFieldModal;
+- (void) showInfoView;
+//- (UIView *) getContentView;
 
 @end

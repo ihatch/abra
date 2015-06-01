@@ -102,6 +102,8 @@ static ABScript *ABScriptInstance = NULL;
                 }
                 
                 ABScriptWord *sw = [[ABScriptWord alloc] initWithText:text sourceStanza:i];
+                // Don't check extra properties because we know it's from the original script.
+                // If sometime later I modify this to allow importing other texts, I need to checkProperties here.
 
                 if(connectNextWord) {
                     connectLastAndCurrent = YES;
@@ -123,8 +125,8 @@ static ABScript *ABScriptInstance = NULL;
                 }
                 
                 if(connectLastAndCurrent && lastWordObj != nil) {
-                    [lastWordObj addRightSister:text];
-                    [sw addLeftSister:[lastWordObj text]];
+                    [lastWordObj addSister:text];
+                    [sw addSister:[lastWordObj text]];
                 }
                 
                 lastWordObj = sw;
@@ -292,18 +294,18 @@ static ABScript *ABScriptInstance = NULL;
 //////////////
 
 
-+ (NSArray *) parseGraftTextIntoScriptWords:(NSString *)text {
++ (NSArray *) parseGraftArrayIntoScriptWords:(NSArray *)words {
     
-    NSArray *words = [text componentsSeparatedByString:@" "];
     NSMutableArray *scriptWords = [NSMutableArray array];
     
     for(int i=0; i<[words count]; i++) {
-        ABScriptWord *sw = [[ABScriptWord alloc] initWithText:words[i] sourceStanza:-1];
-        sw.isGrafted = YES;
+        ABScriptWord *sw = [[ABScriptWord alloc] initGraftedWithText:words[i] sourceStanza:-1];
         [scriptWords addObject:sw];
     }
+    
     return [NSArray arrayWithArray:scriptWords];
 }
+
 
 
 + (NSArray *) graftText:(NSArray *)scriptWords intoStanzaLines:(NSArray *)stanzaLines {

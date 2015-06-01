@@ -93,14 +93,22 @@
         self.textColor = [ABUI progressHueColorForStanza:self.sourceStanza];
     }
     
+    
+    CGFloat unlockTime = (duration + delay) * .25;
+    [self performSelector:@selector(unlock) withObject:nil afterDelay:unlockTime];
+    
     [UIView animateWithDuration:duration delay:delay options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         self.alpha = 1.0;
         self.transform = CGAffineTransformMakeScale(randomSize, randomSize);
-    } completion:^(BOOL finished) {
-        self.locked = NO;
-    }];
+    } completion:^(BOOL finished) {}];
     
 }
+
+
+- (void) unlock {
+    self.locked = NO;
+}
+
 
 
 - (void) dim {

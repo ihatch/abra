@@ -11,18 +11,23 @@
 @interface ABScriptWord : NSObject
 
 @property (nonatomic) NSString *text;
+@property (nonatomic) NSMutableArray *sisters;
 @property (nonatomic) int sourceStanza;
+@property (nonatomic) int morphCount;
+@property (nonatomic) int emojiCount;
+@property (nonatomic) int nonAsciiCount;
+@property (nonatomic) BOOL isNumber;
 @property (nonatomic) BOOL marginLeft;
 @property (nonatomic) BOOL marginRight;
-@property (nonatomic) NSMutableArray *leftSisters;
-@property (nonatomic) NSMutableArray *rightSisters;
 @property (nonatomic) BOOL isGrafted;
-@property (nonatomic) int morphCount;
+
 
 - (id) initWithText:(NSString *)wordText sourceStanza:(int)stanza;
+- (id) initGraftedWithText:(NSString *)wordText sourceStanza:(int)stanza;
 
-- (void) addRightSister:(NSString *)wordText;
-- (void) addLeftSister:(NSString *)wordText;
+- (void) checkProperties;
+- (void) addSister:(NSString *)wordText;
+- (BOOL) hasSister:(NSString *)string;
 
 + (ABScriptWord *) copyScriptWord:(ABScriptWord *)word;
 

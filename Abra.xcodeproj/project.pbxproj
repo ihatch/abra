@@ -10,11 +10,16 @@
 		07597B341B13A70F006F6B5E /* ABInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07597B331B13A70F006F6B5E /* ABInfoView.m */; };
 		07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */; };
 		07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */; };
+		07597B3C1B1B8043006F6B5E /* info-About.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B3B1B1B8043006F6B5E /* info-About.html */; };
+		07597B411B1B87FA006F6B5E /* info-Acknowledgements.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B3D1B1B87FA006F6B5E /* info-Acknowledgements.html */; };
+		07597B421B1B87FA006F6B5E /* info-ArtistsBook.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B3E1B1B87FA006F6B5E /* info-ArtistsBook.html */; };
+		07597B431B1B87FA006F6B5E /* info-Background.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B3F1B1B87FA006F6B5E /* info-Background.html */; };
+		07597B441B1B87FA006F6B5E /* info-Paperback.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B401B1B87FA006F6B5E /* info-Paperback.html */; };
 		075B2AC71A917D7F00763915 /* ABData.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AC51A917D7F00763915 /* ABData.m */; };
 		075B2AC81A917D7F00763915 /* ABDice.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AC61A917D7F00763915 /* ABDice.m */; };
 		075B2ACB1A917FF900763915 /* ABControlPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2ACA1A917FF900763915 /* ABControlPanel.m */; };
 		075B2ACE1A91938100763915 /* ui_down_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 075B2ACD1A91938100763915 /* ui_down_arrow.png */; };
-		075B2AE41A992D9600763915 /* diceAdditions.txt in Resources */ = {isa = PBXBuildFile; fileRef = 075B2AE31A992D9600763915 /* diceAdditions.txt */; };
+		075B2AE41A992D9600763915 /* diceErrata.txt in Resources */ = {isa = PBXBuildFile; fileRef = 075B2AE31A992D9600763915 /* diceErrata.txt */; };
 		075B2AEA1A9945D200763915 /* ABMutate.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AE91A9945D200763915 /* ABMutate.m */; };
 		075B2AF61A9ABC4B00763915 /* a_87.png in Resources */ = {isa = PBXBuildFile; fileRef = 075B2AEF1A9ABC4B00763915 /* a_87.png */; };
 		075B2AF71A9ABC4B00763915 /* a_120.png in Resources */ = {isa = PBXBuildFile; fileRef = 075B2AF01A9ABC4B00763915 /* a_120.png */; };
@@ -81,6 +86,11 @@
 		07597B331B13A70F006F6B5E /* ABInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABInfoView.m; sourceTree = "<group>"; };
 		07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "_abraData-coreDiceDictionary"; sourceTree = "<group>"; };
 		07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-coreDiceDictionary"; sourceTree = "<group>"; };
+		07597B3B1B1B8043006F6B5E /* info-About.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-About.html"; sourceTree = "<group>"; };
+		07597B3D1B1B87FA006F6B5E /* info-Acknowledgements.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-Acknowledgements.html"; sourceTree = "<group>"; };
+		07597B3E1B1B87FA006F6B5E /* info-ArtistsBook.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-ArtistsBook.html"; sourceTree = "<group>"; };
+		07597B3F1B1B87FA006F6B5E /* info-Background.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-Background.html"; sourceTree = "<group>"; };
+		07597B401B1B87FA006F6B5E /* info-Paperback.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-Paperback.html"; sourceTree = "<group>"; };
 		075B2AC41A917D7F00763915 /* ABData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABData.h; sourceTree = "<group>"; };
 		075B2AC51A917D7F00763915 /* ABData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABData.m; sourceTree = "<group>"; };
 		075B2AC61A917D7F00763915 /* ABDice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABDice.m; sourceTree = "<group>"; };
@@ -88,7 +98,7 @@
 		075B2ACA1A917FF900763915 /* ABControlPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABControlPanel.m; sourceTree = "<group>"; };
 		075B2ACC1A91821A00763915 /* ABDice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ABDice.h; path = ../ABDice.h; sourceTree = "<group>"; };
 		075B2ACD1A91938100763915 /* ui_down_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ui_down_arrow.png; sourceTree = "<group>"; };
-		075B2AE31A992D9600763915 /* diceAdditions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = diceAdditions.txt; sourceTree = "<group>"; };
+		075B2AE31A992D9600763915 /* diceErrata.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = diceErrata.txt; sourceTree = "<group>"; };
 		075B2AE81A9945D200763915 /* ABMutate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABMutate.h; sourceTree = "<group>"; };
 		075B2AE91A9945D200763915 /* ABMutate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABMutate.m; sourceTree = "<group>"; };
 		075B2AEF1A9ABC4B00763915 /* a_87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a_87.png; sourceTree = "<group>"; };
@@ -205,8 +215,6 @@
 		075B2AEE1A99483300763915 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				075B2ACC1A91821A00763915 /* ABDice.h */,
-				075B2AC61A917D7F00763915 /* ABDice.m */,
 				C619F5F6185A55690073DD32 /* ABMatch.h */,
 				C619F5F7185A55690073DD32 /* ABMatch.m */,
 				07A1A7EC1A9AF9980047F7F3 /* ABMagicString.h */,
@@ -220,6 +228,11 @@
 			isa = PBXGroup;
 			children = (
 				C6446D1E1878A78800CFAA20 /* abraInfo.html */,
+				07597B3B1B1B8043006F6B5E /* info-About.html */,
+				07597B3D1B1B87FA006F6B5E /* info-Acknowledgements.html */,
+				07597B3E1B1B87FA006F6B5E /* info-ArtistsBook.html */,
+				07597B3F1B1B87FA006F6B5E /* info-Background.html */,
+				07597B401B1B87FA006F6B5E /* info-Paperback.html */,
 			);
 			name = Info;
 			sourceTree = "<group>";
@@ -262,6 +275,8 @@
 				075B2AC51A917D7F00763915 /* ABData.m */,
 				075B2AE81A9945D200763915 /* ABMutate.h */,
 				075B2AE91A9945D200763915 /* ABMutate.m */,
+				075B2ACC1A91821A00763915 /* ABDice.h */,
+				075B2AC61A917D7F00763915 /* ABDice.m */,
 				C60EB08818A5E9340090BBEB /* ABScriptWord.h */,
 				C60EB08918A5E9340090BBEB /* ABScriptWord.m */,
 				075B2AEE1A99483300763915 /* Helpers */,
@@ -332,7 +347,7 @@
 				07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */,
 				C604FA0B1850FA5F0076CC96 /* script.txt */,
 				07C9242E19B56E0A00CCFC9C /* dice.txt */,
-				075B2AE31A992D9600763915 /* diceAdditions.txt */,
+				075B2AE31A992D9600763915 /* diceErrata.txt */,
 				C68B9ED018615C7B007D2BDB /* wordList.txt */,
 			);
 			name = "Text Resources";
@@ -525,6 +540,7 @@
 				075B2ACE1A91938100763915 /* ui_down_arrow.png in Resources */,
 				C605E2021888C99A007770E2 /* IMFeFlow2.otf in Resources */,
 				C6CF48F818A7057D00C43C14 /* gold1.jpg in Resources */,
+				07597B411B1B87FA006F6B5E /* info-Acknowledgements.html in Resources */,
 				075B2AF71A9ABC4B00763915 /* a_120.png in Resources */,
 				075B2AF61A9ABC4B00763915 /* a_87.png in Resources */,
 				C6E73A0B184BED4600A2A5C3 /* Default@2x.png in Resources */,
@@ -536,20 +552,24 @@
 				C6446D281879F04200CFAA20 /* FeGPrm27C.otf in Resources */,
 				C6A8B02018B8105B001D3C01 /* a_40.png in Resources */,
 				C6A8B02318B8105B001D3C01 /* a_80.png in Resources */,
-				075B2AE41A992D9600763915 /* diceAdditions.txt in Resources */,
+				075B2AE41A992D9600763915 /* diceErrata.txt in Resources */,
+				07597B441B1B87FA006F6B5E /* info-Paperback.html in Resources */,
 				C6DE547B18BD6B95000A3DAB /* abra_logos_horiz.png in Resources */,
 				075B2AFB1A9ABC4B00763915 /* black_1536x2048.png in Resources */,
 				C604FA0C1850FA5F0076CC96 /* script.txt in Resources */,
 				C6A8B01F18B8105B001D3C01 /* a_29.png in Resources */,
+				07597B431B1B87FA006F6B5E /* info-Background.html in Resources */,
 				07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */,
 				075B2AFC1A9ABC4B00763915 /* black_2048x1536.png in Resources */,
 				07D6D1B11A69C008004970A3 /* Images.xcassets in Resources */,
+				07597B3C1B1B8043006F6B5E /* info-About.html in Resources */,
 				C6A8B02118B8105B001D3C01 /* a_58.png in Resources */,
 				C6CF48F918A7057D00C43C14 /* gold2.jpg in Resources */,
 				C6E73A0D184BED4600A2A5C3 /* Default-568h@2x.png in Resources */,
 				07A8000D1A69DD8B00BE71C9 /* a_152.png in Resources */,
 				C6E73A10184BED4600A2A5C3 /* MainStoryboard.storyboard in Resources */,
 				C6CF48F518A704D600C43C14 /* gold.jpg in Resources */,
+				07597B421B1B87FA006F6B5E /* info-ArtistsBook.html in Resources */,
 				C6EEC238187D1D7E005D657D /* leather2.jpg in Resources */,
 				C6446D271879F04200CFAA20 /* FeGPit27C.otf in Resources */,
 				075B2AFA1A9ABC4B00763915 /* black_1024x768.png in Resources */,

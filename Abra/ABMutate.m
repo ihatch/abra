@@ -13,6 +13,28 @@
 #import "ABScriptWord.h"
 #import "ABState.h"
 #import "ABData.h"
+#import "ABDice.h"
+
+
+// Method to split string that works with extended chars (emoji)
+@interface NSString (ConvertToArray)
+- (NSArray *)convertToArray;
+@end
+@implementation NSString (ConvertToArray)
+- (NSArray *)convertToArray {
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    NSUInteger i = 0;
+    while (i < self.length) {
+        NSRange range = [self rangeOfComposedCharacterSequenceAtIndex:i];
+        NSString *chStr = [self substringWithRange:range];
+        [arr addObject:chStr];
+        i += range.length;
+    }
+    return arr;
+}
+@end
+
+
 
 @implementation ABMutate
 
@@ -308,7 +330,7 @@ static ABMutate *ABMutateInstance = NULL;
 
 + (ABScriptWord *) throwDiceCoefficient:(ABScriptWord *)word {
     
-    NSArray *dice = [ABData diceForKey:word.text];
+    NSArray *dice = [ABDice diceForKey:word.text];
     if(!dice) {
         NSLog(@">> Dice match not found: %@", word.text);
         return [ABScript trulyRandomWord];
@@ -320,7 +342,17 @@ static ABMutate *ABMutateInstance = NULL;
         int range = 4 + (word.morphCount * 3);
         int max = (int)[dice count];
         if(range > max) range = max;
-        if(range == max && ABI(1) == 0) {
+        if(max > 0 && word.morphCount < 2 && word.isGrafted) {
+            int randomIndex = ABI(range);
+            NSString *w = [dice objectAtIndex:randomIndex];
+            if(!w) {
+                NSLog(@">> Problematic dice match for: %@", word.text);
+                return word;
+            }
+            NSLog(@"* Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
+            new = [ABData getScriptWord:w];
+            
+        } else if(range == max && ABI(2) == 0) {
             new = [ABScript trulyRandomWord];
             NSLog(@"Radical mutation: %@ -> %@", word.text, new.text);
             new.morphCount = (int)(new.morphCount / 3);
@@ -371,13 +403,12 @@ static ABMutate *ABMutateInstance = NULL;
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
     NSString *wordText = [word text];
+    NSArray *characters = [wordText convertToArray];
     
-    for (int i = 0; i < [wordText length]; i++) {
-        NSString *ch = [wordText substringWithRange:NSMakeRange(i, 1)];
-        ABScriptWord *sw = [[ABScriptWord alloc] initWithText:ch sourceStanza:word.sourceStanza];
+    for (int i = 0; i < [characters count]; i++) {
+        ABScriptWord *sw = [[ABScriptWord alloc] initWithText:characters[i] sourceStanza:word.sourceStanza];
         if(i != 0) sw.marginLeft = NO;
         if(i != [wordText length] - 1) sw.marginRight = NO;
-        
         [array addObject:sw];
     }
     return [NSArray arrayWithArray:array];

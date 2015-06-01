@@ -10,12 +10,10 @@
 
 @interface ABDice : NSObject
 
-+ (CGFloat) diceCoefficientWithString:(NSString *)s andString:(NSString *)t;
++ (void) setDiceDictionary:(NSMutableDictionary *)dict;
++ (void) generateDiceDictionary;
 
-+ (void) initCacheWithLexicon:(NSArray *)lexicon;
-
-+ (NSArray *) topMatchesForTerm:(NSString *)term inLexicon:(NSArray *)lexicon;
-
-+ (NSDictionary *) topCoreMatchesForLexicon:(NSArray *)lexicon;
++ (NSMutableArray *) diceForKey:(NSString *)text;
++ (void) updateDiceDictionaryWithStrings:(NSArray *)strings;
 
 @end

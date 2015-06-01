@@ -29,14 +29,15 @@
 @implementation ABData
 
 NSMutableDictionary *scriptData;
-NSMutableDictionary *diceDictionary;
 NSMutableDictionary *abScriptWordsDictionary;
-NSMutableArray *graftScriptWords;   //  <<------ TODO
-NSMutableArray *graftsHistory;
+
+NSMutableArray *pastGrafts;               // as strings
+NSMutableDictionary *wordsIndexedByCharLength;  // use special char cutup;   also create fns to add / lookup by char count
+
+
+
 NSArray *currentGraftWords;
-
-
-NSMutableDictionary *scriptData;
+int graftIndex;
 
 
 static ABData *ABDataInstance = NULL;
@@ -56,10 +57,7 @@ static ABData *ABDataInstance = NULL;
     [ABData initCoreScript];
     [ABData initCoreDictionary];
     
-    
     NSLog(@"Initialization of Abra data completed.");
-    
-    
 }
 
 
@@ -81,13 +79,17 @@ static ABData *ABDataInstance = NULL;
 
 
 + (void) initCoreDictionary {
-    diceDictionary = [ABData loadPrecompiledData:@"coreDiceDictionary"];
+    NSMutableDictionary *diceDictionary = [ABData loadPrecompiledData:@"coreDiceDictionary"];
     if(diceDictionary == nil) {
         NSLog(@"%@", @">> ERROR: CORE MUTATIONS TABLE NOT FOUND");
-        [ABData generateCoreDictionary];
+        [ABDice generateDiceDictionary];
         [ABData saveData:diceDictionary forKey:@"coreDiceDictionary"];
     } else {
-        diceDictionary = [ABData loadDiceAdditionsAndAddToDictionary:diceDictionary];
+        [ABDice setDiceDictionary:diceDictionary];
+        
+        // TODO!
+
+    
     }
     
 }
@@ -152,17 +154,7 @@ static ABData *ABDataInstance = NULL;
 /////////////////////// DEV FNS ///////////////////////
 
 + (void) createLocalDataCacheDEV {
-    [ABData generateCoreDictionary];
-}
-
-// Only used in dev, and needs to be manually triggered
-// Thereafter saved as a local file
-+ (NSMutableDictionary *) generateCoreDictionary {
-    NSLog(@"%@", @"Generating dictionary ...");
-    diceDictionary = [NSMutableDictionary dictionaryWithDictionary:[ABDice topCoreMatchesForLexicon:[ABData loadWordList]]];
-    diceDictionary = [ABData loadDiceAdditionsAndAddToDictionary:diceDictionary];
-    NSLog(@"%@", @"Finished generating dictionary.");
-    return diceDictionary;
+    [ABDice generateDiceDictionary];
 }
 
 /////////////////////// END DEV FNS ///////////////////////
@@ -206,27 +198,6 @@ static ABData *ABDataInstance = NULL;
 }
 
 
-+ (NSMutableDictionary *) loadDiceAdditionsAndAddToDictionary:(NSMutableDictionary *)diceDictionary {
-
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"diceAdditions" ofType:@"txt"];
-    NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-    NSArray *entries = [rawText componentsSeparatedByString:@"\n"];
-
-    for (int i = 0; i < [entries count]; i++) {
-        NSArray *terms = [entries[i] componentsSeparatedByString:@" "];
-        NSString *key = terms[0];
-        NSMutableArray *others = [NSMutableArray array];
-        for (int j = 1; j < [terms count]; j++) {
-            [others addObject:terms[j]];
-        }
-        [diceDictionary setObject:[NSArray arrayWithArray:others] forKey:key];
-    }
-
-    return diceDictionary;
-}
-
-
-
 
 
 
@@ -240,6 +211,7 @@ static ABData *ABDataInstance = NULL;
 // Add new words to scriptWords list temporarily (not persistently)
 + (void) addToScriptWords:(NSString *)text {
     ABScriptWord *sw = [[ABScriptWord alloc] initWithText:text sourceStanza:[ABState getCurrentStanza]];
+    [sw checkProperties];
     [abScriptWordsDictionary setObject:[ABScriptWord copyScriptWord:sw] forKey:text];
 }
 
@@ -264,11 +236,6 @@ static ABData *ABDataInstance = NULL;
 /////////////
 
 
-+ (NSMutableArray *) diceForKey:(NSString *)text {
-    if(![diceDictionary objectForKey:text]) return nil;
-    return [diceDictionary objectForKey:text];
-}
-
 // TODO: determine whether this needs to be a copy and not a reference to the object within the dictionary (?)
 + (ABScriptWord *) randomABScriptWordFromDictionary {
     NSArray *allKeys = [abScriptWordsDictionary allKeys];
@@ -283,25 +250,52 @@ static ABData *ABDataInstance = NULL;
 // GRAFTING //
 //////////////
 
-+ (BOOL) abraKnowsThisWordAlready {
-    
-}
-
 + (void) graftNewWords:(NSArray *)words {
     
-    
     // Run processes to update lookup tables
-    currentGraftWords = words;
+
+    [ABDice updateDiceDictionaryWithStrings:words];
+    NSArray *scriptWords = [ABScript parseGraftArrayIntoScriptWords:words];
+    
+    for(ABScriptWord *sw in scriptWords) {
+        if([abScriptWordsDictionary objectForKey:sw.text] != nil) continue;
+        [abScriptWordsDictionary setObject:sw forKey:sw.text];
+    }
+
+    // Set sisters
+    if([words count] > 1) {
+        for(NSString *s in words) {
+            for(NSString *s2 in words) {
+                if([s isEqualToString:s2]) continue;
+                [[abScriptWordsDictionary objectForKey:s] addSister:s2];
+            }
+        }
+    }
+
+    [pastGrafts addObjectsFromArray:words];
+    
+    currentGraftWords = scriptWords;
+    graftIndex = 0;
+    
 }
 
 
 
 
 + (ABScriptWord *) getWordToGraft {
-    ABScriptWord *w = [currentGraftWords objectAtIndex:(arc4random() % [currentGraftWords count])];
-    
+    ABScriptWord *w = [currentGraftWords objectAtIndex:graftIndex];
+    graftIndex ++;
+    if(graftIndex == [currentGraftWords count]) graftIndex = 0;
     return w;
 }
+
+
++ (ABScriptWord *) getPastGraftWord {
+    if([pastGrafts count] == 0) return nil;
+    return [pastGrafts objectAtIndex:(arc4random() % [pastGrafts count])];
+}
+
+
 
 
 
@@ -311,12 +305,6 @@ static ABData *ABDataInstance = NULL;
 /////////////
 // LEXICON //
 /////////////
-
-
-+ (void) addToDice:(NSString *)text {
-    
-}
-
 
 
 

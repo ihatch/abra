@@ -81,8 +81,8 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
 //    CGFloat x7 = [self iPadToUniversalW:700];
 //    CGFloat w7 = [self iPadToUniversalW:105];
 
-    CGFloat x7 = [self iPadToUniversalW:725];
-    CGFloat w7 = [self iPadToUniversalW:85];
+    CGFloat x7 = [self iPadToUniversalW:720];
+    CGFloat w7 = [self iPadToUniversalW:90];
 
     CGFloat x8 = [self iPadToUniversalW:810];
     CGFloat w8 = [self iPadToUniversalW:95];
@@ -91,35 +91,40 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
     CGFloat w9 = [self iPadToUniversalW:70];
     
     
-    mutateButton = [self controlButtonWithText:@"🌀 mutate" andFrame:CGRectMake(x1, y, w1, h)];
+    mutateButton = [self controlButtonWithText:@"🌀 mutate" andFrame:CGRectMake(x1, y, w1, h) andAddToView:YES];
     [mutateButton addTarget:self action:@selector(mutateButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [mutateButton setSelected:YES];
     currentlySelected = mutateButton;
     
-    graftButton = [self controlButtonWithText:@"🌱 graft" andFrame:CGRectMake(x2, y, w2, h)];
+    graftButton = [self controlButtonWithText:@"🌱 graft" andFrame:CGRectMake(x2, y, w2, h) andAddToView:YES];
     [graftButton addTarget:self action:@selector(graftButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    pruneButton = [self controlButtonWithText:@"🍃 prune" andFrame:CGRectMake(x3, y, w3, h)];
+    pruneButton = [self controlButtonWithText:@"🍃 prune" andFrame:CGRectMake(x3, y, w3, h) andAddToView:YES];
     [pruneButton addTarget:self action:@selector(pruneButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    eraseButton = [self controlButtonWithText:@"🍂 erase" andFrame:CGRectMake(x4, y, w4, h)];
+    eraseButton = [self controlButtonWithText:@"🍂 erase" andFrame:CGRectMake(x4, y, w4, h) andAddToView:YES];
     [eraseButton addTarget:self action:@selector(eraseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    magicButton = [self controlButtonWithText:@"✨ cadabra" andFrame:CGRectMake(x5, y, w5, h)];
+    magicButton = [self controlButtonWithText:@"✨ cadabra" andFrame:CGRectMake(x5, y, w5, h) andAddToView:YES];
     [magicButton addTarget:self action:@selector(magicButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
 //    autoplayButton = [self controlButtonWithText:@"🌿 autoplay" andFrame:CGRectMake(x7, y, w7, h)];
 //    [autoplayButton addTarget:self action:@selector(autoplayButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    shareButton = [self controlButtonWithText:@"🎁 share" andFrame:CGRectMake(x7, y, w7, h)];
+    shareButton = [self controlButtonWithText:@"🎁 share" andFrame:CGRectMake(x7, y, w7, h) andAddToView:YES];
     [shareButton addTarget:self action:@selector(shareButtonPressed) forControlEvents:UIControlEventTouchUpInside]; // 🚀📷📡
 
-    settingsButton = [self controlButtonWithText:@"🌰 settings" andFrame:CGRectMake(x8, y, w8, h)];
+    settingsButton = [self controlButtonWithText:@"🌰 settings" andFrame:CGRectMake(x8, y, w8, h) andAddToView:YES];
     [settingsButton addTarget:self action:@selector(settingsButtonPressed) forControlEvents:UIControlEventTouchUpInside]; // 🔩🎁🔩🎒🍎📦🌰
     
-    helpButton = [self controlButtonWithText:@"🔮 info" andFrame:CGRectMake(x9, y, w9, h)];
+    helpButton = [self controlButtonWithText:@"🔮 info" andFrame:CGRectMake(x9, y, w9, h) andAddToView:YES];
     [helpButton addTarget:self action:@selector(infoButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 }
+
+
+
+
+
 
 
 - (void) setModeToMutate {
@@ -147,11 +152,6 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
     [mainViewController textFieldModal];
 }
 
-- (void) magicButtonPressed {
-    [self selectModeWithButton:magicButton];
-    [ABState setInteractivityModeTo:MAGIC];
-}
-
 - (void) pruneButtonPressed {
     [self selectModeWithButton:pruneButton];
     [ABState setInteractivityModeTo:PRUNE];
@@ -163,16 +163,22 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
 }
 
 
-
-- (void) autoplayButtonPressed {
-
-    if(autoplayButton.isSelected) {
-        [autoplayButton setSelected:NO];
-    } else {
-        [autoplayButton setSelected:YES];
-    }
-    
+- (void) magicButtonPressed {
+    [self selectModeWithButton:magicButton];
+    [ABState setInteractivityModeTo:MAGIC];
 }
+
+
+//
+//- (void) autoplayButtonPressed {
+//
+//    if(autoplayButton.isSelected) {
+//        [autoplayButton setSelected:NO];
+//    } else {
+//        [autoplayButton setSelected:YES];
+//    }
+//    
+//}
 
 - (void) shareButtonPressed {
     
@@ -185,7 +191,7 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
         UIGraphicsBeginImageContext(self.window.bounds.size);
     
 //    [self.window.layer renderInContext:UIGraphicsGetCurrentContext()];
-    [mainViewController.view drawViewHierarchyInRect:mainViewController.view.bounds afterScreenUpdates:YES];
+    [mainViewController.view drawViewHierarchyInRect:mainViewController.view.bounds afterScreenUpdates:NO];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
@@ -199,8 +205,6 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cropViewController];
     [mainViewController presentViewController:navigationController animated:YES completion:nil];
     
-//    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-
 }
 
 
@@ -210,13 +214,11 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
 }
 
 - (void) infoButtonPressed {
-    infoView = [[ABInfoView alloc] initWithMainView:mainViewController];
-    [mainViewController.view addSubview:infoView];
+    [mainViewController showInfoView];
 }
 
 
--(UIImage *)cropImage:(UIImage *)image rect:(CGRect)cropRect
-{
+-(UIImage *)cropImage:(UIImage *)image rect:(CGRect)cropRect {
     CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
     UIImage *img = [UIImage imageWithCGImage:imageRef];
     CGImageRelease(imageRef);
@@ -270,7 +272,7 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
 
 
 
-- (UIButton *) controlButtonWithText:(NSString *)text andFrame:(CGRect)frame {
+- (UIButton *) controlButtonWithText:(NSString *)text andFrame:(CGRect)frame andAddToView:(BOOL)addToView {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = frame;
     [button setTitle:text forState:UIControlStateNormal];
@@ -286,7 +288,7 @@ UIButton *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, 
 
     button.layer.cornerRadius = [self iPadToUniversalH:10];
     button.clipsToBounds = YES;
-    [self addSubview:button];
+    if(addToView) [self addSubview:button];
     return button;
 }
 

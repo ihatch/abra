@@ -370,13 +370,11 @@ static ABState *ABStateInstance = NULL;
     
     NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *trimmed = [text stringByTrimmingCharactersInSet:whitespace];
-    if ([trimmed length] == 0) {
-        return NO;
-    }
+    if ([trimmed length] == 0) return NO;
     
-    NSArray *words = [ABScript parseGraftTextIntoScriptWords:trimmed];
-    
+    NSArray *words = [text componentsSeparatedByString:@" "];
     [ABData graftNewWords:words];
+
     return YES;
 }
 

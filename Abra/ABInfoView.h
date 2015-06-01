@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "ABMainViewController.h"
 
+@class ABControlPanel;
+
 @interface ABInfoView : UIView
 
-- (id) initWithMainView:(ABMainViewController *)main;
+- (id) initWithMainViewReference:(UIView *)mainView andControlPanelReference:(ABControlPanel *)cPanel;
 
 
 @end

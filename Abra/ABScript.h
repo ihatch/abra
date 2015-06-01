@@ -24,8 +24,6 @@
 + (int) firstStanzaIndex;
 + (int) lastStanzaIndex;
 
-
-
 + (NSArray *) allWordsInLines:(NSArray *)stanza;
 + (ABScriptWord *) randomScriptWordFromSet:(NSArray *)words;
 + (ABScriptWord *) trulyRandomWord;
@@ -37,7 +35,7 @@
 + (NSArray *) mixStanzaLines:(NSArray *)oldStanzaLines withStanzaAtIndex:(int)stanzaIndex;
 
 
-+ (NSArray *) parseGraftTextIntoScriptWords:(NSString *)text;
++ (NSArray *) parseGraftArrayIntoScriptWords:(NSArray *)words;
 + (NSArray *) graftText:(NSArray *)scriptWords intoStanzaLines:(NSArray *)stanzaLines;
 
 @end

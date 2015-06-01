@@ -40,7 +40,9 @@ extern CGFloat const ABRA_GESTURE_FEEDBACK_FADE_DURATION;
 extern CGFloat const ABRA_GESTURE_TIME_BUFFER;
 extern CGFloat const ABRA_TICKER_INTERVAL;
 
-
+extern NSString *const EMOJI_REGEX;
+extern NSString *const NON_ASCII_REGEX;
+extern NSString *const NUMBERS_REGEX;
 
 
 // DEV CONSTS

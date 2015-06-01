@@ -21,6 +21,13 @@
 
 - (void) setModeToMutate;
 
+
+- (CGFloat) iPadToUniversalW:(CGFloat)n;
+- (CGFloat) iPadToUniversalH:(CGFloat)n;
+
+- (UIButton *) controlButtonWithText:(NSString *)text andFrame:(CGRect)frame andAddToView:(BOOL)addToView;
+
+
 @property (nonatomic) UIDynamicAnimator *animator;
 @property (nonatomic) POPBasicAnimation *animationY;
 

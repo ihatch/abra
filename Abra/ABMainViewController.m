@@ -34,9 +34,7 @@
 @implementation ABMainViewController
 
 ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
-//UIView *infoView;
-ABBlackCurtain *graftCurtain;
-ABBlackCurtain *infoCurtain;
+ABBlackCurtain *graftCurtain, *infoCurtain;
 UIButton *controlPanelTriggerButton;
 CGPoint touchStart;
 
@@ -45,15 +43,14 @@ NSArray *ABLines;
 
 UITextField *graftTextField;
 
-CGFloat screenHeight;
-CGFloat screenWidth;
-
+CGFloat screenHeight, screenWidth;
 
 ABControlPanel *controlPanel;
 ABInfoView *infoView;
-
+//UIView *contentView;
 
 BOOL carouselIsAnimating;
+
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -70,24 +67,35 @@ BOOL carouselIsAnimating;
     NSLog(@"%f screenWidth", screenWidth);
     NSLog(@"%f screenHeight", screenHeight);
     
+//    contentView = [[UIView alloc] initWithFrame:self.view.frame];
+//    [self.view addSubview:contentView];
+    
     [self initLines];
     [self initGestures];
-    [self initCarouselView];
-    [self initControlPanelTrigger];
+    [self initCarousel];
+    [self initInfoView];
     [self initTextFieldModal];
+    [self initControlPanel];
     
-    // Top control panel
-    controlPanel = [[ABControlPanel alloc] initWithMainView:self];
-    [self.view addSubview:controlPanel];
-
 
     [self devStartupTests];
 }
 
 
+
 - (void) devStartupTests {
     
 }
+
+
+//- (UIView *) getContentView {
+//    return contentView;
+//}
+
+
+
+
+
 
 
 
@@ -135,7 +143,7 @@ BOOL carouselIsAnimating;
     return NO;
 }
 
-- (void) initCarouselView {
+- (void) initCarousel {
     
 //    CGFloat carouselWidth = isIpad ? 624 : screenWidth / 1.5;
 //    CGFloat carouselHeight = isIpad ? 120 : 90;
@@ -495,13 +503,11 @@ BOOL carouselIsAnimating;
     [graftCurtain addSubview:modal];
 }
 
-
 - (void) textFieldModal {
     [graftTextField becomeFirstResponder];
     [graftCurtain show];
 
 }
-
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     [graftTextField resignFirstResponder];
@@ -510,6 +516,15 @@ BOOL carouselIsAnimating;
     if(successfulGraft == NO) [controlPanel setModeToMutate];
     [graftCurtain hide];
     return YES;
+}
+
+
+
+// Top control panel
+- (void) initControlPanel {
+    controlPanel = [[ABControlPanel alloc] initWithMainView:self];
+    [self.view addSubview:controlPanel];
+    [self initControlPanelTrigger];
 }
 
 
@@ -543,6 +558,30 @@ BOOL carouselIsAnimating;
 
 
 
+
+
+
+
+- (void) initInfoView {
+//    infoView = [[ABInfoView alloc] initWithMainViewReference:self.view];
+}
+
+
+
+
+
+- (void) showInfoView {
+    
+    infoView = [[ABInfoView alloc] initWithMainViewReference:self.view andControlPanelReference:controlPanel];
+    
+    infoCurtain = [[ABBlackCurtain alloc] init];
+    infoCurtain.destroyOnFadeOut = YES;
+    [self.view addSubview:infoCurtain];
+    [infoCurtain addSubview:infoView];
+
+    [infoCurtain show];
+    
+}
 
 
 
