@@ -11,12 +11,11 @@
 		07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */; };
 		07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */; };
 		07597B471B1CDA9C006F6B5E /* ABLoading.m in Sources */ = {isa = PBXBuildFile; fileRef = 07597B461B1CDA9C006F6B5E /* ABLoading.m */; };
-		07597B4E1B1CEAEF006F6B5E /* info-About.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B481B1CEAEF006F6B5E /* info-About.html */; };
-		07597B4F1B1CEAEF006F6B5E /* info-Acknowledgements.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B491B1CEAEF006F6B5E /* info-Acknowledgements.html */; };
-		07597B501B1CEAEF006F6B5E /* info-ArtistsBook.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B4A1B1CEAEF006F6B5E /* info-ArtistsBook.html */; };
-		07597B511B1CEAEF006F6B5E /* info-Background.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B4B1B1CEAEF006F6B5E /* info-Background.html */; };
-		07597B521B1CEAEF006F6B5E /* info-Paperback.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B4C1B1CEAEF006F6B5E /* info-Paperback.html */; };
-		07597B531B1CEAEF006F6B5E /* abraInfo.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B4D1B1CEAEF006F6B5E /* abraInfo.html */; };
+		07597B5A1B1D0010006F6B5E /* info-About.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B551B1D0010006F6B5E /* info-About.html */; };
+		07597B5B1B1D0010006F6B5E /* info-Acknowledgements.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B561B1D0010006F6B5E /* info-Acknowledgements.html */; };
+		07597B5C1B1D0010006F6B5E /* info-ArtistsBook.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B571B1D0010006F6B5E /* info-ArtistsBook.html */; };
+		07597B5D1B1D0010006F6B5E /* info-Background.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B581B1D0010006F6B5E /* info-Background.html */; };
+		07597B5E1B1D0010006F6B5E /* info-Paperback.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B591B1D0010006F6B5E /* info-Paperback.html */; };
 		075B2AC71A917D7F00763915 /* ABData.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AC51A917D7F00763915 /* ABData.m */; };
 		075B2AC81A917D7F00763915 /* ABDice.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AC61A917D7F00763915 /* ABDice.m */; };
 		075B2ACB1A917FF900763915 /* ABControlPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2ACA1A917FF900763915 /* ABControlPanel.m */; };
@@ -88,12 +87,11 @@
 		07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-coreDiceDictionary"; sourceTree = "<group>"; };
 		07597B451B1CDA9C006F6B5E /* ABLoading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABLoading.h; sourceTree = "<group>"; };
 		07597B461B1CDA9C006F6B5E /* ABLoading.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABLoading.m; sourceTree = "<group>"; };
-		07597B481B1CEAEF006F6B5E /* info-About.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "info-About.html"; path = "iCarousel/info-About.html"; sourceTree = "<group>"; };
-		07597B491B1CEAEF006F6B5E /* info-Acknowledgements.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "info-Acknowledgements.html"; path = "iCarousel/info-Acknowledgements.html"; sourceTree = "<group>"; };
-		07597B4A1B1CEAEF006F6B5E /* info-ArtistsBook.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "info-ArtistsBook.html"; path = "iCarousel/info-ArtistsBook.html"; sourceTree = "<group>"; };
-		07597B4B1B1CEAEF006F6B5E /* info-Background.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "info-Background.html"; path = "iCarousel/info-Background.html"; sourceTree = "<group>"; };
-		07597B4C1B1CEAEF006F6B5E /* info-Paperback.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "info-Paperback.html"; path = "iCarousel/info-Paperback.html"; sourceTree = "<group>"; };
-		07597B4D1B1CEAEF006F6B5E /* abraInfo.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = abraInfo.html; path = iCarousel/abraInfo.html; sourceTree = "<group>"; };
+		07597B551B1D0010006F6B5E /* info-About.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-About.html"; sourceTree = "<group>"; };
+		07597B561B1D0010006F6B5E /* info-Acknowledgements.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-Acknowledgements.html"; sourceTree = "<group>"; };
+		07597B571B1D0010006F6B5E /* info-ArtistsBook.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-ArtistsBook.html"; sourceTree = "<group>"; };
+		07597B581B1D0010006F6B5E /* info-Background.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-Background.html"; sourceTree = "<group>"; };
+		07597B591B1D0010006F6B5E /* info-Paperback.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-Paperback.html"; sourceTree = "<group>"; };
 		075B2AC41A917D7F00763915 /* ABData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABData.h; sourceTree = "<group>"; };
 		075B2AC51A917D7F00763915 /* ABData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABData.m; sourceTree = "<group>"; };
 		075B2AC61A917D7F00763915 /* ABDice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABDice.m; sourceTree = "<group>"; };
@@ -200,12 +198,11 @@
 		07597B541B1CEB01006F6B5E /* Info */ = {
 			isa = PBXGroup;
 			children = (
-				07597B481B1CEAEF006F6B5E /* info-About.html */,
-				07597B491B1CEAEF006F6B5E /* info-Acknowledgements.html */,
-				07597B4A1B1CEAEF006F6B5E /* info-ArtistsBook.html */,
-				07597B4B1B1CEAEF006F6B5E /* info-Background.html */,
-				07597B4C1B1CEAEF006F6B5E /* info-Paperback.html */,
-				07597B4D1B1CEAEF006F6B5E /* abraInfo.html */,
+				07597B551B1D0010006F6B5E /* info-About.html */,
+				07597B561B1D0010006F6B5E /* info-Acknowledgements.html */,
+				07597B571B1D0010006F6B5E /* info-ArtistsBook.html */,
+				07597B581B1D0010006F6B5E /* info-Background.html */,
+				07597B591B1D0010006F6B5E /* info-Paperback.html */,
 			);
 			name = Info;
 			sourceTree = "<group>";
@@ -530,8 +527,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C605E2011888C99A007770E2 /* IMFeFlow1.otf in Resources */,
-				07597B4F1B1CEAEF006F6B5E /* info-Acknowledgements.html in Resources */,
-				07597B501B1CEAEF006F6B5E /* info-ArtistsBook.html in Resources */,
+				07597B5B1B1D0010006F6B5E /* info-Acknowledgements.html in Resources */,
+				07597B5C1B1D0010006F6B5E /* info-ArtistsBook.html in Resources */,
 				C6DE548118BD89EB000A3DAB /* abra_logos_horiz2.png in Resources */,
 				07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */,
 				C6DE547918BD69DC000A3DAB /* abra_logos.png in Resources */,
@@ -543,23 +540,22 @@
 				C605E2021888C99A007770E2 /* IMFeFlow2.otf in Resources */,
 				C6CF48F818A7057D00C43C14 /* gold1.jpg in Resources */,
 				075B2AF71A9ABC4B00763915 /* a_120.png in Resources */,
-				07597B4E1B1CEAEF006F6B5E /* info-About.html in Resources */,
+				07597B5A1B1D0010006F6B5E /* info-About.html in Resources */,
 				075B2AF61A9ABC4B00763915 /* a_87.png in Resources */,
 				C6E73A0B184BED4600A2A5C3 /* Default@2x.png in Resources */,
-				07597B521B1CEAEF006F6B5E /* info-Paperback.html in Resources */,
+				07597B5E1B1D0010006F6B5E /* info-Paperback.html in Resources */,
 				07A8000F1A69DD9600BE71C9 /* a_60.png in Resources */,
 				07C9242F19B56E0A00CCFC9C /* dice.txt in Resources */,
 				075B2AF81A9ABC4B00763915 /* a_180.png in Resources */,
 				075B2AF91A9ABC4B00763915 /* black_768x1024.png in Resources */,
 				C6446D281879F04200CFAA20 /* FeGPrm27C.otf in Resources */,
-				07597B511B1CEAEF006F6B5E /* info-Background.html in Resources */,
+				07597B5D1B1D0010006F6B5E /* info-Background.html in Resources */,
 				C6A8B02018B8105B001D3C01 /* a_40.png in Resources */,
 				C6A8B02318B8105B001D3C01 /* a_80.png in Resources */,
 				075B2AE41A992D9600763915 /* diceErrata.txt in Resources */,
 				C6DE547B18BD6B95000A3DAB /* abra_logos_horiz.png in Resources */,
 				075B2AFB1A9ABC4B00763915 /* black_1536x2048.png in Resources */,
 				C604FA0C1850FA5F0076CC96 /* script.txt in Resources */,
-				07597B531B1CEAEF006F6B5E /* abraInfo.html in Resources */,
 				C6A8B01F18B8105B001D3C01 /* a_29.png in Resources */,
 				07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */,
 				075B2AFC1A9ABC4B00763915 /* black_2048x1536.png in Resources */,
