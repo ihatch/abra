@@ -117,7 +117,7 @@
     ABScriptWord *pw = [lineScriptWords objectAtIndex:index];
     
     if(pw == nil) {
-        NSLog(@"ERROR: replaceWordAtIndex did not find a word at index: %i", index);
+        DDLogError(@"ERROR: replaceWordAtIndex did not find a word at index: %i", index);
         return;
     }
 
@@ -411,9 +411,21 @@
 
 
 - (void) absentlyMutate {
+    
     int index = ABI((int)[lineScriptWords count]);
     ABScriptWord *sw = [lineScriptWords objectAtIndex:index];
-    [self replaceWordAtIndex:index withArray:[ABMutate mutateWord:sw inLine:lineScriptWords]];
+    
+    NSArray *newSWs = [ABMutate mutateWord:sw inLine:lineScriptWords];
+    NSMutableArray *newTexts = [NSMutableArray array];
+    for(ABScriptWord *nsw in newSWs) {
+        // don't allow morphCount to increment much when absently mutating
+        if(nsw.morphCount > 2) nsw.morphCount = ABI(2);
+        [newTexts addObject:nsw.text];
+    }
+
+    DDLogInfo(@"Absently mutate (line %i): %@ -> %@", self.lineNumber, sw.text, [newTexts componentsJoinedByString:@" "]);
+
+    [self replaceWordAtIndex:index withArray:newSWs];
     [ABState updatePrevStanzaLinesWithLine:lineScriptWords atIndex:self.lineNumber];
 }
 

@@ -193,8 +193,10 @@ static ABMutate *ABMutateInstance = NULL;
 //        } else
         if(ABI(40) == 0) {
             newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
+            newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
         } else if(ABI(9) == 0) {
             newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
+            newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
         } else {
             newWords = @[[ABMutate throwDiceCoefficient:oldWord]];
         }
@@ -368,7 +370,7 @@ static ABMutate *ABMutateInstance = NULL;
     
     NSArray *dice = [ABDice diceForKey:word.text];
     if([dice count] == 0) {
-        NSLog(@">> Dice match not found: %@", word.text);
+        DDLogWarn(@">> Dice match not found: %@. Returning totally random word :(", word.text);
         // TODO: simple pattern analysis to swap in, say, emoji for emoji
         // or text for emoji based on emoji.h (or mutate that text)
         // or a string similarly sized in char count
@@ -385,29 +387,30 @@ static ABMutate *ABMutateInstance = NULL;
             int randomIndex = ABI(range);
             NSString *w = [dice objectAtIndex:randomIndex];
             if(!w) {
-                NSLog(@">> Problematic dice match for: %@", word.text);
+                DDLogWarn(@">> Problematic dice match for: %@", word.text);
                 return word;
             }
-            NSLog(@"* Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
+            DDLogVerbose(@"* Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
             new = [ABData getScriptWord:w];
             
-        } else if(range == max && ABI(2) == 0) {
-            new = [ABScript trulyRandomWord];
-            NSLog(@"Radical mutation: %@ -> %@", word.text, new.text);
+        } else if(range == max && ABI(5) == 0) {
+            new = [ABData getPastGraftWord];
+            if(!new) new = [ABScript trulyRandomWord];
+            DDLogWarn(@"!!! Random (radical) mutation: %@ -> %@", word.text, new.text);
             new.morphCount = (int)(new.morphCount / 3);
         } else {
             int randomIndex = ABI(range);
             NSString *w = [dice objectAtIndex:randomIndex];
             if(!w) {
-                NSLog(@">> Problematic dice match for: %@", word.text);
+                DDLogWarn(@">> Problematic dice match for: %@", word.text);
                 return word;
             }
-            NSLog(@"* Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
+            DDLogVerbose(@"* Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
             new = [ABData getScriptWord:w];
         }
     }
     @catch (NSException *exception) {
-        NSLog(@">> DICE ERROR: %@", word.text);
+        DDLogError(@">> DICE ERROR: %@", word.text);
     }
     @finally {
         // To make changes more colorful sooner, change this last digit:

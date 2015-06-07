@@ -4,41 +4,45 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Pods-Abra-CocoaLumberjack.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Abra-PEPhotoCropEditor.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>3</integer>
 		</dict>
 		<key>Pods-Abra-pop.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>4</integer>
 		</dict>
 		<key>Pods-Abra.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>2</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>A32EC12CA85AB17C52DF328D</key>
+		<key>583DB093F8660F846F63ECC8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C57396FFB83E8B139E25C745</key>
+		<key>7F1A395C83C1CAC9FE2E9BF8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DB1CEBFDE2BDC74D3BCAD1D3</key>
+		<key>BD9F102890221D4153626E0C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E64286183BD0F34A70AC8759</key>
 		<dict>
 			<key>primary</key>
 			<true/>

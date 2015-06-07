@@ -8,7 +8,7 @@
 
 #import "ABDice.h"
 #import "ABData.h"
-
+#import "ABConstants.h"
 
 // Method to split string that works with extended chars (emoji)
 @interface NSString (ConvertToArray)
@@ -71,28 +71,24 @@ NSMutableDictionary *diceAdditionsDictionary;
 
 
 + (void) setDiceAdditions:(NSDictionary *)dict {
+    DDLogInfo(@"Dice additions: adding %i entries", [[dict allKeys] count]);
+    diceAdditionsDictionary = [NSMutableDictionary dictionary];
     [ABDice updateCacheWithLexicon:[dict allKeys]];
     for (NSString *key in dict) {
         [diceDictionary setObject:[dict objectForKey:key] forKey:key];
     }
+    diceAdditionsDictionary = [NSMutableDictionary dictionaryWithDictionary:dict];
 }
 
 + (void) generateDiceDictionary {
-    NSLog(@"%@", @"Generating dictionary ...");
+    DDLogInfo(@"%@", @"Dice dictionary: generating ...");
     diceDictionary = [NSMutableDictionary dictionaryWithDictionary:[ABDice topCoreMatchesForLexicon:[ABData loadWordList]]];
-    NSLog(@"%@", @"Finished generating dictionary.");
+    DDLogInfo(@"%@", @"Dice dictionary: done generating.");
     [ABDice loadErrataAndAddToDictionary];
 }
 
 
-+ (void) loadErrataAndAddToDictionary {
-    
-    NSLog(@"%@", @"Loading and adding dictionary errata ...");
-    
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"diceErrata" ofType:@"txt"];
-    NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-    NSArray *entries = [rawText componentsSeparatedByString:@"\n"];
-    
++ (void) addEntriesToDictionary:(NSArray *)entries {
     int entriesCount = [entries count];
     for (int i = 0; i < entriesCount; i++) {
         NSArray *terms = [entries[i] componentsSeparatedByString:@" "];
@@ -104,12 +100,16 @@ NSMutableDictionary *diceAdditionsDictionary;
         }
         [diceDictionary setObject:[NSArray arrayWithArray:others] forKey:key];
     }
-    
-    NSLog(@"%@", @"Finished adding dictionary errata.");
-    
 }
 
-
++ (void) loadErrataAndAddToDictionary {
+    DDLogInfo(@"%@", @"Dice errata: loading ...");
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"diceErrata" ofType:@"txt"];
+    NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    NSArray *entries = [rawText componentsSeparatedByString:@"\n"];
+    [ABDice addEntriesToDictionary:entries];
+    DDLogInfo(@"%@", @"Dice errata: done.");
+}
 
 
 
@@ -233,7 +233,7 @@ NSMutableDictionary *diceAdditionsDictionary;
 
 + (NSDictionary *) topCoreMatchesForLexicon:(NSArray *)lexicon {
     
-    NSLog(@"Computing core dice matches ...");
+    DDLogInfo(@"Core dice matches: computing ...");
     
     NSMutableDictionary *tops = [NSMutableDictionary dictionary];
     [ABDice initCacheWithLexicon:lexicon];
@@ -242,10 +242,10 @@ NSMutableDictionary *diceAdditionsDictionary;
         if([term isEqualToString:@""]) continue;
         NSArray *topterms = [self topMatchesForTerm:term inLexicon:lexicon];
         [tops setObject:topterms forKey:term];
-        NSLog(@"%@", term);
+        DDLogInfo(@"----- %@", term);
     }
     
-    NSLog(@"Finished computing core matches.");
+    DDLogInfo(@"Core dice matches: done.");
     
     return tops;
 }
@@ -255,7 +255,7 @@ NSMutableDictionary *diceAdditionsDictionary;
 
 + (NSDictionary *) getMatchesForKeys:(NSArray *)strings inLexicon:(NSArray *)lexicon {
     
-    NSLog(@"Computing new dice matches ...");
+    DDLogInfo(@"New dice: computing ...");
     
     NSMutableDictionary *tops = [NSMutableDictionary dictionary];
     
@@ -263,10 +263,10 @@ NSMutableDictionary *diceAdditionsDictionary;
         if([term isEqualToString:@""]) continue;
         NSArray *topterms = [self topMatchesForTerm:term inLexicon:lexicon];
         [tops setObject:topterms forKey:term];
-        NSLog(@"%@", term);
+        DDLogInfo(@"----- %@", term);
     }
     
-    NSLog(@"Finished computing matches.");
+    DDLogInfo(@"New dice: done.");
     
     return tops;
 }
@@ -290,7 +290,7 @@ NSMutableDictionary *diceAdditionsDictionary;
     NSMutableArray *diceArray = [NSMutableArray arrayWithArray:[ABDice diceForKey:entry]];
     
     if(!diceArray || [diceArray count] == 0) {
-        NSLog(@"Existing dice listing not found!: %@", entry);
+        DDLogWarn(@"Dice listing not found!: %@", entry);
         return;
     }
     
@@ -331,7 +331,7 @@ NSMutableDictionary *diceAdditionsDictionary;
 
 + (void) updateDiceDictionaryWithStrings:(NSArray *)strings {
     
-    NSLog(@"Starting to update dice dictionary ... ");
+    DDLogInfo(@"Dice dictionary: updating ... ");
     
     NSMutableArray *newWords = [NSMutableArray array];
     for(NSString *w in strings) {
@@ -345,11 +345,10 @@ NSMutableDictionary *diceAdditionsDictionary;
     [diceDictionary addEntriesFromDictionary:diceAdditions];
     [diceAdditionsDictionary addEntriesFromDictionary:diceAdditions];
     
+    [ABDice crossReferenceTerms:diceAdditions];
     [ABData saveDiceAdditions:diceAdditionsDictionary];
     
-    [ABDice crossReferenceTerms:diceAdditions];
-    
-    NSLog(@"%@", @"Finished updating dice dictionary.");
+    DDLogInfo(@"%@", @"Dice dictionary: done updating.");
 }
 
 

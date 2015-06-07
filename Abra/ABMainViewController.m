@@ -62,8 +62,7 @@ ABMainViewController *mainViewControllerInstance;
     
     [ABData initAbraData];
 
-    NSLog(@"%f screenWidth", kScreenWidth);
-    NSLog(@"%f screenHeight", kScreenHeight);
+    DDLogInfo(@"Screen: %f x %f", kScreenWidth, kScreenHeight);
     
     // init lines
     ABLines = [ABState initLines];
@@ -229,7 +228,6 @@ ABMainViewController *mainViewControllerInstance;
         CGFloat xDist = (touchEnd.x - touchStart.x);
         CGFloat yDist = (touchEnd.y - touchStart.y);
         if(yDist < 100 && ((xDist < -40 && direction == 1) || (xDist > 40 && direction == -1))) {
-            NSLog(@"%i", direction);
             [ABClock updateLastInteractionTime];
             [self turnPage:direction];
         }

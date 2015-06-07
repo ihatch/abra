@@ -17,34 +17,28 @@
 
 - (id) initWithText:(NSString *)wordText sourceStanza:(int)stanza {
     if(self = [super init]) {
-
         self.text = wordText;
         self.sourceStanza = stanza;
         self.isGrafted = NO;
         self.emojiCount = 0;
         self.nonAsciiCount = 0;
         self.isNumber = NO;
-
-        // defaults
         self.marginLeft = YES;
         self.marginRight = YES;
     }
-    
     return self;
 }
 
 
 - (id) initGraftedWithText:(NSString *)wordText sourceStanza:(int)stanza {
     if(self = [super init]) {
-
         self.text = wordText;
         self.sourceStanza = stanza;
         self.isGrafted = YES;
-        [self checkProperties];
         self.marginLeft = YES;
         self.marginRight = YES;
+        [self checkProperties];
     }
-    
     return self;
 }
 
@@ -52,7 +46,7 @@
 - (void) checkProperties {
     self.emojiCount = [self emojiCheck];
     self.nonAsciiCount = [self nonAsciiCheck];
-    self.isNumber = [self numberCheck];
+    self.isNumber = [self numberCheck] != 0;
 }
 
 
@@ -71,32 +65,24 @@
 }
 
 
-
-- (int) emojiCheck {
+- (int) checkWithRegex:(NSString *)regexString {
     NSError *error = nil;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:EMOJI_REGEX options:NSRegularExpressionCaseInsensitive error:&error];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexString options:NSRegularExpressionCaseInsensitive error:&error];
     NSAssert(regex, @"Unable to create regular expression");
     int numberOfMatches = (int)[regex numberOfMatchesInString:self.text options:0 range:NSMakeRange(0, [self.text length])];
-//    NSLog(@"Emoji check: %@ %i", self.text, numberOfMatches);
     return numberOfMatches;
+}
+
+- (int) emojiCheck {
+    return [self checkWithRegex:EMOJI_REGEX];
 }
 
 - (int) nonAsciiCheck {
-    NSError *error = nil;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:NON_ASCII_REGEX options:NSRegularExpressionCaseInsensitive error:&error];
-    NSAssert(regex, @"Unable to create regular expression");
-    int numberOfMatches = (int)[regex numberOfMatchesInString:self.text options:0 range:NSMakeRange(0, [self.text length])];
-//    NSLog(@"Non-ASCII check: %@ %i", self.text, numberOfMatches);
-    return numberOfMatches;
+    return [self checkWithRegex:NON_ASCII_REGEX];
 }
 
 - (int) numberCheck {
-    NSError *error = nil;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:NUMBERS_REGEX options:NSRegularExpressionCaseInsensitive error:&error];
-    NSAssert(regex, @"Unable to create regular expression");
-    int numberOfMatches = (int)[regex numberOfMatchesInString:self.text options:0 range:NSMakeRange(0, [self.text length])];
-//    NSLog(@"Number check: %@ %i", self.text, numberOfMatches);
-    return numberOfMatches;
+    return [self checkWithRegex:NUMBERS_REGEX];
 }
 
 

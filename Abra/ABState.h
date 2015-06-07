@@ -32,8 +32,8 @@ typedef enum { MUTATE, GRAFT, MAGIC, PRUNE, ERASE } InteractivityMode;
 + (void) pause;
 + (void) resume;
 
-+ (void) increaseMutation;
-+ (void) addToMutationLevel:(CGFloat)num;
+//+ (void) increaseMutation;
+//+ (void) addToMutationLevel:(CGFloat)num;
 + (BOOL) attemptGesture;
 + (void) disallowGestures;
 + (void) allowGestures;

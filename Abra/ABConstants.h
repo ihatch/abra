@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-//#import <CocoaLumberjack/CocoaLumberjack.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height

@@ -181,20 +181,20 @@ static ABState *ABStateInstance = NULL;
 }
 
 
+//
+//+ (void) increaseMutation {
+//    if(!isInAutoplayMode) {
+//        [ABState addToMutationLevel:1.2];
+//        [ABState manuallyTransitionStanzaWithIncrement:0];
+//    } else {
+//        [ABState addToMutationLevel:2.2];
+//    }
+//}
 
-+ (void) increaseMutation {
-    if(!isInAutoplayMode) {
-        [ABState addToMutationLevel:1.2];
-        [ABState manuallyTransitionStanzaWithIncrement:0];
-    } else {
-        [ABState addToMutationLevel:2.2];
-    }
-}
-
-+ (void) addToMutationLevel:(CGFloat)num {
-    //    if(mutationLevel > 20) return;
-    mutationLevel = mutationLevel + num;
-}
+//+ (void) addToMutationLevel:(CGFloat)num {
+//    //    if(mutationLevel > 20) return;
+//    mutationLevel = mutationLevel + num;
+//}
 
 + (int) checkMutationLevel {
     return mutationLevel;
@@ -273,7 +273,7 @@ static ABState *ABStateInstance = NULL;
     int firstIndex = [ABScript firstStanzaIndex];
     int lastIndex = [ABScript lastStanzaIndex];
 
-    NSLog(@"%@ %i %i %i %i", @"TRANS ", currentStanza, index, firstIndex, lastIndex);
+    DDLogInfo(@"Stanza transition: %i -> %i (%i %i)", currentStanza, index, firstIndex, lastIndex);
 
     
     if(index == firstIndex - 1) {

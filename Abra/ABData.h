@@ -28,6 +28,6 @@
 + (BOOL) graftText:(NSString *)text;
 
 + (ABScriptWord *) getWordToGraft;
-+ (ABScriptWord *) getPastGraftWord;  // TODO: integrate
++ (ABScriptWord *) getPastGraftWord;
 
 @end
