@@ -169,7 +169,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "395"
             endingLineNumber = "395"
-            landmarkName = "+getScriptWord:"
+            landmarkName = "+addToScriptWords:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -185,7 +185,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "398"
             endingLineNumber = "398"
-            landmarkName = "+getScriptWord:"
+            landmarkName = "+addToScriptWords:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

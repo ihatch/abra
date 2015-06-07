@@ -95,7 +95,6 @@
 		075B2AC61A917D7F00763915 /* ABDice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABDice.m; sourceTree = "<group>"; };
 		075B2AC91A917FF900763915 /* ABControlPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABControlPanel.h; sourceTree = "<group>"; };
 		075B2ACA1A917FF900763915 /* ABControlPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABControlPanel.m; sourceTree = "<group>"; };
-		075B2ACC1A91821A00763915 /* ABDice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ABDice.h; path = ../ABDice.h; sourceTree = "<group>"; };
 		075B2ACD1A91938100763915 /* ui_down_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ui_down_arrow.png; sourceTree = "<group>"; };
 		075B2AE31A992D9600763915 /* diceErrata.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = diceErrata.txt; sourceTree = "<group>"; };
 		075B2AE81A9945D200763915 /* ABMutate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABMutate.h; sourceTree = "<group>"; };
@@ -113,6 +112,7 @@
 		07A8000E1A69DD9600BE71C9 /* a_60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a_60.png; sourceTree = "<group>"; };
 		07B7D29819AECE6A001194FD /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		07B7D29919AECE6A001194FD /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
+		07BF3FD71B250CD800B1D977 /* ABDice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABDice.h; sourceTree = "<group>"; };
 		07C9242E19B56E0A00CCFC9C /* dice.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dice.txt; sourceTree = "<group>"; };
 		84407B0D15CE45E5804EAEEE /* libPods-Abra.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Abra.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86BA78A39E5E2AD47EE37330 /* Pods-Abra.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abra.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Abra/Pods-Abra.debug.xcconfig"; sourceTree = "<group>"; };
@@ -267,7 +267,7 @@
 				075B2AC51A917D7F00763915 /* ABData.m */,
 				075B2AE81A9945D200763915 /* ABMutate.h */,
 				075B2AE91A9945D200763915 /* ABMutate.m */,
-				075B2ACC1A91821A00763915 /* ABDice.h */,
+				07BF3FD71B250CD800B1D977 /* ABDice.h */,
 				075B2AC61A917D7F00763915 /* ABDice.m */,
 				C60EB08818A5E9340090BBEB /* ABScriptWord.h */,
 				C60EB08918A5E9340090BBEB /* ABScriptWord.m */,

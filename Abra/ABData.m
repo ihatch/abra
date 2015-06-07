@@ -372,12 +372,12 @@ static ABData *ABDataInstance = NULL;
 + (NSMutableArray *) getPastGraftsWithCharCount:(int)count {
     return [graftsByCharCount objectForKey:@(count)];
 }
-
-+ (NSMutableArray *) getPastGraftSimilarToWord:(NSString *)word {
-    
-}
-
-
+//
+//+ (NSMutableArray *) getPastGraftSimilarToWord:(NSString *)word {
+//    
+//}
+//
+//
 
 
 
