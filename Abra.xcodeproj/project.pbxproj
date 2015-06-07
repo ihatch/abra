@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0718D1DF1B24D96C004EC1D2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0718D1DE1B24D96C004EC1D2 /* Images.xcassets */; };
 		07597B341B13A70F006F6B5E /* ABInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07597B331B13A70F006F6B5E /* ABInfoView.m */; };
 		07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */; };
 		07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */; };
@@ -33,7 +34,6 @@
 		07A8000F1A69DD9600BE71C9 /* a_60.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8000E1A69DD9600BE71C9 /* a_60.png */; };
 		07B7D29A19AECE6A001194FD /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B7D29919AECE6A001194FD /* iCarousel.m */; };
 		07C9242F19B56E0A00CCFC9C /* dice.txt in Resources */ = {isa = PBXBuildFile; fileRef = 07C9242E19B56E0A00CCFC9C /* dice.txt */; };
-		07D6D1B11A69C008004970A3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07D6D1B01A69C008004970A3 /* Images.xcassets */; };
 		A1110549E1C24A4CBFD6C0DB /* libPods-Abra.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84407B0D15CE45E5804EAEEE /* libPods-Abra.a */; };
 		C604FA071850F7790076CC96 /* ABScript.m in Sources */ = {isa = PBXBuildFile; fileRef = C604FA061850F7790076CC96 /* ABScript.m */; };
 		C604FA0C1850FA5F0076CC96 /* script.txt in Resources */ = {isa = PBXBuildFile; fileRef = C604FA0B1850FA5F0076CC96 /* script.txt */; };
@@ -80,6 +80,7 @@
 
 /* Begin PBXFileReference section */
 		03D01643C5EB0DC7B45A27D7 /* Pods-Abra.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abra.release.xcconfig"; path = "Pods/Target Support Files/Pods-Abra/Pods-Abra.release.xcconfig"; sourceTree = "<group>"; };
+		0718D1DE1B24D96C004EC1D2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		07597B321B13A70F006F6B5E /* ABInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABInfoView.h; sourceTree = "<group>"; };
 		07597B331B13A70F006F6B5E /* ABInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABInfoView.m; sourceTree = "<group>"; };
 		07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "_abraData-coreDiceDictionary"; sourceTree = "<group>"; };
@@ -113,7 +114,6 @@
 		07B7D29819AECE6A001194FD /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		07B7D29919AECE6A001194FD /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		07C9242E19B56E0A00CCFC9C /* dice.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dice.txt; sourceTree = "<group>"; };
-		07D6D1B01A69C008004970A3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		84407B0D15CE45E5804EAEEE /* libPods-Abra.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Abra.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86BA78A39E5E2AD47EE37330 /* Pods-Abra.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abra.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Abra/Pods-Abra.debug.xcconfig"; sourceTree = "<group>"; };
 		C604FA051850F7790076CC96 /* ABScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABScript.h; sourceTree = "<group>"; };
@@ -395,6 +395,7 @@
 		C6E739E7184BED4600A2A5C3 = {
 			isa = PBXGroup;
 			children = (
+				0718D1DE1B24D96C004EC1D2 /* Images.xcassets */,
 				C6E739FC184BED4600A2A5C3 /* Abra */,
 				C6E739F3184BED4600A2A5C3 /* Products */,
 				C68B9ECE185FAF96007D2BDB /* libz.dylib */,
@@ -436,7 +437,6 @@
 				C6E739FD184BED4600A2A5C3 /* Supporting Files */,
 				C66636D1187DA7EC0046E8DE /* Storyboard */,
 				C6E739F5184BED4600A2A5C3 /* Frameworks & Libs */,
-				07D6D1B01A69C008004970A3 /* Images.xcassets */,
 			);
 			path = Abra;
 			sourceTree = "<group>";
@@ -545,6 +545,7 @@
 				075B2AF91A9ABC4B00763915 /* black_768x1024.png in Resources */,
 				C6446D281879F04200CFAA20 /* FeGPrm27C.otf in Resources */,
 				07597B5D1B1D0010006F6B5E /* info-Background.html in Resources */,
+				0718D1DF1B24D96C004EC1D2 /* Images.xcassets in Resources */,
 				C6A8B02018B8105B001D3C01 /* a_40.png in Resources */,
 				C6A8B02318B8105B001D3C01 /* a_80.png in Resources */,
 				075B2AE41A992D9600763915 /* diceErrata.txt in Resources */,
@@ -554,7 +555,6 @@
 				C6A8B01F18B8105B001D3C01 /* a_29.png in Resources */,
 				07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */,
 				075B2AFC1A9ABC4B00763915 /* black_2048x1536.png in Resources */,
-				07D6D1B11A69C008004970A3 /* Images.xcassets in Resources */,
 				C6A8B02118B8105B001D3C01 /* a_58.png in Resources */,
 				C6CF48F918A7057D00C43C14 /* gold2.jpg in Resources */,
 				C6E73A0D184BED4600A2A5C3 /* Default-568h@2x.png in Resources */,
@@ -745,6 +745,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ianhatcher/Documents/obj-c/Abra/Abra",
+					"/Users/ianhatcher/Documents/obj-c/Abra/CocoaLumberjack/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

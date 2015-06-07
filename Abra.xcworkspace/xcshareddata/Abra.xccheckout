@@ -10,6 +10,8 @@
 	<string>Abra</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>35B5C9A93714EC9BEB56BAE809C5551E5C66E52D</key>
+		<string>github.com:CocoaLumberjack/CocoaLumberjack.git</string>
 		<key>779E5235ABE4BCD7AE98C87F8892D51E691DACFC</key>
 		<string>https://bitbucket.org/ihatch/abra.git</string>
 	</dict>
@@ -17,6 +19,8 @@
 	<string>Abra.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>35B5C9A93714EC9BEB56BAE809C5551E5C66E52D</key>
+		<string>../CocoaLumberjack</string>
 		<key>779E5235ABE4BCD7AE98C87F8892D51E691DACFC</key>
 		<string>..</string>
 	</dict>
@@ -35,6 +39,14 @@
 			<string>779E5235ABE4BCD7AE98C87F8892D51E691DACFC</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Abra</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>35B5C9A93714EC9BEB56BAE809C5551E5C66E52D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CocoaLumberjack</string>
 		</dict>
 	</array>
 </dict>

@@ -976,7 +976,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABDice.m"
@@ -992,7 +992,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABDice.m"
@@ -1008,7 +1008,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABDice.m"
@@ -1019,12 +1019,44 @@
             endingLineNumber = "301"
             landmarkName = "+crossReferenceDiceEntry:withNewTerm:"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__46+[ABDice crossReferenceDiceEntry:withNewTerm:]_block_invoke"
+                  moduleName = "Abra"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ianhatcher/Documents/obj-c/Abra/Abra/ABDice.m"
+                  timestampString = "455404535.852942"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "301"
+                  endingLineNumber = "301"
+                  offsetFromSymbolStart = "350">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__46+[ABDice crossReferenceDiceEntry:withNewTerm:]_block_invoke"
+                  moduleName = "Abra"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ianhatcher/Documents/obj-c/Abra/Abra/ABDice.m"
+                  timestampString = "455404535.853073"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "301"
+                  endingLineNumber = "301"
+                  offsetFromSymbolStart = "370">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABDice.m"
@@ -1035,44 +1067,12 @@
             endingLineNumber = "294"
             landmarkName = "+crossReferenceDiceEntry:withNewTerm:"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "+[ABDice crossReferenceDiceEntry:withNewTerm:]"
-                  moduleName = "Abra"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ianhatcher/Documents/obj-c/Abra/Abra/ABDice.m"
-                  timestampString = "455396905.669643"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "295"
-                  endingLineNumber = "295"
-                  offsetFromSymbolStart = "244">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__46+[ABDice crossReferenceDiceEntry:withNewTerm:]_block_invoke"
-                  moduleName = "Abra"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ianhatcher/Documents/obj-c/Abra/Abra/ABDice.m"
-                  timestampString = "455396905.669806"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "295"
-                  endingLineNumber = "295"
-                  offsetFromSymbolStart = "82">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABDice.m"
@@ -1104,7 +1104,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABDice.m"

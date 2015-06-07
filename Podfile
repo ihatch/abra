@@ -4,5 +4,6 @@ platform :ios, "8.0"
 target "Abra" do
   pod 'pop', '~> 1.0'
   pod 'PEPhotoCropEditor'
+  pod 'CocoaLumberjack'
 end
 
