@@ -11,9 +11,12 @@
 @interface ABDice : NSObject
 
 + (void) setDiceDictionary:(NSMutableDictionary *)dict;
++ (void) setDiceAdditions:(NSDictionary *)dict;
 + (void) generateDiceDictionary;
 
 + (NSMutableArray *) diceForKey:(NSString *)text;
 + (void) updateDiceDictionaryWithStrings:(NSArray *)strings;
+
+
 
 @end

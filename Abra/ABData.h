@@ -17,12 +17,16 @@
 
 + (void) initCoreDictionary;
 
++ (void) saveDiceAdditions:(NSMutableDictionary *) diceAdditions;
+
 + (void) setABScriptWordsDictionary:(NSMutableDictionary *) scriptWordsDictionary;
 + (void) addToScriptWords:(NSString *)text;
 + (ABScriptWord *) getRandomScriptWord;
 + (ABScriptWord *) getScriptWord:(NSString *)text;
 
 + (void) graftNewWords:(NSArray *)words;
++ (BOOL) graftText:(NSString *)text;
+
 + (ABScriptWord *) getWordToGraft;
 + (ABScriptWord *) getPastGraftWord;  // TODO: integrate
 

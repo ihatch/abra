@@ -22,7 +22,7 @@
 @end
 @implementation NSString (ConvertToArray)
 - (NSArray *)convertToArray {
-    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    NSMutableArray *arr = [NSMutableArray array];
     NSUInteger i = 0;
     while (i < self.length) {
         NSRange range = [self rangeOfComposedCharacterSequenceAtIndex:i];
@@ -247,13 +247,13 @@ static ABMutate *ABMutateInstance = NULL;
 + (NSArray *) mutateLines:(NSArray *)stanza atMutationLevel:(int)mutationLevel {
     
     NSArray *targetStanza = stanza;
-    NSMutableArray *newStanza = [[NSMutableArray alloc] init];
+    NSMutableArray *newStanza = [NSMutableArray array];
     NSArray *allTargetWords = [ABScript allWordsInLines:stanza];
     
     for(int l=0; l < [targetStanza count]; l ++) {
         
         NSArray *targetLine = [targetStanza objectAtIndex:l];
-        NSMutableArray *newLine = [[NSMutableArray alloc] init];
+        NSMutableArray *newLine = [NSMutableArray array];
         
         int lineLength = [ABMutate totalCharLengthOfWordObjs:targetLine];
         
@@ -296,13 +296,13 @@ static ABMutate *ABMutateInstance = NULL;
     
     int changes = 0;
     NSArray *targetStanza = stanza;
-    NSMutableArray *newStanza = [[NSMutableArray alloc] init];
+    NSMutableArray *newStanza = [NSMutableArray array];
     
     for(int l=0; l < [targetStanza count]; l ++) {
         
         NSArray *targetLine = [targetStanza objectAtIndex:l];
         NSArray *oldLine = ([oldStanza count] < l) ? [oldStanza objectAtIndex:l] : nil;
-        NSMutableArray *newLine = [[NSMutableArray alloc] init];
+        NSMutableArray *newLine = [NSMutableArray array];
         
         int lineLength = [ABMutate totalCharLengthOfWordObjs:targetLine];
         
@@ -425,7 +425,7 @@ static ABMutate *ABMutateInstance = NULL;
         objs = @[sw];
     }
     
-    NSMutableArray *text = [[NSMutableArray alloc] init];
+    NSMutableArray *text = [NSMutableArray array];
     ABScriptWord *first = objs[0];
     
     for (int i = 0; i < [objs count]; i++) {
@@ -440,7 +440,7 @@ static ABMutate *ABMutateInstance = NULL;
 
 + (NSArray *) splitWordIntoLetters:(ABScriptWord *)word {
     
-    NSMutableArray *array = [[NSMutableArray alloc] init];
+    NSMutableArray *array = [NSMutableArray array];
     NSString *wordText = [word text];
     NSArray *characters = [wordText convertToArray];
     
@@ -458,8 +458,8 @@ static ABMutate *ABMutateInstance = NULL;
     
     NSArray *letters = [ABMutate splitWordIntoLetters:word];
     
-    NSMutableArray *firstHalf = [[NSMutableArray alloc] init];
-    NSMutableArray *secondHalf = [[NSMutableArray alloc] init];
+    NSMutableArray *firstHalf = [NSMutableArray array];
+    NSMutableArray *secondHalf = [NSMutableArray array];
     BOOL cut = NO;
     
     for (int i = 0; i < [letters count]; i++) {
@@ -496,7 +496,7 @@ static ABMutate *ABMutateInstance = NULL;
 + (NSArray *) cutWordsOutOfTooLongLine:(NSArray *)line {
     
     int lineLength = [ABMutate totalCharLengthOfWordObjs:line];
-    NSMutableArray *newLine = [[NSMutableArray alloc] init];
+    NSMutableArray *newLine = [NSMutableArray array];
     
     if(lineLength < 80) return line;
     int destroyOdds = 5 + ((lineLength - 70) / 8);

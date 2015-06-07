@@ -112,8 +112,8 @@
 
 - (void) processPast {
     
-    NSMutableArray *left = [[NSMutableArray alloc] init];
-    NSMutableArray *right = [[NSMutableArray alloc] init];
+    NSMutableArray *left = [NSMutableArray array];
+    NSMutableArray *right = [NSMutableArray array];
     
     for(int i=0, l=(int)[past count]; i < l; i ++){
         
@@ -199,7 +199,7 @@
 
 // Get a list of all known (solved-for) words to the left of given position
 - (NSArray *) solvedIDsToLeftOfPosition:(int)i {
-    NSMutableArray *known = [[NSMutableArray alloc] init];
+    NSMutableArray *known = [NSMutableArray array];
     for(int f = i-1; f > -1; f --) {
         int fi = [[solvedSet objectAtIndex:f] intValue];
         if(fi != -1) [known addObject:[solvedSet objectAtIndex:f]];
@@ -210,7 +210,7 @@
 
 // Get a list of all known (solved-for) words to the right of given position
 - (NSArray *) solvedIDsToRightOfPosition:(int)i {
-    NSMutableArray *known = [[NSMutableArray alloc] init];
+    NSMutableArray *known = [NSMutableArray array];
     for(int f = i+1; f < [solvedSet count]; f ++) {
         int fi = [[solvedSet objectAtIndex:f] intValue];
         if(fi != -1) [known addObject:[solvedSet objectAtIndex:f]];

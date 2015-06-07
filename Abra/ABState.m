@@ -233,7 +233,7 @@ static ABState *ABStateInstance = NULL;
     CGFloat heightOffset = (kScreenHeight - (lineHeight * ABRA_NUMBER_OF_LINES)) / 2;
     if(kScreenHeight < 400) heightOffset = heightOffset / 1.5;
     
-    ABLines = [[NSMutableArray alloc] init];
+    ABLines = [NSMutableArray array];
     
     int p = 0;
     for(int s = ABRA_START_LINE; s < ABRA_START_LINE + ABRA_NUMBER_OF_LINES; s ++) {
@@ -376,15 +376,7 @@ static ABState *ABStateInstance = NULL;
 ////////////////
 
 + (BOOL) graftText:(NSString *)text {
-    
-    NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    NSString *trimmed = [text stringByTrimmingCharactersInSet:whitespace];
-    if ([trimmed length] == 0) return NO;
-    
-    NSArray *words = [text componentsSeparatedByString:@" "];
-    [ABData graftNewWords:words];
-
-    return YES;
+    return [ABData graftText:text];
 }
 
 

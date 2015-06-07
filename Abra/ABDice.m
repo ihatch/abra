@@ -16,7 +16,7 @@
 @end
 @implementation NSString (ConvertToArray)
 - (NSMutableArray *) convertToMutableArray {
-    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    NSMutableArray *arr = [NSMutableArray array];
     NSUInteger i = 0;
     while (i < self.length) {
         NSRange range = [self rangeOfComposedCharacterSequenceAtIndex:i];
@@ -51,15 +51,11 @@
 @end
 
 
-
-
-
-
 @implementation ABDice
-
 
 NSMutableDictionary *charArrayCache;
 NSMutableDictionary *diceDictionary;
+NSMutableDictionary *diceAdditionsDictionary;
 
 
 
@@ -73,6 +69,13 @@ NSMutableDictionary *diceDictionary;
     [ABDice initCacheWithLexicon:[diceDictionary allKeys]];
 }
 
+
++ (void) setDiceAdditions:(NSDictionary *)dict {
+    [ABDice updateCacheWithLexicon:[dict allKeys]];
+    for (NSString *key in dict) {
+        [diceDictionary setObject:[dict objectForKey:key] forKey:key];
+    }
+}
 
 + (void) generateDiceDictionary {
     NSLog(@"%@", @"Generating dictionary ...");
@@ -116,18 +119,10 @@ NSMutableDictionary *diceDictionary;
 
 
 + (void) initCacheWithLexicon:(NSArray *)lexicon {
-    
     NSMutableDictionary *arrays = [NSMutableDictionary dictionary];
-    
     for(NSString * s in lexicon) {
         NSMutableArray *chars = [s convertToMutableArray];
         if([chars count] < 1 || s == nil) continue;
-
-//        int n = (int)[s length] - 1;
-//        NSMutableArray *sChars = [NSMutableArray arrayWithArray:chars];
-//        for (int i = 0; i <= n; i ++) {
-//            [sChars addObject:[NSNumber numberWithChar:[s characterAtIndex:i]]];
-//        }
         if([chars count] > 1) [chars sortUsingSelector:@selector(compare:)];
         [arrays setObject:[NSArray arrayWithArray:chars] forKey:s];
     }
@@ -211,9 +206,7 @@ NSMutableDictionary *diceDictionary;
         if(c < 0.3) continue;
         NSString *score = [NSString stringWithFormat:@"%f", c];
         
-        if (![res objectForKey:score]) {
-            [res setObject:[NSMutableArray array] forKey:score];
-        }
+        if (![res objectForKey:score]) [res setObject:[NSMutableArray array] forKey:score];
         [[res objectForKey:score] addObject:term2];
     }
     
@@ -282,6 +275,37 @@ NSMutableDictionary *diceDictionary;
 
 
 
++ (void) crossReferenceTerms:(NSDictionary *)diceAdditions {
+    for (NSString *key in [diceAdditions allKeys]) {
+        NSArray *terms = [diceAdditions objectForKey:key];
+        for (NSString *entry in terms) {
+            [ABDice crossReferenceDiceEntry:entry withNewTerm:key];
+        }
+    }
+}
+
+
++ (void) crossReferenceDiceEntry:(NSString *)entry withNewTerm:(NSString *)term {
+    
+    NSMutableArray *diceArray = [NSMutableArray arrayWithArray:[ABDice diceForKey:entry]];
+    
+    if(!diceArray || [diceArray count] == 0) {
+        NSLog(@"Existing dice listing not found!: %@", entry);
+        return;
+    }
+    
+    NSUInteger newIndex = [diceArray indexOfObject:term inSortedRange:(NSRange){0, [diceArray count]} options:NSBinarySearchingInsertionIndex usingComparator:^(id obj2, id obj1) {
+        NSNumber *rank1 = @([ABDice diceCoefficientWithString:entry andString:obj1]);
+        NSNumber *rank2 = @([ABDice diceCoefficientWithString:entry andString:obj2]);
+        return (NSComparisonResult)[rank1 compare:rank2];
+    }];
+    
+    [diceArray insertObject:term atIndex:(int)newIndex];
+    [diceDictionary setObject:diceArray forKey:entry];
+    [diceAdditionsDictionary setObject:diceArray forKey:entry];
+}
+
+
 
 
 
@@ -302,7 +326,12 @@ NSMutableDictionary *diceDictionary;
     return [diceDictionary objectForKey:text];
 }
 
+
+
+
 + (void) updateDiceDictionaryWithStrings:(NSArray *)strings {
+    
+    NSLog(@"Starting to update dice dictionary ... ");
     
     NSMutableArray *newWords = [NSMutableArray array];
     for(NSString *w in strings) {
@@ -314,9 +343,13 @@ NSMutableDictionary *diceDictionary;
     NSMutableArray *lexicon = [NSMutableArray arrayWithArray:[oldKeys arrayByAddingObjectsFromArray:newWords]];
     NSDictionary *diceAdditions = [ABDice getMatchesForKeys:newWords inLexicon:lexicon];
     [diceDictionary addEntriesFromDictionary:diceAdditions];
-    // TODO: cross-referencing in old word entries (ideally)
+    [diceAdditionsDictionary addEntriesFromDictionary:diceAdditions];
     
-    NSLog(@"%@", @"hi");
+    [ABData saveDiceAdditions:diceAdditionsDictionary];
+    
+    [ABDice crossReferenceTerms:diceAdditions];
+    
+    NSLog(@"%@", @"Finished updating dice dictionary.");
 }
 
 

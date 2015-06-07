@@ -7,23 +7,27 @@
 //
 
 #import "ABBlackCurtain.h"
+#import "ABControlPanel.h"
 #import "ABConstants.h"
 #import "ABState.h"
 
 @implementation ABBlackCurtain
 
-@synthesize destroyOnFadeOut;
+@synthesize destroyOnFadeOut, setToMutateOnCancel;
 
 BOOL ready;
+ABControlPanel *controlPanel;
 
 
-- (id) init {
+- (id) initWithControlPanel:(ABControlPanel *)panel {
     self = [super initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
     if (self) {
         self.alpha = 0;
         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.6];
         self.hidden = YES;
         self.destroyOnFadeOut = YES;
+        self.setToMutateOnCancel = NO;
+        controlPanel = panel;
     }
     return self;
 }
@@ -55,12 +59,22 @@ BOOL ready;
     }];
 }
 
+- (void) hideWithSuccess:(BOOL)success {
+    if(success == NO && self.setToMutateOnCancel) {
+        [controlPanel selectMutate];
+    }
+    [self hide];
+}
+
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
     UITouch *touch = [[event allTouches] anyObject];
     if (![touch.view isKindOfClass:[ABBlackCurtain class]]) return;
-    if(ready) [self hide];
+    if(ready) {
+        if(self.setToMutateOnCancel) [self hideWithSuccess:NO];
+        else [self hide];
+    }
 }
 
 

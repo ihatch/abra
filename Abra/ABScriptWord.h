@@ -29,6 +29,9 @@
 - (void) addSister:(NSString *)wordText;
 - (BOOL) hasSister:(NSString *)string;
 
+- (ABScriptWord *) copyOfThisWord;
+
 + (ABScriptWord *) copyScriptWord:(ABScriptWord *)word;
+
 
 @end

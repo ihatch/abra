@@ -29,17 +29,30 @@ ABInfoView *infoView;
 
 UIButton *arrowButton, *mutateButton, *graftButton, *magicButton, *pruneButton, *eraseButton, *autoplayButton, *shareButton, *settingsButton, *helpButton, *currentlySelected;
 
-- (id) init {
+ABControlPanel *controlPanelInstance;
+
++ (ABControlPanel *) instance {
+    return controlPanelInstance;
+}
+
++ (void) initialize {
+    @synchronized(self) {
+        if (controlPanelInstance == NULL) controlPanelInstance = [[ABControlPanel alloc] init];
+    }
+}
+
+
+- (id) initWithMainVC:(ABMainViewController *)main {
     
     self = [super initWithFrame:panelFrame];
     if (self) {
 
-        mainViewController = [ABMainViewController instance];
+        mainViewController = main;
         panelFrame = CGRectMake(-1, [self iPadToUniversalH:-67], [self iPadToUniversalW:1026], [self iPadToUniversalH:66]);
 
         self.alpha = 1;
         self.backgroundColor = [UIColor colorWithWhite:0.1 alpha:1];
-        self.hidden = NO;
+        self.hidden = YES;
         
         [self initButtons];
         
@@ -137,9 +150,6 @@ UIButton *arrowButton, *mutateButton, *graftButton, *magicButton, *pruneButton, 
     [self selectModeWithButton:mutateButton];
     [ABState setInteractivityModeTo:MUTATE];
 }
-- (void) setModeToMutate {
-    [self selectMutate];
-}
 
 - (void) selectGraft {
     [self selectModeWithButton:graftButton];
@@ -208,6 +218,7 @@ UIButton *arrowButton, *mutateButton, *graftButton, *magicButton, *pruneButton, 
 
 - (void) open {
     isAnimating = YES;
+    self.hidden = NO;
     [self.layer setBorderColor:[ABUI progressHueColor].CGColor];
     [self moveArrowButtonDown];
     [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
@@ -224,6 +235,7 @@ UIButton *arrowButton, *mutateButton, *graftButton, *magicButton, *pruneButton, 
     [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         self.frame = panelFrame;
     } completion:^(BOOL finished) {
+        self.hidden = YES;
         isOpen = NO;
         isAnimating = NO;
     }];
@@ -298,12 +310,17 @@ UIButton *arrowButton, *mutateButton, *graftButton, *magicButton, *pruneButton, 
     [arrowButton setHidden:YES];
     [self setHidden:YES];
     
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
-        UIGraphicsBeginImageContextWithOptions(self.window.bounds.size, NO, [UIScreen mainScreen].scale);
-    else UIGraphicsBeginImageContext(self.window.bounds.size);
+//    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+//        UIGraphicsBeginImageContextWithOptions(self.window.bounds.size, NO, [UIScreen mainScreen].scale);
+//    else
+        UIGraphicsBeginImageContext(self.window.bounds.size);
     
     //    [self.window.layer renderInContext:UIGraphicsGetCurrentContext()];
-    [mainViewController.view drawViewHierarchyInRect:mainViewController.view.bounds afterScreenUpdates:NO];
+    
+    // CGRect mainBounds = mainViewController.view.bounds;
+    CGRect cropBounds = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+    
+    [mainViewController.view drawViewHierarchyInRect:cropBounds afterScreenUpdates:NO];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     

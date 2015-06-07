@@ -14,7 +14,10 @@
 
 @interface ABControlPanel : UIView <PECropViewControllerDelegate>
 
-- (id) init;
++ (ABControlPanel *) instance;
+
+
+- (id) initWithMainVC:(ABMainViewController *)main;
 - (void) openOrClose;
 - (void) selectMutate;
 

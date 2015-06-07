@@ -10,7 +10,6 @@
 		07597B341B13A70F006F6B5E /* ABInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07597B331B13A70F006F6B5E /* ABInfoView.m */; };
 		07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */; };
 		07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */; };
-		07597B471B1CDA9C006F6B5E /* ABLoading.m in Sources */ = {isa = PBXBuildFile; fileRef = 07597B461B1CDA9C006F6B5E /* ABLoading.m */; };
 		07597B5A1B1D0010006F6B5E /* info-About.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B551B1D0010006F6B5E /* info-About.html */; };
 		07597B5B1B1D0010006F6B5E /* info-Acknowledgements.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B561B1D0010006F6B5E /* info-Acknowledgements.html */; };
 		07597B5C1B1D0010006F6B5E /* info-ArtistsBook.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B571B1D0010006F6B5E /* info-ArtistsBook.html */; };
@@ -85,8 +84,6 @@
 		07597B331B13A70F006F6B5E /* ABInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABInfoView.m; sourceTree = "<group>"; };
 		07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "_abraData-coreDiceDictionary"; sourceTree = "<group>"; };
 		07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-coreDiceDictionary"; sourceTree = "<group>"; };
-		07597B451B1CDA9C006F6B5E /* ABLoading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABLoading.h; sourceTree = "<group>"; };
-		07597B461B1CDA9C006F6B5E /* ABLoading.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABLoading.m; sourceTree = "<group>"; };
 		07597B551B1D0010006F6B5E /* info-About.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-About.html"; sourceTree = "<group>"; };
 		07597B561B1D0010006F6B5E /* info-Acknowledgements.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-Acknowledgements.html"; sourceTree = "<group>"; };
 		07597B571B1D0010006F6B5E /* info-ArtistsBook.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-ArtistsBook.html"; sourceTree = "<group>"; };
@@ -210,8 +207,6 @@
 		075B2AE21A9826CC00763915 /* Elements */ = {
 			isa = PBXGroup;
 			children = (
-				07597B451B1CDA9C006F6B5E /* ABLoading.h */,
-				07597B461B1CDA9C006F6B5E /* ABLoading.m */,
 				07597B321B13A70F006F6B5E /* ABInfoView.h */,
 				07597B331B13A70F006F6B5E /* ABInfoView.m */,
 				075B2AC91A917FF900763915 /* ABControlPanel.h */,
@@ -624,7 +619,6 @@
 				C6F76F8B1851220A00BCFAF3 /* ABLine.m in Sources */,
 				C6E73A13184BED4600A2A5C3 /* ABMainViewController.m in Sources */,
 				075B2AEA1A9945D200763915 /* ABMutate.m in Sources */,
-				07597B471B1CDA9C006F6B5E /* ABLoading.m in Sources */,
 				07B7D29A19AECE6A001194FD /* iCarousel.m in Sources */,
 				C6591B2A185D1B9E001144FC /* ABState.m in Sources */,
 				C6E73A1E184BFA7400A2A5C3 /* ABWord.m in Sources */,

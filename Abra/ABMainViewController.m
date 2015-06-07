@@ -38,7 +38,7 @@ CGPoint touchStart;
 NSMutableArray *ABLines;
 ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
 
-ABBlackCurtain *graftCurtain, *infoCurtain, *loadingCurtain;
+ABBlackCurtain *graftCurtain, *infoCurtain;
 
 UIButton *controlPanelArrowButton;
 ABControlPanel *controlPanel;
@@ -47,10 +47,6 @@ UITextField *graftTextField;
 
 BOOL carouselIsAnimating;
 ABMainViewController *mainViewControllerInstance;
-
-+ (ABMainViewController *) instance {
-    return mainViewControllerInstance;
-}
 
 + (void) initialize {
     @synchronized(self) {
@@ -184,7 +180,6 @@ ABMainViewController *mainViewControllerInstance;
 
 - (IBAction) rotate:(UIRotationGestureRecognizer *)gesture {
     [ABClock updateLastInteractionTime];
-    
     if(gesture.state == UIGestureRecognizerStateEnded) {
         if(gesture.rotation > 0.3 || gesture.rotation < -0.3 ) {
             [feedbackReset flash];
@@ -220,7 +215,8 @@ ABMainViewController *mainViewControllerInstance;
     if(carouselIsAnimating) return;
     [self.carousel scrollByNumberOfItems:direction duration:1.4f];
     [self carouselFlash];
-    [feedbackBackward flash];
+    if(direction == -1) [feedbackBackward flash];
+    if(direction == 1) [feedbackForward flash];
     [ABState turnPage:direction];
 }
 
@@ -232,9 +228,8 @@ ABMainViewController *mainViewControllerInstance;
         CGPoint touchEnd = [gesture locationInView:self.view];
         CGFloat xDist = (touchEnd.x - touchStart.x);
         CGFloat yDist = (touchEnd.y - touchStart.y);
-        
-        // alter xDist comparator with direction
         if(yDist < 100 && ((xDist < -40 && direction == 1) || (xDist > 40 && direction == -1))) {
+            NSLog(@"%i", direction);
             [ABClock updateLastInteractionTime];
             [self turnPage:direction];
         }
@@ -263,7 +258,7 @@ ABMainViewController *mainViewControllerInstance;
 ///////////////////
 
 - (void) initControlPanel {
-    controlPanel = [[ABControlPanel alloc] init];
+    controlPanel = [[ABControlPanel alloc] initWithMainVC:self];
     [self.view addSubview:controlPanel];
     controlPanelArrowButton = [controlPanel createArrowButton];
     [controlPanelArrowButton addTarget:self action:@selector(triggerControlPanel) forControlEvents:(UIControlEvents)UIControlEventTouchDown];
@@ -285,12 +280,14 @@ ABMainViewController *mainViewControllerInstance;
 /////////////////
 
 - (void) initGraftModal {
-    UIView *modal = [ABUI createModalWithFrame:CGRectMake(362, 100, 300, 140)];
+    UIView *modal = [ABUI createCenteredModalWithWidth:300 andHeight:140];
+//    UIView *modal = [ABUI createModalWithFrame:CGRectMake(362, 100, 300, 140)];
     graftTextField = [ABUI createTextFieldWithFrame:CGRectMake(20, 20, 260, 100)];
     graftTextField.delegate = self;
     [modal addSubview:graftTextField];
-    graftCurtain = [[ABBlackCurtain alloc] init];
+    graftCurtain = [[ABBlackCurtain alloc] initWithControlPanel:controlPanel];
     graftCurtain.destroyOnFadeOut = NO;
+    graftCurtain.setToMutateOnCancel = YES;
     [self.view addSubview:graftCurtain];
     [graftCurtain addSubview:modal];
 }
@@ -304,7 +301,7 @@ ABMainViewController *mainViewControllerInstance;
     [graftTextField resignFirstResponder];
     BOOL successfulGraft = [ABState graftText:textField.text];
     if(successfulGraft == NO) [controlPanel selectMutate];
-    [graftCurtain hide];
+    [graftCurtain hideWithSuccess:successfulGraft];
     return YES;
 }
 
@@ -318,7 +315,7 @@ ABMainViewController *mainViewControllerInstance;
 ///////////////
 
 - (void) initInfoView {
-    infoCurtain = [[ABBlackCurtain alloc] init];
+    infoCurtain = [[ABBlackCurtain alloc] initWithControlPanel:controlPanel];
     infoCurtain.destroyOnFadeOut = NO;
     [self.view addSubview:infoCurtain];
     infoView = [[ABInfoView alloc] init];
@@ -328,28 +325,6 @@ ABMainViewController *mainViewControllerInstance;
 - (void) showInfoView {
     [infoCurtain show];
 }
-
-
-
-
-
-
-
-//////////////////
-// LOADING VIEW //
-//////////////////
-
-- (void) initLoading {
-    loadingCurtain = [[ABBlackCurtain alloc] init];
-    loadingCurtain.destroyOnFadeOut = NO;
-    [self.view addSubview:loadingCurtain];
-    
-}
-
-- (void) showLoading {
-    
-}
-
 
 
 

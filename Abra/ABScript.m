@@ -58,12 +58,12 @@ static ABScript *ABScriptInstance = NULL;
 
     NSMutableDictionary *scriptWordsDictionary = [NSMutableDictionary dictionary];
     NSMutableArray *stanzas = [NSMutableArray array];
-    NSMutableArray *stanzaObjs = [[NSMutableArray alloc] init];
+    NSMutableArray *stanzaObjs = [NSMutableArray array];
     
     for (int i = 0; i < [rawStanzas count]; i++) {
         
         NSMutableArray *lines = [NSMutableArray arrayWithArray: [rawStanzas[i] componentsSeparatedByString:@"\n"]];
-        NSMutableArray *linesObjs = [[NSMutableArray alloc] init];
+        NSMutableArray *linesObjs = [NSMutableArray array];
         
         // Make certain punctuations their own word objects
         for (int j = 0; j < [lines count]; j++) {
@@ -78,7 +78,7 @@ static ABScript *ABScriptInstance = NULL;
         // Split into words
         for (int j = 0; j < [lines count]; j++) {
             
-            [linesObjs addObject:[[NSMutableArray alloc] init]];
+            [linesObjs addObject:[NSMutableArray array]];
             
             lines[j] = [lines[j] componentsSeparatedByString:@" "];
             ABScriptWord *lastWordObj = nil;
@@ -256,11 +256,11 @@ static ABScript *ABScriptInstance = NULL;
     NSArray *lines1 = oldStanzaLines;
     NSArray *lines2 = script[stanzaIndex];
     
-    NSMutableArray *remixStanza = [[NSMutableArray alloc] init];
+    NSMutableArray *remixStanza = [NSMutableArray array];
     
     for(int l=0; l<[lines1 count]; l++) {
         
-        NSMutableArray *remixLine = [[NSMutableArray alloc] init];
+        NSMutableArray *remixLine = [NSMutableArray array];
         
         NSArray *line1 = [lines1 objectAtIndex:l];
         NSArray *line2 = [lines2 objectAtIndex:l];

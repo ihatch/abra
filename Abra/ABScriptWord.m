@@ -77,7 +77,7 @@
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:EMOJI_REGEX options:NSRegularExpressionCaseInsensitive error:&error];
     NSAssert(regex, @"Unable to create regular expression");
     int numberOfMatches = (int)[regex numberOfMatchesInString:self.text options:0 range:NSMakeRange(0, [self.text length])];
-    NSLog(@"Emoji check: %@ %i", self.text, numberOfMatches);
+//    NSLog(@"Emoji check: %@ %i", self.text, numberOfMatches);
     return numberOfMatches;
 }
 
@@ -86,7 +86,7 @@
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:NON_ASCII_REGEX options:NSRegularExpressionCaseInsensitive error:&error];
     NSAssert(regex, @"Unable to create regular expression");
     int numberOfMatches = (int)[regex numberOfMatchesInString:self.text options:0 range:NSMakeRange(0, [self.text length])];
-    NSLog(@"Non-ASCII check: %@ %i", self.text, numberOfMatches);
+//    NSLog(@"Non-ASCII check: %@ %i", self.text, numberOfMatches);
     return numberOfMatches;
 }
 
@@ -95,96 +95,29 @@
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:NUMBERS_REGEX options:NSRegularExpressionCaseInsensitive error:&error];
     NSAssert(regex, @"Unable to create regular expression");
     int numberOfMatches = (int)[regex numberOfMatchesInString:self.text options:0 range:NSMakeRange(0, [self.text length])];
-    NSLog(@"Number check: %@ %i", self.text, numberOfMatches);
+//    NSLog(@"Number check: %@ %i", self.text, numberOfMatches);
     return numberOfMatches;
+}
+
+
+- (ABScriptWord *) copyOfThisWord {
+    return [ABScriptWord copyScriptWord:self];
 }
 
 
 + (ABScriptWord *) copyScriptWord:(ABScriptWord *)word {
     ABScriptWord *copy = [[ABScriptWord alloc] initWithText:word.text sourceStanza:word.sourceStanza];
-    copy.sisters = word.sisters;
-    copy.isGrafted = word.isGrafted;
     copy.marginLeft = word.marginLeft;
     copy.marginRight = word.marginRight;
+    copy.isGrafted = word.isGrafted;
+    copy.isNumber = word.isNumber;
     copy.emojiCount = word.emojiCount;
     copy.nonAsciiCount = word.nonAsciiCount;
+    copy.sisters = word.sisters;
     return copy;
 }
 
 
 
-
-//
-//- (NSArray *)propertyKeys
-//{
-//    NSMutableArray *array = [NSMutableArray array];
-//    Class class = [self class];
-//    while (class != [NSObject class])
-//    {
-//        unsigned int propertyCount;
-//        objc_property_t *properties = class_copyPropertyList(class, &propertyCount);
-//        for (int i = 0; i < propertyCount; i++)
-//        {
-//            //get property
-//            objc_property_t property = properties[i];
-//            const char *propertyName = property_getName(property);
-//            NSString *key = [NSString stringWithCString:propertyName encoding:NSUTF8StringEncoding];
-//            
-//            //check if read-only
-//            BOOL readonly = NO;
-//            const char *attributes = property_getAttributes(property);
-//            NSString *encoding = [NSString stringWithCString:attributes encoding:NSUTF8StringEncoding];
-//            if ([[encoding componentsSeparatedByString:@","] containsObject:@"R"])
-//            {
-//                readonly = YES;
-//                
-//                //see if there is a backing ivar with a KVC-compliant name
-//                NSRange iVarRange = [encoding rangeOfString:@",V"];
-//                if (iVarRange.location != NSNotFound)
-//                {
-//                    NSString *iVarName = [encoding substringFromIndex:iVarRange.location + 2];
-//                    if ([iVarName isEqualToString:key] ||
-//                        [iVarName isEqualToString:[@"_" stringByAppendingString:key]])
-//                    {
-//                        //setValue:forKey: will still work
-//                        readonly = NO;
-//                    }
-//                }
-//            }
-//            
-//            if (!readonly)
-//            {
-//                //exclude read-only properties
-//                [array addObject:key];
-//            }
-//        }
-//        free(properties);
-//        class = [class superclass];
-//    }
-//    return array;
-//}
-//
-//- (id)initWithCoder:(NSCoder *)aDecoder
-//{
-//    if ((self = [self init]))
-//    {
-//        for (NSString *key in [self propertyKeys])
-//        {
-//            id value = [aDecoder decodeObjectForKey:key];
-//            [self setValue:value forKey:key];
-//        }
-//    }
-//    return self;
-//}
-//
-//- (void)encodeWithCoder:(NSCoder *)aCoder
-//{
-//    for (NSString *key in [self propertyKeys])
-//    {
-//        id value = [self valueForKey:key];
-//        [aCoder encodeObject:value forKey:key];
-//    }
-//}
-//
 
 @end

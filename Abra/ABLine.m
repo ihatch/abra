@@ -41,7 +41,7 @@
 
         self.lineNumber = lineNum;
         yPosition = y;
-        lineWords = [[NSMutableArray alloc] init];
+        lineWords = [NSMutableArray array];
         [self setFrame:CGRectMake(0,y,1024,lineHeight)];
         abMatcher = [[ABMatch alloc] init];
   
@@ -103,7 +103,7 @@
 
 
 - (NSArray *) getTextArrayFromScriptWords:(NSArray *)scriptWords {
-    NSMutableArray *texts = [[NSMutableArray alloc] init];
+    NSMutableArray *texts = [NSMutableArray array];
     for(int i=0; i<[scriptWords count]; i++){
         ABScriptWord *o = scriptWords[i];
         [texts addObject:o.text];
@@ -192,8 +192,8 @@
         return;
     }
     
-    NSMutableArray *newWords = [[NSMutableArray alloc] init];
-    NSMutableArray *foundIndices = [[NSMutableArray alloc] init];
+    NSMutableArray *newWords = [NSMutableArray array];
+    NSMutableArray *foundIndices = [NSMutableArray array];
     
     NSArray *pastWordsText = [self getTextArrayFromScriptWords:pastWords];
     NSArray *futureWordsText = [self getTextArrayFromScriptWords:futureWords];
@@ -261,7 +261,7 @@
 
 
 - (NSArray *) currentWordsTextArray {
-    NSMutableArray *words = [[NSMutableArray alloc] init];
+    NSMutableArray *words = [NSMutableArray array];
     for(int i=0; i<[lineWords count]; i++) {
         [words addObject:[lineWords[i] text]];
     }

@@ -45,18 +45,22 @@ static ABUI *ABUIInstance = NULL;
 
 
 + (CGFloat) abraFontSize {
+    return 21.0;
     if(kScreenHeight < 400) return kScreenHeight / 27;
     return kScreenHeight / 36.5;   //    return 21.0;
 }
 + (CGFloat) abraOptionsFontSize {
+         return 21.0;
     if(kScreenHeight < 400) return kScreenHeight / 26;
     return kScreenHeight / 36.5;  //     21.0;
 }
 + (CGFloat) abraFontMargin {
+    return     8.0;
     if(kScreenHeight < 400) return kScreenHeight / 75;
     return kScreenHeight / 96;   //     8.0;
 }
 + (CGFloat) abraLineHeight {
+    return 44;
     if(kScreenHeight < 400) return kScreenHeight / 15;
     return kScreenHeight / 17.45;  //     44.0;
 }
@@ -243,7 +247,7 @@ static ABUI *ABUIInstance = NULL;
 
 + (UIView *) createCenteredModalWithWidth:(CGFloat)w andHeight:(CGFloat)h {
 
-    CGFloat mw = w, mh = h, mx = ((1024 - mw) / 2), my = ((768 - mh) / 2);
+    CGFloat mw = w, mh = h, mx = ((kScreenWidth - mw) / 2), my = ((kScreenHeight - mh) / 3);
     UIView *modal = [ABUI createModalWithFrame:CGRectMake(mx, my, mw, mh)];
     return modal;
 }

@@ -14,7 +14,6 @@
 
 @property (strong, nonatomic) ABInfoViewController *infoViewController;
 
-+ (ABMainViewController *) instance;
 - (void) showGraftModal;
 - (void) showInfoView;
 
