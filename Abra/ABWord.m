@@ -82,8 +82,8 @@
 
     CGFloat speed = [self speed];
     CGFloat randomSize = 0.95f + ABF(0.1);
-    CGFloat delay = speed * (0.2 + ABF(0.5));
-    CGFloat duration = speed * (2.25 + ABF(2.8));
+    CGFloat delay = speed * (0.2 + ABF(0.3));
+    CGFloat duration = speed * (2.25 + ABF(2.5));
 
     if(sourceStanza == -1) {
         self.textColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.6 alpha:1];

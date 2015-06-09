@@ -9,6 +9,7 @@
 #import "ABScript.h"
 #import "ABState.h"
 #import "ABData.h"
+#import "ABUI.h"
 #import "ABConstants.h"
 #import "ABScriptWord.h"
 
@@ -179,8 +180,8 @@ static ABScript *ABScriptInstance = NULL;
     if(stanza >= [script count]) return script[[script count] - 1];
     if(stanza < 0) return script[0];
     NSArray *scriptStanza = script[stanza];
-    if([scriptStanza count] > ABRA_NUMBER_OF_LINES) {
-        scriptStanza = [scriptStanza subarrayWithRange:NSMakeRange(0, ABRA_NUMBER_OF_LINES)];
+    if([scriptStanza count] > [ABUI abraNumberOfLines]) {
+        scriptStanza = [scriptStanza subarrayWithRange:NSMakeRange(0, [ABUI abraNumberOfLines])];
     }
     
     return script[stanza];

@@ -34,6 +34,23 @@
 }
 @end
 
+// This category enhances NSMutableArray by providing
+// methods to randomly shuffle the elements.
+@interface NSMutableArray (Shuffling)
+- (void) shuffle;
+@end
+@implementation NSMutableArray (Shuffling)
+- (void) shuffle {
+    NSUInteger count = [self count];
+    for (NSUInteger i = 0; i < count; ++i) {
+        NSInteger remainingCount = count - i;
+        NSInteger exchangeIndex = i + arc4random_uniform((u_int32_t )remainingCount);
+        [self exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
+    }
+}
+@end
+
+
 
 
 // PRIVATE
@@ -175,37 +192,31 @@ static ABMutate *ABMutateInstance = NULL;
     NSArray *newWords;
     
     if(type == DICE) {
-//
-//        NSArray *sliced = [ABMutate sliceWordInHalf:oldWord];
-//        NSArray *matches;
-//        ABScriptWord *slice;
-//        if([sliced count] > 0) slice = [sliced objectAtIndex:0];
-//        
-//        if([slice.text length] > 2) {
-//            matches = [ABMutate spellCheckerGuessesForString: slice.text];
-//        }
-//        
-//        if([matches count] > 0) {
-//            ABScriptWord *sw = [[ABScriptWord alloc] initWithText:matches[0] sourceStanza:oldWord.sourceStanza];
+
+//        ABScriptWord *sw = [ABMutate attemptMatchBySpellCheck:oldWord];
+//        if(sw != nil) {
 //            newWords = @[sw];
-//
-//        
-//        } else
-        if(ABI(40) == 0) {
-            newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
-            newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
-        } else if(ABI(9) == 0) {
-            newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
-            newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
-        } else {
-            newWords = @[[ABMutate throwDiceCoefficient:oldWord]];
-        }
+//        } else {
+        
+            if(ABI(40) == 0) {
+                newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
+                newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
+            } else if(ABI(9) == 0) {
+                newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
+                newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
+            } else {
+                newWords = @[[ABMutate throwDiceCoefficient:oldWord]];
+            }
+//        }
+    
     } else if(type == RANDOM) {
         newWords = [ABMutate mutate:oldWord andLocalWords:line mutationLevel:5 lineLength:(int)[line count]];
     } else if(type == EXPLODE) {
         newWords = [ABMutate splitWordIntoLetters:oldWord];
     } else if(type == GRAFTWORD) {
         ABScriptWord *gw = [ABData getWordToGraft];
+        // TODO: do not allow grafting to happen when user doesn't enter text! and prevent error here when
+        //   graft words are nil
         // TODO: more complex sourceStanza handling for grafted words?
         gw.sourceStanza = oldWord.sourceStanza;
         newWords = @[gw];
@@ -221,27 +232,6 @@ static ABMutate *ABMutateInstance = NULL;
     return [NSArray arrayWithArray:newWords];
 }
 
-
-
-//
-//
-//+ (NSArray *) spellCheck:(NSString *)string {
-//    
-//    NSRange stringRange = NSMakeRange(0, string.length);
-//    NSRange range = [textChecker rangeOfMisspelledWordInString:string range:stringRange startingAt:stringRange.location wrap:NO language:@"en_US"];
-//    NSArray *arrGuessed = [textChecker guessesForWordRange:range inString:string language:@"en_US"];
-//    return arrGuessed;
-//}
-//
-//
-//+ (ABScriptWord *) attemptSpellCheckMatch:(ABScriptWord *)sw {
-//    
-//    NSRange stringRange = NSMakeRange(0, string.length);
-//    NSRange range = [textChecker rangeOfMisspelledWordInString:string range:stringRange startingAt:stringRange.location wrap:NO language:@"en_US"];
-//    NSArray *arrGuessed = [textChecker guessesForWordRange:range inString:string language:@"en_US"];
-//    return arrGuessed;
-//}
-//
 
 
 
@@ -365,15 +355,88 @@ static ABMutate *ABMutateInstance = NULL;
 }
 
 
++ (NSArray *) spellCheck:(NSString *)string {
+    NSRange stringRange = NSMakeRange(0, string.length);
+    NSRange range = [textChecker rangeOfMisspelledWordInString:string range:stringRange startingAt:stringRange.location wrap:NO language:@"en_US"];
+    NSArray *arrGuessed = [textChecker guessesForWordRange:range inString:string language:@"en_US"];
+    return arrGuessed;
+}
+
+
++ (ABScriptWord *) attemptMatchBySpellCheck:(ABScriptWord *)word {
+    
+    // Is word already misspelled?
+    NSArray *simple = [ABMutate spellCheck:word.text];
+    if([simple count] > 0) {
+        ABScriptWord *sw = [[ABScriptWord alloc] initWithText:simple[0] sourceStanza:word.sourceStanza];
+        return sw;
+    }
+    
+
+    // TODO :: RETURN TO THIS
+    
+    
+    // try cutting a letter...
+    NSString *cut = [ABMutate cutFirstOrLastLetter:word.text];
+    NSArray *cuts = [ABMutate spellCheck:cut];
+    
+    if([cuts count]) return [[ABScriptWord alloc] initWithText:cuts[0] sourceStanza:word.sourceStanza];
+    
+
+    
+    // okay, try a scrambler...
+    NSString *scrambled = [ABMutate scrambleString:word.text];
+    NSArray *scram = [ABMutate spellCheck:scrambled];
+    
+    if([scram count]) return [[ABScriptWord alloc] initWithText:scram[0] sourceStanza:word.sourceStanza];
+    
+    
+    
+    
+    // If not, make a slice of it, then spellcheck that
+    NSArray *slices = [ABMutate sliceStringInHalf:word.text];
+    if(slices) DDLogInfo(@"Slice: %@ | %@", slices[0], slices[1]);
+    else DDLogInfo(@"Slice fail :( %@", word.text);
+    NSString *slice;
+    NSArray *matches;
+    
+    if(slices == nil) {
+        DDLogWarn(@"Spell check failed for %@ !", word.text);
+        return nil;
+    }
+    
+    slice = [slices objectAtIndex:0];
+
+    if([slice length] > 2) {
+        matches = [ABMutate spellCheck: slice];
+        if([matches count] > 0) {
+            ABScriptWord *sw = [[ABScriptWord alloc] initWithText:matches[0] sourceStanza:word.sourceStanza];
+            return sw;
+        }
+    }
+
+    DDLogWarn(@"Spell check really really failed for %@ ! :(", word.text);
+    return nil;
+    
+}
+
+
 
 + (ABScriptWord *) throwDiceCoefficient:(ABScriptWord *)word {
     
     NSArray *dice = [ABDice diceForKey:word.text];
     if([dice count] == 0) {
-        DDLogWarn(@">> Dice match not found: %@. Returning totally random word :(", word.text);
+        DDLogWarn(@">> Dice match not found: %@ - ", word.text);
         // TODO: simple pattern analysis to swap in, say, emoji for emoji
         // or text for emoji based on emoji.h (or mutate that text)
         // or a string similarly sized in char count
+        ABScriptWord *result = [ABMutate attemptMatchBySpellCheck:word];
+        if(result != nil) {
+            DDLogWarn(@">> Found match by spell check: %@ -> %@ ", word.text, result.text);
+            return result;
+        }
+        
+        DDLogWarn(@">> Spell check match failed too! Returning something random :( - %@", word.text);
         return [ABScript trulyRandomWord];
     }
     
@@ -457,30 +520,85 @@ static ABMutate *ABMutateInstance = NULL;
 }
 
 
+
 + (NSArray *) sliceWordInHalf:(ABScriptWord *)word {
+
+    NSArray *slices = [ABMutate sliceStringInHalf:word.text];
+    if(slices == nil) return @[word];
     
-    NSArray *letters = [ABMutate splitWordIntoLetters:word];
+    ABScriptWord *first = [[ABScriptWord alloc] initWithText:slices[0] sourceStanza:word.sourceStanza];
+    ABScriptWord *second = [[ABScriptWord alloc] initWithText:slices[1] sourceStanza:word.sourceStanza];
+    first.marginRight = NO;
+    second.marginLeft = YES;
+
+    return @[first, second];
+}
+
+// Index is start of second substring (ie, length of first)
++ (NSArray *) sliceString:(NSString *)string atIndex:(int)index {
+    NSArray *chars = [string convertToArray];
+    int len = [chars count];
+    NSString *one = [[chars subarrayWithRange:NSMakeRange(0, index)] componentsJoinedByString:@""];
+    NSString *two = [[chars subarrayWithRange:NSMakeRange(index, len - index)] componentsJoinedByString:@""];
+    return @[one, two];
+}
+
++ (NSArray *) sliceStringInHalf:(NSString *)string {
     
-    NSMutableArray *firstHalf = [NSMutableArray array];
-    NSMutableArray *secondHalf = [NSMutableArray array];
-    BOOL cut = NO;
+    int length = [[string convertToArray] count];
+    if(length < 2) return nil;
+    if(length == 2) {
+        return [ABMutate sliceString:string atIndex:1];
+    } else if(length == 3 || length == 4) {
+        return [ABMutate sliceString:string atIndex:2];
+    }
     
-    for (int i = 0; i < [letters count]; i++) {
-        if(cut == NO) {
-            [firstHalf addObject:[letters objectAtIndex:i]];
-            if(ABI((int)[letters count]) < 1) cut = YES;
-            if(i == [letters count] - 2) cut = YES;
-        } else {
-            [secondHalf addObject:[letters objectAtIndex:i]];
+    int half = ceilf(length / 2);
+    if(half > 4) half ++;
+    if(half > 6) half ++;
+    if(half > 9) half ++;
+    if(half > 11) half ++;
+    if(half > 13) half ++;
+
+    return [ABMutate sliceString:string atIndex:half];
+
+}
+
+
+
++ (NSString *) scrambleString:(NSString *)string {
+    
+    NSMutableArray *original = [NSMutableArray arrayWithArray:[string convertToArray]];
+    NSMutableArray *new = [[NSMutableArray alloc] initWithArray:original copyItems:YES];
+    
+    [new shuffle];
+    
+    for(int i=0; i < [original count]; i++) {
+        if(i == 0 || i == [original count] - 1 || ABI(2) == 0) {
+            new[i] = original[i];
         }
     }
     
-    ABScriptWord *first = [ABMutate fuseWordObjects:firstHalf];
-    ABScriptWord *second = [ABMutate fuseWordObjects:secondHalf];
-    first.marginRight = NO;
-    second.marginLeft = YES;
+    return [new componentsJoinedByString:@""];
     
-    return @[first, second];
+}
+
+
+
++ (NSString *) cutFirstOrLastLetter: (NSString *)string {
+    NSMutableArray *original = [NSMutableArray arrayWithArray:[string convertToArray]];
+    int c = [original count];
+    if(c < 2) return nil;
+    if(c < 4 && ABI(2 == 0)) {
+        return [[ABMutate sliceString:string atIndex:c - 1] objectAtIndex:0];
+    }
+    
+    // TODO: RETURN TO THIS
+    if(c < 5 && ABI(2 == 0)) {
+        return [[ABMutate sliceString:string atIndex:1] objectAtIndex:0];
+    }
+    
+    return [[ABMutate sliceString:string atIndex:1] objectAtIndex:0];
 }
 
 

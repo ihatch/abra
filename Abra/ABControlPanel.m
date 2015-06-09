@@ -73,6 +73,17 @@ ABControlPanel *controlPanelInstance;
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
 - (void) initButtons {
     
     int y = [ABUI iPadToUniversalH:20];
@@ -108,7 +119,7 @@ ABControlPanel *controlPanelInstance;
     mutateButton = [self controlButtonWithText:@"🌀 mutate" andFrame:CGRectMake(x1, y, w1, h) andAddToView:YES];
     [mutateButton addTarget:self action:@selector(selectMutate) forControlEvents:UIControlEventTouchUpInside];
     [mutateButton setSelected:YES];
-    currentlySelected = mutateButton;
+    currentlySelected = mutateButton;   //  🌀🌱🍃🍂✨🎁🌰🔮
     
     graftButton = [self controlButtonWithText:@"🌱 graft" andFrame:CGRectMake(x2, y, w2, h) andAddToView:YES];
     [graftButton addTarget:self action:@selector(selectGraft) forControlEvents:UIControlEventTouchUpInside];
@@ -195,7 +206,7 @@ ABControlPanel *controlPanelInstance;
     [button setTitleColor:[ABUI darkGoldColor] forState:UIControlStateNormal];
     [button setTitleColor:[ABUI darkGoldColor] forState:UIControlStateHighlighted];
     [button setTitleColor:[ABUI goldColor] forState:UIControlStateSelected];
-    button.titleLabel.font = [UIFont fontWithName:@"EuphemiaUCAS" size:(kScreenWidth / 73.14)];  // 14.0f
+    button.titleLabel.font = [UIFont fontWithName:ABRA_SYSTEM_FONT size:(kScreenWidth / 73.14)];  // 14.0f
     button.backgroundColor = [UIColor clearColor];
     [button setBackgroundImage:[ABUI imageWithColor:[UIColor clearColor]] forState:UIControlStateNormal];
     [button setBackgroundImage:[ABUI imageWithColor:[ABUI darkGoldBackgroundColor]] forState:UIControlStateHighlighted];

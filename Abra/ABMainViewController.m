@@ -14,9 +14,10 @@
 #import "ABLine.h"
 #import "ABData.h"
 #import "ABUI.h"
+#import "ABModal.h"
 #import "ABGestureArrow.h"
 #import "ABBlackCurtain.h"
-#import "ABControlPanel.h"
+#import "ABIconBar.h"
 #import "ABInfoView.h"
 #import "iCarousel.h"
 #import "PECropViewController.h"
@@ -41,11 +42,16 @@ ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
 ABBlackCurtain *graftCurtain, *infoCurtain;
 
 UIButton *controlPanelArrowButton;
-ABControlPanel *controlPanel;
+ABIconBar *iconBar;
+
+
 ABInfoView *infoView;
+ABModal *graftModal;
 UITextField *graftTextField;
 
 BOOL carouselIsAnimating;
+BOOL preventInput;
+
 ABMainViewController *mainViewControllerInstance;
 
 + (void) initialize {
@@ -71,7 +77,7 @@ ABMainViewController *mainViewControllerInstance;
     [self initGestures];
     [self initInfoView];
     [self initGraftModal];
-    [self initControlPanel];
+    [self initIconBar];
     [self initCarousel];
 
     [self devStartupTests];
@@ -98,6 +104,8 @@ ABMainViewController *mainViewControllerInstance;
 
 - (void) initGestures {
 
+    preventInput = NO;
+    
     feedbackForward = [[ABGestureArrow alloc] initWithType:@"forward"];
     feedbackBackward = [[ABGestureArrow alloc] initWithType:@"backward"];
     feedbackReset = [[ABGestureArrow alloc] initWithType:@"reset"];
@@ -156,13 +164,16 @@ ABMainViewController *mainViewControllerInstance;
 }
 
 - (void) pan:(UIPanGestureRecognizer *)gesture {
+    if(preventInput) return;
     CGPoint point = [gesture locationInView:self.view];
     ABLine *line = [self checkLinesForPoint:point];
     if(line == nil) return;
     [line touch:[self.view convertPoint:point toView:line]];
 }
 
+
 - (IBAction) tap:(UITapGestureRecognizer *)gesture {
+    if(preventInput) return;
     CGPoint point = [gesture locationInView:self.view];
     ABLine *line = [self checkLinesForPoint:point];
     if(line == nil) return;
@@ -170,14 +181,15 @@ ABMainViewController *mainViewControllerInstance;
 }
 
 - (IBAction) doubleTap:(UITapGestureRecognizer *)gesture {
+    if(preventInput) return;
     CGPoint point = [gesture locationInView:self.view];
     ABLine *line = [self checkLinesForPoint:point];
     if(line == nil) return;
     [line doubleTap:[self.view convertPoint:point toView:line]];
 }
 
-
 - (IBAction) rotate:(UIRotationGestureRecognizer *)gesture {
+    if(preventInput) return;
     [ABClock updateLastInteractionTime];
     if(gesture.state == UIGestureRecognizerStateEnded) {
         if(gesture.rotation > 0.3 || gesture.rotation < -0.3 ) {
@@ -189,6 +201,7 @@ ABMainViewController *mainViewControllerInstance;
 
 
 - (IBAction) longPress:(UILongPressGestureRecognizer *)gesture {
+    if(preventInput) return;
     [ABClock updateLastInteractionTime];
     
     if([ABState isRunningInBookMode]) {
@@ -211,7 +224,6 @@ ABMainViewController *mainViewControllerInstance;
 
 
 - (void) turnPage:(int)direction {
-    if(carouselIsAnimating) return;
     [self.carousel scrollByNumberOfItems:direction duration:1.4f];
     [self carouselFlash];
     if(direction == -1) [feedbackBackward flash];
@@ -220,6 +232,7 @@ ABMainViewController *mainViewControllerInstance;
 }
 
 - (void) edgeSwipeCheckWithGesture:(UIScreenEdgePanGestureRecognizer *)gesture andDirection:(int)direction {
+    if(preventInput) return;
     if(gesture.state == UIGestureRecognizerStateBegan) {
         touchStart = [gesture locationInView:self.view];
         
@@ -228,6 +241,7 @@ ABMainViewController *mainViewControllerInstance;
         CGFloat xDist = (touchEnd.x - touchStart.x);
         CGFloat yDist = (touchEnd.y - touchStart.y);
         if(yDist < 100 && ((xDist < -40 && direction == 1) || (xDist > 40 && direction == -1))) {
+            if(carouselIsAnimating) return;
             [ABClock updateLastInteractionTime];
             [self turnPage:direction];
         }
@@ -251,20 +265,13 @@ ABMainViewController *mainViewControllerInstance;
 
 
 
-///////////////////
-// CONTROL PANEL //
-///////////////////
+//////////////
+// ICON BAR //
+//////////////
 
-- (void) initControlPanel {
-    controlPanel = [[ABControlPanel alloc] initWithMainVC:self];
-    [self.view addSubview:controlPanel];
-    controlPanelArrowButton = [controlPanel createArrowButton];
-    [controlPanelArrowButton addTarget:self action:@selector(triggerControlPanel) forControlEvents:(UIControlEvents)UIControlEventTouchDown];
-    [self.view addSubview:controlPanelArrowButton];
-}
-
-- (void) triggerControlPanel {
-    [controlPanel openOrClose];
+- (void) initIconBar {
+    iconBar = [[ABIconBar alloc] initWithMainVC:self];
+    [self.view addSubview:iconBar];
 }
 
 
@@ -278,30 +285,37 @@ ABMainViewController *mainViewControllerInstance;
 /////////////////
 
 - (void) initGraftModal {
-    UIView *modal = [ABUI createCenteredModalWithWidth:300 andHeight:140];
-//    UIView *modal = [ABUI createModalWithFrame:CGRectMake(362, 100, 300, 140)];
-    graftTextField = [ABUI createTextFieldWithFrame:CGRectMake(20, 20, 260, 100)];
+    graftModal = [ABUI createGraftModalWithMainVC:self];
+    graftTextField = [graftModal createTextField];
     graftTextField.delegate = self;
-    [modal addSubview:graftTextField];
-    graftCurtain = [[ABBlackCurtain alloc] initWithControlPanel:controlPanel];
+    [graftModal.innerView addSubview:graftTextField];
+    graftCurtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar];
     graftCurtain.destroyOnFadeOut = NO;
     graftCurtain.setToMutateOnCancel = YES;
+    [graftCurtain addSubview:graftModal];
     [self.view addSubview:graftCurtain];
-    [graftCurtain addSubview:modal];
 }
 
 - (void) showGraftModal {
-    [graftTextField becomeFirstResponder];
+    preventInput = YES;
+    [graftModal updateColor];
     [graftCurtain show];
+    [graftTextField becomeFirstResponder];
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     [graftTextField resignFirstResponder];
-    BOOL successfulGraft = [ABState graftText:textField.text];
-    if(successfulGraft == NO) [controlPanel selectMutate];
+    BOOL successfulGraft = [ABState graftText:graftTextField.text];
+    if(successfulGraft == NO) [iconBar selectMutate];
     [graftCurtain hideWithSuccess:successfulGraft];
+    preventInput = NO;
     return YES;
 }
+
+
+
+
+
 
 
 
@@ -313,7 +327,7 @@ ABMainViewController *mainViewControllerInstance;
 ///////////////
 
 - (void) initInfoView {
-    infoCurtain = [[ABBlackCurtain alloc] initWithControlPanel:controlPanel];
+    infoCurtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar];
     infoCurtain.destroyOnFadeOut = NO;
     [self.view addSubview:infoCurtain];
     infoView = [[ABInfoView alloc] init];
@@ -349,27 +363,27 @@ ABMainViewController *mainViewControllerInstance;
 }
 
 - (void) initCarousel {
-    
+
     CGFloat carouselWidth = kScreenWidth / 1.64;
     CGFloat carouselHeight = kScreenHeight / 6.4;
     CGFloat carouselX = (kScreenWidth - carouselWidth) / 2;
     CGFloat carouselY = kScreenHeight - carouselHeight - (kScreenHeight / 36);
-    
+
     self.carousel = [[iCarousel alloc] initWithFrame:CGRectMake(carouselX, carouselY, carouselWidth, carouselHeight)];
     self.carousel.type = iCarouselTypeRotary;
     self.carousel.delegate = self;
     self.carousel.dataSource = self;
     self.carousel.alpha = 0.0;
-    self.carousel.scrollSpeed = 0.19;
+    self.carousel.scrollSpeed = 0.15;
     self.carousel.clipsToBounds = NO;
-    
+
     [self.view addSubview:_carousel];
     [self.view bringSubviewToFront:_carousel];
-    
+
     carouselIsAnimating = NO;
-    
+
     [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:8.5];
+    [UIView setAnimationDuration:7.5];
     [self.carousel setAlpha:0.8];
     [UIView commitAnimations];
 }
@@ -380,7 +394,7 @@ ABMainViewController *mainViewControllerInstance;
 
 - (UIView *) carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view {
     UILabel *label = nil;
-    
+
     if (view == nil) {
         // create new view if no view is available for recycling
         view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth / 20.48, kScreenHeight / 7.68)];
@@ -425,6 +439,10 @@ ABMainViewController *mainViewControllerInstance;
 
 - (void) carouselDidEndScrollingAnimation:(iCarousel *)carousel {
     [ABState manuallyTransitionStanzaToNumber:(int)carousel.currentItemIndex];
+    [self performSelector:@selector(carouselDoneAnimating) withObject:self afterDelay:0.2];
+}
+
+- (void) carouselDoneAnimating {
     carouselIsAnimating = NO;
 }
 
@@ -438,14 +456,14 @@ ABMainViewController *mainViewControllerInstance;
 }
 
 - (void) carouselFlash {
-    carouselIsAnimating = YES;
+//    carouselIsAnimating = YES;
     [UIView animateWithDuration:0.4 animations:^() {
         _carousel.alpha = 1.0;
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.64 animations:^() {
             _carousel.alpha = 0.75;
         } completion:^(BOOL finished) {
-            carouselIsAnimating = NO;
+//            carouselIsAnimating = NO;
         }];
     }];
 }

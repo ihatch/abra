@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "ABMainViewController.h"
 
-@class ABControlPanel;
 
 @interface ABInfoView : UIView
 

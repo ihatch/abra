@@ -63,7 +63,7 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     [self.navigationController.toolbar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1]];
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1]];
     
-    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"EuphemiaUCAS" size:14.0f]} forState:UIControlStateNormal];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"EuphemiaUCAS" size:13.0f]} forState:UIControlStateNormal];
     
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
 //                                                                                          target:self
@@ -105,6 +105,9 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
 
 - (void) saveToCameraRoll:(id)sender {
     UIImageWriteToSavedPhotosAlbum(self.cropView.croppedImage, nil, nil, nil);
+    NSString *message = @"Saved.";
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alertView show];
 }
 
 - (void) postToFacebook:(id)sender {

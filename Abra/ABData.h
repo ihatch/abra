@@ -16,7 +16,6 @@
 + (NSArray *) loadWordList;
 
 + (void) initCoreDictionary;
-
 + (void) saveDiceAdditions:(NSMutableDictionary *) diceAdditions;
 
 + (void) setABScriptWordsDictionary:(NSMutableDictionary *) scriptWordsDictionary;

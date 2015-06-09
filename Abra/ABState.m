@@ -102,6 +102,46 @@ static ABState *ABStateInstance = NULL;
 
 
 
+
+
+////////////////
+// INIT LINES //
+////////////////
+
+
++ (NSMutableArray *) initLines {
+    
+    NSArray *stanza = [ABScript linesAtStanzaNumber:currentStanza];
+    prevStanzaLines = stanza;
+    
+    int lineHeight = [ABUI abraLineHeight];
+    CGFloat heightOffset = (kScreenHeight - (lineHeight * [ABUI abraNumberOfLines])) / 2;
+    
+    ABLines = [NSMutableArray array];
+    
+    int p = 0;
+    for(int s = ABRA_START_LINE; s < ABRA_START_LINE + [ABUI abraNumberOfLines]; s ++) {
+        NSArray *words = (s < [stanza count]) ? stanza[s] : [ABScript emptyLine];
+        CGFloat y = heightOffset + (p++ * lineHeight);
+        [ABLines addObject:[[ABLine alloc] initWithWords:words andYPosition:y andHeight:lineHeight andLineNumber:s]];
+    }
+    
+    return ABLines;
+}
+
++ (int) numberOfLinesToDisplay {
+    if(kScreenWidth > 900) {
+        return 11;
+    } else {
+        return 5;
+    }
+}
+
+
+
+
+
+
 ///////////
 // MODEL //
 ///////////
@@ -219,36 +259,6 @@ static ABState *ABStateInstance = NULL;
 
 
 
-////////////////
-// INIT LINES //
-////////////////
-
-
-+ (NSMutableArray *) initLines {
-    
-    NSArray *stanza = [ABScript linesAtStanzaNumber:currentStanza];
-    prevStanzaLines = stanza;
-    
-    int lineHeight = [ABUI abraLineHeight];
-    CGFloat heightOffset = (kScreenHeight - (lineHeight * ABRA_NUMBER_OF_LINES)) / 2;
-    if(kScreenHeight < 400) heightOffset = heightOffset / 1.5;
-    
-    ABLines = [NSMutableArray array];
-    
-    int p = 0;
-    for(int s = ABRA_START_LINE; s < ABRA_START_LINE + ABRA_NUMBER_OF_LINES; s ++) {
-        NSArray *words = (s < [stanza count]) ? stanza[s] : [ABScript emptyLine];
-        CGFloat y = heightOffset + (p++ * lineHeight);
-        [ABLines addObject:[[ABLine alloc] initWithWords:words andYPosition:y andHeight:lineHeight andLineNumber:s]];
-    }
-    
-    return ABLines;
-}
-
-
-
-
-
 
 
 /////////////////
@@ -258,7 +268,7 @@ static ABState *ABStateInstance = NULL;
 
 + (void) changeAllLinesToLines:(NSArray *)newLines {
     int c = 0;
-    for(int s = ABRA_START_LINE; s < ABRA_START_LINE + ABRA_NUMBER_OF_LINES; s++) {
+    for(int s = ABRA_START_LINE; s < ABRA_START_LINE + [ABUI abraNumberOfLines]; s++) {
         if(c >= [ABLines count]) continue;
         NSArray *newWords = (s < [newLines count]) ? newLines[s] : [ABScript emptyLine];
         [[ABLines objectAtIndex:c++] changeWordsToWords:newWords];
@@ -291,8 +301,8 @@ static ABState *ABStateInstance = NULL;
         mutationLevel --;
     }
     
-    if([newLines count] > ABRA_NUMBER_OF_LINES) {
-        newLines = [newLines subarrayWithRange:NSMakeRange(0, ABRA_NUMBER_OF_LINES)];
+    if([newLines count] > [ABUI abraNumberOfLines]) {
+        newLines = [newLines subarrayWithRange:NSMakeRange(0, [ABUI abraNumberOfLines])];
     }
 
     
@@ -362,7 +372,7 @@ static ABState *ABStateInstance = NULL;
 
 + (void) absentlyMutate {
     if([prevStanzaLines count] == 0) return;
-    int max = MIN([prevStanzaLines count], ABRA_NUMBER_OF_LINES);
+    int max = MIN([prevStanzaLines count], [ABUI abraNumberOfLines]);
     int i = ABI(max);
     [[ABLines objectAtIndex:i] absentlyMutate];
 }

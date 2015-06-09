@@ -8,14 +8,33 @@
 
 #import <Foundation/Foundation.h>
 
+@class ABMainViewController;
+@class ABModal;
+
 @interface ABUI : NSObject <UIWebViewDelegate>
 
++ (CGFloat) abraFontSize;
++ (CGFloat) abraFontMargin;
++ (CGFloat) abraLineHeight;
++ (CGFloat) abraFlowersFontSize;
++ (int) abraNumberOfLines;
+
++ (CGFloat) iPadToUniversalW:(CGFloat)n;
++ (CGFloat) iPadToUniversalH:(CGFloat)n;
+
++ (CGFloat) scaleXWithIphone:(CGFloat)iphone ipad:(CGFloat)ipad;
++ (CGFloat) scaleYWithIphone:(CGFloat)iphone ipad:(CGFloat)ipad;
+
+
 + (UIColor *) progressHueColor;
++ (UIColor *) progressHueColorDark;
++ (UIColor *) progressHueColorDarker;
 + (UIColor *) progressHueColorWithOffset:(CGFloat)colorOffset;
 + (UIColor *) progressHueColorPreciselyWithOffset:(CGFloat)colorOffset;
 + (UIColor *) progressHueColorForStanza:(int)stanza;
 + (UIColor *) goldColor;
 + (UIColor *) darkGoldColor;
++ (UIColor *) darkGoldColor2;
 + (UIColor *) darkGoldBackgroundColor;
 + (UIImage *)imageWithColor:(UIColor *)color;
 
@@ -29,19 +48,6 @@
 + (UIView *) createModalWithFrame:(CGRect)frame;
 
 
-+ (CGFloat) abraFontSize;
-+ (CGFloat) abraFontMargin;
-+ (CGFloat) abraLineHeight;
-+ (CGFloat) abraFlowersFontSize;
-
-+ (CGFloat) iPadToUniversalW:(CGFloat)n;
-+ (CGFloat) iPadToUniversalH:(CGFloat)n;
-
-
-
-+ (BOOL) isIpadAir;
-+ (BOOL) isIpad;
-
-
++ (ABModal *) createGraftModalWithMainVC:(ABMainViewController *)mainVC;
 
 @end

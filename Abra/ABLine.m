@@ -42,7 +42,7 @@
         self.lineNumber = lineNum;
         yPosition = y;
         lineWords = [NSMutableArray array];
-        [self setFrame:CGRectMake(0,y,1024,lineHeight)];
+        [self setFrame:CGRectMake(0, y, kScreenWidth, lineHeight)];
         abMatcher = [[ABMatch alloc] init];
   
         // For position testing
@@ -270,13 +270,16 @@
 
 
 - (NSArray *) wordsXPositions {
-
-    CGFloat total = 0;
+    
+    // Hack to fix weird slight off center phenomenon
+    CGFloat total = [ABUI scaleXWithIphone:2 ipad:4];
+    
     NSMutableArray *xPositions = [[NSMutableArray alloc] initWithCapacity:[lineWords count]];
 
     BOOL prevMarginRight = NO;
     
     for(int i=0; i<[lineWords count]; i++){
+        
         
         ABWord *w = [lineWords objectAtIndex:i];
         CGFloat wordWidth = [w width];
@@ -412,6 +415,7 @@
 
 - (void) absentlyMutate {
     
+    if([lineScriptWords count] == 0) return;
     int index = ABI((int)[lineScriptWords count]);
     ABScriptWord *sw = [lineScriptWords objectAtIndex:index];
     

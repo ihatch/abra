@@ -20,7 +20,7 @@ int ABI(int max);
 @interface ABConstants : NSObject
 
 extern int const ABRA_START_LINE;
-extern int const ABRA_NUMBER_OF_LINES;
+// extern int const ABRA_NUMBER_OF_LINES;
 extern int const ABRA_START_STANZA;
 
 extern BOOL const ABRA_ABSENTLY_MUTATE;
@@ -28,6 +28,7 @@ extern BOOL const ABRA_ABSENTLY_MUTATE;
 
 extern NSString *const ABRA_FONT;
 extern NSString *const ABRA_FLOWERS_FONT;
+extern NSString *const ABRA_SYSTEM_FONT;
 
 extern CGFloat const ABRA_NORMAL_SPEED;
 extern CGFloat const ABRA_FASTEST_SPEED;

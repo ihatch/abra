@@ -25,15 +25,17 @@
     NSString *text;
     fontSize = [ABUI abraFlowersFontSize];
 
+    CGFloat yOffset = [ABUI scaleYWithIphone:38 ipad:58];
+    
     if([type isEqualToString:@"forward"]) {
-        frame = CGRectMake(950, 300, 50, 50);
-        colorOffset = 0.1;
+        frame = CGRectMake(kScreenWidth - 52, (kScreenHeight / 2) - yOffset, 50, 50);
+        colorOffset = 0.06;
         text = @"1";
     }
 
     else if([type isEqualToString:@"backward"]) {
-        frame = CGRectMake(24, 300, 50, 50);
-        colorOffset = 0.9;
+        frame = CGRectMake(20, (kScreenHeight / 2) - yOffset, 50, 50);
+        colorOffset = 0.94;
         text = @"2";
     }
 

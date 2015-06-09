@@ -11,6 +11,7 @@
 #import "ABScript.h"
 #import "ABConstants.h"
 #import "ABMainViewController.h"
+#import "ABModal.h"
 
 
 @implementation ABUI
@@ -33,6 +34,12 @@ static ABUI *ABUIInstance = NULL;
 
 
 
+
+
+////////////////
+// DIMENSIONS //
+////////////////
+
 + (CGFloat) iPadToUniversalW:(CGFloat)n {
     return kScreenWidth / (1024 / n);
 }
@@ -42,31 +49,33 @@ static ABUI *ABUIInstance = NULL;
 }
 
 
++ (CGFloat) scaleXWithIphone:(CGFloat)iphone ipad:(CGFloat)ipad {
+    return iphone + ((kScreenWidth - 568) / ((1024 - 568) / (ipad - iphone)));
+}
+
++ (CGFloat) scaleYWithIphone:(CGFloat)iphone ipad:(CGFloat)ipad {
+    return iphone + ((kScreenHeight - 320) / ((768 - 320) / (ipad - iphone)));
+}
+
 
 
 + (CGFloat) abraFontSize {
-    return 21.0;
-    if(kScreenHeight < 400) return kScreenHeight / 27;
-    return kScreenHeight / 36.5;   //    return 21.0;
+    return [ABUI scaleYWithIphone:17 ipad:21];
 }
 + (CGFloat) abraOptionsFontSize {
-         return 21.0;
-    if(kScreenHeight < 400) return kScreenHeight / 26;
-    return kScreenHeight / 36.5;  //     21.0;
+    return [ABUI scaleYWithIphone:18 ipad:21];
 }
 + (CGFloat) abraFontMargin {
-    return     8.0;
-    if(kScreenHeight < 400) return kScreenHeight / 75;
-    return kScreenHeight / 96;   //     8.0;
+    return [ABUI scaleYWithIphone:7 ipad:8];
 }
 + (CGFloat) abraLineHeight {
-    return 44;
-    if(kScreenHeight < 400) return kScreenHeight / 15;
-    return kScreenHeight / 17.45;  //     44.0;
+    return [ABUI scaleYWithIphone:36 ipad:44];
 }
 + (CGFloat) abraFlowersFontSize {
-    if(kScreenHeight < 400) return kScreenHeight / 10;
-    return kScreenHeight / 25.6;  //     30.0;
+    return [ABUI scaleYWithIphone:20 ipad:30];
+}
++ (int) abraNumberOfLines {
+    if(kScreenWidth < 900) return 5; else return 11;
 }
 
 
@@ -94,6 +103,24 @@ static ABUI *ABUIInstance = NULL;
 
 + (UIColor *) progressHueColor {
     return [ABUI progressHueColorWithOffset:0.0];
+}
+
++ (UIColor *) progressHueColorDark {
+    CGFloat p = [ABUI progressFloatForStanza:[ABState getCurrentStanza]];
+    CGFloat s = ABF(0.1);
+    CGFloat hue = p + (0 + (ABF(0.10) - 0.05));
+    if(hue > 1) hue -= 1;
+    if(hue < 0) hue += 1;
+    return [UIColor colorWithHue:hue saturation:(0.4 + s) brightness:0.7 alpha:1];
+}
+
++ (UIColor *) progressHueColorDarker {
+    CGFloat p = [ABUI progressFloatForStanza:[ABState getCurrentStanza]];
+    CGFloat s = ABF(0.1);
+    CGFloat hue = p + (0 + (ABF(0.10) - 0.05));
+    if(hue > 1) hue -= 1;
+    if(hue < 0) hue += 1;
+    return [UIColor colorWithHue:hue saturation:(0.4 + s) brightness:0.2 alpha:1];
 }
 
 + (UIColor *) progressHueColorWithOffset:(CGFloat)colorOffset {
@@ -124,12 +151,17 @@ static ABUI *ABUIInstance = NULL;
 }
 
 + (UIColor *) goldColor {
-    return [ABUI progressHueColorWithOffset:0.12];
+    return [ABUI progressHueColorWithOffset:0.10];
 }
 
 + (UIColor *) darkGoldColor {
     return [UIColor colorWithHue:0.07 saturation:0.4 brightness:0.45 alpha:1];
 }
+
++ (UIColor *) darkGoldColor2 {
+    return [UIColor colorWithHue:0.07 saturation:0.55 brightness:0.7 alpha:1];
+}
+
 
 + (UIColor *) darkGoldBackgroundColor {
     return [UIColor colorWithHue:0.07 saturation:0.4 brightness:0.25 alpha:1];
@@ -152,6 +184,10 @@ static ABUI *ABUIInstance = NULL;
 
 
 
+
+///////////////
+// INFO VIEW //
+///////////////
 
 
 + (UIView *) createInfoViewWithFrame:(CGRect)frame {
@@ -217,6 +253,8 @@ static ABUI *ABUIInstance = NULL;
 }
 
 
+
+
 ////////////////////
 // GENERIC BUTTON //
 ////////////////////
@@ -245,6 +283,13 @@ static ABUI *ABUIInstance = NULL;
 // MODALS //
 ////////////
 
++ (ABModal *) createGraftModalWithMainVC:(ABMainViewController *)mainVC {
+    ABModal *graftModal = [[ABModal alloc] initWithType:@"graft" andMainVC:mainVC];
+    return graftModal;
+}
+
+
+
 + (UIView *) createCenteredModalWithWidth:(CGFloat)w andHeight:(CGFloat)h {
 
     CGFloat mw = w, mh = h, mx = ((kScreenWidth - mw) / 2), my = ((kScreenHeight - mh) / 3);
@@ -264,37 +309,6 @@ static ABUI *ABUIInstance = NULL;
 }
 
 
-
-///////////////////
-// CONTROL PANEL //
-///////////////////
-
-
-+ (UIView *) createControlPanel:(CGRect)frame {
-    
-    UIView *modal = [[UIView alloc] initWithFrame:frame];
-    [modal.layer setBorderWidth:1.0f];
-    [modal.layer setBorderColor:[ABUI progressHueColor].CGColor];
-    modal.userInteractionEnabled = YES;
-    modal.backgroundColor = [UIColor blackColor];
-    return modal;
-}
-
-
-
-
-///////////////////////
-// SCREEN DIMENSIONS //
-///////////////////////
-
-
-+ (BOOL) isIpad {
-    return kScreenWidth > 1023;
-}
-
-+ (BOOL) isIpadAir {
-    return kScreenWidth > 1400;
-}
 
 
 

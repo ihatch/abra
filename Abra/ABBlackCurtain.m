@@ -7,7 +7,7 @@
 //
 
 #import "ABBlackCurtain.h"
-#import "ABControlPanel.h"
+#import "ABIconBar.h"
 #import "ABConstants.h"
 #import "ABState.h"
 
@@ -16,10 +16,10 @@
 @synthesize destroyOnFadeOut, setToMutateOnCancel;
 
 BOOL ready;
-ABControlPanel *controlPanel;
+ABIconBar *iconBar;
 
 
-- (id) initWithControlPanel:(ABControlPanel *)panel {
+- (id) initWithIconBar:(ABIconBar *)bar {
     self = [super initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
     if (self) {
         self.alpha = 0;
@@ -27,7 +27,8 @@ ABControlPanel *controlPanel;
         self.hidden = YES;
         self.destroyOnFadeOut = YES;
         self.setToMutateOnCancel = NO;
-        controlPanel = panel;
+
+        iconBar = bar;
     }
     return self;
 }
@@ -61,7 +62,7 @@ ABControlPanel *controlPanel;
 
 - (void) hideWithSuccess:(BOOL)success {
     if(success == NO && self.setToMutateOnCancel) {
-        [controlPanel selectMutate];
+        [iconBar selectMutate];
     }
     [self hide];
 }

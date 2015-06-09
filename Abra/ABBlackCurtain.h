@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class ABControlPanel;
+@class ABIconBar;
 
 
 @interface ABBlackCurtain : UIView
@@ -16,7 +16,7 @@
 @property BOOL destroyOnFadeOut;
 @property BOOL setToMutateOnCancel;
 
-- (id) initWithControlPanel:(ABControlPanel *)panel;
+- (id) initWithIconBar:(ABIconBar *)bar;
 - (void) show;
 - (void) hide;
 - (void) hideWithSuccess:(BOOL)success;

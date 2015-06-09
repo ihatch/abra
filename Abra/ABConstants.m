@@ -23,6 +23,8 @@ int ABI(int max) {
 }
 
 
+
+
 ///////////////
 // CONSTANTS //
 ///////////////
@@ -31,13 +33,14 @@ int ABI(int max) {
 
 
 int const ABRA_START_LINE = 0;
-int const ABRA_NUMBER_OF_LINES = 5;
+// int const ABRA_NUMBER_OF_LINES = 5;
 int const ABRA_START_STANZA = 0;
 
 BOOL const ABRA_ABSENTLY_MUTATE = YES;
 
 NSString *const ABRA_FONT = @"IM FELL Great Primer PRO";
 NSString *const ABRA_FLOWERS_FONT = @"IM FELL FLOWERS 2";
+NSString *const ABRA_SYSTEM_FONT = @"EuphemiaUCAS";
 
 CGFloat const ABRA_NORMAL_SPEED = 1.0;
 CGFloat const ABRA_SLOWEST_SPEED = 1.5;
