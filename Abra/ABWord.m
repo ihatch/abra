@@ -15,6 +15,7 @@
 #import "ABLine.h"
 #import "ABUI.h"
 #import <pop/POP.h>
+#import <QuartzCore/QuartzCore.h>
 
 
 @implementation ABWord
@@ -115,7 +116,7 @@
     if(self.isErased) return;
     CGFloat speed = [self speed];
     [UIView animateWithDuration:(speed * 1.5) delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        self.alpha = 0.8;
+        self.alpha = 0.85;
     } completion:^(BOOL finished) {}];
 }
 
@@ -149,7 +150,6 @@
     self.animationX.duration = duration;
     self.animationX.toValue = @([self convertLeftToCenter:x]);
     
-    // TODO: remove abWordID?
     [self pop_addAnimation:self.animationX forKey:[NSString stringWithFormat:@"%@%@", @"x-", [self wordID]]];
 }
 
@@ -162,6 +162,18 @@
         self.alpha = 0;
     } completion:^(BOOL finished) {}];
 }
+
+
+
+- (void) eraseWithDelay:(CGFloat)delay {
+    self.isErased = YES;
+    CGFloat speed = [self speed];
+    [UIView animateWithDuration:(speed * ABF(1.5) + 0.4) delay:delay options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+        self.alpha = 0;
+    } completion:^(BOOL finished) {}];
+}
+
+
 
 
 
@@ -202,6 +214,42 @@
 
 
 
+- (void) fadeColorToSourceStanza:(int)stanza {
+    
+    self.sourceStanza = stanza;
+    [UIView transitionWithView:self duration:2.0f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [self setTextColor:[ABUI progressHueColorForStanza:stanza]];
+//        [statusLabel setShadowColor:[UIColor blackColor]];
+    } completion:nil];
+}
+
+
+
+- (void) redact {
+    [UIView transitionWithView:self duration:2.0f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [self setBackgroundColor:[self textColor]];
+    } completion:nil];
+}
+
+
+
+- (void) spin {
+    [self runSpinAnimationOnView:self duration:0.25 + ABF(0.75) rotations:1 repeat:INFINITY];
+}
+
+
+
+- (void) runSpinAnimationOnView:(UIView*)view duration:(CGFloat)duration rotations:(CGFloat)rotations repeat:(float)repeat;
+{
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 /* full rotation*/ * rotations ];
+    rotationAnimation.duration = duration;
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = repeat;
+    
+    [view.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+}
 
 @end
 

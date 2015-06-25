@@ -17,16 +17,8 @@
 
 
 @implementation ABLine {
-    NSArray *lineScriptWords;
-    NSMutableArray *lineWords;
-    CGFloat lineWidth;
-    CGFloat yPosition;
-    NSMutableArray *grafts;
     ABMatch *abMatcher;
 }
-
-
-@synthesize lineNumber;
 
 
 
@@ -40,8 +32,8 @@
     if(self = [super init]) {
 
         self.lineNumber = lineNum;
-        yPosition = y;
-        lineWords = [NSMutableArray array];
+        self.yPosition = y;
+        self.lineWords = [NSMutableArray array];
         [self setFrame:CGRectMake(0, y, kScreenWidth, lineHeight)];
         abMatcher = [[ABMatch alloc] init];
   
@@ -65,31 +57,31 @@
 
 - (void) createAllNewWords:(NSArray *)words {
 
-    lineScriptWords = words;
+    self.lineScriptWords = words;
 
     for(int i=0; i<[words count]; i++) {
-        ABWord *word = [self newWordWithFrame:CGRectMake(100, 0, 100, 100) andScriptWord:words[i]];
+        ABWord *word = [self newWordWithFrame:CGRectMake(0, 0, 100, 100) andScriptWord:words[i]];
         word.parentLine = self;
-        [lineWords addObject:word];
+        [self.lineWords addObject:word];
     }
     
     [self moveWordsToNewPositions];
 
-    for(int i=0; i<[lineWords count]; i++) {
-        [lineWords[i] animateIn];
+    for(int i=0; i<[self.lineWords count]; i++) {
+        [self.lineWords[i] animateIn];
     }
 }
 
 
 - (void) destroyAllWords {
 
-    for(int i=0, l=(int)[lineWords count]; i<l; i++) {
-        [lineWords[i] selfDestruct];
+    for(int i=0, l=(int)[self.lineWords count]; i<l; i++) {
+        [self.lineWords[i] selfDestruct];
     }
     
-    [lineWords removeAllObjects];
-    lineScriptWords = @[];
-    lineWidth = 0;
+    [self.lineWords removeAllObjects];
+    self.lineScriptWords = @[];
+    self.lineWidth = 0;
 }
 
 
@@ -114,7 +106,7 @@
 
 - (void) replaceWordAtIndex:(int)index withArray:(NSArray *)futureWords {
 
-    ABScriptWord *pw = [lineScriptWords objectAtIndex:index];
+    ABScriptWord *pw = [self.lineScriptWords objectAtIndex:index];
     
     if(pw == nil) {
         DDLogError(@"ERROR: replaceWordAtIndex did not find a word at index: %i", index);
@@ -136,16 +128,16 @@
         
         // Create new word object
         if([[map objectAtIndex:i] isEqual: @(-1)]) {
-            word = [self newWordWithFrame:CGRectMake(100, 0, 100, 50) andScriptWord:futureWords[i]];
+            word = [self newWordWithFrame:CGRectMake(0, 0, 100, 50) andScriptWord:futureWords[i]];
             word.parentLine = self;
             [newScriptWords addObject:futureWords[i]];
             
         // Use existing word object
         } else {
-            word = [lineWords objectAtIndex:index];
+            word = [self.lineWords objectAtIndex:index];
             [newScriptWords addObject:pw];
             foundMatchForWord = YES;
-            [word dim]; // TODO: ??? dim?
+            [word dim];
         }
         
         [newWords addObject:word];
@@ -155,23 +147,23 @@
     NSMutableArray *newLineWords = [NSMutableArray array];
     NSMutableArray *newLineScriptWords = [NSMutableArray array];
 
-    for(int i=0, l=(int)[lineWords count]; i<l; i++) {
+    for(int i=0, l=(int)[self.lineWords count]; i<l; i++) {
         if(i == index) {
             [newLineWords addObjectsFromArray:newWords];
             [newLineScriptWords addObjectsFromArray:newScriptWords];
         } else {
-            [newLineWords addObject:[lineWords objectAtIndex:i]];
-            [newLineScriptWords addObject:[lineScriptWords objectAtIndex:i]];
+            [newLineWords addObject:[self.lineWords objectAtIndex:i]];
+            [newLineScriptWords addObject:[self.lineScriptWords objectAtIndex:i]];
         }
     }
     
     
     if(foundMatchForWord == NO) {
-        [lineWords[index] selfDestructMorph];
+        [self.lineWords[index] selfDestructMorph];
     }
 
-    lineScriptWords = newLineScriptWords;
-    lineWords = newLineWords;
+    self.lineScriptWords = newLineScriptWords;
+    self.lineWords = newLineWords;
     
     [self moveWordsToNewPositions];
 }
@@ -180,7 +172,7 @@
 
 - (void) changeWordsToWords:(NSArray *)futureWords {
     
-    NSArray *pastWords = lineScriptWords;
+    NSArray *pastWords = self.lineScriptWords;
 
     if([pastWords count] == 0 && [futureWords count] == 0) return;
     if([pastWords count] == 0) {
@@ -206,14 +198,14 @@
 
         // Create new word object
         if([[map objectAtIndex:i] isEqual: @(-1)]) {
-            word = [self newWordWithFrame:CGRectMake(100, 0, 100, 50) andScriptWord:futureWords[i]];
+            word = [self newWordWithFrame:CGRectMake(0, 0, 100, 50) andScriptWord:futureWords[i]];
             word.parentLine = self;
 
         // Use existing word object
         } else {
             int oldIndex = [map[i] intValue];
-            if(![lineWords objectAtIndex:oldIndex]) return;
-            word = [lineWords objectAtIndex:oldIndex];
+            if(![self.lineWords objectAtIndex:oldIndex]) return;
+            word = [self.lineWords objectAtIndex:oldIndex];
             [foundIndices addObject:@(oldIndex)];
             [word dim];
         }
@@ -222,12 +214,12 @@
     
     for(int i=0, l=(int)[pastWords count]; i<l; i++) {
         if (![foundIndices containsObject:@(i)]) {
-            [lineWords[i] selfDestruct];
+            [self.lineWords[i] selfDestruct];
         }
     }
     
-    lineScriptWords = futureWords;
-    lineWords = newWords;
+    self.lineScriptWords = futureWords;
+    self.lineWords = newWords;
 
     [self moveWordsToNewPositions];
 }
@@ -246,8 +238,8 @@
     
     NSArray *xPositions = [self wordsXPositions];
     
-    for(int i=0; i<[lineWords count]; i++) {
-        ABWord *word = lineWords[i];
+    for(int i=0; i<[self.lineWords count]; i++) {
+        ABWord *word = self.lineWords[i];
 
         if([word isNew]) {
             [word setXPosition:[xPositions[i] floatValue]];
@@ -262,8 +254,8 @@
 
 - (NSArray *) currentWordsTextArray {
     NSMutableArray *words = [NSMutableArray array];
-    for(int i=0; i<[lineWords count]; i++) {
-        [words addObject:[lineWords[i] text]];
+    for(int i=0; i<[self.lineWords count]; i++) {
+        [words addObject:[self.lineWords[i] text]];
     }
     return [words copy];
 }
@@ -274,35 +266,44 @@
     // Hack to fix weird slight off center phenomenon
     CGFloat total = [ABUI scaleXWithIphone:2 ipad:4];
     
-    NSMutableArray *xPositions = [[NSMutableArray alloc] initWithCapacity:[lineWords count]];
-
+    CGFloat fontMargin = [ABUI abraFontMargin];
+    
+    NSMutableArray *xPositions = [[NSMutableArray alloc] initWithCapacity:[self.lineWords count]];
+    NSMutableArray *xWidths = [NSMutableArray array];
+    
     BOOL prevMarginRight = NO;
     
-    for(int i=0; i<[lineWords count]; i++){
+    for(int i=0; i<[self.lineWords count]; i++){
         
-        
-        ABWord *w = [lineWords objectAtIndex:i];
+        ABWord *w = [self.lineWords objectAtIndex:i];
         CGFloat wordWidth = [w width];
+        CGFloat wordWidthWithMargins = wordWidth;
+        
         if(!w.marginLeft && prevMarginRight) {
-            if(prevMarginRight) total -= [ABUI abraFontMargin];
+            if(prevMarginRight) total -= fontMargin;
+            wordWidthWithMargins -= fontMargin;
         }
         
         [xPositions addObject:[NSNumber numberWithFloat:total]];
 
         if(w.marginRight) {
-            total += [ABUI abraFontMargin];
+            total += fontMargin;
+            wordWidthWithMargins += fontMargin;
             prevMarginRight = YES;
         } else {
             prevMarginRight = NO;
         }
         
         total += wordWidth;
+        [xWidths addObject:[NSNumber numberWithFloat:wordWidthWithMargins]];
+
     }
     
-    lineWidth = total;
+    self.lineWidth = total;
+    self.wordWidthsWithMargins = xWidths;
     
     CGFloat windowOffset = kScreenWidth / 2;
-    CGFloat lineOffset = windowOffset - (lineWidth / 2);
+    CGFloat lineOffset = windowOffset - (self.lineWidth / 2);
 
     for(int i=0; i<[xPositions count]; i++){
         CGFloat x = [xPositions[i] floatValue];
@@ -328,15 +329,15 @@
     
     int target = -1;
 
-    for(int i=0; i<[lineWords count]; i++) {
-        ABLine *w = [lineWords objectAtIndex:i];
+    for(int i=0; i<[self.lineWords count]; i++) {
+        ABLine *w = [self.lineWords objectAtIndex:i];
         if(CGRectContainsPoint(w.frame, point)) {
             target = i;
         }
     }
     
     if(target > -1) {
-        ABWord *targetWord = [lineWords objectAtIndex:target];
+        ABWord *targetWord = [self.lineWords objectAtIndex:target];
         if(targetWord.locked) target = -1;
     }
     
@@ -358,12 +359,12 @@
     if(index == -1) return;
     
     InteractivityMode mode = [ABState getCurrentInteractivityMode];
-    ABWord *w = lineWords[index];
-    ABScriptWord *sw = lineScriptWords[index];
+    ABWord *w = self.lineWords[index];
+    ABScriptWord *sw = self.lineScriptWords[index];
     
     if(mode == ERASE) {
         if(w.isErased) return;
-        [lineWords[index] erase];
+        [self.lineWords[index] erase];
         return;
     }
 
@@ -373,14 +374,14 @@
 
     if(mode == MUTATE) {
         if(w.isErased) return;
-        [self replaceWordAtIndex:index withArray:[ABMutate mutateWord:sw inLine:lineScriptWords]];
+        [self replaceWordAtIndex:index withArray:[ABMutate mutateWord:sw inLine:self.lineScriptWords]];
     }
     
     if(mode == GRAFT) {
         [self replaceWordAtIndex:index withArray:[ABMutate graftWord:sw]];
     }
 
-    [ABState updatePrevStanzaLinesWithLine:lineScriptWords atIndex:self.lineNumber];
+    [ABState updateCurrentScriptWordLinesWithLine:self.lineScriptWords atIndex:self.lineNumber];
 }
 
 
@@ -392,10 +393,10 @@
 
     int index = [self checkPoint:point];
     if(index == -1) return;
-    ABScriptWord *sw = lineScriptWords[index];
+    ABScriptWord *sw = self.lineScriptWords[index];
     
     [self replaceWordAtIndex:index withArray:[ABMutate multiplyWord:sw]];
-    [ABState updatePrevStanzaLinesWithLine:lineScriptWords atIndex:self.lineNumber];
+    [ABState updateCurrentScriptWordLinesWithLine:self.lineScriptWords atIndex:self.lineNumber];
 }
 
 
@@ -404,10 +405,10 @@
     
     int index = [self checkPoint:point];
     if(index == -1) return;
-    ABScriptWord *sw = lineScriptWords[index];
+    ABScriptWord *sw = self.lineScriptWords[index];
     
     [self replaceWordAtIndex:index withArray:[ABMutate explodeWord:sw]];
-    [ABState updatePrevStanzaLinesWithLine:lineScriptWords atIndex:self.lineNumber];
+    [ABState updateCurrentScriptWordLinesWithLine:self.lineScriptWords atIndex:self.lineNumber];
 }
 
 
@@ -415,11 +416,11 @@
 
 - (void) absentlyMutate {
     
-    if([lineScriptWords count] == 0) return;
-    int index = ABI((int)[lineScriptWords count]);
-    ABScriptWord *sw = [lineScriptWords objectAtIndex:index];
+    if([self.lineScriptWords count] == 0) return;
+    int index = ABI((int)[self.lineScriptWords count]);
+    ABScriptWord *sw = [self.lineScriptWords objectAtIndex:index];
     
-    NSArray *newSWs = [ABMutate mutateWord:sw inLine:lineScriptWords];
+    NSArray *newSWs = [ABMutate mutateWord:sw inLine:self.lineScriptWords];
     NSMutableArray *newTexts = [NSMutableArray array];
     for(ABScriptWord *nsw in newSWs) {
         // don't allow morphCount to increment much when absently mutating
@@ -430,7 +431,21 @@
     DDLogInfo(@"Absently mutate (line %i): %@ -> %@", self.lineNumber, sw.text, [newTexts componentsJoinedByString:@" "]);
 
     [self replaceWordAtIndex:index withArray:newSWs];
-    [ABState updatePrevStanzaLinesWithLine:lineScriptWords atIndex:self.lineNumber];
+    [ABState updateCurrentScriptWordLinesWithLine:self.lineScriptWords atIndex:self.lineNumber];
+}
+
+
+
+
+
+- (void) animateToYPosition:(CGFloat)y duration:(CGFloat)duration delay:(CGFloat)delay {
+    CGRect newFrame = self.frame;
+    newFrame.origin.y = y;
+    [UIView animateWithDuration:duration delay:delay options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState animations:^() {
+        self.frame = newFrame;
+    } completion:^(BOOL finished) {}];
+
+    
 }
 
 

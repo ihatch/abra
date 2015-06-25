@@ -8,7 +8,6 @@
 
 #import "ABInfoView.h"
 #import "ABMainViewController.h"
-#import "ABControlPanel.h"
 #import "ABConstants.h"
 #import "ABState.h"
 #import "ABUI.h"
@@ -21,7 +20,6 @@ CGFloat margin;
 UIView *infoNav, *infoMain, *mainView, *infoNavView;
 UIWebView *contentView;
 
-ABControlPanel *controlPanel;
 NSString *aboutHtml, *backgroundHtml, *paperbackHtml, *artistsBookHtml, *thxHtml;
 UIButton *aboutButton, *backgroundButton, *paperbackButton, *artistsBookButton, *thxButton, *currentlySelected;
 
@@ -41,8 +39,6 @@ UIButton *aboutButton, *backgroundButton, *paperbackButton, *artistsBookButton, 
     self = [super initWithFrame:infoContainerFrame];
 
     if (self) {
-
-//        mainView = [ABMainViewController instance].view;
 
         self.alpha = 1;
         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.4];
@@ -72,31 +68,24 @@ UIButton *aboutButton, *backgroundButton, *paperbackButton, *artistsBookButton, 
 
 - (void) show {
     [contentView loadHTMLString:aboutHtml baseURL:nil];
-    
 }
 
+- (NSString *) loadContents:(NSString *)htmlPath {
+    return [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:htmlPath ofType:@"html"] encoding:NSUTF8StringEncoding error:nil];
+}
 
 - (void) initInfoContents {
-    
-    aboutHtml = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"info-About" ofType:@"html"] encoding:NSUTF8StringEncoding error:nil];
-    backgroundHtml = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"info-Background" ofType:@"html"] encoding:NSUTF8StringEncoding error:nil];
-    paperbackHtml = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"info-Paperback" ofType:@"html"] encoding:NSUTF8StringEncoding error:nil];
-    artistsBookHtml = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"info-ArtistsBook" ofType:@"html"] encoding:NSUTF8StringEncoding error:nil];
-    thxHtml = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"info-Acknowledgements" ofType:@"html"] encoding:NSUTF8StringEncoding error:nil];
-
+    aboutHtml = [self loadContents:@"info-About"];
+    backgroundHtml = [self loadContents:@"info-Background"];
+    paperbackHtml = [self loadContents:@"info-Paperback"];
+    artistsBookHtml = [self loadContents:@"info-ArtistsBook"];
+    thxHtml = [self loadContents:@"info-Acknowledgements"];
 }
 
 - (void) showContents:(NSString *)html {
     [contentView loadHTMLString:html baseURL:nil];
 }
 
-
-- (void) initNav {
-//    - (CGFloat) iPadToUniversalW:(CGFloat)n;
-//    - (CGFloat) iPadToUniversalH:(CGFloat)n;
-//    - (UIButton *) controlButtonWithText:(NSString *)text andFrame:(CGRect)frame andAddToView:(BOOL)addToView;
-
-}
 
 
 
@@ -106,40 +95,30 @@ UIButton *aboutButton, *backgroundButton, *paperbackButton, *artistsBookButton, 
     
     int y = [ABUI iPadToUniversalH:20], h = [ABUI iPadToUniversalH:30];
     CGFloat x = 20;
-    
-    aboutButton = [controlPanel controlButtonWithText:@"🌀 about" andFrame:CGRectMake(x, y, 200, h) andAddToView:NO];
-    aboutButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    aboutButton.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+
+    aboutButton = [ABUI horizontalButtonWithText:@"🌀 about" andFrame:CGRectMake(x, y, 200, h)];
     [infoNavView addSubview:aboutButton];
     [aboutButton addTarget:self action:@selector(aboutPressed) forControlEvents:UIControlEventTouchUpInside];
     [aboutButton setSelected:YES];
     currentlySelected = aboutButton;
     y += 40;
     
-    backgroundButton = [controlPanel controlButtonWithText:@"🌱 background" andFrame:CGRectMake(x, y, 200, h) andAddToView:NO];
-    backgroundButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    backgroundButton.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+    backgroundButton = [ABUI horizontalButtonWithText:@"🌱 background" andFrame:CGRectMake(x, y, 200, h)];
     [infoNavView addSubview:backgroundButton];
     [backgroundButton addTarget:self action:@selector(backgroundPressed) forControlEvents:UIControlEventTouchUpInside];
     y += 40;
     
-    paperbackButton = [controlPanel controlButtonWithText:@"🍃 paperback" andFrame:CGRectMake(x, y, 200, h) andAddToView:NO];
-    paperbackButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    paperbackButton.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+    paperbackButton = [ABUI horizontalButtonWithText:@"🍃 paperback" andFrame:CGRectMake(x, y, 200, h)];
     [infoNavView addSubview:paperbackButton];
     [paperbackButton addTarget:self action:@selector(paperbackPressed) forControlEvents:UIControlEventTouchUpInside];
     y += 40;
     
-    artistsBookButton = [controlPanel controlButtonWithText:@"🍂 artists' book" andFrame:CGRectMake(x, y, 200, h) andAddToView:NO];
-    artistsBookButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    artistsBookButton.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+    artistsBookButton = [ABUI horizontalButtonWithText:@"🍂 artists' book" andFrame:CGRectMake(x, y, 200, h)];
     [infoNavView addSubview:artistsBookButton];
     [artistsBookButton addTarget:self action:@selector(artistsBookPressed) forControlEvents:UIControlEventTouchUpInside];
     y += 40;
     
-    thxButton = [controlPanel controlButtonWithText:@"✨ acknowledgements" andFrame:CGRectMake(x, y, 200, h) andAddToView:NO];
-    thxButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    thxButton.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+    thxButton = [ABUI horizontalButtonWithText:@"✨ acknowledgements" andFrame:CGRectMake(x, y, 200, h)];
     [infoNavView addSubview:thxButton];
     [thxButton addTarget:self action:@selector(thxPressed) forControlEvents:UIControlEventTouchUpInside];
     
@@ -185,12 +164,6 @@ UIButton *aboutButton, *backgroundButton, *paperbackButton, *artistsBookButton, 
 
 
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+
 
 @end

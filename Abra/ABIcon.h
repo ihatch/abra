@@ -8,7 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum { MUTATE_ICON, GRAFT_ICON, PRUNE_ICON, ERASE_ICON, CADABRA_ICON, SHARE_ICON, SETTINGS_ICON, INFO_ICON, FLOWER_ICON } iconType;
+typedef NS_ENUM(NSInteger, iconType) {
+    MUTATE_ICON,
+    GRAFT_ICON,
+    PRUNE_ICON,
+    ERASE_ICON,
+    CADABRA_ICON,
+    SHARE_ICON,
+    SETTINGS_ICON,
+    INFO_ICON,
+    FLOWER_ICON
+};
 
 
 @interface ABIcon : UIView

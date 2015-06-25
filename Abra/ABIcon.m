@@ -178,14 +178,14 @@
     self.isVisible = YES;
 }
 - (void) hideFlower {
-    self.alpha = 0.65;
+    self.alpha = 0.7;
     self.isVisible = NO;
 }
 
 
 - (void) showUnselected {
     self.iconLabelHighlighted.alpha = 0;
-    self.iconLabel.alpha = 0.8;
+    self.iconLabel.alpha = 1;
     self.iconSymbol.alpha = 0.4;
     self.isVisible = YES;
 }
@@ -206,7 +206,7 @@
 - (void) hideSelected {
     self.iconLabelHighlighted.alpha = 0;
     self.iconLabel.alpha = 0;
-    self.iconSymbol.alpha = 0.25;
+    self.iconSymbol.alpha = 0.35;
     self.isVisible = NO;
 }
 

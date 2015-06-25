@@ -17,6 +17,6 @@
 + (NSMutableArray *) diceForKey:(NSString *)text;
 + (void) updateDiceDictionaryWithStrings:(NSArray *)strings;
 
-
++ (void) resetLexicon;
 
 @end

@@ -14,18 +14,22 @@
 @implementation ABAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [self initCocoaLumberjack];
+    [self initKeyboard];
+    return YES;
+}
 
-//     CocoaLumberjack init
+- (void) initCocoaLumberjack {
     [DDLog addLogger:[DDASLLogger sharedInstance]];
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
-    
     DDFileLogger *fileLogger = [[DDFileLogger alloc] init];
     fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
     fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
-    
     [DDLog addLogger:fileLogger];
+}
 
-    // Preloads keyboard so there's no lag on initial keyboard appearance.
+// Preloads keyboard so there's no lag on initial keyboard appearance.
+- (void) initKeyboard {
     DDLogInfo(@"Keyboard loading ...");
     UITextField *lagFreeField = [[UITextField alloc] init];
     [self.window addSubview:lagFreeField];
@@ -33,22 +37,27 @@
     [lagFreeField resignFirstResponder];
     [lagFreeField removeFromSuperview];
     DDLogInfo(@"Keyboard loaded.");
-    
-    return YES;
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     [ABClock deactivate];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {}
+- (void)applicationDidEnterBackground:(UIApplication *)application {
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {}
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+
+}
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [ABClock reactivate];
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {}
+- (void)applicationWillTerminate:(UIApplication *)application {
+
+}
 
 @end

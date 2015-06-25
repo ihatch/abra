@@ -57,6 +57,7 @@ NSMutableDictionary *charArrayCache;
 NSMutableDictionary *diceDictionary;
 NSMutableDictionary *diceAdditionsDictionary;
 
+NSMutableDictionary *coreDiceDictionaryBackup;
 
 
 //////////
@@ -65,13 +66,14 @@ NSMutableDictionary *diceAdditionsDictionary;
 
 + (void) setDiceDictionary:(NSMutableDictionary *)dict {
     diceDictionary = dict;
+    coreDiceDictionaryBackup = [[NSMutableDictionary alloc] initWithDictionary:diceDictionary copyItems:YES];
     [ABDice loadErrataAndAddToDictionary];
     [ABDice initCacheWithLexicon:[diceDictionary allKeys]];
 }
 
 
 + (void) setDiceAdditions:(NSDictionary *)dict {
-    DDLogInfo(@"Dice additions: adding %i entries", [[dict allKeys] count]);
+    DDLogInfo(@"Dice additions: adding %lu entries", (unsigned long)[[dict allKeys] count]);
     diceAdditionsDictionary = [NSMutableDictionary dictionary];
     [ABDice updateCacheWithLexicon:[dict allKeys]];
     for (NSString *key in dict) {
@@ -89,12 +91,12 @@ NSMutableDictionary *diceAdditionsDictionary;
 
 
 + (void) addEntriesToDictionary:(NSArray *)entries {
-    int entriesCount = [entries count];
+    int entriesCount = (int)[entries count];
     for (int i = 0; i < entriesCount; i++) {
         NSArray *terms = [entries[i] componentsSeparatedByString:@" "];
         NSString *key = terms[0];
         NSMutableArray *others = [NSMutableArray array];
-        int termsCount = [terms count];
+        int termsCount = (int)[terms count];
         for (int j = 1; j < termsCount; j++) {
             [others addObject:terms[j]];
         }
@@ -109,6 +111,13 @@ NSMutableDictionary *diceAdditionsDictionary;
     NSArray *entries = [rawText componentsSeparatedByString:@"\n"];
     [ABDice addEntriesToDictionary:entries];
     DDLogInfo(@"%@", @"Dice errata: done.");
+}
+
++ (void) resetLexicon {
+    diceDictionary = [[NSMutableDictionary alloc] initWithDictionary:coreDiceDictionaryBackup copyItems:YES];
+    [ABDice loadErrataAndAddToDictionary];
+    diceAdditionsDictionary = [NSMutableDictionary dictionary];
+    [ABData saveDiceAdditions:diceAdditionsDictionary];
 }
 
 

@@ -12,7 +12,11 @@
 
 @implementation ABClock
 
-typedef enum { RUNNING, PAUSED, DEACTIVATED } ClockState;
+typedef NS_ENUM(NSInteger, ClockState) {
+    RUNNING,
+    PAUSED,
+    DEACTIVATED
+};
 
 BOOL autoProgress;
 

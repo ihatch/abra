@@ -10,7 +10,7 @@
 #import "ABMainViewController.h"
 
 
-@interface ABInfoView : UIView
+@interface ABInfoView : UIView <UIWebViewDelegate>
 
 - (id) init;
 

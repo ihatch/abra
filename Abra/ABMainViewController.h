@@ -16,5 +16,9 @@
 
 - (void) showGraftModal;
 - (void) showInfoView;
+- (void) showSettingsModal;
+
+- (void) blackCurtainDidDisappear;
+- (BOOL) userDidTouchOutsideGraftBox;
 
 @end

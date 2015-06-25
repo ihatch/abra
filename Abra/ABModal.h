@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @class ABMainViewController;
+// typedef NS_ENUM(NSInteger, modalType) { GRAFT_MODAL, SETTINGS_MODAL, INFO_MODAL };
 
 
 @interface ABModal : UIView
 
-@property (nonatomic) NSString *type;
+@property (nonatomic) int type;
 @property (nonatomic) UIView *innerView;
 @property (nonatomic) CGFloat w;
 @property (nonatomic) CGFloat h;
@@ -23,7 +24,7 @@
 @property (nonatomic) UITextField *textField;
 
 
-- (id) initWithType:(NSString *)type andMainVC:(ABMainViewController *)mainVC;
+- (id) initWithType:(NSInteger)type andMainVC:(ABMainViewController *)mainVC;
 - (UITextField *) createTextField;
 
 - (void) updateColor;

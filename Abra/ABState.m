@@ -18,27 +18,35 @@
 #import "ABWord.h"
 #import "ABMutate.h"
 #import "ABData.h"
+#import "ABCadabra.h"
 
 @implementation ABState
 
-NSArray *prevStanzaLines;
+NSArray *currentScriptWordLines;
 NSMutableArray *ABLines;
 
-BOOL isInitialized, isInAutoplayMode, isAnimating, preventGestures;
+BOOL isInitialized, isAnimating, preventGestures;
 
 int currentStanza;
 double lastGestureTime;
 CGFloat mutationLevel;
 
-typedef enum { FORWARD, BACKWARD } ScriptDirection;
+typedef NS_ENUM(NSInteger, ScriptDirection) { FORWARD, BACKWARD };
 ScriptDirection scriptDirection;
-
-typedef enum { REMIX, NORMAL } TransitionType;
 InteractivityMode currentInteractivityMode;
+
 
 NSDate *lastDialSetTime;
 int dialThrottleMs;
 
+BOOL settingAutonomousMutation;
+BOOL settingAutoplay;
+BOOL settingIPhoneDisplayMode;
+BOOL settingIPhoneDisplayModeHasChanged;
+
+BOOL secretSettingSpaceyMode;
+BOOL linesAreFlipped;
+BOOL linesAreWoven;
 
 
 static ABState *ABStateInstance = NULL;
@@ -55,17 +63,24 @@ static ABState *ABStateInstance = NULL;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(transitionStanza:) name:@"transitionStanza" object:nil];
         
+        isInitialized = YES;
+
         lastDialSetTime = [NSDate date];
         dialThrottleMs = 200;
-        
-        isInAutoplayMode = NO;
+        lastGestureTime = CACurrentMediaTime();
+        preventGestures = NO;
+
         currentStanza = ABRA_START_STANZA;
         scriptDirection = FORWARD;
-        lastGestureTime = CACurrentMediaTime();
-        isInitialized = YES;
-        preventGestures = NO;
         
         currentInteractivityMode = MUTATE;
+
+        settingAutoplay = NO;
+        settingAutonomousMutation = YES;
+        settingIPhoneDisplayModeHasChanged = NO;
+        
+        secretSettingSpaceyMode = NO;
+        linesAreFlipped = NO;
         
         [ABClock start];
         
@@ -79,16 +94,6 @@ static ABState *ABStateInstance = NULL;
 ///////////////////////
 // APPLICATION STATE //
 ///////////////////////
-
-+ (void) setModeToStandalone {
-    isInAutoplayMode = NO;
-    [ABClock stopAutoProgress];
-}
-
-+ (void) setModeToAutoplayMode {
-    isInAutoplayMode = YES;
-    [ABClock startAutoProgress];
-}
 
 + (void) applicationWillResignActive {
     [ABClock deactivate];
@@ -112,15 +117,15 @@ static ABState *ABStateInstance = NULL;
 + (NSMutableArray *) initLines {
     
     NSArray *stanza = [ABScript linesAtStanzaNumber:currentStanza];
-    prevStanzaLines = stanza;
+    currentScriptWordLines = stanza;
     
     int lineHeight = [ABUI abraLineHeight];
-    CGFloat heightOffset = (kScreenHeight - (lineHeight * [ABUI abraNumberOfLines])) / 2;
+    CGFloat heightOffset = (kScreenHeight - (lineHeight * [ABState numberOfLinesToDisplay])) / 2;
     
     ABLines = [NSMutableArray array];
     
     int p = 0;
-    for(int s = ABRA_START_LINE; s < ABRA_START_LINE + [ABUI abraNumberOfLines]; s ++) {
+    for(int s = ABRA_START_LINE; s < ABRA_START_LINE + [ABState numberOfLinesToDisplay]; s ++) {
         NSArray *words = (s < [stanza count]) ? stanza[s] : [ABScript emptyLine];
         CGFloat y = heightOffset + (p++ * lineHeight);
         [ABLines addObject:[[ABLine alloc] initWithWords:words andYPosition:y andHeight:lineHeight andLineNumber:s]];
@@ -130,14 +135,12 @@ static ABState *ABStateInstance = NULL;
 }
 
 + (int) numberOfLinesToDisplay {
-    if(kScreenWidth > 900) {
-        return 11;
-    } else {
-        return 5;
-    }
+    if([ABUI isIphone] || settingIPhoneDisplayMode == YES) return 5; else return 11;
 }
 
-
++ (NSArray *) getLines {
+    return ABLines;
+}
 
 
 
@@ -158,7 +161,7 @@ static ABState *ABStateInstance = NULL;
 
 
 + (BOOL) isRunningInBookMode {
-    return isInAutoplayMode;
+    return settingAutoplay;
 }
 
 + (int) getCurrentStanza {
@@ -167,7 +170,7 @@ static ABState *ABStateInstance = NULL;
 
 + (void) reset {
     mutationLevel = 0;
-    if(isInAutoplayMode) {
+    if(settingAutoplay) {
         currentStanza = -1;
         scriptDirection = FORWARD;
     } else {
@@ -182,7 +185,7 @@ static ABState *ABStateInstance = NULL;
 }
 
 + (void) turnPage:(int)direction {
-    if(isInAutoplayMode) {
+    if(settingAutoplay) {
         if(direction == 1) scriptDirection = FORWARD;
         if(direction == -1) scriptDirection = BACKWARD;
     } else {
@@ -191,12 +194,12 @@ static ABState *ABStateInstance = NULL;
 }
 
 + (void) forward {
-    if(isInAutoplayMode) scriptDirection = FORWARD;
+    if(settingAutoplay) scriptDirection = FORWARD;
     else [ABState manuallyTransitionStanzaWithIncrement:1];
 }
 
 + (void) backward {
-    if(isInAutoplayMode) scriptDirection = BACKWARD;
+    if(settingAutoplay) scriptDirection = BACKWARD;
     else [ABState manuallyTransitionStanzaWithIncrement:-1];
 }
 
@@ -221,40 +224,27 @@ static ABState *ABStateInstance = NULL;
 }
 
 
-//
-//+ (void) increaseMutation {
-//    if(!isInAutoplayMode) {
-//        [ABState addToMutationLevel:1.2];
-//        [ABState manuallyTransitionStanzaWithIncrement:0];
-//    } else {
-//        [ABState addToMutationLevel:2.2];
-//    }
-//}
-
-//+ (void) addToMutationLevel:(CGFloat)num {
-//    //    if(mutationLevel > 20) return;
-//    mutationLevel = mutationLevel + num;
-//}
-
 + (int) checkMutationLevel {
     return mutationLevel;
 }
 
 
 
-+ (void) updatePrevStanzaLinesWithLine:(NSArray *)newLine atIndex:(int)lineNumber {
++ (void) updateCurrentScriptWordLinesWithLine:(NSArray *)newLine atIndex:(int)lineNumber {
     
     NSMutableArray *newStanza = [NSMutableArray array];
     
-    for(int l=0; l < [prevStanzaLines count]; l ++) {
+    for(int l=0; l < [currentScriptWordLines count]; l ++) {
         if(l == lineNumber) [newStanza addObject:newLine];
-        else [newStanza addObject:[prevStanzaLines objectAtIndex:l]];
+        else [newStanza addObject:[currentScriptWordLines objectAtIndex:l]];
     }
     
-    prevStanzaLines = [NSArray arrayWithArray:newStanza];
+    currentScriptWordLines = [NSArray arrayWithArray:newStanza];
 }
 
-
++ (NSArray *) getCurrentScriptWordLines {
+    return currentScriptWordLines;
+}
 
 
 
@@ -268,7 +258,7 @@ static ABState *ABStateInstance = NULL;
 
 + (void) changeAllLinesToLines:(NSArray *)newLines {
     int c = 0;
-    for(int s = ABRA_START_LINE; s < ABRA_START_LINE + [ABUI abraNumberOfLines]; s++) {
+    for(int s = ABRA_START_LINE; s < ABRA_START_LINE + [ABState numberOfLinesToDisplay]; s++) {
         if(c >= [ABLines count]) continue;
         NSArray *newWords = (s < [newLines count]) ? newLines[s] : [ABScript emptyLine];
         [[ABLines objectAtIndex:c++] changeWordsToWords:newWords];
@@ -287,27 +277,36 @@ static ABState *ABStateInstance = NULL;
 
     
     if(index == firstIndex - 1) {
-        newLines = [ABScript mixStanzaLines:prevStanzaLines withStanzaAtIndex:lastIndex];
+        newLines = [ABScript mixStanzaLines:currentScriptWordLines withStanzaAtIndex:lastIndex];
         
     } else if(index == lastIndex + 1) {
-        newLines = [ABScript mixStanzaLines:prevStanzaLines withStanzaAtIndex:firstIndex];
+        newLines = [ABScript mixStanzaLines:currentScriptWordLines withStanzaAtIndex:firstIndex];
         
     } else {
         newLines = [ABScript linesAtStanzaNumber:index];
     }
     
     if(mutationLevel > 0) {
-        newLines = [ABMutate remixStanza:newLines andOldStanza:prevStanzaLines atMutationLevel:mutationLevel];
+        newLines = [ABMutate remixStanza:newLines andOldStanza:currentScriptWordLines atMutationLevel:mutationLevel];
         mutationLevel --;
     }
     
-    if([newLines count] > [ABUI abraNumberOfLines]) {
-        newLines = [newLines subarrayWithRange:NSMakeRange(0, [ABUI abraNumberOfLines])];
+    if([newLines count] > [ABState numberOfLinesToDisplay]) {
+        newLines = [newLines subarrayWithRange:NSMakeRange(0, [ABState numberOfLinesToDisplay])];
     }
 
+    // Chance to turn off spacey mode, if it's on
+    if(secretSettingSpaceyMode == YES) {
+        if(ABI(3) == 0) {
+            secretSettingSpaceyMode = NO;
+        } else {
+            newLines = [ABCadabra spaceyLettersMagic:newLines];
+        }
+    }
+    
     
     currentStanza = index;
-    prevStanzaLines = newLines;
+    currentScriptWordLines = newLines;
     [ABState changeAllLinesToLines:newLines];
 
 }
@@ -352,9 +351,7 @@ static ABState *ABStateInstance = NULL;
     if(index < firstIndex - 1) index = lastIndex;
     
     [ABState transitionToStanza:index];
-    
 }
-
 
 
 + (void) manuallyTransitionStanzaToNumber:(int)stanzaNumber {
@@ -367,27 +364,16 @@ static ABState *ABStateInstance = NULL;
 }
 
 
-
-
-
 + (void) absentlyMutate {
-    if([prevStanzaLines count] == 0) return;
-    int max = MIN([prevStanzaLines count], [ABUI abraNumberOfLines]);
+    if(settingAutonomousMutation == NO) return;
+    if([currentScriptWordLines count] == 0) return;
+    int max = MIN((int)[currentScriptWordLines count], [ABState numberOfLinesToDisplay]);
     int i = ABI(max);
     [[ABLines objectAtIndex:i] absentlyMutate];
 }
 
 
 
-
-
-////////////////
-// GRAFT TEXT //
-////////////////
-
-+ (BOOL) graftText:(NSString *)text {
-    return [ABData graftText:text];
-}
 
 
 
@@ -397,11 +383,9 @@ static ABState *ABStateInstance = NULL;
 ///////////////////
 
 + (BOOL) attemptGesture {
-    
     if(preventGestures) return NO;
-    
     double currentTime = CACurrentMediaTime();
-    
+
     if(currentTime < (lastGestureTime + ABRA_GESTURE_TIME_BUFFER)) {
         return NO;
     } else {
@@ -419,6 +403,77 @@ static ABState *ABStateInstance = NULL;
 }
 
 
+
+
+
+
+
+
+//////////////
+// SETTINGS //
+//////////////
+
++ (void) setAutoMutation:(BOOL)value {
+    DDLogInfo(@"set setAutoMutation %d", value);
+    settingAutonomousMutation = value;
+}
+
++ (void) setAutoplay:(BOOL)value {
+    DDLogInfo(@"set setAutoplay %d", value);
+    settingAutoplay = value;
+    if(value == YES) [ABClock startAutoProgress];
+    else [ABClock stopAutoProgress];
+}
+
++ (void) setIPhoneMode:(BOOL)value {
+    DDLogInfo(@"set setIPhoneMode %d", value);
+    settingIPhoneDisplayMode = value;
+    settingIPhoneDisplayModeHasChanged = YES;
+}
+
++ (void) setResetLexicon {
+    DDLogInfo(@"set setResetLexicon");
+    [ABData resetLexicon];
+    [[[UIAlertView alloc] initWithTitle:@"" message:@"“our birth is but a sleep and a forgetting...” ―wordsworth" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+}
+
+
+
+
+
+
+
++ (void) setSpaceyMode:(BOOL)value {
+    secretSettingSpaceyMode = value;
+}
++ (BOOL) checkSpaceyMode {
+    return secretSettingSpaceyMode;
+}
+
++ (void) setLinesAreFlipped:(BOOL)value {
+    linesAreFlipped = value;
+}
++ (BOOL) checkLinesAreFlipped {
+    return linesAreFlipped;
+}
+
+
++ (void) setLinesAreWoven:(BOOL)value {
+    linesAreWoven = value;
+}
++ (BOOL) checkLinesAreWoven {
+    return linesAreWoven;
+}
+
+
+
+
++ (BOOL) checkForChangedDisplayMode {
+    if(settingIPhoneDisplayModeHasChanged == NO) return NO;
+    for(ABLine *line in ABLines) [line destroyAllWords];
+    settingIPhoneDisplayModeHasChanged = NO;
+    return YES;
+}
 
 
 @end

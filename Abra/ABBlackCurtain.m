@@ -10,48 +10,55 @@
 #import "ABIconBar.h"
 #import "ABConstants.h"
 #import "ABState.h"
+#import "ABMainViewController.h"
 
 @implementation ABBlackCurtain
 
-@synthesize destroyOnFadeOut, setToMutateOnCancel;
 
-BOOL ready;
-ABIconBar *iconBar;
-
-
-- (id) initWithIconBar:(ABIconBar *)bar {
+- (id) initWithIconBar:(ABIconBar *)bar andMainVC:(ABMainViewController *)main {
     self = [super initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
     if (self) {
         self.alpha = 0;
         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.6];
         self.hidden = YES;
+        self.isVisible = NO;
         self.destroyOnFadeOut = YES;
-        self.setToMutateOnCancel = NO;
-
-        iconBar = bar;
+        self.isGraftCurtain = NO;
+        self.mainVC = main;
+        self.iconBar = bar;
     }
     return self;
 }
 
 
 - (void) show {
+
     [ABState disallowGestures];
+    
     self.hidden = NO;
+    self.isVisible = YES;
     [self.superview bringSubviewToFront:self];
+    
     [UIView animateWithDuration:0.7 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.alpha = 1;
     } completion:^(BOOL finished) {
-        ready = YES;
+        self.ready = YES;
     }];
 }
 
 
 - (void) hide {
+    
+    if(!self.isVisible) return;
+    self.isVisible = NO;
+    
     [self endEditing:YES];
-    [UIView animateWithDuration:0.7 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+
+    [UIView animateWithDuration:0.7 delay:0 options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState animations:^{
         self.alpha = 0;
+        
     } completion:^(BOOL finished) {
-        [ABState allowGestures];
+        [self.mainVC blackCurtainDidDisappear];
         if(self.destroyOnFadeOut) {
             [self removeFromSuperview];
         } else {
@@ -60,23 +67,31 @@ ABIconBar *iconBar;
     }];
 }
 
-- (void) hideWithSuccess:(BOOL)success {
-    if(success == NO && self.setToMutateOnCancel) {
-        [iconBar selectMutate];
+
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+
+    [super touchesBegan:touches withEvent:event];
+    UITouch *touch = [[event allTouches] anyObject];
+
+    if (![touch.view isKindOfClass:[ABBlackCurtain class]]) return;
+    if(self.ready && self.isVisible) {
+        if(self.isGraftCurtain) {
+            // switch to mutate mode in case of unsuccessful graft
+            if(![self.mainVC userDidTouchOutsideGraftBox]) [self.iconBar selectMutate];
+        } else {
+            [self hide];
+        }
     }
+}
+
+
+
+// called from main VC to close graft modal
+- (void) hideWithSuccess:(BOOL)success {
+    if(success == NO && self.isGraftCurtain) [self.iconBar selectMutate];
     [self hide];
 }
 
-
-- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesBegan:touches withEvent:event];
-    UITouch *touch = [[event allTouches] anyObject];
-    if (![touch.view isKindOfClass:[ABBlackCurtain class]]) return;
-    if(ready) {
-        if(self.setToMutateOnCancel) [self hideWithSuccess:NO];
-        else [self hide];
-    }
-}
 
 
 @end

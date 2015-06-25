@@ -8,16 +8,23 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum { MUTATE, GRAFT, MAGIC, PRUNE, ERASE } InteractivityMode;
+typedef NS_ENUM(NSInteger, InteractivityMode) { MUTATE, GRAFT, MAGIC, PRUNE, ERASE };
+typedef NS_ENUM(NSInteger, modalType) { GRAFT_MODAL, SETTINGS_MODAL, INFO_MODAL };
 
 
 @interface ABState : NSObject
 
 
 + (NSMutableArray *) initLines;
++ (int) numberOfLinesToDisplay;
++ (NSArray *) getLines;
+
++ (void) changeAllLinesToLines:(NSArray *)newLines;
+
 
 + (BOOL) isRunningInBookMode;
 + (int) getCurrentStanza;
++ (NSArray *) getCurrentScriptWordLines;
 
 + (void) reset;
 + (void) clearMutations;
@@ -26,8 +33,6 @@ typedef enum { MUTATE, GRAFT, MAGIC, PRUNE, ERASE } InteractivityMode;
 + (void) backward;
 + (void) accelerate;
 + (void) decelerate;
-
-+ (BOOL) graftText:(NSString *)text;
 
 + (void) pause;
 + (void) resume;
@@ -45,16 +50,33 @@ typedef enum { MUTATE, GRAFT, MAGIC, PRUNE, ERASE } InteractivityMode;
 
 + (void) manuallyTransitionStanzaToNumber:(int)stanzaNumber;
 + (void) manuallyTransitionStanzaWithIncrement:(int)increment;
-+ (void) setModeToStandalone;
-+ (void) setModeToAutoplayMode;
+
++ (void) updateCurrentScriptWordLinesWithLine:(NSArray *)newLine atIndex:(int)lineNumber;
 
 + (void) absentlyMutate;
 
-+ (void) updatePrevStanzaLinesWithLine:(NSArray *)newLine atIndex:(int)lineNumber;
-
 + (void) setInteractivityModeTo:(InteractivityMode)mode;
-
 + (InteractivityMode) getCurrentInteractivityMode;
+
++ (BOOL) checkForChangedDisplayMode;
+
+
+
++ (void) setAutoMutation:(BOOL)value;
++ (void) setAutoplay:(BOOL)value;
++ (void) setIPhoneMode:(BOOL)value;
++ (void) setResetLexicon;
+
+
+
++ (void) setSpaceyMode:(BOOL)value;
++ (BOOL) checkSpaceyMode;
+
++ (void) setLinesAreFlipped:(BOOL)value;
++ (BOOL) checkLinesAreFlipped;
+
++ (void) setLinesAreWoven:(BOOL)value;
++ (BOOL) checkLinesAreWoven;
 
 
 @end

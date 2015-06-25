@@ -13,7 +13,13 @@
 #import "ABConstants.h"
 #import "ABScriptWord.h"
 
-typedef enum { DICE, RANDOM, EXPLODE, CLONE } mutationType;
+typedef NS_ENUM(NSInteger, mutationType) {
+    DICE,
+    RANDOM,
+    GRAFTWORD,
+    EXPLODE,
+    CLONE
+};
 
 @implementation ABScript
 
@@ -34,7 +40,7 @@ static ABScript *ABScriptInstance = NULL;
 
 + (void) initScriptWithDataArray:(NSArray *)scriptDataArray {
     script = scriptDataArray;
-    stanzaCount = [script count];
+    stanzaCount = (int)[script count];
 }
 
 + (NSMutableDictionary *) initScriptAndParseScriptFile {
@@ -82,14 +88,20 @@ static ABScript *ABScriptInstance = NULL;
             [linesObjs addObject:[NSMutableArray array]];
             
             lines[j] = [lines[j] componentsSeparatedByString:@" "];
-            ABScriptWord *lastWordObj = nil;
+
+            int thisLineCount = [lines[j] count];
             BOOL connectNextWord = NO;
+            ABScriptWord *lastWordObj = nil;
             
-            for (int z = 0; z < [lines[j] count]; z++) {
+            for (int z = 0; z < thisLineCount; z++) {
                 
                 BOOL connectLastAndCurrent = NO;
 
                 NSString *text = lines[j][z];
+                NSMutableArray *sibs = [NSMutableArray array];
+                
+                if(z > 0) [sibs addObject:lines[j][z - 1]];
+                if(z + 1 != thisLineCount) [sibs addObject:lines[j][z + 1]];
                 
                 if([text isEqualToString:@""]) continue;
                 
@@ -102,7 +114,7 @@ static ABScript *ABScriptInstance = NULL;
                     continue;
                 }
                 
-                ABScriptWord *sw = [[ABScriptWord alloc] initWithText:text sourceStanza:i];
+                ABScriptWord *sw = [ABData getScriptWord:text withSourceStanza:i];
                 // Don't check extra properties because we know it's from the original script.
                 // If sometime later I modify this to allow importing other texts, I need to checkProperties here.
 
@@ -126,14 +138,17 @@ static ABScript *ABScriptInstance = NULL;
                 }
                 
                 if(connectLastAndCurrent && lastWordObj != nil) {
-                    [lastWordObj addSister:text];
-                    [sw addSister:[lastWordObj text]];
+                    [sw addLeftSister:[lastWordObj text]];
+                    [lastWordObj addRightSister:text];
                 }
                 
                 lastWordObj = sw;
                 [linesObjs[j] addObject:sw];
+                
                 [scriptWordsDictionary setObject:[ABScriptWord copyScriptWord:sw] forKey:text];
             }
+            
+            
         }
         
         // Add the cleaned and parsed array of word objects
@@ -156,13 +171,18 @@ static ABScript *ABScriptInstance = NULL;
 
 - (NSArray *) specialHandlingForCrazyEeeWordWithSourceStanza:(int)stanza {
     
-    ABScriptWord *sw1 = [[ABScriptWord alloc] initWithText:@"estroph" sourceStanza:stanza];
-    ABScriptWord *sw2 = [[ABScriptWord alloc] initWithText:@"eeeeeeeeeeeeeeeeeeeeeee" sourceStanza:stanza];
-    ABScriptWord *sw3 = [[ABScriptWord alloc] initWithText:@"ees" sourceStanza:stanza];
-
+    ABScriptWord *sw1 = [ABData getScriptWord:@"estroph" withSourceStanza:stanza];
+    ABScriptWord *sw2 = [ABData getScriptWord:@"eeeeeeeeeeeeeeeeeeeeeee" withSourceStanza:stanza];
+    ABScriptWord *sw3 = [ABData getScriptWord:@"ees" withSourceStanza:stanza];
+    
     sw1.marginRight = NO;
     sw2.marginLeft = NO; sw2.marginRight = NO;
     sw3.marginLeft = NO;
+    
+    [sw1 addRightSister:sw2.text];
+    [sw2 addLeftSister:sw1.text];
+    [sw2 addRightSister:sw3.text];
+    [sw3 addLeftSister:sw2.text];
     
     return @[sw1, sw2, sw3];
 }
@@ -180,8 +200,8 @@ static ABScript *ABScriptInstance = NULL;
     if(stanza >= [script count]) return script[[script count] - 1];
     if(stanza < 0) return script[0];
     NSArray *scriptStanza = script[stanza];
-    if([scriptStanza count] > [ABUI abraNumberOfLines]) {
-        scriptStanza = [scriptStanza subarrayWithRange:NSMakeRange(0, [ABUI abraNumberOfLines])];
+    if([scriptStanza count] > [ABState numberOfLinesToDisplay]) {
+        scriptStanza = [scriptStanza subarrayWithRange:NSMakeRange(0, [ABState numberOfLinesToDisplay])];
     }
     
     return script[stanza];
@@ -305,7 +325,8 @@ static ABScript *ABScriptInstance = NULL;
     NSMutableArray *scriptWords = [NSMutableArray array];
     
     for(int i=0; i<[words count]; i++) {
-        ABScriptWord *sw = [[ABScriptWord alloc] initGraftedWithText:words[i] sourceStanza:-1];
+        ABScriptWord *sw = [ABData scriptWord:words[i] stanza:-1 fam:words leftSis:nil rightSis:nil graft:YES check:YES];
+//        ABScriptWord *sw = [[ABScriptWord alloc] initWithText:words[i] sourceStanza:-1 inFamily:words isGrafted:YES];
         [scriptWords addObject:sw];
     }
     

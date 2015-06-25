@@ -42,7 +42,14 @@
 - (void) setXPosition:(CGFloat)x;
 - (void) dim;
 - (void) erase;
+- (void) eraseWithDelay:(CGFloat)delay;
 - (void) selfDestruct;
 - (void) selfDestructMorph;
+
+- (void) fadeColorToSourceStanza:(int)stanza;
+
+
+- (void) redact;
+- (void) spin;
 
 @end

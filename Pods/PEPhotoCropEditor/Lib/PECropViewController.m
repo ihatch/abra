@@ -105,9 +105,7 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
 
 - (void) saveToCameraRoll:(id)sender {
     UIImageWriteToSavedPhotosAlbum(self.cropView.croppedImage, nil, nil, nil);
-    NSString *message = @"Saved.";
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alertView show];
+    [[[UIAlertView alloc] initWithTitle:@"" message:@"Saved." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 }
 
 - (void) postToFacebook:(id)sender {

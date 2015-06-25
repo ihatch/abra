@@ -14,6 +14,7 @@
 #import "ABState.h"
 #import "ABData.h"
 #import "ABDice.h"
+#import "ABEmoji.h"
 
 
 // Method to split string that works with extended chars (emoji)
@@ -141,12 +142,12 @@ static ABMutate *ABMutateInstance = NULL;
     
     // Add old word in letters
     else if(ABI(20) < 3) {
-        returnArray = [ABMutate splitWordIntoLetters:stanzaWord];
+        returnArray = [ABMutate splitWordIntoLetters:stanzaWord andSpaceOut:NO];
     }
     
     // Add random word in letters
     else if(ABI(20) < 3) {
-        returnArray = [ABMutate splitWordIntoLetters:randomWord];
+        returnArray = [ABMutate splitWordIntoLetters:randomWord andSpaceOut:NO];
     }
     
     // Add random word
@@ -192,11 +193,18 @@ static ABMutate *ABMutateInstance = NULL;
     NSArray *newWords;
     
     if(type == DICE) {
+        
+        NSString *emojiTransform = [ABEmoji emojiWordTransform:oldWord.text];
+        if(emojiTransform != nil) {
+            
+            newWords = @[[ABData getScriptWord:emojiTransform]];
 
+            // TODO: change chance handling to include a little spell-check
+        
 //        ABScriptWord *sw = [ABMutate attemptMatchBySpellCheck:oldWord];
 //        if(sw != nil) {
 //            newWords = @[sw];
-//        } else {
+        } else {
         
             if(ABI(40) == 0) {
                 newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
@@ -207,16 +215,14 @@ static ABMutate *ABMutateInstance = NULL;
             } else {
                 newWords = @[[ABMutate throwDiceCoefficient:oldWord]];
             }
-//        }
+        }
     
     } else if(type == RANDOM) {
         newWords = [ABMutate mutate:oldWord andLocalWords:line mutationLevel:5 lineLength:(int)[line count]];
     } else if(type == EXPLODE) {
-        newWords = [ABMutate splitWordIntoLetters:oldWord];
+        newWords = [ABMutate splitWordIntoLetters:oldWord andSpaceOut:NO];
     } else if(type == GRAFTWORD) {
         ABScriptWord *gw = [ABData getWordToGraft];
-        // TODO: do not allow grafting to happen when user doesn't enter text! and prevent error here when
-        //   graft words are nil
         // TODO: more complex sourceStanza handling for grafted words?
         gw.sourceStanza = oldWord.sourceStanza;
         newWords = @[gw];
@@ -368,7 +374,7 @@ static ABMutate *ABMutateInstance = NULL;
     // Is word already misspelled?
     NSArray *simple = [ABMutate spellCheck:word.text];
     if([simple count] > 0) {
-        ABScriptWord *sw = [[ABScriptWord alloc] initWithText:simple[0] sourceStanza:word.sourceStanza];
+        ABScriptWord *sw = [ABData getScriptWord:simple[0]];
         return sw;
     }
     
@@ -380,7 +386,7 @@ static ABMutate *ABMutateInstance = NULL;
     NSString *cut = [ABMutate cutFirstOrLastLetter:word.text];
     NSArray *cuts = [ABMutate spellCheck:cut];
     
-    if([cuts count]) return [[ABScriptWord alloc] initWithText:cuts[0] sourceStanza:word.sourceStanza];
+    if([cuts count]) return [ABData getScriptWord:simple[0] withSourceStanza:word.sourceStanza];
     
 
     
@@ -388,7 +394,7 @@ static ABMutate *ABMutateInstance = NULL;
     NSString *scrambled = [ABMutate scrambleString:word.text];
     NSArray *scram = [ABMutate spellCheck:scrambled];
     
-    if([scram count]) return [[ABScriptWord alloc] initWithText:scram[0] sourceStanza:word.sourceStanza];
+    if([scram count]) return [ABData getScriptWord:scram[0] withSourceStanza:word.sourceStanza];
     
     
     
@@ -410,7 +416,7 @@ static ABMutate *ABMutateInstance = NULL;
     if([slice length] > 2) {
         matches = [ABMutate spellCheck: slice];
         if([matches count] > 0) {
-            ABScriptWord *sw = [[ABScriptWord alloc] initWithText:matches[0] sourceStanza:word.sourceStanza];
+            ABScriptWord *sw = [ABData getScriptWord:matches[0] withSourceStanza:word.sourceStanza];
             return sw;
         }
     }
@@ -499,21 +505,21 @@ static ABMutate *ABMutateInstance = NULL;
         [text addObject:o.text];
     }
     
-    ABScriptWord *sw = [[ABScriptWord alloc] initWithText:[text componentsJoinedByString:@""] sourceStanza:first.sourceStanza];
+    ABScriptWord *sw = [ABData getScriptWord:[text componentsJoinedByString:@""] withSourceStanza:first.sourceStanza];
     return sw;
 }
 
 
-+ (NSArray *) splitWordIntoLetters:(ABScriptWord *)word {
++ (NSArray *) splitWordIntoLetters:(ABScriptWord *)word andSpaceOut:(BOOL)spaceOut; {
     
     NSMutableArray *array = [NSMutableArray array];
     NSString *wordText = [word text];
-    NSArray *characters = [wordText convertToArray];
+    NSArray *characters = [word charArray];
     
     for (int i = 0; i < [characters count]; i++) {
-        ABScriptWord *sw = [[ABScriptWord alloc] initWithText:characters[i] sourceStanza:word.sourceStanza];
-        if(i != 0) sw.marginLeft = NO;
-        if(i != [wordText length] - 1) sw.marginRight = NO;
+        ABScriptWord *sw =  [ABData getScriptWord:characters[i] withSourceStanza:word.sourceStanza];
+        if(i != 0 && !spaceOut) sw.marginLeft = NO;
+        if(i != [wordText length] - 1 && !spaceOut) sw.marginRight = NO;
         [array addObject:sw];
     }
     return [NSArray arrayWithArray:array];
@@ -525,9 +531,9 @@ static ABMutate *ABMutateInstance = NULL;
 
     NSArray *slices = [ABMutate sliceStringInHalf:word.text];
     if(slices == nil) return @[word];
-    
-    ABScriptWord *first = [[ABScriptWord alloc] initWithText:slices[0] sourceStanza:word.sourceStanza];
-    ABScriptWord *second = [[ABScriptWord alloc] initWithText:slices[1] sourceStanza:word.sourceStanza];
+
+    ABScriptWord *first = [ABData getScriptWord:slices[0] withSourceStanza:word.sourceStanza];
+    ABScriptWord *second = [ABData getScriptWord:slices[1] withSourceStanza:word.sourceStanza];
     first.marginRight = NO;
     second.marginLeft = YES;
 
@@ -537,7 +543,7 @@ static ABMutate *ABMutateInstance = NULL;
 // Index is start of second substring (ie, length of first)
 + (NSArray *) sliceString:(NSString *)string atIndex:(int)index {
     NSArray *chars = [string convertToArray];
-    int len = [chars count];
+    int len = (int)[chars count];
     NSString *one = [[chars subarrayWithRange:NSMakeRange(0, index)] componentsJoinedByString:@""];
     NSString *two = [[chars subarrayWithRange:NSMakeRange(index, len - index)] componentsJoinedByString:@""];
     return @[one, two];
@@ -545,7 +551,7 @@ static ABMutate *ABMutateInstance = NULL;
 
 + (NSArray *) sliceStringInHalf:(NSString *)string {
     
-    int length = [[string convertToArray] count];
+    int length = (int)[[string convertToArray] count];
     if(length < 2) return nil;
     if(length == 2) {
         return [ABMutate sliceString:string atIndex:1];
@@ -587,7 +593,7 @@ static ABMutate *ABMutateInstance = NULL;
 
 + (NSString *) cutFirstOrLastLetter: (NSString *)string {
     NSMutableArray *original = [NSMutableArray arrayWithArray:[string convertToArray]];
-    int c = [original count];
+    int c = (int)[original count];
     if(c < 2) return nil;
     if(c < 4 && ABI(2 == 0)) {
         return [[ABMutate sliceString:string atIndex:c - 1] objectAtIndex:0];
@@ -629,6 +635,12 @@ static ABMutate *ABMutateInstance = NULL;
     
     return [NSArray arrayWithArray:newLine];
 }
+
+
+
+
+
+
 
 
 

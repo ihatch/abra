@@ -1,5 +1,5 @@
 //
-//  ABUIElements.m
+//  ABUI.m
 //  Abra
 //
 //  Created by Ian Hatcher on 2/23/14.
@@ -48,7 +48,6 @@ static ABUI *ABUIInstance = NULL;
     return kScreenHeight / (768 / n);
 }
 
-
 + (CGFloat) scaleXWithIphone:(CGFloat)iphone ipad:(CGFloat)ipad {
     return iphone + ((kScreenWidth - 568) / ((1024 - 568) / (ipad - iphone)));
 }
@@ -56,6 +55,11 @@ static ABUI *ABUIInstance = NULL;
 + (CGFloat) scaleYWithIphone:(CGFloat)iphone ipad:(CGFloat)ipad {
     return iphone + ((kScreenHeight - 320) / ((768 - 320) / (ipad - iphone)));
 }
+
++ (BOOL) isIphone {
+    return (kScreenWidth < 750);
+}
+
 
 
 
@@ -74,11 +78,6 @@ static ABUI *ABUIInstance = NULL;
 + (CGFloat) abraFlowersFontSize {
     return [ABUI scaleYWithIphone:20 ipad:30];
 }
-+ (int) abraNumberOfLines {
-    if(kScreenWidth < 900) return 5; else return 11;
-}
-
-
 
 
 
@@ -184,6 +183,34 @@ static ABUI *ABUIInstance = NULL;
 
 
 
+/////////////////////
+// GENERIC BUTTONS //
+/////////////////////
+
++ (UIButton *) horizontalButtonWithText:(NSString *)text andFrame:(CGRect)frame {
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = frame;
+    [button setTitle:text forState:UIControlStateNormal];
+    [button setTitleColor:[ABUI darkGoldColor] forState:UIControlStateNormal];
+    [button setTitleColor:[ABUI darkGoldColor] forState:UIControlStateHighlighted];
+    [button setTitleColor:[ABUI goldColor] forState:UIControlStateSelected];
+    button.titleLabel.font = [UIFont fontWithName:ABRA_SYSTEM_FONT size:(kScreenWidth / 73.14)];  // 14.0f
+    button.backgroundColor = [UIColor clearColor];
+    [button setBackgroundImage:[ABUI imageWithColor:[UIColor clearColor]] forState:UIControlStateNormal];
+    [button setBackgroundImage:[ABUI imageWithColor:[ABUI darkGoldBackgroundColor]] forState:UIControlStateHighlighted];
+    [button setBackgroundImage:[ABUI imageWithColor:[ABUI darkGoldBackgroundColor]] forState:UIControlStateSelected];
+    button.adjustsImageWhenHighlighted = NO;
+    button.layer.cornerRadius = [ABUI iPadToUniversalH:10];
+    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+    button.clipsToBounds = YES;
+    return button;
+}
+
+
+
+
+
 
 ///////////////
 // INFO VIEW //
@@ -202,7 +229,6 @@ static ABUI *ABUIInstance = NULL;
     }
     infoWebView.scrollView.scrollEnabled = NO;
     infoWebView.scrollView.bounces = NO;
-
     [infoWebView setHidden:YES];
     [infoWebView setDelegate:ABUIInstance];
     
@@ -219,94 +245,6 @@ static ABUI *ABUIInstance = NULL;
     [webView setHidden:NO];
 }
 
-
-
-
-
-////////////////
-// TEXT FIELD //
-////////////////
-
-+ (UITextField *) createTextFieldWithFrame:(CGRect)frame {
-    
-    UITextField *textField = [[UITextField alloc] initWithFrame:frame];
-    textField.borderStyle = UITextBorderStyleRoundedRect;
-    textField.textColor = [UIColor whiteColor];
-    textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"words to graft" attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:0.24 alpha:1]}];
-    textField.backgroundColor = [UIColor blackColor];
-    textField.font = [UIFont fontWithName:ABRA_FONT size:18];
-    textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    textField.textAlignment = NSTextAlignmentCenter;
-
-    textField.keyboardAppearance = UIKeyboardAppearanceDark;
-    textField.autocorrectionType = UITextAutocorrectionTypeNo;
-    textField.keyboardType = UIKeyboardTypeDefault;
-    textField.returnKeyType = UIReturnKeyDone;
-    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    
-    textField.layer.cornerRadius = 8.0f;
-    textField.layer.masksToBounds = YES;
-    textField.layer.borderColor = [ABUI goldColor].CGColor;
-    textField.layer.borderWidth = 1.0f;
-    
-    return textField;
-}
-
-
-
-
-////////////////////
-// GENERIC BUTTON //
-////////////////////
-
-+ (UIButton *) createButtonWithFrame:(CGRect)frame title:(NSString *)title {
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.titleLabel.font = [UIFont fontWithName:ABRA_FONT size:16];
-    
-    [button setFrame:frame];
-    [button setTitle:title forState:UIControlStateNormal];
-    [button setTitleColor:normalColor forState:UIControlStateNormal];
-    [button setTitleColor:selectedColor forState:UIControlStateSelected];
-    [button setClipsToBounds:YES];
-    [button setTitleEdgeInsets:UIEdgeInsetsZero];
-    [button.layer setBorderWidth:1.0f];
-    [button.layer setBorderColor:normalColor.CGColor];
-    [button.layer setCornerRadius:8.0f];
-    return button;
-}
-
-
-
-
-////////////
-// MODALS //
-////////////
-
-+ (ABModal *) createGraftModalWithMainVC:(ABMainViewController *)mainVC {
-    ABModal *graftModal = [[ABModal alloc] initWithType:@"graft" andMainVC:mainVC];
-    return graftModal;
-}
-
-
-
-+ (UIView *) createCenteredModalWithWidth:(CGFloat)w andHeight:(CGFloat)h {
-
-    CGFloat mw = w, mh = h, mx = ((kScreenWidth - mw) / 2), my = ((kScreenHeight - mh) / 3);
-    UIView *modal = [ABUI createModalWithFrame:CGRectMake(mx, my, mw, mh)];
-    return modal;
-}
-
-
-+ (UIView *) createModalWithFrame:(CGRect)frame {
-
-    UIView *modal = [[UIView alloc] initWithFrame:frame];
-    [modal.layer setBorderWidth:1.0f];
-    [modal.layer setBorderColor:[ABUI progressHueColor].CGColor];
-    modal.userInteractionEnabled = YES;
-    modal.backgroundColor = [UIColor blackColor];
-    return modal;
-}
 
 
 

@@ -20,7 +20,6 @@ int ABI(int max);
 @interface ABConstants : NSObject
 
 extern int const ABRA_START_LINE;
-// extern int const ABRA_NUMBER_OF_LINES;
 extern int const ABRA_START_STANZA;
 
 extern BOOL const ABRA_ABSENTLY_MUTATE;
@@ -49,6 +48,9 @@ extern CGFloat const ABRA_TICKER_INTERVAL;
 extern NSString *const EMOJI_REGEX;
 extern NSString *const NON_ASCII_REGEX;
 extern NSString *const NUMBERS_REGEX;
+
+
+extern NSString *const BLACK_BOX_QUOTE;
 
 
 // DEV CONSTS

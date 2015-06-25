@@ -11,7 +11,14 @@
 
 @interface ABMutate : NSObject
 
-typedef enum { DICE, RANDOM, GRAFTWORD, EXPLODE, CLONE } mutationType;
+typedef NS_ENUM(NSInteger, mutationType) {
+    DICE,
+    RANDOM,
+    GRAFTWORD,
+    EXPLODE,
+    CLONE
+};
+
 
 + (NSArray *) mutateLines:(NSArray *)stanza atMutationLevel:(int)mutationLevel;
 
@@ -23,6 +30,7 @@ typedef enum { DICE, RANDOM, GRAFTWORD, EXPLODE, CLONE } mutationType;
 + (NSArray *) remixStanza:(NSArray *)stanza andOldStanza:(NSArray *)oldStanza atMutationLevel:(int)mutationLevel;
 + (NSArray *) remixStanza:(NSArray *)stanza andOldStanza:(NSArray *)oldStanza atMutationLevel:(int)mutationLevel andLimitTo:(int)limit;
 
++ (NSArray *) splitWordIntoLetters:(ABScriptWord *)word andSpaceOut:(BOOL)spaceOut;
 
 
 @end

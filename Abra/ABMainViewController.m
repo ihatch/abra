@@ -31,68 +31,57 @@
 @end
 
 
-
 @implementation ABMainViewController
-
-CGPoint touchStart;
 
 NSMutableArray *ABLines;
 ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
 
-ABBlackCurtain *graftCurtain, *infoCurtain;
-
-UIButton *controlPanelArrowButton;
 ABIconBar *iconBar;
-
-
-ABInfoView *infoView;
-ABModal *graftModal;
+ABBlackCurtain *graftCurtain, *settingsCurtain, *infoCurtain;
+ABModal *graftModal, *settingsModal;
 UITextField *graftTextField;
+ABInfoView *infoView;
 
-BOOL carouselIsAnimating;
-BOOL preventInput;
+BOOL carouselIsAnimating, preventInput;
+CGPoint touchStart;
 
-ABMainViewController *mainViewControllerInstance;
 
-+ (void) initialize {
-    @synchronized(self) {
-        if (mainViewControllerInstance == NULL) mainViewControllerInstance = [[ABMainViewController alloc] init];
-    }
-}
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-   
-    self.view.backgroundColor = [UIColor blackColor];
-    self.view.userInteractionEnabled = YES;
-    
-    [ABData initAbraData];
 
-    DDLogInfo(@"Screen: %f x %f", kScreenWidth, kScreenHeight);
-    
-    // init lines
-    ABLines = [ABState initLines];
-    for(int i=0; i < [ABLines count]; i ++) [self.view addSubview:ABLines[i]];
-
+    [self initScreen];
+    [ABData initData];
+    [self initLines];
     [self initGestures];
     [self initInfoView];
+    [self initSettingsModal];
     [self initGraftModal];
     [self initIconBar];
     [self initCarousel];
-
-    [self devStartupTests];
-}
-
-
-
-- (void) devStartupTests {
-    
 }
 
 
 
 
 
+- (void) initScreen {
+    DDLogInfo(@"Screen: %f x %f", kScreenWidth, kScreenHeight);
+    self.view.backgroundColor = [UIColor blackColor];
+    self.view.userInteractionEnabled = YES;
+}
+
+
+- (void) initLines {
+    ABLines = [ABState initLines];
+    for(ABLine *line in ABLines) [self.view addSubview:line];
+}
+
+
+- (void) initIconBar {
+    iconBar = [[ABIconBar alloc] initWithMainVC:self];
+    [self.view addSubview:iconBar];
+}
 
 
 
@@ -265,33 +254,43 @@ ABMainViewController *mainViewControllerInstance;
 
 
 
-//////////////
-// ICON BAR //
-//////////////
 
-- (void) initIconBar {
-    iconBar = [[ABIconBar alloc] initWithMainVC:self];
-    [self.view addSubview:iconBar];
+
+
+
+
+///////////////////////
+// MODALS / CONTROLS //
+///////////////////////
+
+- (void) blackCurtainDidDisappear {
+    if([ABState checkForChangedDisplayMode] == YES) {
+        ABLines = [ABState initLines];
+        for(int i=0; i < [ABLines count]; i ++) [self.view addSubview:ABLines[i]];
+        [self performSelector:@selector(allowGestures) withObject:self afterDelay:2];
+    } else {
+        [self allowGestures];
+    }
+}
+
+- (void) allowGestures {
+    [ABState allowGestures];
+    preventInput = NO;
 }
 
 
 
 
-
-
-
-/////////////////
-// GRAFT MODAL //
-/////////////////
+// GRAFT
 
 - (void) initGraftModal {
-    graftModal = [ABUI createGraftModalWithMainVC:self];
+    graftModal = [[ABModal alloc] initWithType:GRAFT_MODAL andMainVC:self];
     graftTextField = [graftModal createTextField];
     graftTextField.delegate = self;
     [graftModal.innerView addSubview:graftTextField];
-    graftCurtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar];
+    graftCurtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar andMainVC:self];
     graftCurtain.destroyOnFadeOut = NO;
-    graftCurtain.setToMutateOnCancel = YES;
+    graftCurtain.isGraftCurtain = YES;
     [graftCurtain addSubview:graftModal];
     [self.view addSubview:graftCurtain];
 }
@@ -303,9 +302,13 @@ ABMainViewController *mainViewControllerInstance;
     [graftTextField becomeFirstResponder];
 }
 
+- (BOOL) userDidTouchOutsideGraftBox {
+    return [self textFieldShouldReturn:graftTextField];
+}
+
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     [graftTextField resignFirstResponder];
-    BOOL successfulGraft = [ABState graftText:graftTextField.text];
+    BOOL successfulGraft = [ABData graftText:graftTextField.text];
     if(successfulGraft == NO) [iconBar selectMutate];
     [graftCurtain hideWithSuccess:successfulGraft];
     preventInput = NO;
@@ -315,19 +318,31 @@ ABMainViewController *mainViewControllerInstance;
 
 
 
+// SETTINGS
+
+- (void) initSettingsModal {
+    ABModal *modal = [[ABModal alloc] initWithType:SETTINGS_MODAL andMainVC:self];
+    ABBlackCurtain *curtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar andMainVC:self];
+    curtain.destroyOnFadeOut = NO;
+    [curtain addSubview:modal];
+    [self.view addSubview:curtain];
+    settingsCurtain = curtain;
+    settingsModal = modal;
+}
+
+- (void) showSettingsModal {
+    preventInput = YES;
+    [settingsModal updateColor];
+    [settingsCurtain show];
+}
 
 
 
 
-
-
-
-///////////////
-// INFO VIEW //
-///////////////
+// INFO
 
 - (void) initInfoView {
-    infoCurtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar];
+    infoCurtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar andMainVC:self];
     infoCurtain.destroyOnFadeOut = NO;
     [self.view addSubview:infoCurtain];
     infoView = [[ABInfoView alloc] init];
@@ -456,15 +471,12 @@ ABMainViewController *mainViewControllerInstance;
 }
 
 - (void) carouselFlash {
-//    carouselIsAnimating = YES;
     [UIView animateWithDuration:0.4 animations:^() {
         _carousel.alpha = 1.0;
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.64 animations:^() {
             _carousel.alpha = 0.75;
-        } completion:^(BOOL finished) {
-//            carouselIsAnimating = NO;
-        }];
+        } completion:^(BOOL finished) {}];
     }];
 }
 

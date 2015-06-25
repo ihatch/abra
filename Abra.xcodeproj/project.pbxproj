@@ -28,9 +28,12 @@
 		075B2AFA1A9ABC4B00763915 /* black_1024x768.png in Resources */ = {isa = PBXBuildFile; fileRef = 075B2AF31A9ABC4B00763915 /* black_1024x768.png */; };
 		075B2AFB1A9ABC4B00763915 /* black_1536x2048.png in Resources */ = {isa = PBXBuildFile; fileRef = 075B2AF41A9ABC4B00763915 /* black_1536x2048.png */; };
 		075B2AFC1A9ABC4B00763915 /* black_2048x1536.png in Resources */ = {isa = PBXBuildFile; fileRef = 075B2AF51A9ABC4B00763915 /* black_2048x1536.png */; };
-		07763B5B1B2667410074F28B /* ABControlPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 07763B5A1B2667410074F28B /* ABControlPanel.m */; };
 		07763B5E1B266CBE0074F28B /* ABModal.m in Sources */ = {isa = PBXBuildFile; fileRef = 07763B5D1B266CBE0074F28B /* ABModal.m */; };
 		07763B601B2677A40074F28B /* clear_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 07763B5F1B2677A40074F28B /* clear_button.png */; };
+		07763B631B2773D20074F28B /* ABCadabra.m in Sources */ = {isa = PBXBuildFile; fileRef = 07763B621B2773D20074F28B /* ABCadabra.m */; };
+		077668BF1B3B971D002EFCE1 /* EAB-splash-for-apps-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 077668BD1B3B971D002EFCE1 /* EAB-splash-for-apps-1024.png */; };
+		077668C01B3B971D002EFCE1 /* EAB-splash-for-apps-2048.png in Resources */ = {isa = PBXBuildFile; fileRef = 077668BE1B3B971D002EFCE1 /* EAB-splash-for-apps-2048.png */; };
+		077668C41B3B9999002EFCE1 /* EAB-splash-for-apps-2048-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 077668C31B3B9999002EFCE1 /* EAB-splash-for-apps-2048-2.png */; };
 		07A8000C1A69DD8B00BE71C9 /* a_76.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8000A1A69DD8B00BE71C9 /* a_76.png */; };
 		07A8000D1A69DD8B00BE71C9 /* a_152.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8000B1A69DD8B00BE71C9 /* a_152.png */; };
 		07A8000F1A69DD9600BE71C9 /* a_60.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A8000E1A69DD9600BE71C9 /* a_60.png */; };
@@ -38,6 +41,10 @@
 		07BF3FDB1B25ED7800B1D977 /* ABIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 07BF3FDA1B25ED7800B1D977 /* ABIcon.m */; };
 		07BF3FDE1B25F39100B1D977 /* ABIconBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 07BF3FDD1B25F39100B1D977 /* ABIconBar.m */; };
 		07C9242F19B56E0A00CCFC9C /* dice.txt in Resources */ = {isa = PBXBuildFile; fileRef = 07C9242E19B56E0A00CCFC9C /* dice.txt */; };
+		07D1EA011B31E89B00DD0B5F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 07D1EA001B31E89B00DD0B5F /* libsqlite3.dylib */; };
+		07D1EA031B327BF300DD0B5F /* emoji_notes in Resources */ = {isa = PBXBuildFile; fileRef = 07D1EA021B327BF300DD0B5F /* emoji_notes */; };
+		07D1EA071B38A03A00DD0B5F /* emojiGroups.txt in Resources */ = {isa = PBXBuildFile; fileRef = 07D1EA061B38A03A00DD0B5F /* emojiGroups.txt */; };
+		07D1EA0A1B38EFDA00DD0B5F /* ABEmoji.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D1EA091B38EFDA00DD0B5F /* ABEmoji.m */; };
 		A1110549E1C24A4CBFD6C0DB /* libPods-Abra.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84407B0D15CE45E5804EAEEE /* libPods-Abra.a */; };
 		C604FA071850F7790076CC96 /* ABScript.m in Sources */ = {isa = PBXBuildFile; fileRef = C604FA061850F7790076CC96 /* ABScript.m */; };
 		C604FA0C1850FA5F0076CC96 /* script.txt in Resources */ = {isa = PBXBuildFile; fileRef = C604FA0B1850FA5F0076CC96 /* script.txt */; };
@@ -108,11 +115,14 @@
 		075B2AF31A9ABC4B00763915 /* black_1024x768.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black_1024x768.png; sourceTree = "<group>"; };
 		075B2AF41A9ABC4B00763915 /* black_1536x2048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black_1536x2048.png; sourceTree = "<group>"; };
 		075B2AF51A9ABC4B00763915 /* black_2048x1536.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black_2048x1536.png; sourceTree = "<group>"; };
-		07763B591B2667410074F28B /* ABControlPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABControlPanel.h; sourceTree = "<group>"; };
-		07763B5A1B2667410074F28B /* ABControlPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABControlPanel.m; sourceTree = "<group>"; };
 		07763B5C1B266CBE0074F28B /* ABModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABModal.h; sourceTree = "<group>"; };
 		07763B5D1B266CBE0074F28B /* ABModal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABModal.m; sourceTree = "<group>"; };
 		07763B5F1B2677A40074F28B /* clear_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear_button.png; sourceTree = "<group>"; };
+		07763B611B2773D20074F28B /* ABCadabra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABCadabra.h; sourceTree = "<group>"; };
+		07763B621B2773D20074F28B /* ABCadabra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABCadabra.m; sourceTree = "<group>"; };
+		077668BD1B3B971D002EFCE1 /* EAB-splash-for-apps-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EAB-splash-for-apps-1024.png"; sourceTree = "<group>"; };
+		077668BE1B3B971D002EFCE1 /* EAB-splash-for-apps-2048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EAB-splash-for-apps-2048.png"; sourceTree = "<group>"; };
+		077668C31B3B9999002EFCE1 /* EAB-splash-for-apps-2048-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EAB-splash-for-apps-2048-2.png"; sourceTree = "<group>"; };
 		07A1A7E81A9AE4B60047F7F3 /* emojis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = emojis.h; sourceTree = "<group>"; };
 		07A8000A1A69DD8B00BE71C9 /* a_76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a_76.png; sourceTree = "<group>"; };
 		07A8000B1A69DD8B00BE71C9 /* a_152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a_152.png; sourceTree = "<group>"; };
@@ -125,6 +135,11 @@
 		07BF3FDC1B25F39100B1D977 /* ABIconBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABIconBar.h; sourceTree = "<group>"; };
 		07BF3FDD1B25F39100B1D977 /* ABIconBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABIconBar.m; sourceTree = "<group>"; };
 		07C9242E19B56E0A00CCFC9C /* dice.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dice.txt; sourceTree = "<group>"; };
+		07D1EA001B31E89B00DD0B5F /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		07D1EA021B327BF300DD0B5F /* emoji_notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji_notes; sourceTree = "<group>"; };
+		07D1EA061B38A03A00DD0B5F /* emojiGroups.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emojiGroups.txt; sourceTree = "<group>"; };
+		07D1EA081B38EFDA00DD0B5F /* ABEmoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABEmoji.h; sourceTree = "<group>"; };
+		07D1EA091B38EFDA00DD0B5F /* ABEmoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABEmoji.m; sourceTree = "<group>"; };
 		84407B0D15CE45E5804EAEEE /* libPods-Abra.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Abra.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86BA78A39E5E2AD47EE37330 /* Pods-Abra.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abra.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Abra/Pods-Abra.debug.xcconfig"; sourceTree = "<group>"; };
 		C604FA051850F7790076CC96 /* ABScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABScript.h; sourceTree = "<group>"; };
@@ -191,6 +206,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07D1EA011B31E89B00DD0B5F /* libsqlite3.dylib in Frameworks */,
 				C6A9D9D9187B40D20087F956 /* QuartzCore.framework in Frameworks */,
 				C68B9ECF185FAF96007D2BDB /* libz.dylib in Frameworks */,
 				C6E739F7184BED4600A2A5C3 /* UIKit.framework in Frameworks */,
@@ -218,14 +234,8 @@
 		075B2AE21A9826CC00763915 /* Elements */ = {
 			isa = PBXGroup;
 			children = (
-				07763B5C1B266CBE0074F28B /* ABModal.h */,
-				07763B5D1B266CBE0074F28B /* ABModal.m */,
-				07BF3FD91B25ED7800B1D977 /* ABIcon.h */,
-				07BF3FDA1B25ED7800B1D977 /* ABIcon.m */,
-				07BF3FDC1B25F39100B1D977 /* ABIconBar.h */,
-				07BF3FDD1B25F39100B1D977 /* ABIconBar.m */,
-				07763B591B2667410074F28B /* ABControlPanel.h */,
-				07763B5A1B2667410074F28B /* ABControlPanel.m */,
+				07D1EA041B38831C00DD0B5F /* Modals */,
+				07D1EA051B38836600DD0B5F /* Icon Bar */,
 				07597B321B13A70F006F6B5E /* ABInfoView.h */,
 				07597B331B13A70F006F6B5E /* ABInfoView.m */,
 				C6A8B02918B9A628001D3C01 /* ABBlackCurtain.h */,
@@ -242,6 +252,8 @@
 				C619F5F6185A55690073DD32 /* ABMatch.h */,
 				C619F5F7185A55690073DD32 /* ABMatch.m */,
 				07A1A7E81A9AE4B60047F7F3 /* emojis.h */,
+				07D1EA021B327BF300DD0B5F /* emoji_notes */,
+				07D1EA061B38A03A00DD0B5F /* emojiGroups.txt */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -253,6 +265,26 @@
 				07B7D29919AECE6A001194FD /* iCarousel.m */,
 			);
 			path = iCarousel;
+			sourceTree = "<group>";
+		};
+		07D1EA041B38831C00DD0B5F /* Modals */ = {
+			isa = PBXGroup;
+			children = (
+				07763B5C1B266CBE0074F28B /* ABModal.h */,
+				07763B5D1B266CBE0074F28B /* ABModal.m */,
+			);
+			name = Modals;
+			sourceTree = "<group>";
+		};
+		07D1EA051B38836600DD0B5F /* Icon Bar */ = {
+			isa = PBXGroup;
+			children = (
+				07BF3FD91B25ED7800B1D977 /* ABIcon.h */,
+				07BF3FDA1B25ED7800B1D977 /* ABIcon.m */,
+				07BF3FDC1B25F39100B1D977 /* ABIconBar.h */,
+				07BF3FDD1B25F39100B1D977 /* ABIconBar.m */,
+			);
+			name = "Icon Bar";
 			sourceTree = "<group>";
 		};
 		3BE9751B18CC7DAA02185714 /* Pods */ = {
@@ -278,10 +310,14 @@
 		C604FA041850F7550076CC96 /* Script */ = {
 			isa = PBXGroup;
 			children = (
+				07763B611B2773D20074F28B /* ABCadabra.h */,
+				07763B621B2773D20074F28B /* ABCadabra.m */,
 				C604FA051850F7790076CC96 /* ABScript.h */,
 				C604FA061850F7790076CC96 /* ABScript.m */,
 				075B2AC41A917D7F00763915 /* ABData.h */,
 				075B2AC51A917D7F00763915 /* ABData.m */,
+				07D1EA081B38EFDA00DD0B5F /* ABEmoji.h */,
+				07D1EA091B38EFDA00DD0B5F /* ABEmoji.m */,
 				075B2AE81A9945D200763915 /* ABMutate.h */,
 				075B2AE91A9945D200763915 /* ABMutate.m */,
 				07BF3FD71B250CD800B1D977 /* ABDice.h */,
@@ -309,6 +345,9 @@
 		C66636CC187DA6C70046E8DE /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				077668C31B3B9999002EFCE1 /* EAB-splash-for-apps-2048-2.png */,
+				077668BD1B3B971D002EFCE1 /* EAB-splash-for-apps-1024.png */,
+				077668BE1B3B971D002EFCE1 /* EAB-splash-for-apps-2048.png */,
 				07763B5F1B2677A40074F28B /* clear_button.png */,
 				075B2AEF1A9ABC4B00763915 /* a_87.png */,
 				075B2AF01A9ABC4B00763915 /* a_120.png */,
@@ -475,6 +514,7 @@
 		F1D00BA050EE485A8C827466 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				07D1EA001B31E89B00DD0B5F /* libsqlite3.dylib */,
 				84407B0D15CE45E5804EAEEE /* libPods-Abra.a */,
 			);
 			name = Frameworks;
@@ -548,6 +588,7 @@
 				C68B9ED118615C7B007D2BDB /* wordList.txt in Resources */,
 				07A8000C1A69DD8B00BE71C9 /* a_76.png in Resources */,
 				C6E73A01184BED4600A2A5C3 /* InfoPlist.strings in Resources */,
+				07D1EA071B38A03A00DD0B5F /* emojiGroups.txt in Resources */,
 				C6E73A09184BED4600A2A5C3 /* Default.png in Resources */,
 				075B2ACE1A91938100763915 /* ui_down_arrow.png in Resources */,
 				C605E2021888C99A007770E2 /* IMFeFlow2.otf in Resources */,
@@ -557,6 +598,7 @@
 				075B2AF61A9ABC4B00763915 /* a_87.png in Resources */,
 				C6E73A0B184BED4600A2A5C3 /* Default@2x.png in Resources */,
 				07597B5E1B1D0010006F6B5E /* info-Paperback.html in Resources */,
+				077668C41B3B9999002EFCE1 /* EAB-splash-for-apps-2048-2.png in Resources */,
 				07A8000F1A69DD9600BE71C9 /* a_60.png in Resources */,
 				07C9242F19B56E0A00CCFC9C /* dice.txt in Resources */,
 				075B2AF81A9ABC4B00763915 /* a_180.png in Resources */,
@@ -569,10 +611,13 @@
 				C6A8B02318B8105B001D3C01 /* a_80.png in Resources */,
 				075B2AE41A992D9600763915 /* diceErrata.txt in Resources */,
 				C6DE547B18BD6B95000A3DAB /* abra_logos_horiz.png in Resources */,
+				077668C01B3B971D002EFCE1 /* EAB-splash-for-apps-2048.png in Resources */,
 				075B2AFB1A9ABC4B00763915 /* black_1536x2048.png in Resources */,
 				C604FA0C1850FA5F0076CC96 /* script.txt in Resources */,
 				C6A8B01F18B8105B001D3C01 /* a_29.png in Resources */,
 				07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */,
+				07D1EA031B327BF300DD0B5F /* emoji_notes in Resources */,
+				077668BF1B3B971D002EFCE1 /* EAB-splash-for-apps-1024.png in Resources */,
 				075B2AFC1A9ABC4B00763915 /* black_2048x1536.png in Resources */,
 				C6A8B02118B8105B001D3C01 /* a_58.png in Resources */,
 				C6CF48F918A7057D00C43C14 /* gold2.jpg in Resources */,
@@ -631,7 +676,6 @@
 				C6A8B02B18B9A628001D3C01 /* ABBlackCurtain.m in Sources */,
 				C6591B2D185D258F001144FC /* ABConstants.m in Sources */,
 				C604FA071850F7790076CC96 /* ABScript.m in Sources */,
-				07763B5B1B2667410074F28B /* ABControlPanel.m in Sources */,
 				C6E73A03184BED4600A2A5C3 /* main.m in Sources */,
 				C6E73A07184BED4600A2A5C3 /* ABAppDelegate.m in Sources */,
 				C619F5F8185A55690073DD32 /* ABMatch.m in Sources */,
@@ -646,9 +690,11 @@
 				C60EB08A18A5E9340090BBEB /* ABScriptWord.m in Sources */,
 				C6A9D9DF187C5FBD0087F956 /* ABClock.m in Sources */,
 				07BF3FDB1B25ED7800B1D977 /* ABIcon.m in Sources */,
+				07D1EA0A1B38EFDA00DD0B5F /* ABEmoji.m in Sources */,
 				07BF3FDE1B25F39100B1D977 /* ABIconBar.m in Sources */,
 				075B2AC81A917D7F00763915 /* ABDice.m in Sources */,
 				C6A8B02F18BAB0EC001D3C01 /* ABUI.m in Sources */,
+				07763B631B2773D20074F28B /* ABCadabra.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

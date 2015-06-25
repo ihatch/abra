@@ -11,6 +11,7 @@
 #import "ABIcon.h"
 #import "ABUI.h"
 #import "ABState.h"
+#import "ABCadabra.h"
 #import <Social/Social.h>
 #import <Accounts/Accounts.h>
 
@@ -141,6 +142,7 @@ NSArray *icons;
 
     if(type == CADABRA_ICON) {
         [icon flash];
+        [ABCadabra castSpell];
         return;
     }
 
@@ -154,6 +156,7 @@ NSArray *icons;
     
     if(type == SETTINGS_ICON) {
         [icon flash];
+        [mainViewController showSettingsModal];
         return;
     }
 
@@ -180,9 +183,6 @@ NSArray *icons;
         if(type == PRUNE_ICON) [ABState setInteractivityModeTo:PRUNE];
         if(type == ERASE_ICON) [ABState setInteractivityModeTo:ERASE];
         if(type == GRAFT_ICON) [self triggerGraft];
-        
-        // TODO: put this in options, I can't decide!
-//        [self performSelector:@selector(hideIcons) withObject:self afterDelay:0.4];
         
         currentModeIcon = icon;
     }

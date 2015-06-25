@@ -41,10 +41,6 @@
     
     [wordLocations setObject:pastLocations forKey:@"past"];
     [wordLocations setObject:futureLocations forKey:@"future"];
-    
-//    pastLocations = [wordLocations objectForKey:@"past"];
-//    futureLocations = [wordLocations objectForKey:@"future"];
-
 }
 
 
@@ -167,35 +163,6 @@
 
 }
 
-//
-//// TODO: finish when not zzzzzz
-//- (void) solveForMirrorMatches {
-//    
-//    // Only run when past and future sets are same length
-//    if([past count] != [future count]) return;
-//    
-//    for(int i = (int)[pastSet count] - 1; i >= 0; i --) {
-//        
-//        if([[pastSet objectAtIndex:i] isKindOfClass:[NSNull class]]) continue;
-//        if([past[i] isEqualToString:future[i]]) {
-//            
-//        }
-//        
-//        NSString *text = [[pastSet objectAtIndex:i] objectForKey:@"text"];
-//        NSMutableArray *pastLocsArray = [pastLocations objectForKey:text];
-//        NSMutableArray *futureLocsArray = [futureLocations objectForKey:text];
-//        
-//        // Match 1-to-1 correspondences and remove from arrays of words to match
-//        if([pastLocsArray count] == 1 && [futureLocsArray count] == 1) {
-//            [solvedSet replaceObjectAtIndex:[[futureLocsArray objectAtIndex:0] intValue] withObject:[pastLocsArray objectAtIndex:0]];
-//            [pastLocations removeObjectForKey:text];
-//            [futureLocations removeObjectForKey:text];
-//        }
-//    }
-//    
-//}
-//
-
 
 // Get a list of all known (solved-for) words to the left of given position
 - (NSArray *) solvedIDsToLeftOfPosition:(int)i {
@@ -268,9 +235,7 @@
              @"fLoc" : [futurePositions objectAtIndex:bestFuture]};
 }
 
-// TODO::::
-// Fix multiples bug by adding a fn to check for instances where past/future are same length -- in this
-// case check what direct correspondences already exist FIRST and solve those FIRST before the remaining positions
+
 
 - (void) solveForRemainingPositions {
     
