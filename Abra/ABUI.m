@@ -150,6 +150,9 @@ static ABUI *ABUIInstance = NULL;
 }
 
 + (UIColor *) goldColor {
+    return [UIColor colorWithHue:0.1 saturation:(0.3) brightness:1 alpha:1];
+
+    
     return [ABUI progressHueColorWithOffset:0.10];
 }
 

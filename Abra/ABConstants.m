@@ -37,6 +37,7 @@ int const ABRA_START_STANZA = 0;
 BOOL const ABRA_ABSENTLY_MUTATE = YES;
 
 NSString *const ABRA_FONT = @"IM FELL Great Primer PRO";
+NSString *const ABRA_ITALIC_FONT = @"IM_FELL_Great_Primer_PRO_Italic";
 NSString *const ABRA_FLOWERS_FONT = @"IM FELL FLOWERS 2";
 NSString *const ABRA_SYSTEM_FONT = @"EuphemiaUCAS";
 
@@ -55,6 +56,52 @@ CGFloat const ABRA_WORD_FADE_IN_DURATION = 400;
 CGFloat const ABRA_GESTURE_FEEDBACK_FADE_DURATION = 0.65;
 CGFloat const ABRA_GESTURE_TIME_BUFFER = 0.75;
 CGFloat const ABRA_TICKER_INTERVAL = 0.2;
+
+
+
+
+
+NSString *const TIP_TEXT_STARTUP = @"Welcome to Abra!\n\nThis app is a poetry instrument/spellbook that responds to touch. Caress the words and watch them shift under your fingers.\n\nAt the bottom of the screen is a rotary dial, by which you can navigate to different poems in the Abra cycle. Touch the top of the screen to reveal a toolbar. There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own.";
+
+NSString *const TIP_TEXT_GRAFT = @"You are about to graft words for the first time. Momentarily a text box will appear. You can enter multiple words if you wish; separate them by spaces. Once you've closed the box, draw with your finger to write the words onto the screen.\n\nAbra will learn and remember new words - of any alphabet -- that you teach her.";
+
+NSString *const TIP_TEXT_MODE = @"";
+
+NSString *const TIP_TEXT_CADABRA = @"";
+
+
+
+
+NSString *const INFO_INTRO_TEXT = @"Welcome to Abra!\n\nThis app is a poetry instrument/spellbook that responds to touch. Caress the words and watch them shift under your fingers.\n\nAt the bottom of the screen is a rotary dial, by which you can navigate to different poems in the Abra cycle. Touch the top of the screen to reveal a toolbar. There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own.";
+
+NSString *const INFO_OVERVIEW_TEXT = @"Abra is a multifaceted project supported by an Expanded Artists’ Books grant from the Center for Book and Paper Arts at Columbia College Chicago. Its two main manifestations are this app, available free for iPad and iPhone, and a limited-edition print artist’s book. The app and book can be read separately or together, with an iPad inserted into a slot in the back of the book.\n\nAbra's text was composed by Amaranth Borsuk and Kate Durbin. This app was designed and coded by Ian Hatcher. Art direction and decision-making processes for both artist's book and app were undertaken in tandem as a team.\n\nFor information on the conceptual framework and background of the project, please see our website:";
+
+NSString *const INFO_ABRA_LINK = @"http://a-b-r-a.com";
+
+NSString *const INFO_ARTISTS_BOOK_TEXT = @"The Abra artists' book features blind letterpress impressions, heat-sensitive disappearing ink, foil-stamping, and laser-cut openings. These openings are designed to gradually reveal the screen of an embedded iPad running Abra, conjoining the analog and digital into a single reading experience.\n\nThe artists' book was fabricated by Amy Rabas at the Center for Book and Paper Arts, with help from graduate students in Inter-Arts.";
+
+// TODO: pix
+
+NSString *const INFO_ARTISTS_BOOK_TEXT_2 = @"To read more about this edition or order a copy:";
+
+NSString *const INFO_LINK_ARTISTS_BOOK_LINK = @"http://a-b-r-a.com/artists-book";
+
+
+
+
+
+NSString *const INFO_PAPERBACK_TEXT = @"In addition to this app and the limited-edition artist’s book, Abra is available as a trade paperback from 1913 Press.\n\nIn this edition, the poem’s stanzas meld one into the next, each recycling language from the preceding. Illustrations by visual artist Zach Kleyn grow and mutate on facing pages, eventually reaching across the book’s gutter to meld with the text.";
+
+// TODO: pix
+
+NSString *const INFO_PAPERBACK_LINK = @"http://a-b-r-a.com/paperback";
+
+NSString *const INFO_THX_TEXT = @"We are grateful to the Center for Book and Paper Arts at Columbia College Chicago for their support of this work: Steve Woodall, tireless mentor; Amy Rabas, visionary paper artist; and Clif Meador, Jessica Cochran, April Sheridan, Michelle Citron, and Paul Catanese, generous interlocutors.\n\nAdditional thanks to Abraham Avnisan, Steven Baughman, Chris Wegman, and Paula Wegman for support and feedback on the app.\n\nSome of Abra's text appeared in slightly different form in Action, Yes!, The &Now Awards 3, Black Warrior Review, Bone Bouquet, The Collagist, Joyland Poetry, Lana Turner: A Journal of Poetry and Opinion, Lit, Peep/Show, SPECS, Spoon River Poetry Review, and VLAK.";
+
+// NSArray *const INFO_THX_ITALICIZE = @[@"Action", @"Yes!", @"The &Now Awards 3", @"Black Warrior Review", @"Bone Bouquet", @"The Collagist", @"Joyland Poetry", @"Lana Turner: A Journal of Poetry and Opinion", @"Lit", @"Peep/Show", @"SPECS", @"Spoon River Poetry Review", @"VLAK"];
+
+
+
 
 
 

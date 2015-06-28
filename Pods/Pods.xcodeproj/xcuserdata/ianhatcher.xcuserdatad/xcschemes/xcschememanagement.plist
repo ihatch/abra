@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-Abra-TTTAttributedLabel.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Abra-pop.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -27,22 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>583DB093F8660F846F63ECC8</key>
+		<key>08C7102ED3760618F829FD19</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7F1A395C83C1CAC9FE2E9BF8</key>
+		<key>4F87ECC860C594E4F3C593FA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BD9F102890221D4153626E0C</key>
+		<key>7FB9FCF4452A9114F2FCF6F0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E64286183BD0F34A70AC8759</key>
+		<key>A0355B6244C81D445F3B6C85</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C8CE4C7F5E631821FCA33438</key>
 		<dict>
 			<key>primary</key>
 			<true/>

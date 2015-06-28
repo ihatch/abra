@@ -19,8 +19,42 @@
 #import "ABScript.h"
 
 
-typedef NS_ENUM(NSInteger, fadeType) { FADE_TOP, FADE_BOTTOM, FADE_LEFT, FADE_RIGHT, FADE_INNER, FADE_OUTER, FADE_RANDOM };
-typedef NS_ENUM(NSInteger, spellType) { SPELL_MUTATE, SPELL_ERASE, SPELL_PRUNE, SPELL_TREES, SPELL_STANZA_EMOJI };
+typedef NS_ENUM(NSInteger, fadeType) {
+    FADE_TOP,
+    FADE_BOTTOM,
+    FADE_LEFT,
+    FADE_RIGHT,
+    FADE_INNER,
+    FADE_OUTER,
+    FADE_RANDOM
+};
+
+
+typedef NS_ENUM(NSInteger, spellFxType) {
+    SPELL_FX_MUTATE,
+    SPELL_FX_ERASE,
+    SPELL_FX_PRUNE,
+    SPELL_FX_TREES,
+    SPELL_FX_STANZA_EMOJI
+};
+
+
+typedef NS_ENUM(NSInteger, spellType) {
+    SPELL_SPIN_WORDS,
+    SPELL_REDACT_WORDS,
+    SPELL_ALLITERATIVE_ERASURE,
+    SPELL_RANDOM_ERASURE,
+    SPELL_RAINBOW,
+    SPELL_SPACEY_MODE,
+    SPELL_EMOJI_COLOR_SHIFT,
+    SPELL_ERASE_ALL_EMOJI,
+    SPELL_ERASE_ALL_EXCEPT_EMOJI,
+    SPELL_EMOJI_FOREST,
+    SPELL_FLIP_LINE_ORDER,
+    SPELL_SHUFFLE_WORDS,
+    SPELL_BLACK_BOX_QUOTE,
+    SPELL_RANDOM_FADE_MUTATION
+};
 
 
 
@@ -119,10 +153,10 @@ NSMutableArray *allStrings;
     
     DDLogInfo(@"test");
 
-    
-    [ABCadabra spinMagic:ABLines];
+    [ABCadabra pruneInterior:stanzaLines];
     return;
     
+    [ABCadabra spinMagic:ABLines]; // <-- needs work
     [ABCadabra redactMagic:ABLines];
     [ABCadabra firstLetterErasure:ABLines];
     [ABCadabra randomErasureMagic:ABLines];
@@ -153,15 +187,15 @@ NSMutableArray *allStrings;
     } else if(chance == 4) {
         [ABCadabra spaceOutLetters:stanzaLines];
     } else if(chance == 5) {
-        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellType:SPELL_STANZA_EMOJI];
+        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_STANZA_EMOJI];
     } else if(chance == 6) {
-        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellType:SPELL_STANZA_EMOJI];
+        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_STANZA_EMOJI];
     } else if(chance == 7) {
-        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellType:SPELL_TREES];
+        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_TREES];
     } else if(chance == 8) {
-        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellType:SPELL_TREES];
+        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_TREES];
     } else if(chance > 8) {
-        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellType:SPELL_MUTATE];
+        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_MUTATE];
     }
 
 
@@ -169,6 +203,20 @@ NSMutableArray *allStrings;
     //     BLACK_BOX_QUOTE
 
 }
+
+
+
+
+
+
++ (void) checkWordForMagicWord:(NSString *)word {
+    
+    
+    
+    
+}
+
+
 
 
 
@@ -201,7 +249,7 @@ NSMutableArray *allStrings;
 
 
 
-+ (NSMutableArray *) applySpell:(spellType)spell toLine:(NSArray *)line withMap:(NSArray *)map {
++ (NSMutableArray *) applySpellFx:(spellFxType)spellFx toLine:(NSArray *)line withMap:(NSArray *)map {
     
     if([map count] != [line count]) DDLogError(@"count mismatch!");
     NSMutableArray *newLine = [NSMutableArray array];
@@ -215,18 +263,18 @@ NSMutableArray *allStrings;
         } else {
             NSArray *newSWs = @[];
             
-            if(spell == SPELL_MUTATE) {
+            if(spellFx == SPELL_FX_MUTATE) {
                 // Added this occasional pass to offset mutational doubling / tripling
                 if(ABI(10) > 1) {
                     newSWs = [ABMutate mutateWord:sw inLine:line];
                 }
             }
 
-            if(spell == SPELL_TREES) {
+            if(spellFx == SPELL_FX_TREES) {
                 newSWs = @[[ABData getScriptWordAndRunChecks:[ABEmoji getRandomEmojiStringWithConcept:@"forest"]]];
             }
 
-            if(spell == SPELL_STANZA_EMOJI) {
+            if(spellFx == SPELL_FX_STANZA_EMOJI) {
                 int stanza = sw.sourceStanza > -1 ? sw.sourceStanza : [ABState getCurrentStanza];
                 stanza = stanza % 42;
                 NSString *emoji = [ABEmoji getEmojiForStanza:stanza];
@@ -317,7 +365,7 @@ NSMutableArray *allStrings;
 }
 
 
-+ (void) fadeMutateAcrossLines:(NSArray *)stanzaLines withFadeType:(fadeType)type withSpellType:(spellType)spell {
++ (void) fadeMutateAcrossLines:(NSArray *)stanzaLines withFadeType:(fadeType)type withSpellFxType:(spellFxType)spellFx {
 
     CGFloat top, bottom, left = 0.0f, right = 0.0f, verticalIncrement, verticalOdds, inner, outer;
     BOOL isVertical = NO, isRadiant = NO;
@@ -394,7 +442,7 @@ NSMutableArray *allStrings;
         }
         
         
-        NSMutableArray *newLine = [ABCadabra applySpell:spell toLine:line withMap:map];
+        NSMutableArray *newLine = [ABCadabra applySpellFx:spellFx toLine:line withMap:map];
         
         [ABState updateCurrentScriptWordLinesWithLine:newLine atIndex:num];
         [[ABLines objectAtIndex:num] changeWordsToWords:[NSArray arrayWithArray:newLine]];
@@ -761,6 +809,20 @@ NSMutableArray *allStrings;
 }
 
 
+
++ (void) pruneInterior:(NSArray *)stanzaLines {
+    
+    int num = 0;
+    for(NSArray *array in stanzaLines) {
+        if([array count] == 0) continue;
+        NSMutableArray *newLine = [NSMutableArray array];
+        [newLine addObject:[array firstObject]];
+        if([array count] > 1) [newLine addObject:[array lastObject]];
+        [ABState updateCurrentScriptWordLinesWithLine:newLine atIndex:num];
+        [[ABLines objectAtIndex:num] changeWordsToWords:[NSArray arrayWithArray:newLine]];
+        num ++;
+    }
+}
 
 
 + (void) eraseAllEmoji:(NSArray *)stanzaLines {

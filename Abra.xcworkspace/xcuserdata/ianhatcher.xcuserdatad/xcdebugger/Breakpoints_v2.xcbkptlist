@@ -1012,27 +1012,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABModal.m"
-            timestampString = "455568783.579858"
+            timestampString = "457204071.069205"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
-            landmarkName = "-updateColor"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Abra/ABModal.m"
-            timestampString = "455564097.418255"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
             landmarkName = "-initWithType:andMainVC:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1092,11 +1076,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456897749.956377"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
             landmarkName = "+castSpell"
             landmarkType = "5">
          </BreakpointContent>
@@ -1140,11 +1124,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456897749.956377"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
+            startingLineNumber = "138"
+            endingLineNumber = "138"
             landmarkName = "+castSpell"
             landmarkType = "5">
          </BreakpointContent>
@@ -1540,11 +1524,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "489"
-            endingLineNumber = "489"
+            startingLineNumber = "537"
+            endingLineNumber = "537"
             landmarkName = "+flipLines"
             landmarkType = "5">
          </BreakpointContent>
@@ -1556,11 +1540,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "461"
-            endingLineNumber = "461"
+            startingLineNumber = "509"
+            endingLineNumber = "509"
             landmarkName = "@implementation ABCadabra"
             landmarkType = "3">
          </BreakpointContent>
@@ -1572,11 +1556,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "255"
-            endingLineNumber = "255"
+            startingLineNumber = "303"
+            endingLineNumber = "303"
             landmarkName = "+mutateMultipleWordsInLine:withMap:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1588,11 +1572,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "263"
-            endingLineNumber = "263"
+            startingLineNumber = "311"
+            endingLineNumber = "311"
             landmarkName = "+mutateMultipleWordsInLine:withMap:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1604,11 +1588,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "272"
-            endingLineNumber = "272"
+            startingLineNumber = "320"
+            endingLineNumber = "320"
             landmarkName = "+mutateMultipleWordsInLine:withMap:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1620,12 +1604,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "410"
-            endingLineNumber = "410"
-            landmarkName = "+fadeMutateAcrossLines:withFadeType:withSpellType:"
+            startingLineNumber = "458"
+            endingLineNumber = "458"
+            landmarkName = "+fadeMutateAcrossLines:withFadeType:withSpellFxType:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1636,12 +1620,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "380"
-            endingLineNumber = "380"
-            landmarkName = "+fadeMutateAcrossLines:withFadeType:withSpellType:"
+            startingLineNumber = "428"
+            endingLineNumber = "428"
+            landmarkName = "+fadeMutateAcrossLines:withFadeType:withSpellFxType:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1652,12 +1636,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "382"
-            endingLineNumber = "382"
-            landmarkName = "+fadeMutateAcrossLines:withFadeType:withSpellType:"
+            startingLineNumber = "430"
+            endingLineNumber = "430"
+            landmarkName = "+fadeMutateAcrossLines:withFadeType:withSpellFxType:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1668,12 +1652,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "390"
-            endingLineNumber = "390"
-            landmarkName = "+fadeMutateAcrossLines:withFadeType:withSpellType:"
+            startingLineNumber = "438"
+            endingLineNumber = "438"
+            landmarkName = "+fadeMutateAcrossLines:withFadeType:withSpellFxType:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1684,11 +1668,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "600"
-            endingLineNumber = "600"
+            startingLineNumber = "648"
+            endingLineNumber = "648"
             landmarkName = "+emojiColorShift:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1700,11 +1684,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "601"
-            endingLineNumber = "601"
+            startingLineNumber = "649"
+            endingLineNumber = "649"
             landmarkName = "+emojiColorShift:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1716,11 +1700,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "602"
-            endingLineNumber = "602"
+            startingLineNumber = "650"
+            endingLineNumber = "650"
             landmarkName = "+emojiColorShift:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1732,11 +1716,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "603"
-            endingLineNumber = "603"
+            startingLineNumber = "651"
+            endingLineNumber = "651"
             landmarkName = "+emojiColorShift:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1748,11 +1732,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "604"
-            endingLineNumber = "604"
+            startingLineNumber = "652"
+            endingLineNumber = "652"
             landmarkName = "+emojiColorShift:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1764,11 +1748,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "605"
-            endingLineNumber = "605"
+            startingLineNumber = "653"
+            endingLineNumber = "653"
             landmarkName = "+emojiColorShift:"
             landmarkType = "5">
             <Locations>
@@ -1812,11 +1796,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Abra/ABCadabra.m"
-            timestampString = "456900926.134571"
+            timestampString = "457141593.459055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "609"
-            endingLineNumber = "609"
+            startingLineNumber = "657"
+            endingLineNumber = "657"
             landmarkName = "+emojiColorShift:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1946,6 +1930,22 @@
             startingLineNumber = "202"
             endingLineNumber = "202"
             landmarkName = "+initEmoji"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Abra/ABUI.m"
+            timestampString = "457205576.872135"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "+progressHueColorWithOffset:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

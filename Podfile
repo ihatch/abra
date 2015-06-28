@@ -5,5 +5,6 @@ target "Abra" do
   pod 'pop', '~> 1.0'
   pod 'PEPhotoCropEditor'
   pod 'CocoaLumberjack'
+  pod 'TTTAttributedLabel'
 end
 

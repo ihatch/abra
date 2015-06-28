@@ -296,7 +296,7 @@
         
         total += wordWidth;
         [xWidths addObject:[NSNumber numberWithFloat:wordWidthWithMargins]];
-
+        
     }
     
     self.lineWidth = total;
@@ -444,9 +444,32 @@
     [UIView animateWithDuration:duration delay:delay options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState animations:^() {
         self.frame = newFrame;
     } completion:^(BOOL finished) {}];
-
-    
 }
+
+
+
+- (BOOL) includesGraftedContent {
+    if([self.lineScriptWords count] == 0) return NO;
+    for(ABScriptWord *sw in self.lineScriptWords) {
+        if(sw.isGrafted) return YES;
+    }
+    return NO;
+}
+
+//
+//- (CGFloat) excessHorizontalWidth {
+//    if(self.lineWidth < kScreenWidth) return 0;
+//    
+//    
+//}
+//
+
+- (BOOL) cutDownLineToScreenWidth {
+    return NO;
+}
+
+
+
 
 
 @end

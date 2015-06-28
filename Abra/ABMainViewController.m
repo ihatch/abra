@@ -18,7 +18,6 @@
 #import "ABGestureArrow.h"
 #import "ABBlackCurtain.h"
 #import "ABIconBar.h"
-#import "ABInfoView.h"
 #import "iCarousel.h"
 #import "PECropViewController.h"
 #import "emojis.h"
@@ -38,9 +37,8 @@ ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
 
 ABIconBar *iconBar;
 ABBlackCurtain *graftCurtain, *settingsCurtain, *infoCurtain;
-ABModal *graftModal, *settingsModal;
+ABModal *graftModal, *settingsModal, *infoModal;
 UITextField *graftTextField;
-ABInfoView *infoView;
 
 BOOL carouselIsAnimating, preventInput;
 CGPoint touchStart;
@@ -342,14 +340,24 @@ CGPoint touchStart;
 // INFO
 
 - (void) initInfoView {
-    infoCurtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar andMainVC:self];
-    infoCurtain.destroyOnFadeOut = NO;
-    [self.view addSubview:infoCurtain];
-    infoView = [[ABInfoView alloc] init];
-    [infoCurtain addSubview:infoView];
+    
+    infoModal = [[ABModal alloc] initWithType:INFO_MODAL andMainVC:self];
+    ABBlackCurtain *curtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar andMainVC:self];
+    curtain.destroyOnFadeOut = NO;
+    [curtain addSubview:infoModal];
+    [self.view addSubview:curtain];
+    infoCurtain = curtain;
+
+//    infoCurtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar andMainVC:self];
+//    infoCurtain.destroyOnFadeOut = NO;
+//    [self.view addSubview:infoCurtain];
+//    infoView = [[ABInfoView alloc] init];
+//    [infoCurtain addSubview:infoView];
 }
 
 - (void) showInfoView {
+    preventInput = YES;
+    [infoModal updateColor];
     [infoCurtain show];
 }
 
