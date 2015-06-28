@@ -88,9 +88,6 @@ static ABData *ABDataInstance = NULL;
 
 + (void) initData {
     
-    
-    DDLogInfo(@"U0001F46C");
-    
     DDLogInfo(@"===== DATA: loading =====");
 
     DDLogInfo(@"== initCoreScript");
@@ -103,11 +100,7 @@ static ABData *ABDataInstance = NULL;
     [ABData loadGrafts];
     DDLogInfo(@"== initEmoji");
     [ABEmoji initEmoji];
-    
-    NSString *test = @"\U0001F34E";
-    [test isEqualToString:@"🍎"];
-    DDLogInfo(@"apple test: %i", [test isEqualToString:@"🍎"]);
-    
+        
     
     
     DDLogInfo(@"===== DATA: loaded. =====");

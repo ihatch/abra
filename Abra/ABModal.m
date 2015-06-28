@@ -13,6 +13,7 @@
 #import "ABState.h"
 #import "ABVerticalContentFlow.h"
 #import <QuartzCore/QuartzCore.h>
+#import "TTTAttributedLabel.h"
 
 @implementation ABModal
 
@@ -246,14 +247,15 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 
 
 
+
 ///////////////
 // INFO VIEW //
 ///////////////
 
 
 - (void) setDimensionsForInfoView {
-    self.w = kScreenWidth - 120;
-    self.h = kScreenHeight - 100;
+    self.w = kScreenWidth - [ABUI scaleXWithIphone:90 ipad:120];
+    self.h = kScreenHeight - [ABUI scaleYWithIphone:60 ipad:200];
     self.x = (kScreenWidth - self.w) / 2;
     self.y = (kScreenHeight - self.h) / 2;
 }
@@ -273,7 +275,7 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     // Titles
     infoTitlesView = [[UIView alloc] initWithFrame:infoTitlesFrame];
     infoTitlesView.backgroundColor = [UIColor clearColor];
-    CGRect titlesFrame = CGRectMake(30, 0, infoTitlesFrame.size.width - 100, containerHeight);
+    CGRect titlesFrame = CGRectMake([ABUI scaleXWithIphone:15 ipad:30], 0, infoTitlesFrame.size.width - [ABUI scaleXWithIphone:60 ipad:100], containerHeight);
     ABVerticalContentFlow *titleLogosFlow = [[ABVerticalContentFlow alloc] initWithFrame:titlesFrame];
     [self addContentToTitleLogosFlow:titleLogosFlow];
     [infoTitlesView addSubview:titleLogosFlow];
@@ -283,18 +285,19 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:infoContentFrame];
     scrollView.userInteractionEnabled = YES;
     scrollView.showsVerticalScrollIndicator = YES;
-    CGRect contentFrame = CGRectMake(0, 0, infoContentFrame.size.width - 30, 3000);
+    CGRect contentFrame = CGRectMake(0, 0, infoContentFrame.size.width - [ABUI scaleXWithIphone:15 ipad:30], 3000);
     ABVerticalContentFlow *contentFlow = [[ABVerticalContentFlow alloc] initWithFrame:contentFrame];
     [self addContentToInfoContentFlow:contentFlow];
     [scrollView addSubview:contentFlow];
     scrollView.contentSize = contentFlow.frame.size;
     [self.innerView addSubview:scrollView];
+    self.scrollView = scrollView;
 }
 
 
 - (void) addContentToTitleLogosFlow:(ABVerticalContentFlow *)flow {
     [flow addImage:@"abra_emboss.png"];
-    [flow addParagraph:@"Amaranth Borsuk\nKate Durbin\nIan Hatcher\n& You"];
+    [flow addAuthors:@"     by Amaranth Borsuk\n            Kate Durbin\n                  Ian Hatcher\n                          & You"];
     [flow addSectionMargin];
     [flow addImageToBottom:@"abra_logos_4.png"];
     [flow refreshFrame];
@@ -304,32 +307,31 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 - (void) addContentToInfoContentFlow:(ABVerticalContentFlow *)flow {
     
     [flow addHeading:@"INTRODUCTION"];
-    [flow addParagraph:@"Welcome to Abra!"];
-    [flow addParagraph:@"This app is a poetry instrument/spellbook that responds to touch. Caress the words and watch them shift under your fingers."];
+    [flow addParagraph:@"This app is a poetry instrument/spellbook that responds to touch. Caress Abra's words and watch them shift under your fingers."];
     [flow addParagraph:@"At the bottom of the screen is a rotary dial, by which you can navigate to different poems in the Abra cycle. Touch the top of the screen to reveal a toolbar."];
     [flow addParagraph:@"There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own."];
     [flow addSectionMargin];
     
     [flow addHeading:@"OVERVIEW"];
-    [flow addParagraph:@"Abra is a multifaceted project supported by an Expanded Artists’ Books grant from the Center for Book and Paper Arts at Columbia College Chicago. Its two main manifestations are this app, available free for iPad and iPhone, and a limited-edition print artist’s book. The app and book can be read separately or together, with an iPad inserted into a slot in the back of the book."];
-    [flow addParagraph:@"Abra's text was composed by Amaranth Borsuk and Kate Durbin. This app was designed and coded by Ian Hatcher. Art direction and decision-making processes for both artist's book and app were undertaken in tandem as a team."];
-    [flow addParagraph:@"For information on the conceptual framework and background of the project, please see our website:"];
-    [flow addParagraph:@"http://a-b-r-a.com"];
+    [flow addParagraph:@"Abra is a multifaceted project supported by an Expanded Artists’ Books grant from the Center for Book and Paper Arts (Columbia College Chicago). Its two main manifestations are this app, available free for iPad and iPhone, and a limited-edition print artist’s book. The app and book can be read separately or together, with an iPad inserted into a slot in the back of the book."];
+    [flow addParagraph:@"Abra's text was composed by Amaranth Borsuk and Kate Durbin. This app was designed and coded by Ian Hatcher. Art direction and decision-making for both artist's book and app were undertaken in tandem as a team."];
+    [flow addImage:@"abra_twins_spread.png"];
+    [flow addParagraph:@"For information on the conceptual framework and background of the project, please see our site:"];
+    [flow addLink:@"http://a-b-r-a.com"];
     [flow addSectionMargin];
     
     [flow addHeading:@"ARTISTS' BOOK"];
     [flow addParagraph:@"The Abra artists' book features blind letterpress impressions, heat-sensitive disappearing ink, foil-stamping, and laser-cut openings. These last can serve as windows, revealing the screen of an embedded iPad running this app, conjoining the analog and digital into a single reading experience."];
     [flow addImage:@"artists_book_spread_4.png"];
     [flow addParagraph:@"The artists' book was fabricated by Amy Rabas at the Center for Book and Paper Arts, with help from graduate students in Inter-Arts."];
-    [flow addParagraph:@"To read more about this edition or order a copy:"];
-    [flow addParagraph:@"http://a-b-r-a.com/artists-book"];
+    [flow addParagraph:@"To learn more about this edition or order a copy:"];
+    [flow addLink:@"http://a-b-r-a.com/artists-book"];
     [flow addSectionMargin];
     
     [flow addHeading:@"PAPERBACK"];
     [flow addParagraph:@"In addition to this app and the limited-edition artist’s book, Abra is available as a trade paperback from 1913 Press."];
     [flow addParagraph:@"In this edition, the poem’s stanzas meld one into the next, each recycling language from the preceding. Illustrations by visual artist Zach Kleyn grow and mutate on facing pages, eventually reaching across the book’s gutter to meld with the text."];
-    [flow addParagraph:@"[images]"];
-    [flow addParagraph:@"http://a-b-r-a.com/paperback"];
+    [flow addLink:@"http://www.journal1913.org/publications/abra/"];
     [flow addSectionMargin];
     
     [flow addHeading:@"ACKNOWLEDGEMENTS"];
@@ -342,7 +344,9 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 }
 
 
-
+- (void) resetScrollViewPosition {
+    [self.scrollView setContentOffset:CGPointMake(0, -self.scrollView.contentInset.top) animated:NO];
+}
 
 
 

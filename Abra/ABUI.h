@@ -37,6 +37,7 @@
 + (UIColor *) darkGoldColor;
 + (UIColor *) darkGoldColor2;
 + (UIColor *) darkGoldBackgroundColor;
++ (UIColor *) whiteTextColor;
 + (UIImage *)imageWithColor:(UIColor *)color;
 
 

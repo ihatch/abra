@@ -9,28 +9,30 @@
 #import "ABVerticalContentFlow.h"
 #import "ABConstants.h"
 #import "ABUI.h"
+#import "TTTAttributedLabel.h"
 #import <QuartzCore/QuartzCore.h>
 
 
 @implementation ABVerticalContentFlow
 
-UIFont *contentFont, *headingFont, *italicFont;
+UIFont *contentFont, *headingFont, *italicFont, *linkFont;
 
 
 - (id) initWithFrame:(CGRect)frame {
 
-    contentFont = [UIFont fontWithName:ABRA_FONT size:17.0f];
-    headingFont = [UIFont fontWithName:ABRA_SYSTEM_FONT size:15.0f];
-    italicFont = [UIFont fontWithName:ABRA_ITALIC_FONT size:17.0f];
+    contentFont = [UIFont fontWithName:ABRA_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
+    headingFont = [UIFont fontWithName:ABRA_SYSTEM_FONT size:[ABUI scaleYWithIphone:9.5f ipad:15.0f]];
+    italicFont = [UIFont fontWithName:ABRA_ITALIC_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
+    linkFont = [UIFont fontWithName:ABRA_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
     
     self = [super initWithFrame:frame];
     if (self) {
-        self.appendYPosition = 20.0f;
-        self.headingMarginBottom = 10.0f;
-        self.paragraphMarginBottom = 10.0f;
-        self.sectionMarginBottom = 35.0f;
-        self.imageMargin = 15.0f;
-        self.lineHeight = 30.0f;
+        self.appendYPosition = [ABUI scaleYWithIphone:5.0f ipad:20.0f];
+        self.headingMarginBottom = [ABUI scaleYWithIphone:7.0f ipad:10.0f];
+        self.paragraphMarginBottom = [ABUI scaleYWithIphone:7.0f ipad:10.0f];
+        self.sectionMarginBottom = [ABUI scaleYWithIphone:20.0f ipad:35.0f];
+        self.imageMargin = [ABUI scaleYWithIphone:10.0f ipad:15.0f];
+        self.lineHeight = [ABUI scaleYWithIphone:20.0f ipad:30.0f];
     }
     return self;
 }
@@ -56,8 +58,10 @@ UIFont *contentFont, *headingFont, *italicFont;
 
 
 
-- (void) addLabelWithText:(NSString *)text Font:(UIFont *)font andColor:(UIColor *)color andShadow:(BOOL)shadow {
+- (UILabel *) addLabelWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color shadow:(BOOL)shadow italic:(BOOL)italic url:(NSString *)url {
+    
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 1000)];
+
     label.font = font;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.preferredMaxLayoutWidth = self.frame.size.width;
@@ -67,36 +71,79 @@ UIFont *contentFont, *headingFont, *italicFont;
     style.minimumLineHeight = self.lineHeight;
     style.maximumLineHeight = self.lineHeight;
     NSDictionary *attrs = @{NSParagraphStyleAttributeName : style};
-    label.attributedText = [[NSAttributedString alloc] initWithString:text attributes:attrs];
-    
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:text attributes:attrs];
     [label setTextColor:color];
+
+    if(font == headingFont) {
+        [attrString addAttribute:NSKernAttributeName value:@(1.5f) range:NSMakeRange(0, [text length])];
+    } else if(italic) {
+        [attrString addAttribute:NSFontAttributeName value:italicFont range:NSMakeRange(0, [text length])];
+    } else {
+        [attrString addAttribute:NSFontAttributeName value:contentFont range:NSMakeRange(0, [text length])];
+    }
+    
+    label.attributedText = attrString;
+    
+    
     CGFloat labelHeight = [self heightForLabel:label];
     label.frame = CGRectMake(0, self.appendYPosition, self.frame.size.width, labelHeight);
     
     if(shadow) {
         label.layer.shadowColor = [label.textColor CGColor];
-        label.layer.shadowOffset = CGSizeMake(2.0, 2.0);
-        label.layer.shadowRadius = 3.0;
-        label.layer.shadowOpacity = 0.2;
+        label.layer.shadowOffset = CGSizeMake(0, 0);
+        label.layer.shadowRadius = [ABUI scaleYWithIphone:2.0f ipad:3.0f];
+        label.layer.shadowOpacity = 0.65;
         label.layer.masksToBounds = NO;
     }
     
-    
     [self addSubview:label];
     self.appendYPosition += labelHeight;
+    
+    return label;
 }
 
 
+
+
+
+
 - (void) addHeading:(NSString *)text {
-    [self addLabelWithText:text Font:headingFont andColor:[ABUI goldColor] andShadow:YES];
+    [self addLabelWithText:text font:headingFont color:[ABUI goldColor] shadow:YES italic:NO url:nil];
     self.appendYPosition += self.headingMarginBottom;
 }
 
 
 - (void) addParagraph:(NSString *)text {
-    [self addLabelWithText:text Font:contentFont andColor:[UIColor colorWithRed:0.95 green:0.9 blue:0.85 alpha:1] andShadow:NO];
+    [self addLabelWithText:text font:contentFont color:[ABUI whiteTextColor] shadow:NO italic:NO url:nil];
     self.appendYPosition += self.paragraphMarginBottom;
 }
+
+
+- (void) addLink:(NSString *)text {
+    UILabel *label = [self addLabelWithText:text font:contentFont color:[ABUI darkGoldColor] shadow:YES italic:NO url:text];
+    
+    UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnLink:)];
+    [label setUserInteractionEnabled:YES];
+    [label addGestureRecognizer:gesture];
+    
+    self.appendYPosition += self.paragraphMarginBottom;
+}
+
+
+- (void) userTappedOnLink:(UIGestureRecognizer*)gestureRecognizer {
+    UILabel *label = (UILabel *)gestureRecognizer.view;
+    DDLogInfo(@"%@", label.text);
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:label.text]];
+}
+
+
+
+
+- (void) addAuthors:(NSString *)text {
+    [self addLabelWithText:text font:contentFont color:[ABUI whiteTextColor] shadow:NO italic:YES url:nil];
+    self.appendYPosition += self.paragraphMarginBottom;
+}
+
 
 - (UIImage*) imageWithImage: (UIImage*) sourceImage scaledToWidth: (float) i_width {
     float oldWidth = sourceImage.size.width;
@@ -129,10 +176,9 @@ UIFont *contentFont, *headingFont, *italicFont;
     UIImage *image = [UIImage imageNamed:imageName];
     image = [self imageWithImage:image scaledToWidth:self.frame.size.width * 2];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-    imageView.frame = CGRectMake(0, self.frame.size.height - (image.size.height / 2) - 30, image.size.width / 2, image.size.height / 2);
+    imageView.frame = CGRectMake(0, self.frame.size.height - (image.size.height / 2) - [ABUI scaleYWithIphone:15.0f ipad:30.0f], image.size.width / 2, image.size.height / 2);
     
     [self addSubview:imageView];
-//    self.appendYPosition += (image.size.height / 2) + self.imageMargin;
 }
 
 
@@ -251,6 +297,13 @@ UIFont *contentFont, *headingFont, *italicFont;
 
 
 
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([touch.view isKindOfClass:[TTTAttributedLabel class]]) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
+}
 
 
 

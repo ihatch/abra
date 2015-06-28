@@ -151,9 +151,7 @@ static ABUI *ABUIInstance = NULL;
 
 + (UIColor *) goldColor {
     return [UIColor colorWithHue:0.1 saturation:(0.3) brightness:1 alpha:1];
-
-    
-    return [ABUI progressHueColorWithOffset:0.10];
+//    return [ABUI progressHueColorWithOffset:0.10];
 }
 
 + (UIColor *) darkGoldColor {
@@ -164,10 +162,14 @@ static ABUI *ABUIInstance = NULL;
     return [UIColor colorWithHue:0.07 saturation:0.55 brightness:0.7 alpha:1];
 }
 
-
 + (UIColor *) darkGoldBackgroundColor {
     return [UIColor colorWithHue:0.07 saturation:0.4 brightness:0.25 alpha:1];
 }
+
++ (UIColor *) whiteTextColor {
+    return [UIColor colorWithRed:0.95 green:0.9 blue:0.85 alpha:1];
+}
+
 
 + (UIImage *)imageWithColor:(UIColor *)color {
     CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);

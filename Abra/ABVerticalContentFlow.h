@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TTTAttributedLabel.h"
 
-@interface ABVerticalContentFlow : UIView
+@interface ABVerticalContentFlow : UIView <TTTAttributedLabelDelegate>
 
 @property (nonatomic) CGFloat appendYPosition;
 
@@ -23,6 +24,8 @@
 - (void) addParagraph:(NSString *)text;
 - (void) addImage:(NSString *)imageName;
 - (void) addImageToBottom:(NSString *)imageName;
+- (void) addAuthors:(NSString *)text;
+- (void) addLink:(NSString *)url;
 
 - (void) addSectionMargin;
 - (void) addSpecialItalicizedParagraph:(NSString *)text;

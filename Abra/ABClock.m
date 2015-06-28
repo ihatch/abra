@@ -83,8 +83,12 @@ static ABClock *ABClockInstance = NULL;
     if(modifier > 20) modifier = 20;
 
     if(ABRA_ABSENTLY_MUTATE) {
+        int totalWords = [ABState getTotalWordsVisible];
+        CGFloat quant = (CGFloat)totalWords / 200.0f;
+        modifier = (5 * quant);
+        
         if ((float)currentTime - (float)lastInteractionTime > 5 &&
-            (float)currentTime - (float)initTime > 15 && ABI(25 - (modifier)) == 0) {
+            (float)currentTime - (float)initTime > 15 && ABF(25 - modifier) < 1) {
             [ABState absentlyMutate];
         }
     }

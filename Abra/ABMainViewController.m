@@ -340,23 +340,17 @@ CGPoint touchStart;
 // INFO
 
 - (void) initInfoView {
-    
     infoModal = [[ABModal alloc] initWithType:INFO_MODAL andMainVC:self];
     ABBlackCurtain *curtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar andMainVC:self];
     curtain.destroyOnFadeOut = NO;
     [curtain addSubview:infoModal];
     [self.view addSubview:curtain];
     infoCurtain = curtain;
-
-//    infoCurtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar andMainVC:self];
-//    infoCurtain.destroyOnFadeOut = NO;
-//    [self.view addSubview:infoCurtain];
-//    infoView = [[ABInfoView alloc] init];
-//    [infoCurtain addSubview:infoView];
 }
 
 - (void) showInfoView {
     preventInput = YES;
+    [infoModal resetScrollViewPosition];
     [infoModal updateColor];
     [infoCurtain show];
 }

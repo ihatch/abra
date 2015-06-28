@@ -142,6 +142,7 @@ NSArray *icons;
 
     if(type == CADABRA_ICON) {
         [icon flash];
+        [mainViewController carouselFlash];
         [ABCadabra castSpell];
         return;
     }

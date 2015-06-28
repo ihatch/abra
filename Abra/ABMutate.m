@@ -174,13 +174,6 @@ static ABMutate *ABMutateInstance = NULL;
 }
 
 + (NSArray *) mutateWord:(ABScriptWord *)sw inLine:(NSArray *)line {
-//
-//    NSArray *sliced = [ABMutate sliceWordInHalf:sw];
-//    for (ABScriptWord *slw in sliced) {
-//        [ABMutate spellCheckerGuessesForString: slw.text];
-//    }
-    
-    
     mutationType type = RANDOM;
     if([ABState checkMutationLevel] < 1 || (ABI(7) < 4)) type = DICE;
     return [ABMutate alterOneWord:sw inLine:line withMutationType:type];
@@ -194,24 +187,28 @@ static ABMutate *ABMutateInstance = NULL;
     
     if(type == DICE) {
         
+        // TODO: check for emoji precedent
+
         NSString *emojiTransform = [ABEmoji emojiWordTransform:oldWord.text];
-        if(emojiTransform != nil) {
-            
+        ABScriptWord *sw;
+        
+        if(emojiTransform == nil) sw = [ABMutate attemptMatchBySpellCheck:oldWord];
+
+        if(emojiTransform != nil && ABI(25) == 0) {
             newWords = @[[ABData getScriptWord:emojiTransform]];
 
-            // TODO: change chance handling to include a little spell-check
-        
-//        ABScriptWord *sw = [ABMutate attemptMatchBySpellCheck:oldWord];
-//        if(sw != nil) {
-//            newWords = @[sw];
+        } else if(sw != nil) {
+            newWords = @[sw];
+            
         } else {
-        
             if(ABI(40) == 0) {
                 newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
                 newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
+
             } else if(ABI(9) == 0) {
                 newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
                 newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
+            
             } else {
                 newWords = @[[ABMutate throwDiceCoefficient:oldWord]];
             }
@@ -219,13 +216,15 @@ static ABMutate *ABMutateInstance = NULL;
     
     } else if(type == RANDOM) {
         newWords = [ABMutate mutate:oldWord andLocalWords:line mutationLevel:5 lineLength:(int)[line count]];
+        
     } else if(type == EXPLODE) {
         newWords = [ABMutate splitWordIntoLetters:oldWord andSpaceOut:NO];
+        
     } else if(type == GRAFTWORD) {
         ABScriptWord *gw = [ABData getWordToGraft];
-        // TODO: more complex sourceStanza handling for grafted words?
         gw.sourceStanza = oldWord.sourceStanza;
         newWords = @[gw];
+        
     } else if(type == CLONE) {
         newWords = @[oldWord, oldWord];
     }
@@ -388,16 +387,11 @@ static ABMutate *ABMutateInstance = NULL;
     
     if([cuts count]) return [ABData getScriptWord:simple[0] withSourceStanza:word.sourceStanza];
     
-
-    
     // okay, try a scrambler...
     NSString *scrambled = [ABMutate scrambleString:word.text];
     NSArray *scram = [ABMutate spellCheck:scrambled];
     
     if([scram count]) return [ABData getScriptWord:scram[0] withSourceStanza:word.sourceStanza];
-    
-    
-    
     
     // If not, make a slice of it, then spellcheck that
     NSArray *slices = [ABMutate sliceStringInHalf:word.text];

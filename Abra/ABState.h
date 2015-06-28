@@ -55,6 +55,8 @@ typedef NS_ENUM(NSInteger, modalType) { GRAFT_MODAL, SETTINGS_MODAL, INFO_MODAL,
 
 + (void) absentlyMutate;
 
++ (int) getTotalWordsVisible;
+
 + (void) setInteractivityModeTo:(InteractivityMode)mode;
 + (InteractivityMode) getCurrentInteractivityMode;
 

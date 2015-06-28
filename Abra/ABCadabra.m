@@ -481,7 +481,7 @@ NSMutableArray *allStrings;
 
 
 
-//
+
 //+ (void) applyMagicStanzaLines:(NSMutableArray *)lines withMutableInterior:(BOOL)mutable {
 //    
 //    NSMutableArray *newLines = [NSMutableArray array];
@@ -506,7 +506,7 @@ NSMutableArray *allStrings;
 //    NSArray *ready = [NSArray arrayWithArray:newLines];
 //    [ABState changeAllLinesToLines:ready];
 //}
-//
+
 
 
 
@@ -587,7 +587,6 @@ NSMutableArray *allStrings;
         d ++;
         d += (d / 20);
     }
-    
 }
 
 

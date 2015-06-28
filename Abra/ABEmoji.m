@@ -59,36 +59,20 @@ NSDictionary *colorCycle;
 
 + (void) initEmoji {
     
+    
+    //    NSString *test = @"\U0001F34E";
+    //    [test isEqualToString:@"🍎"];
+    //    DDLogInfo(@"apple test: %i", [test isEqualToString:@"🍎"]);
+
+    
+    
     emojiIndex = [NSMutableDictionary dictionary];
     
     allEmoji = [@"😄😃😀😊☺️😉😍😘😚😗😙😜😝😛😳😁😔😌😒😞😣😢😂😭😪😥😰😅😓😩😫😨😱😠😡😤😖😆😋😷😎😴😵😲😟😦😧😈👿😮😬😐😕😯😶😇😏😑👲👳👮👷💂👶👦👧👨👩👴👵👱👼👸😺😸😻😽😼🙀😿😹😾👹👺🙈🙉🙊💀👽💩🔥✨🌟💫💥💢💦💧💤💨👂👀👃👅👄👍👎👌👊✊✌️👋✋👐👆👇👉👈🙌🙏☝️👏💪🚶🏃💃👫👪👬👭💏💑👯🙆🙅💁🙋💆💇💅👰🙎🙍🙇🎩👑👒👟👞👡👠👢👕👔👚👗🎽👖👘👙💼👜👝👛👓🎀🌂💄💛💙💜💚❤️💔💗💓💕💖💞💘💌💋💍💎👤👥💬👣💭🐶🐺🐱🐭🐹🐰🐸🐯🐨🐻🐷🐽🐮🐗🐵🐒🐴🐑🐘🐼🐧🐦🐤🐥🐣🐔🐍🐢🐛🐝🐜🐞🐌🐙🐚🐠🐟🐬🐳🐋🐄🐏🐀🐃🐅🐇🐉🐎🐐🐓🐕🐖🐁🐂🐲🐡🐊🐫🐪🐆🐈🐩🐾💐🌸🌷🍀🌹🌻🌺🍁🍃🍂🌿🌾🍄🌵🌴🌲🌳🌰🌱🌼🌐🌞🌝🌚🌑🌒🌓🌔🌕🌖🌗🌘🌜🌛🌙🌍🌎🌏🌋🌌🌠⭐️☀️⛅️☁️⚡️☔️❄️⛄️🌀🌁🌈🌊🎍💝🎎🎒🎓🎏🎆🎇🎐🎑🎃👻🎅🎄🎁🎋🎉🎊🎈🎌🔮🎥📷📹📼💿📀💽💾💻📱☎️📞📟📠📡📺📻🔊🔉🔈🔇🔔🔕📢📣⏳⌛️⏰⌚️🔓🔒🔏🔐🔑🔎💡🔦🔆🔅🔌🔋🔍🛁🛀🚿🚽🔧🔩🔨🚪🚬💣🔫🔪💊💉💰💴💵💷💶💳💸📲📧📥📤✉️📩📨📯📫📪📬📭📮📦📝📄📃📑📊📈📉📜📋📅📆📇📁📂✂️📌📎✒️✏️📏📐📕📗📘📙📓📔📒📚📖🔖📛🔬🔭📰🎨🎬🎤🎧🎼🎵🎶🎹🎻🎺🎷🎸👾🎮🃏🎴🀄️🎲🎯🏈🏀⚽️⚾️🎾🎱🏉🎳⛳️🚵🚴🏁🏇🏆🎿🏂🏊🏄🎣☕️🍵🍶🍼🍺🍻🍸🍹🍷🍴🍕🍔🍟🍗🍖🍝🍛🍤🍱🍣🍥🍙🍘🍚🍜🍲🍢🍡🍳🍞🍩🍮🍦🍨🍧🎂🍰🍪🍫🍬🍭🍯🍎🍏🍊🍋🍒🍇🍉🍓🍑🍈🍌🍐🍍🍠🍆🍅🌽🏠🏡🏫🏢🏣🏥🏦🏪🏩🏨💒⛪️🏬🏤🌇🌆🏯🏰⛺️🏭🗼🗾🗻🌄🌅🌃🗽🌉🎠🎡⛲️🎢🚢⛵️🚤🚣⚓️🚀✈️💺🚁🚂🚊🚉🚞🚆🚄🚅🚈🚇🚝🚋🚃🚎🚌🚍🚙🚘🚗🚕🚖🚛🚚🚨🚓🚔🚒🚑🚐🚲🚡🚟🚠🚜💈🚏🎫🚦🚥⚠️🚧🔰⛽️🏮🎰♨️🗿🎪🎭📍🚩🇬🇧🇷🇺🇫🇷🇯🇵🇰🇷🇩🇪🇨🇳🇺🇸🇺🇸🇺🇸1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣0️⃣🔟🔢#️⃣🔣⬆️⬇️⬅️➡️🔠🔡🔤↗️↖️↘️↙️↔️↕️🔄◀️▶️🔼🔽↩️↪️ℹ️⏪⏩⏫⏬⤵️⤴️🆗🔀🔁🔂🆕🆙🆒🆓🆖📶🎦🈁🈯️🈳🈵🈴🈲🉐🈹🈺🈶🈚️🚻🚹🚺🚼🚾🚰🚮🅿️♿️🚭🈷🈸🈂Ⓜ️🛂🛄🛅🛃🉑㊙️㊗️🆑🆘🆔🚫🔞📵🚯🚱🚳🚷🚸⛔️✳️❇️❎✅✴️💟🆚📳📴🅰🅱🆎🅾💠➿♻️♈️♉️♊️♋️♌️♍️♎️♏️♐️♑️♒️♓️⛎🔯🏧💹💲💱©®™❌‼️⁉️❗️❓❕❔⭕️🔝🔚🔙🔛🔜🔃🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕖🕗🕘🕙🕚🕡🕢🕣🕤🕥🕦✖️➕➖➗♠️♥️♣️♦️💮💯✔️☑️🔘🔗➰〰〽️🔱◼️◻️◾️◽️▪️▫️🔺🔲🔳⚫️⚪️🔴🔵🔻⬜️⬛️🔶🔷🔸🔹" convertToArray];
     
     /*
-     
-     
-     
-     🎭
-     
-     
-     🇬
-     🇺
-     🇫
-     🇯
-     🇵
-     🇺
-     
-     
-     
-     ©
-     ®
-     ™
-     
-     
-     
-     
-     
-MISSING EMOJI COLOR: ✔➡◻❄⌚⚫▪⛳⬛🎭™✉®↕🅿⌛⛅✒‼㊗©☝♥✖↙⁉
-     
+     🎭 🇬 🇺 🇫 🇯 🇵 🇺 © ® ™
+     MISSING EMOJI COLOR: ✔➡◻❄⌚⚫▪⛳⬛🎭™✉®↕🅿⌛⛅✒‼㊗©☝♥✖↙⁉
      ⬅↗▶⬆↪↘⬇⤴ℹ↔◀↩↖⤵
      */
     
@@ -176,12 +160,11 @@ MISSING EMOJI COLOR: ✔➡◻❄⌚⚫▪⛳⬛🎭™✉®↕🅿⌛⛅✒‼�
     emojiByColor = [ABEmoji processEmojiDictionary:colors withType:@"color"];
     emojiByConcept = [ABEmoji processEmojiDictionary:concepts withType:@"concept"];
     
-    
-    for(NSString *e in allEmoji) {
-        if([emojiIndex objectForKey:e] == nil) {
-            DDLogInfo(@"MISSING EMOJI COLOR: %@", e);
-        }
-    }
+//    for(NSString *e in allEmoji) {
+//        if([emojiIndex objectForKey:e] == nil) {
+//            DDLogInfo(@"MISSING EMOJI COLOR: %@", e);
+//        }
+//    }
 
     emojiToWords = [NSMutableDictionary dictionary];
     wordsToEmoji = [NSMutableDictionary dictionary];
@@ -199,7 +182,7 @@ MISSING EMOJI COLOR: ✔➡◻❄⌚⚫▪⛳⬛🎭™✉®↕🅿⌛⛅✒‼�
         }
     }
      
-    DDLogInfo(@"hi");
+//    DDLogInfo(@"test");
 }
 
 

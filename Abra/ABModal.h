@@ -22,11 +22,13 @@
 @property (nonatomic) CGFloat y;
 
 @property (nonatomic) UITextField *textField;
+@property (nonatomic) UIScrollView *scrollView;
 
 
 - (id) initWithType:(NSInteger)type andMainVC:(ABMainViewController *)mainVC;
 - (UITextField *) createTextField;
 
 - (void) updateColor;
+- (void) resetScrollViewPosition;
 
 @end

@@ -21,4 +21,6 @@
 - (void) blackCurtainDidDisappear;
 - (BOOL) userDidTouchOutsideGraftBox;
 
+- (void) carouselFlash;
+
 @end

@@ -243,7 +243,9 @@ static ABState *ABStateInstance = NULL;
 }
 
 + (NSArray *) getCurrentScriptWordLines {
-    return currentScriptWordLines;
+    int num = [ABState numberOfLinesToDisplay];
+    if([currentScriptWordLines count] >= [ABState numberOfLinesToDisplay]) return currentScriptWordLines;
+    return [currentScriptWordLines subarrayWithRange:NSMakeRange(0, [ABState numberOfLinesToDisplay])];
 }
 
 
@@ -268,6 +270,11 @@ static ABState *ABStateInstance = NULL;
 
 + (void) transitionToStanza:(int)index {
     
+    if(currentStanza == -1 && index == 39) {
+        currentStanza = 39;
+        return;
+    }
+
     NSArray *newLines;
     
     int firstIndex = [ABScript firstStanzaIndex];
@@ -373,7 +380,11 @@ static ABState *ABStateInstance = NULL;
 }
 
 
-
++ (int) getTotalWordsVisible {
+    int i = 0;
+    for(ABLine *line in ABLines) i += (int)[line.lineWords count];
+    return i;
+}
 
 
 
