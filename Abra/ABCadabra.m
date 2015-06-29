@@ -17,6 +17,7 @@
 #import "ABLine.h"
 #import "ABEmoji.h"
 #import "ABScript.h"
+#import "ABHistory.h"
 
 
 typedef NS_ENUM(NSInteger, fadeType) {
@@ -55,6 +56,11 @@ typedef NS_ENUM(NSInteger, spellType) {
     SPELL_BLACK_BOX_QUOTE,
     SPELL_RANDOM_FADE_MUTATION
 };
+
+
+
+
+
 
 
 
@@ -102,23 +108,22 @@ NSArray *stanzaLines;
 NSMutableArray *stringLines;
 NSMutableArray *allStrings;
 
+ABHistory *history;
 
 
 
 
-
-+ (void) castSpell {
++ (void) castSpell:(NSString *)spell {
     
+    history.cadabraCount ++;
     
     ABLines = [ABState getLines];
     stanzaLines = [ABState getCurrentScriptWordLines];
 
     stringLines = [NSMutableArray array];
     allStrings = [NSMutableArray array];
-
     
     int hasFamilyCount = 0;
-    int familySandwichCount = 0;
     int hasEmojiCount = 0;
     int isMutatedCount = 0;
     int isGraftedCount = 0;
@@ -134,12 +139,7 @@ NSMutableArray *allStrings;
             [stringLine addObject:sw.text];
             
             analysis = [ABCadabra analyzeLines:stanzaLines];
-            if(sw.hasFamily) {
-                hasFamilyCount ++;
-                if([sw.leftSisters count] > 0 && [sw.rightSisters count] > 0){
-                    familySandwichCount ++;
-                }
-            }
+            if(sw.hasFamily) hasFamilyCount ++;
             if(sw.emojiCount > 0) hasEmojiCount ++;
             if(sw.morphCount > 0) isMutatedCount ++;
             if(sw.isGrafted == YES) isGraftedCount ++;
@@ -149,73 +149,94 @@ NSMutableArray *allStrings;
     }
 
     
-    
-    
-    DDLogInfo(@"test");
+    // SPECIFIED SPELL
+    if(spell != nil) {
 
-    [ABCadabra pruneInterior:stanzaLines];
-    return;
-    
-    [ABCadabra spinMagic:ABLines]; // <-- needs work
-    [ABCadabra redactMagic:ABLines];
-    [ABCadabra firstLetterErasure:ABLines];
-    [ABCadabra randomErasureMagic:ABLines];
-    [ABCadabra rainbowMagic:ABLines];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"magicWordCadabra" object:self];
 
-    
-    int chance = ABI(12);
-    
-    DDLogInfo(@"chance %d", chance);
-    
-    if([ABState checkSpaceyMode] == YES && ABI(12) < 5) {
-        [ABState setSpaceyMode:NO];
-    } else if(hasEmojiCount > 0 && ABI(12) < 2) {
-        [ABCadabra emojiColorShift:stanzaLines];
-    } else if(hasEmojiCount > 0 && hasEmojiCount < totalWords && ABI(12) < 2) {
-        [ABCadabra eraseAllExceptEmoji:stanzaLines];
-    } else if(hasEmojiCount > 0 && hasEmojiCount < totalWords && ABI(12) < 2) {
-        [ABCadabra eraseAllEmoji:stanzaLines];
-    } else if(chance == 0) {
-        [ABCadabra flipLines]; // weaveLines TODO bug
-    } else if(chance == 1) {
-        [ABCadabra flipLines];
-    } else if(chance == 2) {
-        [ABCadabra randomlyReorderWords:stanzaLines];
-    } else if(chance == 3) {
-        NSArray *a = [ABCadabra splitParagraphIntoLinesOfScriptWords:BLACK_BOX_QUOTE];
-        [ABCadabra replaceAllWithText:a];
-    } else if(chance == 4) {
-        [ABCadabra spaceOutLetters:stanzaLines];
-    } else if(chance == 5) {
-        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_STANZA_EMOJI];
-    } else if(chance == 6) {
-        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_STANZA_EMOJI];
-    } else if(chance == 7) {
-        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_TREES];
-    } else if(chance == 8) {
-        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_TREES];
-    } else if(chance > 8) {
-        [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_MUTATE];
+        if([spell isEqualToString:@"PRUNE_FIRST_LAST"]) [ABCadabra pruneInterior:stanzaLines];
+        if([spell isEqualToString:@"SPIN"]) [ABCadabra spinMagic:ABLines];
+        if([spell isEqualToString:@"REDACT"]) [ABCadabra redactMagic:ABLines];
+        if([spell isEqualToString:@"ALLITERATIVE_ERASE"]) [ABCadabra firstLetterErasure:ABLines];
+        if([spell isEqualToString:@"RANDOM_ERASE"]) [ABCadabra randomErasureMagic:ABLines];
+        if([spell isEqualToString:@"RAINBOW"]) [ABCadabra rainbowMagic:ABLines];
+        if([spell isEqualToString:@"FOREST"]) [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_TREES];
+        if([spell isEqualToString:@"FLIP_LINE_ORDER"]) [ABCadabra flipLines];
+        if([spell isEqualToString:@"SHUFFLE"]) [ABCadabra randomlyReorderWords:stanzaLines];
+        if([spell isEqualToString:@"SPACEY_MODE"]) [ABCadabra spaceOutLetters:stanzaLines];
+        if([spell isEqualToString:@"EMOJI_COLOR_SHIFT"]) [ABCadabra emojiColorShift:stanzaLines];
+        if([spell isEqualToString:@"ERASE_ALL_EMOJI"]) [ABCadabra eraseAllEmoji:stanzaLines];
+        if([spell isEqualToString:@"ERASE_ALL_EXCEPT_EMOJI"]) [ABCadabra eraseAllExceptEmoji:stanzaLines];
+        if([spell isEqualToString:@"WEAVE"]) [ABCadabra flipLines];
+        if([spell isEqualToString:@"BLACK_BOX"]) [ABCadabra blackBox];
+        if([spell isEqualToString:@"FADE_TOP"]) [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_TOP withSpellFxType:SPELL_FX_MUTATE];
+        if([spell isEqualToString:@"FADE_LEFT"]) [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_LEFT withSpellFxType:SPELL_FX_MUTATE];
+        if([spell isEqualToString:@"FADE_RIGHT"]) [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RIGHT withSpellFxType:SPELL_FX_MUTATE];
+        if([spell isEqualToString:@"FADE_BOTTOM"]) [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_BOTTOM withSpellFxType:SPELL_FX_MUTATE];
+        if([spell isEqualToString:@"FADE_CENTER"]) [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_INNER withSpellFxType:SPELL_FX_MUTATE];
+        if([spell isEqualToString:@"FADE_PERIMETER"]) [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_OUTER withSpellFxType:SPELL_FX_MUTATE];
+        
+        
+        
+    // RANDOM SPELL
+    } else {
+        
+        
+        
+        int chance = ABI(20);
+        DDLogInfo(@"chance %d", chance);
+        
+        if([ABState checkSpaceyMode] == YES && ABI(12) < 5) {
+            [ABState setSpaceyMode:NO];
+        } else if(hasEmojiCount > 0 && ABI(12) < 2) {
+            [ABCadabra emojiColorShift:stanzaLines];
+        } else if(hasEmojiCount > 0 && hasEmojiCount < totalWords && ABI(12) < 2) {
+            [ABCadabra eraseAllExceptEmoji:stanzaLines];
+        } else if(hasEmojiCount > 0 && hasEmojiCount < totalWords && ABI(12) < 2) {
+            [ABCadabra eraseAllEmoji:stanzaLines];
+        } else if(chance == 0) {
+            [ABCadabra flipLines]; // weaveLines TODO bug
+        } else if(chance == 1) {
+            [ABCadabra flipLines];
+        } else if(chance == 2) {
+            [ABCadabra randomlyReorderWords:stanzaLines];
+        } else if(chance == 3) {
+            [ABCadabra blackBox];
+        } else if(chance == 4) {
+            [ABCadabra spaceOutLetters:stanzaLines];
+        } else if(chance == 5) {
+            [ABCadabra pruneInterior:stanzaLines];
+        } else if(chance == 6) {
+            [ABCadabra spinMagic:ABLines]; // <-- needs work
+        } else if(chance == 7) {
+            [ABCadabra redactMagic:ABLines];
+        } else if(chance == 8) {
+            [ABCadabra firstLetterErasure:ABLines];
+        } else if(chance == 9) {
+            [ABCadabra rainbowMagic:ABLines];
+        } else if(chance == 10) {
+            [ABCadabra randomErasureMagic:ABLines];
+        } else if(chance == 11) {
+            [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_STANZA_EMOJI];
+        } else if(chance == 12) {
+            [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_STANZA_EMOJI];
+        } else if(chance == 13) {
+            [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_TREES];
+        } else if(chance > 13) {
+            [ABCadabra fadeMutateAcrossLines:stanzaLines withFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_MUTATE];
+        }
+
     }
 
-
-    
-    //     BLACK_BOX_QUOTE
-
 }
 
 
 
 
-
-
-+ (void) checkWordForMagicWord:(NSString *)word {
-    
-    
-    
-    
++ (void) blackBox {
+    NSArray *a = [ABCadabra splitParagraphIntoLinesOfScriptWords:BLACK_BOX_QUOTE];
+    [ABCadabra replaceAllWithText:a];
 }
-
 
 
 
@@ -229,7 +250,6 @@ NSMutableArray *allStrings;
     [analysis setObject:[NSMutableDictionary dictionary] forKey:@"charCounts"];
     [analysis setObject:[NSMutableDictionary dictionary] forKey:@"lineLengths"];
     
-    
     int num = 0;
     for(NSArray *array in stanzaLines) {
         for(ABScriptWord *sw in array) {
@@ -238,7 +258,6 @@ NSMutableArray *allStrings;
     }
 
     return analysis;
-    
 }
 
 
@@ -895,5 +914,23 @@ NSMutableArray *allStrings;
 
 
 
+
+
+
+
++ (void) revealCadabraWords {
+    
+    NSArray *lines = [ABState getLines];
+    for(ABLine *line in lines) {
+        int len = [line.lineScriptWords count];
+        for(int i=0; i < len; i ++) {
+            ABScriptWord *sw = [line.lineScriptWords objectAtIndex:i];
+            if(sw.cadabra == nil && [line.lineWords objectAtIndex:i] != nil) {
+                [[line.lineWords objectAtIndex:i] quickDim];
+            }
+        }
+    }
+    
+}
 
 @end

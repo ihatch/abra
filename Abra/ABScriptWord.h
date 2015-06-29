@@ -26,6 +26,7 @@
 @property (nonatomic) BOOL marginRight;
 @property (nonatomic) BOOL isGrafted;
 @property (nonatomic) BOOL hasFamily;
+@property (nonatomic) NSString *cadabra;
 
 @property (nonatomic, readonly) int charCount;
 @property (nonatomic, readonly) NSArray *charArray;

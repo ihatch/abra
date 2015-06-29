@@ -32,9 +32,9 @@
 + (ABScriptWord *) getWordToGraft;
 + (ABScriptWord *) getPastGraftWord;
 
++ (NSString *) checkMagicWord:(NSString *)word;
 
 + (void) resetLexicon;
-
 
 
 

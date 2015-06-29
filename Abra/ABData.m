@@ -56,6 +56,7 @@
 + (NSMutableDictionary *) loadMutableDataForKey:(NSString *)key;
 + (NSMutableDictionary *) loadPrecompiledData:(NSString *)key;
 
+
 @end
 
 
@@ -73,6 +74,8 @@ NSMutableDictionary *graftsByCharCount;
 
 NSArray *currentGraftWords;
 int graftIndex;
+
+NSMutableDictionary *magicWordsIndex;
 
 
 
@@ -100,7 +103,9 @@ static ABData *ABDataInstance = NULL;
     [ABData loadGrafts];
     DDLogInfo(@"== initEmoji");
     [ABEmoji initEmoji];
-        
+    DDLogInfo(@"== initMagicWords");
+    [ABData initMagicWords];
+    
     
     
     DDLogInfo(@"===== DATA: loaded. =====");
@@ -459,6 +464,40 @@ static ABData *ABDataInstance = NULL;
 
 
 
+
+
+
+
+
+
++ (void) initMagicWords {
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"magicWords" ofType:@"txt"];
+    NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    NSArray *rawSets = [rawText componentsSeparatedByString:@"\n\n\n"];
+    
+    magicWordsIndex = [NSMutableDictionary dictionary];
+    
+    for (int i = 0; i < [rawSets count]; i++) {
+        
+        NSMutableArray *words = [NSMutableArray arrayWithArray: [rawSets[i] componentsSeparatedByString:@"\n"]];
+        NSString *cadabra = [words objectAtIndex:0];
+
+        for(int j = 1; j < [words count]; j ++) {
+            NSString *w = [words objectAtIndex:j];
+            [magicWordsIndex setObject:cadabra forKey:w];
+        }
+    }
+    
+    DDLogInfo(@"xcfs");
+    
+}
+
+
++ (NSString *) checkMagicWord:(NSString *)word {
+    if(magicWordsIndex == nil) [ABData initMagicWords];
+    return [magicWordsIndex objectForKey:word];
+}
 
 
 

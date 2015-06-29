@@ -10,6 +10,7 @@
 #import <objc/message.h>
 #import "ABScriptWord.h"
 #import "ABConstants.h"
+#import "ABData.h"
 
 // Method to split string that works with extended chars (emoji)
 @interface NSString (ConvertToArray)
@@ -55,6 +56,7 @@
         self.nonAsciiCount = 0;
         self.isNumber = NO;
         self.hasRunChecks = NO;
+        self.cadabra = [ABData checkMagicWord:wordText];
         
         self.family = [NSMutableArray array];
         self.leftSisters = [NSMutableArray array];
@@ -129,7 +131,7 @@
 }
 
 - (int) charLength {
-    return [[self charArray] count];
+    return (int)[[self charArray] count];
 }
 
 

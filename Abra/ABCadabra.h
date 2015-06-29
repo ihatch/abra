@@ -11,8 +11,10 @@
 @interface ABCadabra : NSObject
 
 
-+ (void) castSpell;
++ (void) castSpell:(NSString *)spell;
 
 + (NSArray *) spaceyLettersMagic:(NSArray *)stanzaLines;
+
++ (void) revealCadabraWords;
 
 @end

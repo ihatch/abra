@@ -89,7 +89,7 @@ static ABScript *ABScriptInstance = NULL;
             
             lines[j] = [lines[j] componentsSeparatedByString:@" "];
 
-            int thisLineCount = [lines[j] count];
+            int thisLineCount = (int)[lines[j] count];
             BOOL connectNextWord = NO;
             ABScriptWord *lastWordObj = nil;
             

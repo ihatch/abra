@@ -197,7 +197,7 @@ static ABMutate *ABMutateInstance = NULL;
         if(emojiTransform != nil && ABI(25) == 0) {
             newWords = @[[ABData getScriptWord:emojiTransform]];
 
-        } else if(sw != nil) {
+        } else if(sw != nil && ABI(7) == 0) {
             newWords = @[sw];
             
         } else {
@@ -377,9 +377,9 @@ static ABMutate *ABMutateInstance = NULL;
         return sw;
     }
     
+    // don't run on short words. otherwise they dwindle to letter fragments
+    if([[word.text convertToArray] count] < 6) return nil;
 
-    // TODO :: RETURN TO THIS
-    
     
     // try cutting a letter...
     NSString *cut = [ABMutate cutFirstOrLastLetter:word.text];
@@ -393,15 +393,16 @@ static ABMutate *ABMutateInstance = NULL;
     
     if([scram count]) return [ABData getScriptWord:scram[0] withSourceStanza:word.sourceStanza];
     
+    
     // If not, make a slice of it, then spellcheck that
     NSArray *slices = [ABMutate sliceStringInHalf:word.text];
-    if(slices) DDLogInfo(@"Slice: %@ | %@", slices[0], slices[1]);
-    else DDLogInfo(@"Slice fail :( %@", word.text);
+//    if(slices) DDLogInfo(@"Slice: %@ | %@", slices[0], slices[1]);
+//    else DDLogInfo(@"Slice fail :( %@", word.text);
     NSString *slice;
     NSArray *matches;
     
     if(slices == nil) {
-        DDLogWarn(@"Spell check failed for %@ !", word.text);
+//        DDLogWarn(@"Spell check failed for %@ !", word.text);
         return nil;
     }
     
@@ -415,7 +416,7 @@ static ABMutate *ABMutateInstance = NULL;
         }
     }
 
-    DDLogWarn(@"Spell check really really failed for %@ ! :(", word.text);
+//    DDLogWarn(@"Spell check really really failed for %@ ! :(", word.text);
     return nil;
     
 }

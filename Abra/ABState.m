@@ -19,6 +19,7 @@
 #import "ABMutate.h"
 #import "ABData.h"
 #import "ABCadabra.h"
+#import "ABHistory.h"
 
 @implementation ABState
 
@@ -48,6 +49,8 @@ BOOL secretSettingSpaceyMode;
 BOOL linesAreFlipped;
 BOOL linesAreWoven;
 
+ABHistory *history;
+NSUserDefaults *defaults;
 
 static ABState *ABStateInstance = NULL;
 
@@ -62,9 +65,11 @@ static ABState *ABStateInstance = NULL;
     if(self = [super init]) {
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(transitionStanza:) name:@"transitionStanza" object:nil];
+        history = [ABHistory history];
+        
+        [ABState initUserDefaults];
         
         isInitialized = YES;
-
         lastDialSetTime = [NSDate date];
         dialThrottleMs = 200;
         lastGestureTime = CACurrentMediaTime();
@@ -72,13 +77,10 @@ static ABState *ABStateInstance = NULL;
 
         currentStanza = ABRA_START_STANZA;
         scriptDirection = FORWARD;
-        
+
         currentInteractivityMode = MUTATE;
 
-        settingAutoplay = NO;
-        settingAutonomousMutation = YES;
         settingIPhoneDisplayModeHasChanged = NO;
-        
         secretSettingSpaceyMode = NO;
         linesAreFlipped = NO;
         
@@ -102,6 +104,25 @@ static ABState *ABStateInstance = NULL;
 + (void) applicationDidBecomeActive {
     if(!isInitialized) return;
     [ABClock reactivate];
+}
+
+
++ (void) initUserDefaults {
+//    
+//    defaults = [NSUserDefaults standardUserDefaults];
+//    
+//    int sAutoplay = (int)[defaults integerForKey:@"setting-autoplay"];
+//    int sAutoMutate = (int)[defaults integerForKey:@"setting-automutate"];
+//    int sFiveLines = (int)[defaults integerForKey:@"setting-fivelines"];
+//
+//    DDLogInfo(@"Setting: Autoplay %i", sAutoplay);
+//    DDLogInfo(@"Setting: Auto-mutate %i", sAutoMutate);
+//    DDLogInfo(@"Setting: Five lines %i", sFiveLines);
+    
+    settingAutoplay = NO; //(BOOL)sAutoplay;
+    settingAutonomousMutation = YES; // (BOOL)sAutoMutate;
+    settingIPhoneDisplayMode = NO; // (BOOL)sFiveLines;
+    
 }
 
 
@@ -156,9 +177,6 @@ static ABState *ABStateInstance = NULL;
 + (InteractivityMode) getCurrentInteractivityMode {
     return currentInteractivityMode;
 }
-
-
-
 
 + (BOOL) isRunningInBookMode {
     return settingAutoplay;
@@ -243,9 +261,11 @@ static ABState *ABStateInstance = NULL;
 }
 
 + (NSArray *) getCurrentScriptWordLines {
-    int num = [ABState numberOfLinesToDisplay];
-    if([currentScriptWordLines count] >= [ABState numberOfLinesToDisplay]) return currentScriptWordLines;
-    return [currentScriptWordLines subarrayWithRange:NSMakeRange(0, [ABState numberOfLinesToDisplay])];
+    NSMutableArray *lines = [NSMutableArray array];
+    for(int i=0; i < MIN([ABState numberOfLinesToDisplay], [currentScriptWordLines count]); i ++) {
+        [lines addObject:[currentScriptWordLines objectAtIndex:i]];
+    }
+    return [NSArray arrayWithArray:lines];
 }
 
 
@@ -270,16 +290,16 @@ static ABState *ABStateInstance = NULL;
 
 + (void) transitionToStanza:(int)index {
     
-    if(currentStanza == -1 && index == 39) {
-        currentStanza = 39;
-        return;
-    }
-
-    NSArray *newLines;
-    
     int firstIndex = [ABScript firstStanzaIndex];
     int lastIndex = [ABScript lastStanzaIndex];
+    int loopStanza = (lastIndex + 1);
+    NSArray *newLines;
 
+    if(currentStanza == -1 && index == loopStanza) {
+        currentStanza = loopStanza;
+        return;
+    }
+    
     DDLogInfo(@"Stanza transition: %i -> %i (%i %i)", currentStanza, index, firstIndex, lastIndex);
 
     
@@ -304,13 +324,9 @@ static ABState *ABStateInstance = NULL;
 
     // Chance to turn off spacey mode, if it's on
     if(secretSettingSpaceyMode == YES) {
-        if(ABI(3) == 0) {
-            secretSettingSpaceyMode = NO;
-        } else {
-            newLines = [ABCadabra spaceyLettersMagic:newLines];
-        }
+        if(ABI(3) == 0) secretSettingSpaceyMode = NO;
+        else newLines = [ABCadabra spaceyLettersMagic:newLines];
     }
-    
     
     currentStanza = index;
     currentScriptWordLines = newLines;
@@ -427,6 +443,12 @@ static ABState *ABStateInstance = NULL;
 + (void) setAutoMutation:(BOOL)value {
     DDLogInfo(@"set setAutoMutation %d", value);
     settingAutonomousMutation = value;
+//    [defaults setInteger:(int)value forKey:@"setting-automutate"];
+//    [defaults synchronize];
+}
+
++ (BOOL) getAutoMutation {
+    return settingAutonomousMutation;
 }
 
 + (void) setAutoplay:(BOOL)value {
@@ -434,23 +456,32 @@ static ABState *ABStateInstance = NULL;
     settingAutoplay = value;
     if(value == YES) [ABClock startAutoProgress];
     else [ABClock stopAutoProgress];
+//    [defaults setInteger:(int)value forKey:@"setting-autoplay"];
+//    [defaults synchronize];
+}
+
++ (BOOL) getAutoplay {
+    return settingAutonomousMutation;
 }
 
 + (void) setIPhoneMode:(BOOL)value {
     DDLogInfo(@"set setIPhoneMode %d", value);
     settingIPhoneDisplayMode = value;
     settingIPhoneDisplayModeHasChanged = YES;
+//    [defaults setInteger:(int)value forKey:@"setting-fivelines"];
+//    [defaults synchronize];
 }
+
++ (BOOL) getIPhoneMode {
+    return settingIPhoneDisplayMode;
+}
+
 
 + (void) setResetLexicon {
     DDLogInfo(@"set setResetLexicon");
     [ABData resetLexicon];
     [[[UIAlertView alloc] initWithTitle:@"" message:@"“our birth is but a sleep and a forgetting...” ―wordsworth" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 }
-
-
-
-
 
 
 

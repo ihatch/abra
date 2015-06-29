@@ -38,6 +38,8 @@
         self.locked = YES;
         self.isSelfDestructing = NO;
         self.isErased = NO;
+        self.isRedacted = NO;
+        self.hasAnimatedIn = NO;
         
         self.font = [UIFont fontWithName:ABRA_FONT size:[ABUI abraFontSize]];
         [self resizeFrameToFitString];
@@ -55,7 +57,6 @@
 
 
 - (void) resizeFrameToFitString {
-    
     CGSize size = [self.text sizeWithAttributes:@{NSFontAttributeName:self.font}];
     CGRect frame = self.frame;
     frame.size = size;
@@ -101,6 +102,7 @@
     [UIView animateWithDuration:duration delay:delay options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         self.alpha = 1.0;
         self.transform = CGAffineTransformMakeScale(randomSize, randomSize);
+        self.hasAnimatedIn = YES;
     } completion:^(BOOL finished) {}];
     
 }
@@ -119,6 +121,22 @@
         self.alpha = 0.85;
     } completion:^(BOOL finished) {}];
 }
+
+
+- (void) quickDim {
+    if(self.isErased) return;
+    if(self.hasAnimatedIn == NO) return;
+    CGFloat prevAlpha = self.alpha;
+    [UIView animateWithDuration:0.8 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+        self.alpha = 0.5;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.8 delay:0.4 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+            self.alpha = prevAlpha;
+        } completion:^(BOOL finished) {}];
+
+    }];
+}
+
 
 
 
@@ -219,13 +237,13 @@
     self.sourceStanza = stanza;
     [UIView transitionWithView:self duration:2.0f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [self setTextColor:[ABUI progressHueColorForStanza:stanza]];
-//        [statusLabel setShadowColor:[UIColor blackColor]];
     } completion:nil];
 }
 
 
 
 - (void) redact {
+    self.isRedacted = YES;
     [UIView transitionWithView:self duration:2.0f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [self setBackgroundColor:[self textColor]];
     } completion:nil];
@@ -234,7 +252,7 @@
 
 
 - (void) spin {
-    [self runSpinAnimationOnView:self duration:0.25 + ABF(0.75) rotations:1 repeat:INFINITY];
+    [self runSpinAnimationOnView:self duration:0.55 + ABF(0.95) rotations:1 repeat:INFINITY];
 }
 
 

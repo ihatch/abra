@@ -45,6 +45,9 @@ NSArray *icons;
         
         [self initIcons];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(magicWordCadabra:) name:@"magicWordCadabra" object:nil];
+        
+        
     }
     
     return self;
@@ -143,7 +146,7 @@ NSArray *icons;
     if(type == CADABRA_ICON) {
         [icon flash];
         [mainViewController carouselFlash];
-        [ABCadabra castSpell];
+        [ABCadabra castSpell:nil];
         return;
     }
 
@@ -188,6 +191,17 @@ NSArray *icons;
         currentModeIcon = icon;
     }
 }
+
+
+- (void) magicWordCadabra:(NSNotification *) notification {
+    if (!([[notification name] isEqualToString:@"magicWordCadabra"])) return;
+    [cadabraIcon flash];
+    [mainViewController carouselFlash];
+}
+
+
+
+
 
 
 - (void) triggerGraft {

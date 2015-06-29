@@ -14,10 +14,13 @@
 #import "ABScriptWord.h"
 #import "ABMutate.h"
 #import "ABUI.h"
+#import "ABHistory.h"
+#import "ABCadabra.h"
 
 
 @implementation ABLine {
-    ABMatch *abMatcher;
+    ABMatch *matcher;
+    ABHistory *history;
 }
 
 
@@ -35,7 +38,7 @@
         self.yPosition = y;
         self.lineWords = [NSMutableArray array];
         [self setFrame:CGRectMake(0, y, kScreenWidth, lineHeight)];
-        abMatcher = [[ABMatch alloc] init];
+        matcher = [[ABMatch alloc] init];
   
         // For position testing
         // self.backgroundColor = [UIColor colorWithHue:0.2 saturation:0.3 brightness:0.4 alpha:0.3];
@@ -117,7 +120,7 @@
     NSMutableArray *newScriptWords = [NSMutableArray array];
     NSArray *pastWordsText = [self getTextArrayFromScriptWords:@[pw]];
     NSArray *futureWordsText = [self getTextArrayFromScriptWords:futureWords];
-    NSArray *map = [abMatcher matchWithPast:pastWordsText andFuture:futureWordsText];
+    NSArray *map = [matcher matchWithPast:pastWordsText andFuture:futureWordsText];
     
     
     BOOL foundMatchForWord = NO;
@@ -190,7 +193,7 @@
     NSArray *pastWordsText = [self getTextArrayFromScriptWords:pastWords];
     NSArray *futureWordsText = [self getTextArrayFromScriptWords:futureWords];
 
-    NSArray *map = [abMatcher matchWithPast:pastWordsText andFuture:futureWordsText];
+    NSArray *map = [matcher matchWithPast:pastWordsText andFuture:futureWordsText];
     
     for(int i=0, l=(int)[map count]; i<l; i++) {
 
@@ -365,20 +368,24 @@
     if(mode == ERASE) {
         if(w.isErased) return;
         [self.lineWords[index] erase];
-        return;
+        history.eraseCount ++;
+        return; // only return due to update at end of fn
     }
 
     if(mode == PRUNE) {
         [self replaceWordAtIndex:index withArray:@[]];
+        history.pruneCount ++;
     }
 
     if(mode == MUTATE) {
         if(w.isErased) return;
         [self replaceWordAtIndex:index withArray:[ABMutate mutateWord:sw inLine:self.lineScriptWords]];
+        history.mutateCount ++;
     }
     
     if(mode == GRAFT) {
         [self replaceWordAtIndex:index withArray:[ABMutate graftWord:sw]];
+        history.graftCount ++;
     }
 
     [ABState updateCurrentScriptWordLinesWithLine:self.lineScriptWords atIndex:self.lineNumber];
@@ -401,14 +408,18 @@
 
 
 
+// cadabra check
 - (void) longPress:(CGPoint)point {
     
     int index = [self checkPoint:point];
     if(index == -1) return;
     ABScriptWord *sw = self.lineScriptWords[index];
+    if(sw.cadabra == nil) {
+        [ABCadabra revealCadabraWords];
+    } else {
+        [ABCadabra castSpell:sw.cadabra];
+    }
     
-    [self replaceWordAtIndex:index withArray:[ABMutate explodeWord:sw]];
-    [ABState updateCurrentScriptWordLinesWithLine:self.lineScriptWords atIndex:self.lineNumber];
 }
 
 

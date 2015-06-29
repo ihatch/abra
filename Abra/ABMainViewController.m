@@ -188,25 +188,26 @@ CGPoint touchStart;
 
 
 - (IBAction) longPress:(UILongPressGestureRecognizer *)gesture {
+    
     if(preventInput) return;
     [ABClock updateLastInteractionTime];
     
-    if([ABState isRunningInBookMode]) {
-        if(gesture.state == UIGestureRecognizerStateBegan) {
-            if([ABState attemptGesture] == NO) return;
-            [ABState pause];
-        } else if(gesture.state == UIGestureRecognizerStateEnded) {
-            [ABState resume];
-        }
-        
-    } else {
+//    if([ABState isRunningInBookMode]) {
+//        if(gesture.state == UIGestureRecognizerStateBegan) {
+//            if([ABState attemptGesture] == NO) return;
+//            [ABState pause];
+//        } else if(gesture.state == UIGestureRecognizerStateEnded) {
+//            [ABState resume];
+//        }
+//        
+//    } else {
         if(gesture.state == UIGestureRecognizerStateBegan) {
             CGPoint point = [gesture locationInView:self.view];
             ABLine *line = [self checkLinesForPoint:point];
             if(line == nil) return;
             [line longPress:[self.view convertPoint:point toView:line]];
         }
-    }
+//    }
 }
 
 
@@ -246,12 +247,6 @@ CGPoint touchStart;
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return YES;
 }
-
-
-
-
-
-
 
 
 
@@ -481,7 +476,6 @@ CGPoint touchStart;
         } completion:^(BOOL finished) {}];
     }];
 }
-
 
 
 

@@ -78,7 +78,6 @@ static ABClock *ABClockInstance = NULL;
         }
     }
 
-
     int modifier = (int)[ABState checkMutationLevel];
     if(modifier > 20) modifier = 20;
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0717AA931B40A8CE00195527 /* ABHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0717AA921B40A8CE00195527 /* ABHistory.m */; };
+		0717AA951B41E43100195527 /* magicWords.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0717AA941B41E43100195527 /* magicWords.txt */; };
 		0718D1DF1B24D96C004EC1D2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0718D1DE1B24D96C004EC1D2 /* Images.xcassets */; };
 		07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */; };
 		07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */; };
@@ -97,6 +99,9 @@
 
 /* Begin PBXFileReference section */
 		03D01643C5EB0DC7B45A27D7 /* Pods-Abra.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abra.release.xcconfig"; path = "Pods/Target Support Files/Pods-Abra/Pods-Abra.release.xcconfig"; sourceTree = "<group>"; };
+		0717AA911B40A8CE00195527 /* ABHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABHistory.h; sourceTree = "<group>"; };
+		0717AA921B40A8CE00195527 /* ABHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABHistory.m; sourceTree = "<group>"; };
+		0717AA941B41E43100195527 /* magicWords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = magicWords.txt; sourceTree = "<group>"; };
 		0718D1DE1B24D96C004EC1D2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "_abraData-coreDiceDictionary"; sourceTree = "<group>"; };
 		07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-coreDiceDictionary"; sourceTree = "<group>"; };
@@ -428,6 +433,8 @@
 			children = (
 				C6591B28185D1B9E001144FC /* ABState.h */,
 				C6591B29185D1B9E001144FC /* ABState.m */,
+				0717AA911B40A8CE00195527 /* ABHistory.h */,
+				0717AA921B40A8CE00195527 /* ABHistory.m */,
 				C6591B2B185D258F001144FC /* ABConstants.h */,
 				C6591B2C185D258F001144FC /* ABConstants.m */,
 				C6A9D9DD187C5FBD0087F956 /* ABClock.h */,
@@ -467,6 +474,7 @@
 				07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */,
 				07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */,
 				C604FA0B1850FA5F0076CC96 /* script.txt */,
+				0717AA941B41E43100195527 /* magicWords.txt */,
 				07C9242E19B56E0A00CCFC9C /* dice.txt */,
 				075B2AE31A992D9600763915 /* diceErrata.txt */,
 				C68B9ED018615C7B007D2BDB /* wordList.txt */,
@@ -681,6 +689,7 @@
 				075B2AF81A9ABC4B00763915 /* a_180.png in Resources */,
 				075B2AF91A9ABC4B00763915 /* black_768x1024.png in Resources */,
 				C6446D281879F04200CFAA20 /* FeGPrm27C.otf in Resources */,
+				0717AA951B41E43100195527 /* magicWords.txt in Resources */,
 				07597B5D1B1D0010006F6B5E /* info-Background.html in Resources */,
 				0718D1DF1B24D96C004EC1D2 /* Images.xcassets in Resources */,
 				07763B601B2677A40074F28B /* clear_button.png in Resources */,
@@ -767,6 +776,7 @@
 				C6591B2A185D1B9E001144FC /* ABState.m in Sources */,
 				077668CA1B3F5D91002EFCE1 /* ABVerticalContentFlow.m in Sources */,
 				C6E73A1E184BFA7400A2A5C3 /* ABWord.m in Sources */,
+				0717AA931B40A8CE00195527 /* ABHistory.m in Sources */,
 				C60EB08A18A5E9340090BBEB /* ABScriptWord.m in Sources */,
 				C6A9D9DF187C5FBD0087F956 /* ABClock.m in Sources */,
 				07BF3FDB1B25ED7800B1D977 /* ABIcon.m in Sources */,
@@ -860,8 +870,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer: Ian Hatcher (6NSQ5G4H8K)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Ian Hatcher (U595KEB552)";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Ian Hatcher (U595KEB552)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Abra/Abra-Prefix.pch";

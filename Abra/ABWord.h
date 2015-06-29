@@ -23,6 +23,8 @@
 @property (nonatomic) int sourceStanza;
 @property (nonatomic) BOOL isGrafted;
 @property (nonatomic) BOOL isErased;
+@property (nonatomic) BOOL isRedacted;
+@property (nonatomic) BOOL hasAnimatedIn;
 @property (nonatomic) NSString *wordID;
 
 @property (nonatomic) UIDynamicAnimator *animator;
@@ -41,13 +43,13 @@
 - (void) moveToXPosition:(CGFloat)x;
 - (void) setXPosition:(CGFloat)x;
 - (void) dim;
+- (void) quickDim;
 - (void) erase;
 - (void) eraseWithDelay:(CGFloat)delay;
 - (void) selfDestruct;
 - (void) selfDestructMorph;
 
 - (void) fadeColorToSourceStanza:(int)stanza;
-
 
 - (void) redact;
 - (void) spin;

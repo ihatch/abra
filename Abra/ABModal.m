@@ -307,7 +307,7 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 - (void) addContentToInfoContentFlow:(ABVerticalContentFlow *)flow {
     
     [flow addHeading:@"INTRODUCTION"];
-    [flow addParagraph:@"This app is a poetry instrument/spellbook that responds to touch. Caress Abra's words and watch them shift under your fingers."];
+    [flow addParagraph:@"The Abra app is a poetry instrument/spellbook that responds to touch. Caress the words and watch them shift under your fingers."];
     [flow addParagraph:@"At the bottom of the screen is a rotary dial, by which you can navigate to different poems in the Abra cycle. Touch the top of the screen to reveal a toolbar."];
     [flow addParagraph:@"There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own."];
     [flow addSectionMargin];
@@ -315,7 +315,7 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     [flow addHeading:@"OVERVIEW"];
     [flow addParagraph:@"Abra is a multifaceted project supported by an Expanded Artists’ Books grant from the Center for Book and Paper Arts (Columbia College Chicago). Its two main manifestations are this app, available free for iPad and iPhone, and a limited-edition print artist’s book. The app and book can be read separately or together, with an iPad inserted into a slot in the back of the book."];
     [flow addParagraph:@"Abra's text was composed by Amaranth Borsuk and Kate Durbin. This app was designed and coded by Ian Hatcher. Art direction and decision-making for both artist's book and app were undertaken in tandem as a team."];
-    [flow addImage:@"abra_twins_spread.png"];
+//    [flow addImage:@"abra_twins_spread.png"];
     [flow addParagraph:@"For information on the conceptual framework and background of the project, please see our site:"];
     [flow addLink:@"http://a-b-r-a.com"];
     [flow addSectionMargin];
