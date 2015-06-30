@@ -157,6 +157,7 @@ thread
 BLACK_BOX
 web
 network
+heaving
 
 
 FADE_TOP
@@ -203,3 +204,25 @@ crust
 fringe
 fringealong
 haloed
+
+
+CHRIS
+paradise
+wave
+waves
+bulge
+surf
+optimist
+chris
+meditation
+florida
+sailor
+mermaid
+prince
+scuba
+aqua
+seaside
+hydrolysis
+🐬
+🏊
+💙

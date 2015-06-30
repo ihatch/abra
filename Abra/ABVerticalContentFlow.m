@@ -172,14 +172,25 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont;
 }
 
 
+// Only used for logos -- so tapping logo takes you to the CBPA site
 - (void) addImageToBottom:(NSString *)imageName {
     UIImage *image = [UIImage imageNamed:imageName];
     image = [self imageWithImage:image scaledToWidth:self.frame.size.width * 2];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     imageView.frame = CGRectMake(0, self.frame.size.height - (image.size.height / 2) - [ABUI scaleYWithIphone:15.0f ipad:30.0f], image.size.width / 2, image.size.height / 2);
     
+    [imageView setUserInteractionEnabled:YES];
+    UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnLogos:)];
+    [imageView addGestureRecognizer:gesture];
     [self addSubview:imageView];
 }
+
+
+- (void) userTappedOnLogos:(UIGestureRecognizer*)gestureRecognizer {
+    DDLogInfo(@"userTappedOnLogos");
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.colum.edu/academics/media-arts/initiatives/expanded-artists-books.html"]];
+}
+
 
 
 - (void) addSectionMargin {
@@ -296,14 +307,14 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont;
 }
 
 
-
-- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if ([touch.view isKindOfClass:[TTTAttributedLabel class]]) {
-        return FALSE;
-    } else {
-        return TRUE;
-    }
-}
+//
+//- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+//    if ([touch.view isKindOfClass:[TTTAttributedLabel class]] || [touch.view isKindOfClass:[UIImageView class]]) {
+//        return FALSE;
+//    } else {
+//        return TRUE;
+//    }
+//}
 
 
 

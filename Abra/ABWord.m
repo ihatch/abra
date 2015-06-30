@@ -40,6 +40,7 @@
         self.isErased = NO;
         self.isRedacted = NO;
         self.hasAnimatedIn = NO;
+        self.isSpinning = NO;
         
         self.font = [UIFont fontWithName:ABRA_FONT size:[ABUI abraFontSize]];
         [self resizeFrameToFitString];
@@ -100,7 +101,7 @@
     [self performSelector:@selector(unlock) withObject:nil afterDelay:unlockTime];
     
     [UIView animateWithDuration:duration delay:delay options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        self.alpha = 1.0;
+        self.alpha = (self.isErased) ? 0.0 : 1.0;
         self.transform = CGAffineTransformMakeScale(randomSize, randomSize);
         self.hasAnimatedIn = YES;
     } completion:^(BOOL finished) {}];
@@ -130,7 +131,7 @@
     [UIView animateWithDuration:0.8 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         self.alpha = 0.5;
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.8 delay:0.4 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+        [UIView animateWithDuration:0.8 delay:0.9 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
             self.alpha = prevAlpha;
         } completion:^(BOOL finished) {}];
 
@@ -169,6 +170,13 @@
     self.animationX.toValue = @([self convertLeftToCenter:x]);
     
     [self pop_addAnimation:self.animationX forKey:[NSString stringWithFormat:@"%@%@", @"x-", [self wordID]]];
+}
+
+
+
+- (void) eraseInstantly {
+    self.isErased = YES;
+    self.alpha = 0;
 }
 
 
@@ -233,16 +241,17 @@
 
 
 - (void) fadeColorToSourceStanza:(int)stanza {
-    
     self.sourceStanza = stanza;
+    UIColor *color = [ABUI progressHueColorForStanza:stanza];
     [UIView transitionWithView:self duration:2.0f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        [self setTextColor:[ABUI progressHueColorForStanza:stanza]];
+        [self setTextColor:color];
+        if(self.isRedacted) [self setBackgroundColor:color];
     } completion:nil];
 }
 
 
-
 - (void) redact {
+    if(self.isErased) return;
     self.isRedacted = YES;
     [UIView transitionWithView:self duration:2.0f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [self setBackgroundColor:[self textColor]];
@@ -252,7 +261,11 @@
 
 
 - (void) spin {
-    [self runSpinAnimationOnView:self duration:0.55 + ABF(0.95) rotations:1 repeat:INFINITY];
+    self.isSpinning = YES;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ABF(0.2) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self runSpinAnimationOnView:self duration:0.55 + ABF(0.95) rotations:1 repeat:INFINITY];
+    });
+    
 }
 
 

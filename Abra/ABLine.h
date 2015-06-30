@@ -17,6 +17,7 @@
 @property (nonatomic) CGFloat lineWidth;
 @property (nonatomic) CGFloat yPosition;
 @property (nonatomic) NSArray *wordWidthsWithMargins;
+@property (nonatomic) BOOL lossyTransitions;
 
 - (id) initWithWords:(NSArray *)words andYPosition:(CGFloat)y andHeight:(CGFloat)lineHeight andLineNumber:(int)lineNum;
 

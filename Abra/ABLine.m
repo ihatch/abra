@@ -37,6 +37,7 @@
         self.lineNumber = lineNum;
         self.yPosition = y;
         self.lineWords = [NSMutableArray array];
+        self.lossyTransitions = NO;
         [self setFrame:CGRectMake(0, y, kScreenWidth, lineHeight)];
         matcher = [[ABMatch alloc] init];
   
@@ -109,16 +110,17 @@
 
 - (void) replaceWordAtIndex:(int)index withArray:(NSArray *)futureWords {
 
-    ABScriptWord *pw = [self.lineScriptWords objectAtIndex:index];
+    ABScriptWord *psw = [self.lineScriptWords objectAtIndex:index];
+    ABWord *pw = self.lineWords[index];
     
-    if(pw == nil) {
+    if(psw == nil) {
         DDLogError(@"ERROR: replaceWordAtIndex did not find a word at index: %i", index);
         return;
     }
 
     NSMutableArray *newWords = [NSMutableArray array];
     NSMutableArray *newScriptWords = [NSMutableArray array];
-    NSArray *pastWordsText = [self getTextArrayFromScriptWords:@[pw]];
+    NSArray *pastWordsText = [self getTextArrayFromScriptWords:@[psw]];
     NSArray *futureWordsText = [self getTextArrayFromScriptWords:futureWords];
     NSArray *map = [matcher matchWithPast:pastWordsText andFuture:futureWordsText];
     
@@ -133,12 +135,16 @@
         if([[map objectAtIndex:i] isEqual: @(-1)]) {
             word = [self newWordWithFrame:CGRectMake(0, 0, 100, 50) andScriptWord:futureWords[i]];
             word.parentLine = self;
+            
+            if(pw.isRedacted && ABI(4) > 0) [word redact];
+            if(pw.isSpinning && ABI(10) > 0) [word spin];
+            
             [newScriptWords addObject:futureWords[i]];
             
         // Use existing word object
         } else {
             word = [self.lineWords objectAtIndex:index];
-            [newScriptWords addObject:pw];
+            [newScriptWords addObject:psw];
             foundMatchForWord = YES;
             [word dim];
         }
@@ -203,7 +209,8 @@
         if([[map objectAtIndex:i] isEqual: @(-1)]) {
             word = [self newWordWithFrame:CGRectMake(0, 0, 100, 50) andScriptWord:futureWords[i]];
             word.parentLine = self;
-
+            if(self.lossyTransitions && ABI(9) < 3) [word eraseInstantly];
+            
         // Use existing word object
         } else {
             int oldIndex = [map[i] intValue];

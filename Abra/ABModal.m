@@ -313,8 +313,8 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     [flow addSectionMargin];
     
     [flow addHeading:@"OVERVIEW"];
-    [flow addParagraph:@"Abra is a multifaceted project supported by an Expanded Artists’ Books grant from the Center for Book and Paper Arts (Columbia College Chicago). Its two main manifestations are this app, available free for iPad and iPhone, and a limited-edition print artist’s book. The app and book can be read separately or together, with an iPad inserted into a slot in the back of the book."];
-    [flow addParagraph:@"Abra's text was composed by Amaranth Borsuk and Kate Durbin. This app was designed and coded by Ian Hatcher. Art direction and decision-making for both artist's book and app were undertaken in tandem as a team."];
+    [flow addParagraph:@"Abra is a multifaceted project supported by an Expanded Artists’ Books grant from the Center for Book and Paper Arts (Columbia College Chicago). Its two main manifestations are this app, available free for iPad and iPhone, and a limited-edition clothbound artists’ book. The two can be read separately or together, with an iPad inserted into a slot in the back of the book."];
+    [flow addParagraph:@"Abra's text was composed by Amaranth Borsuk and Kate Durbin. This app was designed and coded by Ian Hatcher. Art direction and decision-making for both artists’ book and app were undertaken in tandem as a team."];
 //    [flow addImage:@"abra_twins_spread.png"];
     [flow addParagraph:@"For information on the conceptual framework and background of the project, please see our site:"];
     [flow addLink:@"http://a-b-r-a.com"];
@@ -329,15 +329,15 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     [flow addSectionMargin];
     
     [flow addHeading:@"PAPERBACK"];
-    [flow addParagraph:@"In addition to this app and the limited-edition artist’s book, Abra is available as a trade paperback from 1913 Press."];
-    [flow addParagraph:@"In this edition, the poem’s stanzas meld one into the next, each recycling language from the preceding. Illustrations by visual artist Zach Kleyn grow and mutate on facing pages, eventually reaching across the book’s gutter to meld with the text."];
+    [flow addParagraph:@"In addition to this app and the limited-edition artist’s book, Abra is available widely as a trade paperback from 1913 Press."];
+    [flow addParagraph:@"In this edition, the poem’s stanzas meld one into the next, each recycling language from the preceding and animating as the reader turns the page. Illustrations by visual artist Zach Kleyn grow and mutate on facing pages, eventually reaching across the book’s gutter to meld with the text."];
     [flow addLink:@"http://www.journal1913.org/publications/abra/"];
     [flow addSectionMargin];
     
     [flow addHeading:@"ACKNOWLEDGEMENTS"];
-    [flow addParagraph:@"We are grateful to the Center for Book and Paper Arts at Columbia College Chicago for their support of this work: Steve Woodall, tireless mentor; Amy Rabas, visionary paper artist; and Clif Meador, Jessica Cochran, April Sheridan, Michelle Citron, and Paul Catanese, generous interlocutors."];
-    [flow addParagraph:@"Additional thanks to Abraham Avnisan, Steven Baughman, Stephanie Strickland, Chris Wegman, and Paula Wegman for support and feedback on the app."];
-    [flow addSpecialItalicizedParagraph:@"Some of Abra's text appeared in slightly different form in Action, Yes!, The &Now Awards 3, Black Warrior Review, Bone Bouquet, The Collagist, Joyland Poetry, Lana Turner: A Journal of Poetry and Opinion, Lit, Peep/Show, SPECS, Spoon River Poetry Review, and VLAK."];
+    [flow addParagraph:@"We are grateful to the Center for Book and Paper Arts at Columbia College Chicago for their support of this work: Stephen Woodall, tireless mentor; Amy Rabas, visionary paper artist; and Clif Meador, Jessica Cochran, April Sheridan, Michelle Citron, and Paul Catanese, generous interlocutors."];
+    [flow addParagraph:@"Additional thanks to Abraham Avnisan, Steven Baughman, Danny Cannizaro, Samantha Gorman, Stephanie Strickland, Chris Wegman, and Paula Wegman for support and feedback on the app."];
+    [flow addSpecialItalicizedParagraph:@"Some of Abra's text appeared in slightly different form in Action, Yes!; The &Now Awards 3; Black Warrior Review; Bone Bouquet; The Collagist; Joyland Poetry; Lana Turner: A Journal of Poetry and Opinion; Lit; Peep/Show; SPECS; Spoon River Poetry Review; and VLAK."];
     [flow addSectionMargin];
     
     [flow refreshFrame];

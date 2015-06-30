@@ -151,13 +151,20 @@
     }];
 }
 
+
 - (void) flash {
-    [UIView animateWithDuration:0.4 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+    
+    CGFloat duration = 0.4;
+    if(self.isVisible == NO) duration = 0.6;
+        
+    [UIView animateWithDuration:duration delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         self.isAnimating = YES;
-        [self showSelected];
+        if(self.isVisible) [self showSelected];
+        else [self showDim];
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.4 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-            [self showUnselected];
+        [UIView animateWithDuration:duration delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+            if(self.isVisible) [self showUnselected];
+            else [self hideUnselected];
         } completion:^(BOOL finished) {
             self.isAnimating = NO;
         }];
@@ -197,6 +204,11 @@
 }
 
 
+- (void) showDim {
+    self.iconSymbol.alpha = 0.5;
+}
+
+
 - (void) showSelected {
     self.iconLabelHighlighted.alpha = 0.9;
     self.iconSymbol.alpha = 0.7;
@@ -210,15 +222,5 @@
     self.isVisible = NO;
 }
 
-
-
-
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
- // Drawing code
- }
- */
 
 @end

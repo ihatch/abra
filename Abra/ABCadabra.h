@@ -13,7 +13,7 @@
 
 + (void) castSpell:(NSString *)spell;
 
-+ (NSArray *) spaceyLettersMagic:(NSArray *)stanzaLines;
++ (NSArray *) spaceyLettersMagic:(NSArray *)lines;
 
 + (void) revealCadabraWords;
 

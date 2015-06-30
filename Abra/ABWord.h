@@ -24,6 +24,7 @@
 @property (nonatomic) BOOL isGrafted;
 @property (nonatomic) BOOL isErased;
 @property (nonatomic) BOOL isRedacted;
+@property (nonatomic) BOOL isSpinning;
 @property (nonatomic) BOOL hasAnimatedIn;
 @property (nonatomic) NSString *wordID;
 
@@ -45,6 +46,7 @@
 - (void) dim;
 - (void) quickDim;
 - (void) erase;
+- (void) eraseInstantly;
 - (void) eraseWithDelay:(CGFloat)delay;
 - (void) selfDestruct;
 - (void) selfDestructMorph;
