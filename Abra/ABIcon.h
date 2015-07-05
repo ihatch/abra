@@ -44,13 +44,11 @@ typedef NS_ENUM(NSInteger, iconType) {
 @property (nonatomic) BOOL isVisible;
 @property (nonatomic) BOOL isAnimating;
 
-
 - (id) initWithFrame:(CGRect)frame text:(NSString *)text symbol:(NSString *)symbol iconType:(iconType)type;
 
 - (void) select;
 - (void) highlight;
 - (void) lowlight;
-
 - (void) show;
 - (void) hide;
 - (void) hideInstantly;

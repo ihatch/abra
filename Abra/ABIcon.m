@@ -53,7 +53,6 @@
 
 
 - (UILabel *) createTextLabelWithText:(NSString *)text {
-    
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.iconWidth, self.iconHeight)];
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
@@ -74,6 +73,7 @@
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.iconWidth, self.iconHeight)];
     label.text = text;
     label.textAlignment = NSTextAlignmentCenter;
+    
     
     if(self.iconType == FLOWER_ICON) {
         label.font = [UIFont fontWithName:ABRA_FLOWERS_FONT size:self.symbolFontSize];
@@ -98,9 +98,6 @@
     return label;
 }
 
-
-
-// [[NSNotificationCenter defaultCenter] postNotificationName:@"touchIcon" object:self];
 
 
 
@@ -153,7 +150,6 @@
 
 
 - (void) flash {
-    
     CGFloat duration = 0.4;
     if(self.isVisible == NO) duration = 0.6;
         
@@ -178,8 +174,6 @@
     else [self hideUnselected];
 }
 
-
-
 - (void) showFlower {
     self.alpha = 1;
     self.isVisible = YES;
@@ -188,7 +182,6 @@
     self.alpha = 0.7;
     self.isVisible = NO;
 }
-
 
 - (void) showUnselected {
     self.iconLabelHighlighted.alpha = 0;
@@ -203,11 +196,9 @@
     self.isVisible = NO;
 }
 
-
 - (void) showDim {
     self.iconSymbol.alpha = 0.5;
 }
-
 
 - (void) showSelected {
     self.iconLabelHighlighted.alpha = 0.9;

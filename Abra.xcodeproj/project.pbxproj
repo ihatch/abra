@@ -10,6 +10,7 @@
 		0717AA931B40A8CE00195527 /* ABHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0717AA921B40A8CE00195527 /* ABHistory.m */; };
 		0717AA951B41E43100195527 /* magicWords.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0717AA941B41E43100195527 /* magicWords.txt */; };
 		0718D1DF1B24D96C004EC1D2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0718D1DE1B24D96C004EC1D2 /* Images.xcassets */; };
+		07510C151B46572F00B041A9 /* ABCharSets.m in Sources */ = {isa = PBXBuildFile; fileRef = 07510C141B46572F00B041A9 /* ABCharSets.m */; };
 		07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */; };
 		07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */; };
 		07597B5A1B1D0010006F6B5E /* info-About.html in Resources */ = {isa = PBXBuildFile; fileRef = 07597B551B1D0010006F6B5E /* info-About.html */; };
@@ -103,6 +104,8 @@
 		0717AA921B40A8CE00195527 /* ABHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABHistory.m; sourceTree = "<group>"; };
 		0717AA941B41E43100195527 /* magicWords.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = magicWords.txt; sourceTree = "<group>"; };
 		0718D1DE1B24D96C004EC1D2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		07510C131B46572F00B041A9 /* ABCharSets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABCharSets.h; sourceTree = "<group>"; };
+		07510C141B46572F00B041A9 /* ABCharSets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABCharSets.m; sourceTree = "<group>"; };
 		07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "_abraData-coreDiceDictionary"; sourceTree = "<group>"; };
 		07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-coreDiceDictionary"; sourceTree = "<group>"; };
 		07597B551B1D0010006F6B5E /* info-About.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "info-About.html"; sourceTree = "<group>"; };
@@ -414,6 +417,8 @@
 				075B2AC51A917D7F00763915 /* ABData.m */,
 				07D1EA081B38EFDA00DD0B5F /* ABEmoji.h */,
 				07D1EA091B38EFDA00DD0B5F /* ABEmoji.m */,
+				07510C131B46572F00B041A9 /* ABCharSets.h */,
+				07510C141B46572F00B041A9 /* ABCharSets.m */,
 				075B2AE81A9945D200763915 /* ABMutate.h */,
 				075B2AE91A9945D200763915 /* ABMutate.m */,
 				07BF3FD71B250CD800B1D977 /* ABDice.h */,
@@ -775,6 +780,7 @@
 				07B7D29A19AECE6A001194FD /* iCarousel.m in Sources */,
 				C6591B2A185D1B9E001144FC /* ABState.m in Sources */,
 				077668CA1B3F5D91002EFCE1 /* ABVerticalContentFlow.m in Sources */,
+				07510C151B46572F00B041A9 /* ABCharSets.m in Sources */,
 				C6E73A1E184BFA7400A2A5C3 /* ABWord.m in Sources */,
 				0717AA931B40A8CE00195527 /* ABHistory.m in Sources */,
 				C60EB08A18A5E9340090BBEB /* ABScriptWord.m in Sources */,
@@ -876,7 +882,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Abra/Abra-Prefix.pch";
 				INFOPLIST_FILE = "Abra/Abra-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ianhatcher/Documents/obj-c/Abra/Abra",
@@ -899,7 +905,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Abra/Abra-Prefix.pch";
 				INFOPLIST_FILE = "Abra/Abra-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ianhatcher/Documents/obj-c/Abra/Abra",

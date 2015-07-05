@@ -11,7 +11,7 @@
 @interface ABCadabra : NSObject
 
 
-+ (void) castSpell:(NSString *)spell;
++ (void) castSpell:(NSString *)spell withMagicWord:(NSString *)magicWord;
 
 + (NSArray *) spaceyLettersMagic:(NSArray *)lines;
 

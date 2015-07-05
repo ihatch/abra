@@ -11,65 +11,67 @@
 typedef NS_ENUM(NSInteger, InteractivityMode) { MUTATE, GRAFT, MAGIC, PRUNE, ERASE };
 typedef NS_ENUM(NSInteger, modalType) { GRAFT_MODAL, SETTINGS_MODAL, INFO_MODAL, TIP_MODAL };
 
-
 @interface ABState : NSObject
 
-
 + (NSMutableArray *) initLines;
-+ (int) numberOfLinesToDisplay;
-+ (NSArray *) getLines;
 
-+ (void) changeAllLinesToLines:(NSArray *)newLines;
-
-
-+ (BOOL) isRunningInBookMode;
 + (int) getCurrentStanza;
-+ (NSArray *) getCurrentScriptWordLines;
++ (int) getTotalWordsVisible;
++ (int) numberOfLinesToDisplay;
 
-+ (void) reset;
-+ (void) clearMutations;
++ (NSArray *) getCurrentScriptWordLines;
++ (void) updateCurrentScriptWordLinesWithLine:(NSArray *)newLine atIndex:(int)lineNumber;
+
++ (NSArray *) getLines;
++ (void) changeAllLinesToLines:(NSArray *)newLines;
++ (void) manuallyTransitionStanzaToNumber:(int)stanzaNumber;
++ (void) manuallyTransitionStanzaWithIncrement:(int)increment;
++ (void) absentlyMutate;
+
+// ---------
+
 + (void) turnPage:(int)direction;
 + (void) forward;
 + (void) backward;
 + (void) accelerate;
 + (void) decelerate;
-
 + (void) pause;
 + (void) resume;
++ (void) reset;
++ (void) setInteractivityModeTo:(InteractivityMode)mode;
++ (InteractivityMode) getCurrentInteractivityMode;
 
-//+ (void) increaseMutation;
-//+ (void) addToMutationLevel:(CGFloat)num;
 + (BOOL) attemptGesture;
 + (void) disallowGestures;
 + (void) allowGestures;
 
+// ---------
+
 + (int) checkMutationLevel;
++ (void) boostMutationLevel;
++ (void) clearMutations;
 
-+ (void) applicationWillResignActive;
-+ (void) applicationDidBecomeActive;
+// ---------
 
-+ (void) manuallyTransitionStanzaToNumber:(int)stanzaNumber;
-+ (void) manuallyTransitionStanzaWithIncrement:(int)increment;
++ (void) toggleTip:(NSString *)tip;
++ (BOOL) shouldShowTip:(NSString *)tip;
++ (void) resetTips;
 
-+ (void) updateCurrentScriptWordLinesWithLine:(NSArray *)newLine atIndex:(int)lineNumber;
-
-+ (void) absentlyMutate;
-
-+ (int) getTotalWordsVisible;
-
-+ (void) setInteractivityModeTo:(InteractivityMode)mode;
-+ (InteractivityMode) getCurrentInteractivityMode;
-
-+ (BOOL) checkForChangedDisplayMode;
-
-
+// ---------
 
 + (void) setAutoMutation:(BOOL)value;
++ (BOOL) getAutoMutation;
+
 + (void) setAutoplay:(BOOL)value;
++ (BOOL) getAutoplay;
+
 + (void) setIPhoneMode:(BOOL)value;
++ (BOOL) getIPhoneMode;
++ (BOOL) checkForChangedDisplayMode;
+
 + (void) setResetLexicon;
 
-
+// ---------
 
 + (void) setSpaceyMode:(BOOL)value;
 + (BOOL) checkSpaceyMode;
@@ -79,6 +81,11 @@ typedef NS_ENUM(NSInteger, modalType) { GRAFT_MODAL, SETTINGS_MODAL, INFO_MODAL,
 
 + (void) setLinesAreWoven:(BOOL)value;
 + (BOOL) checkLinesAreWoven;
+
+// ---------
+
++ (void) applicationWillResignActive;
++ (void) applicationDidBecomeActive;
 
 
 @end

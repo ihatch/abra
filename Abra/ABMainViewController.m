@@ -18,6 +18,7 @@
 #import "ABGestureArrow.h"
 #import "ABBlackCurtain.h"
 #import "ABIconBar.h"
+#import "ABCadabra.h"
 #import "iCarousel.h"
 #import "PECropViewController.h"
 #import "emojis.h"
@@ -37,8 +38,11 @@ ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
 
 ABIconBar *iconBar;
 ABBlackCurtain *graftCurtain, *settingsCurtain, *infoCurtain;
+ABBlackCurtain *tipCurtain;
 ABModal *graftModal, *settingsModal, *infoModal;
+ABModal *welcomeTip, *graftTip, *cadabraTip, *spellModeTip;
 UITextField *graftTextField;
+NSString *currentTip;
 
 BOOL carouselIsAnimating, preventInput;
 CGPoint touchStart;
@@ -57,6 +61,10 @@ CGPoint touchStart;
     [self initGraftModal];
     [self initIconBar];
     [self initCarousel];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [self showTip:@"welcome"];
+    });
 }
 
 
@@ -135,6 +143,10 @@ CGPoint touchStart;
     // Pan
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
     [self.view addGestureRecognizer:pan];
+    
+    // Flash prev/next
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prevNextFeedbackFlash) name:@"prevNextFeedbackFlash" object:nil];
+
 
 }
 
@@ -191,23 +203,12 @@ CGPoint touchStart;
     
     if(preventInput) return;
     [ABClock updateLastInteractionTime];
-    
-//    if([ABState isRunningInBookMode]) {
-//        if(gesture.state == UIGestureRecognizerStateBegan) {
-//            if([ABState attemptGesture] == NO) return;
-//            [ABState pause];
-//        } else if(gesture.state == UIGestureRecognizerStateEnded) {
-//            [ABState resume];
-//        }
-//        
-//    } else {
-        if(gesture.state == UIGestureRecognizerStateBegan) {
-            CGPoint point = [gesture locationInView:self.view];
-            ABLine *line = [self checkLinesForPoint:point];
-            if(line == nil) return;
-            [line longPress:[self.view convertPoint:point toView:line]];
-        }
-//    }
+    if(gesture.state == UIGestureRecognizerStateBegan) {
+        CGPoint point = [gesture locationInView:self.view];
+        ABLine *line = [self checkLinesForPoint:point];
+        if(line == nil) return;
+        [line longPress:[self.view convertPoint:point toView:line]];
+    }
 }
 
 
@@ -248,6 +249,11 @@ CGPoint touchStart;
     return YES;
 }
 
+- (void) prevNextFeedbackFlash {
+    [feedbackBackward flash];
+    [feedbackForward flash];
+}
+
 
 
 
@@ -256,7 +262,12 @@ CGPoint touchStart;
 // MODALS / CONTROLS //
 ///////////////////////
 
+
+
 - (void) blackCurtainDidDisappear {
+
+    [ABState resume];
+
     if([ABState checkForChangedDisplayMode] == YES) {
         ABLines = [ABState initLines];
         for(int i=0; i < [ABLines count]; i ++) [self.view addSubview:ABLines[i]];
@@ -264,13 +275,22 @@ CGPoint touchStart;
     } else {
         [self allowGestures];
     }
+    
+    if(currentTip != nil) {
+        if([currentTip isEqualToString:@"graft"]) [self showGraftModal];
+        if([currentTip isEqualToString:@"cadabra"]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"triggerCadabra" object:self];
+            [ABCadabra castSpell:nil withMagicWord:nil];
+        }
+        currentTip = nil;
+    }
 }
+
 
 - (void) allowGestures {
     [ABState allowGestures];
     preventInput = NO;
 }
-
 
 
 
@@ -287,6 +307,15 @@ CGPoint touchStart;
     [graftCurtain addSubview:graftModal];
     [self.view addSubview:graftCurtain];
 }
+
+- (void) pressedGraftButton {
+    if([ABState shouldShowTip:@"graft"] == 0) {
+        [self showGraftModal];
+    } else {
+        [self showTip:@"graft"];
+    }
+}
+
 
 - (void) showGraftModal {
     preventInput = YES;
@@ -349,6 +378,38 @@ CGPoint touchStart;
     [infoModal updateColor];
     [infoCurtain show];
 }
+
+
+
+
+
+// TIPS
+
+- (void) showTip:(NSString *)tip {
+    
+    if(![ABState shouldShowTip:tip]) return;
+    [ABState toggleTip:tip];
+    currentTip = tip;
+
+    [ABState pause];
+    preventInput = YES;
+    
+    ABModal *tipModal = [[ABModal alloc] initWithType:TIP_MODAL andMainVC:self];
+    if([tip isEqualToString:@"welcome"]) [tipModal setTipContentForWelcome];
+    if([tip isEqualToString:@"mode"]) [tipModal setTipContentForSpellMode];
+    if([tip isEqualToString:@"graft"]) [tipModal setTipContentForGraft];
+    if([tip isEqualToString:@"cadabra"]) [tipModal setTipContentForCadabra];
+    
+    ABBlackCurtain *curtain = [[ABBlackCurtain alloc] initWithIconBar:iconBar andMainVC:self];
+    curtain.destroyOnFadeOut = YES;
+    [curtain addSubview:tipModal];
+    [self.view addSubview:curtain];
+    tipCurtain = curtain;
+    
+    [tipCurtain show];
+}
+
+
 
 
 

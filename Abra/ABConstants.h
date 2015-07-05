@@ -54,25 +54,8 @@ extern NSString *const NUMBERS_REGEX;
 extern NSString *const BLACK_BOX_QUOTE;
 
 
-
-extern NSString *const TIP_TEXT_STARTUP;
-extern NSString *const TIP_TEXT_GRAFT;
-extern NSString *const TIP_TEXT_MODE;
-extern NSString *const TIP_TEXT_CADABRA;
-
-extern NSString *const INFO_INTRO_TEXT;
-extern NSString *const INFO_OVERVIEW_TEXT;
-extern NSString *const INFO_ABRA_LINK;
-extern NSString *const INFO_ARTISTS_BOOK_TEXT;
-// TODO: pix
-extern NSString *const INFO_ARTISTS_BOOK_TEXT_2;
-extern NSString *const INFO_LINK_ARTISTS_BOOK_LINK;
-extern NSString *const INFO_PAPERBACK_TEXT;
-// TODO: pix
-extern NSString *const INFO_PAPERBACK_LINK;
-extern NSString *const INFO_THX_TEXT;
-// NSArray *const INFO_THX_ITALICIZE = @[@"Action", @"Yes!", @"The &Now Awards 3", @"Black Warrior Review", @"Bone Bouquet", @"The Collagist", @"Joyland Poetry", @"Lana Turner: A Journal of Poetry and Opinion", @"Lit", @"Peep/Show", @"SPECS", @"Spoon River Poetry Review", @"VLAK"];
-
+extern NSString *const SYMBOLS_CHESS;
+extern NSString *const SYMBOLS_DEATH;
 
 
 

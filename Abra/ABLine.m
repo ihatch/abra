@@ -210,6 +210,7 @@
             word = [self newWordWithFrame:CGRectMake(0, 0, 100, 50) andScriptWord:futureWords[i]];
             word.parentLine = self;
             if(self.lossyTransitions && ABI(9) < 3) [word eraseInstantly];
+            else if([ABState checkMutationLevel] > 0 && ABI(18 - [ABState checkMutationLevel]) < 4) [word eraseInstantly];
             
         // Use existing word object
         } else {
@@ -424,7 +425,7 @@
     if(sw.cadabra == nil) {
         [ABCadabra revealCadabraWords];
     } else {
-        [ABCadabra castSpell:sw.cadabra];
+        [ABCadabra castSpell:sw.cadabra withMagicWord:sw.text];
     }
     
 }
@@ -432,15 +433,58 @@
 
 
 
+- (NSArray *) locationsOfVisibleWords {
+    NSMutableArray *locs = [NSMutableArray array];
+    for(int i=0; i<[self.lineWords count]; i ++) {
+        ABWord *w = [self.lineWords objectAtIndex:i];
+        if(w.isErased) continue;
+        if(w.isRedacted) continue;
+        [locs addObject:@(i)];
+    }
+    return locs;
+}
+
+- (NSArray *) locationsOfErasedWords {
+    NSMutableArray *locs = [NSMutableArray array];
+    for(int i=0; i<[self.lineWords count]; i ++) {
+        ABWord *w = [self.lineWords objectAtIndex:i];
+        if(w.isErased) continue;
+        if(w.isRedacted) continue;
+        [locs addObject:@(i)];
+    }
+    return locs;
+}
+
+
+
 - (void) absentlyMutate {
     
     if([self.lineScriptWords count] == 0) return;
-    int index = ABI((int)[self.lineScriptWords count]);
+    NSArray *indices = [self locationsOfVisibleWords];
+    NSArray *erased = [self locationsOfErasedWords];    // TODO
+    int index = 0;
+    
+    // Occasionally choose any old word
+    if(ABI(8) == 0 || [indices count] == 0) {
+        index = ABI((int)[self.lineScriptWords count]);
+        
+    // But usually, only select from among visible ones
+    } else {
+        NSUInteger randomIndex = arc4random() % [indices count];
+        index = [[indices objectAtIndex:randomIndex] intValue];
+    }
+    
+    if(ABI(12) < 2) {
+        [[self.lineWords objectAtIndex:index] erase];
+        return;
+    }
+
     ABScriptWord *sw = [self.lineScriptWords objectAtIndex:index];
     
     NSArray *newSWs = [ABMutate mutateWord:sw inLine:self.lineScriptWords];
     NSMutableArray *newTexts = [NSMutableArray array];
     for(ABScriptWord *nsw in newSWs) {
+        if(ABI(11) < 2) continue;
         // don't allow morphCount to increment much when absently mutating
         if(nsw.morphCount > 2) nsw.morphCount = ABI(2);
         [newTexts addObject:nsw.text];
@@ -474,13 +518,15 @@
     return NO;
 }
 
-//
+
+// TODO
+
 //- (CGFloat) excessHorizontalWidth {
 //    if(self.lineWidth < kScreenWidth) return 0;
 //    
 //    
 //}
-//
+
 
 - (BOOL) cutDownLineToScreenWidth {
     return NO;

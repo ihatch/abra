@@ -12,16 +12,18 @@
 @interface ABVerticalContentFlow : UIView <TTTAttributedLabelDelegate>
 
 @property (nonatomic) CGFloat appendYPosition;
-
 @property (nonatomic) CGFloat headingMarginBottom;
 @property (nonatomic) CGFloat paragraphMarginBottom;
 @property (nonatomic) CGFloat sectionMarginBottom;
 @property (nonatomic) CGFloat imageMargin;
 @property (nonatomic) CGFloat lineHeight;
+@property (nonatomic) BOOL isSelfCentered;
 
+- (CGFloat) flowHeight;
 
 - (void) addHeading:(NSString *)text;
 - (void) addParagraph:(NSString *)text;
+- (void) addItalicParagraph:(NSString *)text;
 - (void) addImage:(NSString *)imageName;
 - (void) addImageToBottom:(NSString *)imageName;
 - (void) addAuthors:(NSString *)text;

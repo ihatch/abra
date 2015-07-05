@@ -1,5 +1,5 @@
 //
-//  PECropViewController.m
+//  PECropViewController.m    ===   MODIFIED FOR ABRA
 //  PhotoCropEditor
 //
 //  Created by kishikawa katsumi on 2013/05/19.
@@ -10,6 +10,9 @@
 #import "PECropView.h"
 #import <Social/Social.h>
 #import <Accounts/Accounts.h>
+
+#import "../../../Abra/ABConstants.h"
+#import "../../../Abra/ABUI.h"
 
 @interface PECropViewController () <UIActionSheetDelegate>
 
@@ -50,53 +53,46 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     [contentView addSubview:self.cropView];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.toolbar.translucent = NO;
-
-    self.navigationController.toolbar.tintColor = [UIColor colorWithHue:0.10f saturation:(0.35) brightness:0.62 alpha:1];
+    self.navigationController.toolbar.tintColor = [ABUI goldColor]; //[UIColor colorWithHue:0.10f saturation:(0.35) brightness:0.62 alpha:1];
 //    self.navigationController.navigationBar.tintColor = [UIColor colorWithHue:0.10f saturation:(0.35) brightness:0.62 alpha:1];
     
     [self.navigationController.toolbar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1]];
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1]];
     
-    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"EuphemiaUCAS" size:13.0f]} forState:UIControlStateNormal];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:ABRA_SYSTEM_FONT size:[ABUI scaleYWithIphone:7.0f ipad:11.0f]]} forState:UIControlStateNormal];
     
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-//                                                                                          target:self
-//                                                                                          action:@selector(cancel:)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"DONE", nil) style:UIBarButtonItemStylePlain
                                                                                            target:self
                                                                                            action:@selector(done:)];
-
     if (!self.toolbarItems) {
         UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                                        target:nil
                                                                                        action:nil];
 
-        UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"📷 save to photos", nil)
+        UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"📷 SAVE TO PHOTOS", nil)
                                                                             style:UIBarButtonItemStylePlain
                                                                            target:self
                                                                            action:@selector(saveToCameraRoll:)];
         
-        UIBarButtonItem *facebookButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"🐬 post to facebook", nil)
+        UIBarButtonItem *facebookButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"🐬 POST TO FACEBOOK", nil)
                                                                             style:UIBarButtonItemStylePlain
                                                                            target:self
                                                                            action:@selector(postToFacebook:)];
 
-        UIBarButtonItem *twitterButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"🐥 post to twitter", nil)
+        UIBarButtonItem *twitterButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"🐥 POST TO TWITTER", nil)
                                                                             style: UIBarButtonItemStylePlain
                                                                            target:self
                                                                            action:@selector(postToTwitter:)];
 
-        
         self.toolbarItems = @[flexibleSpace, flexibleSpace, saveButton, flexibleSpace, facebookButton, flexibleSpace, twitterButton, flexibleSpace, flexibleSpace];
     }
+
     self.navigationController.toolbarHidden = self.toolbarHidden;
-    
     self.cropView.image = self.image;
 }
 

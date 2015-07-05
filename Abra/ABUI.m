@@ -167,7 +167,7 @@ static ABUI *ABUIInstance = NULL;
 }
 
 + (UIColor *) whiteTextColor {
-    return [UIColor colorWithRed:0.95 green:0.9 blue:0.85 alpha:1];
+    return [UIColor colorWithRed:0.9 green:0.85 blue:0.78 alpha:1];
 }
 
 

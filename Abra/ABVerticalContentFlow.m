@@ -15,13 +15,14 @@
 
 @implementation ABVerticalContentFlow
 
-UIFont *contentFont, *headingFont, *italicFont, *linkFont;
+UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont;
 
 
 - (id) initWithFrame:(CGRect)frame {
 
     contentFont = [UIFont fontWithName:ABRA_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
     headingFont = [UIFont fontWithName:ABRA_SYSTEM_FONT size:[ABUI scaleYWithIphone:9.5f ipad:15.0f]];
+    flowersFont = [UIFont fontWithName:ABRA_FLOWERS_FONT size:[ABUI scaleYWithIphone:9.5f ipad:15.0f]];
     italicFont = [UIFont fontWithName:ABRA_ITALIC_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
     linkFont = [UIFont fontWithName:ABRA_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
     
@@ -45,6 +46,11 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont;
 }
 
 
+- (CGFloat) flowHeight {
+    return self.appendYPosition;
+}
+
+
 - (CGFloat) heightForLabel:(UILabel *)label {
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     style.minimumLineHeight = self.lineHeight;
@@ -57,7 +63,6 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont;
 }
 
 
-
 - (UILabel *) addLabelWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color shadow:(BOOL)shadow italic:(BOOL)italic url:(NSString *)url {
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 1000)];
@@ -66,15 +71,24 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.preferredMaxLayoutWidth = self.frame.size.width;
     label.numberOfLines = 0;
+    
+    if(font == headingFont) {
+        text = [NSString stringWithFormat:@"%@ %@ %@", @"K", text, @"J"];
+    }
 
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     style.minimumLineHeight = self.lineHeight;
     style.maximumLineHeight = self.lineHeight;
+    if(self.isSelfCentered) style.alignment = NSTextAlignmentCenter;
     NSDictionary *attrs = @{NSParagraphStyleAttributeName : style};
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:text attributes:attrs];
     [label setTextColor:color];
 
     if(font == headingFont) {
+        [attrString addAttribute:NSFontAttributeName value:flowersFont range:NSMakeRange(0, 1)];
+        [attrString addAttribute:NSForegroundColorAttributeName value:[ABUI darkGoldColor2] range:NSMakeRange(0,1)];
+        [attrString addAttribute:NSFontAttributeName value:flowersFont range:NSMakeRange([text length] - 1, 1)];
+        [attrString addAttribute:NSForegroundColorAttributeName value:[ABUI darkGoldColor2] range:NSMakeRange([text length] - 1, 1)];
         [attrString addAttribute:NSKernAttributeName value:@(1.5f) range:NSMakeRange(0, [text length])];
     } else if(italic) {
         [attrString addAttribute:NSFontAttributeName value:italicFont range:NSMakeRange(0, [text length])];
@@ -104,19 +118,21 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont;
 
 
 
-
-
-
 - (void) addHeading:(NSString *)text {
     [self addLabelWithText:text font:headingFont color:[ABUI goldColor] shadow:YES italic:NO url:nil];
     self.appendYPosition += self.headingMarginBottom;
 }
 
+- (void) addItalicParagraph:(NSString *)text {
+    [self addLabelWithText:text font:contentFont color:[ABUI whiteTextColor] shadow:NO italic:YES url:nil];
+    self.appendYPosition += self.paragraphMarginBottom;
+}
 
 - (void) addParagraph:(NSString *)text {
     [self addLabelWithText:text font:contentFont color:[ABUI whiteTextColor] shadow:NO italic:NO url:nil];
     self.appendYPosition += self.paragraphMarginBottom;
 }
+
 
 
 - (void) addLink:(NSString *)text {
@@ -135,7 +151,6 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont;
     DDLogInfo(@"%@", label.text);
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:label.text]];
 }
-
 
 
 
@@ -192,11 +207,9 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont;
 }
 
 
-
 - (void) addSectionMargin {
     self.appendYPosition += self.sectionMarginBottom;
 }
-
 
 
 - (void) addSpecialItalicizedParagraph:(NSString *)text {
@@ -307,7 +320,6 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont;
 }
 
 
-//
 //- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
 //    if ([touch.view isKindOfClass:[TTTAttributedLabel class]] || [touch.view isKindOfClass:[UIImageView class]]) {
 //        return FALSE;

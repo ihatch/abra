@@ -17,10 +17,14 @@
 - (void) showGraftModal;
 - (void) showInfoView;
 - (void) showSettingsModal;
+- (void) showTip:(NSString *)tip;
 
 - (void) blackCurtainDidDisappear;
 - (BOOL) userDidTouchOutsideGraftBox;
+- (void) pressedGraftButton;
 
 - (void) carouselFlash;
+- (void) prevNextFeedbackFlash;
+
 
 @end

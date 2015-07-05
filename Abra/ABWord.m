@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Ian Hatcher. All rights reserved.
 //
 
-
 #import "ABConstants.h"
 #import "ABState.h"
 #import "ABScriptWord.h"
@@ -17,18 +16,17 @@
 #import <pop/POP.h>
 #import <QuartzCore/QuartzCore.h>
 
-
 @implementation ABWord
 
 @synthesize width, height, isNew, startPoint, marginLeft, marginRight, sourceStanza, isGrafted, animationX, animationAlpha, animationSize, wordID, locked, isSelfDestructing;
 
 
-
 - (id) initWithFrame:(CGRect)frame andScriptWord:(ABScriptWord *) word {
+    
     if(self = [super initWithFrame:frame]) {
 
         self.text = word.text;
-
+        
         self.isGrafted = word.isGrafted;
         self.marginLeft = word.marginLeft;
         self.marginRight = word.marginRight;
@@ -50,7 +48,6 @@
         
         self.userInteractionEnabled = NO;
         self.wordID = [[NSUUID UUID] UUIDString];
-        
     }
     
     return self;
@@ -96,7 +93,6 @@
         self.textColor = [ABUI progressHueColorForStanza:self.sourceStanza];
     }
     
-    
     CGFloat unlockTime = (duration + delay) * .25;
     [self performSelector:@selector(unlock) withObject:nil afterDelay:unlockTime];
     
@@ -140,14 +136,11 @@
 
 
 
-
-
 - (void) setXPosition:(CGFloat)x {
     startPoint = self.center;
     CGPoint newPoint = CGPointMake([self convertLeftToCenter:x], self.center.y);
     self.center = newPoint;
 }
-
 
 - (void) setXPositionToCenter {
     startPoint = self.center;
@@ -155,8 +148,6 @@
     CGPoint newPoint = CGPointMake([self convertLeftToCenter:x], self.center.y);
     self.center = newPoint;
 }
-
-
 
 - (void) moveToXPosition:(CGFloat)x {
     
@@ -179,8 +170,6 @@
     self.alpha = 0;
 }
 
-
-
 - (void) erase {
     self.isErased = YES;
     CGFloat speed = [self speed];
@@ -189,8 +178,6 @@
     } completion:^(BOOL finished) {}];
 }
 
-
-
 - (void) eraseWithDelay:(CGFloat)delay {
     self.isErased = YES;
     CGFloat speed = [self speed];
@@ -198,8 +185,6 @@
         self.alpha = 0;
     } completion:^(BOOL finished) {}];
 }
-
-
 
 
 
@@ -219,7 +204,6 @@
         [self removeFromSuperview];
     }];
 }
-
 
 - (void) selfDestructMorph {
     
@@ -259,26 +243,34 @@
 }
 
 
-
-- (void) spin {
-    self.isSpinning = YES;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ABF(0.2) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self runSpinAnimationOnView:self duration:0.55 + ABF(0.95) rotations:1 repeat:INFINITY];
-    });
-    
+// TODO
+- (void) mirror {
+    if(self.isErased) return;
+    CGFloat scale = self.isMirrored ? 1.0 : -1.0;
+    self.isMirrored = !self.isMirrored;
+    [UIView transitionWithView:self duration:1.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationCurveEaseInOut animations:^{
+        self.transform = CGAffineTransformMakeScale(1, scale);
+    } completion:nil];
 }
 
 
 
-- (void) runSpinAnimationOnView:(UIView*)view duration:(CGFloat)duration rotations:(CGFloat)rotations repeat:(float)repeat;
-{
+
+
+- (void) spin {
+    self.isSpinning = YES;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ABF(0.2) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self runSpinAnimationOnView:self duration:0.55 + ABF(1.75) rotations:1 repeat:INFINITY];
+    });
+}
+
+- (void) runSpinAnimationOnView:(UIView*)view duration:(CGFloat)duration rotations:(CGFloat)rotations repeat:(float)repeat {
     CABasicAnimation* rotationAnimation;
     rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 /* full rotation*/ * rotations ];
     rotationAnimation.duration = duration;
     rotationAnimation.cumulative = YES;
     rotationAnimation.repeatCount = repeat;
-    
     [view.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 }
 

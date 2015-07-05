@@ -245,13 +245,9 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 
 
 
-
-
-
 ///////////////
 // INFO VIEW //
 ///////////////
-
 
 - (void) setDimensionsForInfoView {
     self.w = kScreenWidth - [ABUI scaleXWithIphone:90 ipad:120];
@@ -259,7 +255,6 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     self.x = (kScreenWidth - self.w) / 2;
     self.y = (kScreenHeight - self.h) / 2;
 }
-
 
 - (void) createInfoView {
     
@@ -308,7 +303,7 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     
     [flow addHeading:@"INTRODUCTION"];
     [flow addParagraph:@"The Abra app is a poetry instrument/spellbook that responds to touch. Caress the words and watch them shift under your fingers."];
-    [flow addParagraph:@"At the bottom of the screen is a rotary dial, by which you can navigate to different poems in the Abra cycle. Touch the top of the screen to reveal a toolbar."];
+    [flow addParagraph:@"At the bottom of the screen is a rainbow dial, by which you can navigate to different poems in the Abra cycle. Touch the top of the screen to reveal a toolbar."];
     [flow addParagraph:@"There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own."];
     [flow addSectionMargin];
     
@@ -358,16 +353,73 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 
 
 - (void) setDimensionsForTip {
-    self.w = [ABUI scaleXWithIphone:335 ipad:350];
+    self.w = [ABUI scaleXWithIphone:355 ipad:550];
     self.h = [ABUI scaleYWithIphone:200 ipad:210];
     if([ABUI isIphone]) self.h = 160;
     self.x = (kScreenWidth - self.w) / 2;
     self.y = (kScreenHeight - self.h) / 2;
 }
 
+- (ABVerticalContentFlow *) startTipFlow {
+    CGRect flowFrame = CGRectMake(viewMargin * 2, 0, self.innerView.frame.size.width - (viewMargin * 4), 500);
+    ABVerticalContentFlow *flow = [[ABVerticalContentFlow alloc] initWithFrame:flowFrame];
+    flow.isSelfCentered = YES;
+    return flow;
+}
+
+- (void) applyTipFlow:(ABVerticalContentFlow *)flow {
+    
+    CGRect outerFrame = self.frame;
+    outerFrame.size.height = [flow flowHeight] + (viewMargin * 4) + (margin * 2);
+    outerFrame.origin.y = (kScreenHeight - outerFrame.size.height) / 2;
+    self.frame = outerFrame;
+    
+    CGRect innerFrame = self.innerView.frame;
+    innerFrame.size.height = [flow flowHeight] + (viewMargin * 2);
+    self.innerView.frame = innerFrame;
+    
+    [self.innerView addSubview:flow];
+    self.contentFlow = flow;
+}
 
 
+- (void) setTipContentForWelcome {
+    ABVerticalContentFlow *flow = [self startTipFlow];
+    [flow addHeading:@"WELCOME TO ABRA!"];
+    [flow addParagraph:@"The Abra app is a poetry instrument/spellbook. Caress words and watch them change under your fingers."];
+    [flow addParagraph:@"Spin the rainbow dial to navigate to other poems in the Abra cycle. Touch the top of the screen to reveal a toolbar."];
+    [flow addParagraph:@"There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own."];
+    [flow addItalicParagraph:@"(Tap outside this box to close it.)"];
+    [flow refreshFrame];
+    [self applyTipFlow:flow];
+}
 
+- (void) setTipContentForGraft {
+    ABVerticalContentFlow *flow = [self startTipFlow];
+    [flow addHeading:@"GRAFTING"];
+    [flow addParagraph:@"You are about to graft words for the first time."];
+    [flow addParagraph:@"Type anything in the box that appears. You may enter multiple words if you wish; separate them by spaces. Once you've closed the box, draw with your finger to write your words into the screen."];
+    [flow addParagraph:@"Abra will learn and remember new words — of any alphabet — that you teach her. Over time her vocabulary will become yours."];
+    [flow refreshFrame];
+    [self applyTipFlow:flow];
+}
+
+- (void) setTipContentForSpellMode {
+    ABVerticalContentFlow *flow = [self startTipFlow];
+    [flow addHeading:@"NEW SPELL SELECTED"];
+    [flow addParagraph:@"Tap or drag your finger across the text to cast the spell."];
+    [flow refreshFrame];
+    [self applyTipFlow:flow];
+}
+
+- (void) setTipContentForCadabra {
+    ABVerticalContentFlow *flow = [self startTipFlow];
+    [flow addHeading:@"CADABRA"];
+    [flow addParagraph:@"Pressing the Cadabra button, as you just did, casts an unpredictable spell. There are many possible Cadabra effects. Some Cadabras only occur under unusual conditions, or after you have done certain things."];
+    [flow addParagraph:@"You can also cast Cadabras by pressing and holding your finger on magic words within the text."];
+    [flow refreshFrame];
+    [self applyTipFlow:flow];
+}
 
 
 @end

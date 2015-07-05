@@ -82,6 +82,9 @@ static ABMutate *ABMutateInstance = NULL;
 
 + (NSArray *) mutate:(ABScriptWord *)targetWord andLocalWords:(NSArray *)localWords mutationLevel:(int)mutationLevel lineLength:(int)lineLength {
     
+    DDLogInfo(@"mutationLevel %d %d", [ABState checkMutationLevel], mutationLevel);
+
+    
     NSArray *returnArray;
     ABScriptWord *stanzaWord = [ABScript randomScriptWordFromSet:localWords];
     ABScriptWord *randomWord = (ABI(4) == 0) ? [ABScript trulyRandomWord] :
@@ -107,7 +110,7 @@ static ABMutate *ABMutateInstance = NULL;
     
     // Look for user-submitted text; if found, duplicate it
     else if(ABI(20) < 18 && [targetWord isGrafted]) {
-        ABScriptWord *duplicate = [targetWord copy];
+        ABScriptWord *duplicate = [targetWord copyOfThisWord];
         if(ABI(2) == 0) {
             duplicate.isGrafted = NO;
             duplicate.sourceStanza = [ABState getCurrentStanza];
@@ -174,6 +177,8 @@ static ABMutate *ABMutateInstance = NULL;
 }
 
 + (NSArray *) mutateWord:(ABScriptWord *)sw inLine:(NSArray *)line {
+    DDLogInfo(@"mutationLevel %d", [ABState checkMutationLevel]);
+
     mutationType type = RANDOM;
     if([ABState checkMutationLevel] < 1 || (ABI(7) < 4)) type = DICE;
     return [ABMutate alterOneWord:sw inLine:line withMutationType:type];
@@ -291,6 +296,9 @@ static ABMutate *ABMutateInstance = NULL;
 
 + (NSArray *) remixStanza:(NSArray *)stanza andOldStanza:(NSArray *)oldStanza atMutationLevel:(int)mutationLevel andLimitTo:(int)limit {
     
+    DDLogInfo(@"mutationLevel %d", mutationLevel);
+
+    
     int changes = 0;
     NSArray *targetStanza = stanza;
     NSMutableArray *newStanza = [NSMutableArray array];
@@ -308,7 +316,7 @@ static ABMutate *ABMutateInstance = NULL;
             ABScriptWord *targetWord = [targetLine objectAtIndex:w];
             
             // Allow target new word to pass unimpeded?
-            if((ABI(32) > mutationLevel && targetWord.isGrafted == NO) ||
+            if((ABI(16) > mutationLevel && targetWord.isGrafted == NO) ||
                (limit > 0 && changes > limit - 1)) {
                 [newLine addObject:targetWord];
                 continue;
@@ -342,7 +350,7 @@ static ABMutate *ABMutateInstance = NULL;
 
 
 + (ABScriptWord *) randomWordWithMutationLevel:(CGFloat)mutationLevel {
-    
+    DDLogInfo(@"mutationLevel %f", mutationLevel);
     int index = [ABState getCurrentStanza];
     
     CGFloat range = 10 + (mutationLevel * 4);

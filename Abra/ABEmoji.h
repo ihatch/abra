@@ -19,7 +19,9 @@
 
 + (BOOL) isEmoji:(NSString *)charString;
 + (NSString *) getEmojiForStanza:(int)stanza;
-
 + (NSString *) emojiWordTransform:(NSString *)string;
+
++ (NSString *) getEmojiForCurrentMoonPhase;
+
 
 @end

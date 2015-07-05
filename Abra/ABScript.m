@@ -277,6 +277,8 @@ static ABScript *ABScriptInstance = NULL;
     NSArray *lines1 = oldStanzaLines;
     NSArray *lines2 = script[stanzaIndex];
     
+    
+    
     NSMutableArray *remixStanza = [NSMutableArray array];
     
     for(int l=0; l<[lines1 count]; l++) {

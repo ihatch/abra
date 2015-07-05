@@ -25,7 +25,6 @@ CGFloat iconWidth, iconHeight, iconBufferWidth, totalIconsWidth, currentXDrawPos
 
 ABIcon *mutateIcon, *graftIcon, *pruneIcon, *eraseIcon, *cadabraIcon, *shareIcon, *settingsIcon, *infoIcon, *flowerIcon;
 ABIcon *currentModeIcon;
-
 NSArray *icons;
 
 
@@ -45,9 +44,7 @@ NSArray *icons;
         
         [self initIcons];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(magicWordCadabra:) name:@"magicWordCadabra" object:nil];
-        
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(triggerCadabra:) name:@"triggerCadabra" object:nil];
     }
     
     return self;
@@ -146,7 +143,12 @@ NSArray *icons;
     if(type == CADABRA_ICON) {
         [icon flash];
         [mainViewController carouselFlash];
-        [ABCadabra castSpell:nil];
+
+        if([ABState shouldShowTip:@"cadabra"]) {
+            [mainViewController showTip:@"cadabra"];
+        } else {
+            [ABCadabra castSpell:nil withMagicWord:nil];
+        }
         return;
     }
 
@@ -189,12 +191,16 @@ NSArray *icons;
         if(type == GRAFT_ICON) [self triggerGraft];
         
         currentModeIcon = icon;
+        
+        if(type == PRUNE_ICON || type == MUTATE_ICON || type == ERASE_ICON) {
+            [mainViewController showTip:@"mode"];
+        }
     }
 }
 
 
-- (void) magicWordCadabra:(NSNotification *) notification {
-    if (!([[notification name] isEqualToString:@"magicWordCadabra"])) return;
+- (void) triggerCadabra:(NSNotification *) notification {
+    if (!([[notification name] isEqualToString:@"triggerCadabra"])) return;
     [cadabraIcon flash];
     [mainViewController carouselFlash];
 }
@@ -206,7 +212,7 @@ NSArray *icons;
 
 - (void) triggerGraft {
     [ABState setInteractivityModeTo:GRAFT];
-    [mainViewController showGraftModal];
+    [mainViewController pressedGraftButton];
 }
 
 
@@ -252,10 +258,7 @@ NSArray *icons;
 
 
 
-
-
 - (int) checkPoint:(CGPoint)point {
-    
     int target = -1;
     
     for(int i=0; i<[icons count]; i++) {
@@ -264,11 +267,6 @@ NSArray *icons;
             target = i;
             break;
         }
-    }
-    
-    if(target > -1) {
-//        ABIcon *targetIcon = [icons objectAtIndex:target];
-        // if(targetWord.locked) target = -1;
     }
     
     return target;

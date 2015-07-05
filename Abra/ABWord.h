@@ -24,6 +24,7 @@
 @property (nonatomic) BOOL isGrafted;
 @property (nonatomic) BOOL isErased;
 @property (nonatomic) BOOL isRedacted;
+@property (nonatomic) BOOL isMirrored;
 @property (nonatomic) BOOL isSpinning;
 @property (nonatomic) BOOL hasAnimatedIn;
 @property (nonatomic) NSString *wordID;
@@ -50,10 +51,9 @@
 - (void) eraseWithDelay:(CGFloat)delay;
 - (void) selfDestruct;
 - (void) selfDestructMorph;
-
-- (void) fadeColorToSourceStanza:(int)stanza;
-
 - (void) redact;
 - (void) spin;
+- (void) fadeColorToSourceStanza:(int)stanza;
+
 
 @end

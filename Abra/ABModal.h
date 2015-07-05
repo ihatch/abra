@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class ABMainViewController;
-// typedef NS_ENUM(NSInteger, modalType) { GRAFT_MODAL, SETTINGS_MODAL, INFO_MODAL };
-
+@class ABVerticalContentFlow;
 
 @interface ABModal : UIView
 
@@ -23,6 +22,7 @@
 
 @property (nonatomic) UITextField *textField;
 @property (nonatomic) UIScrollView *scrollView;
+@property (nonatomic) ABVerticalContentFlow *contentFlow;
 
 
 - (id) initWithType:(NSInteger)type andMainVC:(ABMainViewController *)mainVC;
@@ -30,5 +30,11 @@
 
 - (void) updateColor;
 - (void) resetScrollViewPosition;
+
+- (void) setTipContentForWelcome;
+- (void) setTipContentForGraft;
+- (void) setTipContentForSpellMode;
+- (void) setTipContentForCadabra;
+
 
 @end

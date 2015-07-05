@@ -16,11 +16,9 @@
 @property (nonatomic) BOOL destroyOnFadeOut;
 @property (nonatomic) BOOL isGraftCurtain;
 @property (nonatomic) BOOL isVisible;
-
 @property (nonatomic) BOOL ready;
 @property (nonatomic) ABIconBar *iconBar;
 @property (nonatomic) ABMainViewController *mainVC;
-
 
 - (id) initWithIconBar:(ABIconBar *)bar andMainVC:(ABMainViewController *)main;
 - (void) show;

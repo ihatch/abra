@@ -81,7 +81,10 @@ static ABClock *ABClockInstance = NULL;
     int modifier = (int)[ABState checkMutationLevel];
     if(modifier > 20) modifier = 20;
 
-    if(ABRA_ABSENTLY_MUTATE) {
+    if([ABState getAutoMutation]) {
+
+        if(clockState == PAUSED) return;
+        
         int totalWords = [ABState getTotalWordsVisible];
         CGFloat quant = (CGFloat)totalWords / 200.0f;
         modifier = (5 * quant);
