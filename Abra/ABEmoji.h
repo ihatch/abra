@@ -16,7 +16,6 @@
 + (NSString *) getRandomEmojiStringWithConcept:(NSString *)concept;
 + (NSString *) getEmojiOfSameColorAsEmoji:(NSString *)emoji;
 
-
 + (BOOL) isEmoji:(NSString *)charString;
 + (NSString *) getEmojiForStanza:(int)stanza;
 + (NSString *) emojiWordTransform:(NSString *)string;

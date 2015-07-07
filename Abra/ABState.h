@@ -83,6 +83,11 @@ typedef NS_ENUM(NSInteger, behaviorArcs) { ARC_GROWING, ARC_SHRINKING, ARC_MUTAT
 + (void) setLinesAreWoven:(BOOL)value;
 + (BOOL) checkLinesAreWoven;
 
+
++ (void) setLinesMirrored:(BOOL)value;
++ (BOOL) checkLinesMirrored;
+
+
 // ---------
 
 + (void) incrementUserActions;

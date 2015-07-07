@@ -26,5 +26,6 @@
 - (void) carouselFlash;
 - (void) prevNextFeedbackFlash;
 
+- (void) flashTwins;
 
 @end

@@ -403,6 +403,11 @@ static ABData *ABDataInstance = NULL;
     return [graftsByCharCount objectForKey:@(count)];
 }
 
++ (NSString *) getPastGraftString {
+    if([pastGraftStrings count] == 0) return @"? ?";
+    return [pastGraftStrings objectAtIndex:(arc4random() % [pastGraftStrings count])];
+}
+
 
 //+ (NSMutableArray *) getPastGraftSimilarToWord:(NSString *)word {
 //    

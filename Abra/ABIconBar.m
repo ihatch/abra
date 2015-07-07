@@ -142,12 +142,13 @@ NSArray *icons;
     iconType type = icon.iconType;
     
     if(type == MUTATE_ICON) [ABCadabra castSpell:@"AREA_RANDOM" withMagicWord:nil];
-    //        if(type == GRAFT_ICON) [self triggerGraft];
+    if(type == GRAFT_ICON) [ABCadabra castSpell:@"PAST_GRAFT" withMagicWord:nil];
     if(type == PRUNE_ICON) [ABCadabra castSpell:@"RANDOM_PRUNE" withMagicWord:nil];
     if(type == ERASE_ICON) [ABCadabra castSpell:@"MINOR_ERASE" withMagicWord:nil];
-
+    if(type == CADABRA_ICON) [mainViewController flashTwins];
     if(type == SHARE_ICON) [ABState copyAllTextToClipboard];
     if(type == SETTINGS_ICON) [ABCadabra castSpell:@"SHUFFLE" withMagicWord:nil];
+    // if(type == INFO_ICON) [ABCadabra castSpell:@"PAST_GRAFT" withMagicWord:nil];
 }
 
 

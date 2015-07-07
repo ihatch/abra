@@ -59,13 +59,6 @@ NSDictionary *colorCycle;
 
 + (void) initEmoji {
     
-    
-    //    NSString *test = @"\U0001F34E";
-    //    [test isEqualToString:@"🍎"];
-    //    DDLogInfo(@"apple test: %i", [test isEqualToString:@"🍎"]);
-
-    
-    
     emojiIndex = [NSMutableDictionary dictionary];
     
     allEmoji = [@"😄😃😀😊☺️😉😍😘😚😗😙😜😝😛😳😁😔😌😒😞😣😢😂😭😪😥😰😅😓😩😫😨😱😠😡😤😖😆😋😷😎😴😵😲😟😦😧😈👿😮😬😐😕😯😶😇😏😑👲👳👮👷💂👶👦👧👨👩👴👵👱👼👸😺😸😻😽😼🙀😿😹😾👹👺🙈🙉🙊💀👽💩🔥✨🌟💫💥💢💦💧💤💨👂👀👃👅👄👍👎👌👊✊✌️👋✋👐👆👇👉👈🙌🙏☝️👏💪🚶🏃💃👫👪👬👭💏💑👯🙆🙅💁🙋💆💇💅👰🙎🙍🙇🎩👑👒👟👞👡👠👢👕👔👚👗🎽👖👘👙💼👜👝👛👓🎀🌂💄💛💙💜💚❤️💔💗💓💕💖💞💘💌💋💍💎👤👥💬👣💭🐶🐺🐱🐭🐹🐰🐸🐯🐨🐻🐷🐽🐮🐗🐵🐒🐴🐑🐘🐼🐧🐦🐤🐥🐣🐔🐍🐢🐛🐝🐜🐞🐌🐙🐚🐠🐟🐬🐳🐋🐄🐏🐀🐃🐅🐇🐉🐎🐐🐓🐕🐖🐁🐂🐲🐡🐊🐫🐪🐆🐈🐩🐾💐🌸🌷🍀🌹🌻🌺🍁🍃🍂🌿🌾🍄🌵🌴🌲🌳🌰🌱🌼🌐🌞🌝🌚🌑🌒🌓🌔🌕🌖🌗🌘🌜🌛🌙🌍🌎🌏🌋🌌🌠⭐️☀️⛅️☁️⚡️☔️❄️⛄️🌀🌁🌈🌊🎍💝🎎🎒🎓🎏🎆🎇🎐🎑🎃👻🎅🎄🎁🎋🎉🎊🎈🎌🔮🎥📷📹📼💿📀💽💾💻📱☎️📞📟📠📡📺📻🔊🔉🔈🔇🔔🔕📢📣⏳⌛️⏰⌚️🔓🔒🔏🔐🔑🔎💡🔦🔆🔅🔌🔋🔍🛁🛀🚿🚽🔧🔩🔨🚪🚬💣🔫🔪💊💉💰💴💵💷💶💳💸📲📧📥📤✉️📩📨📯📫📪📬📭📮📦📝📄📃📑📊📈📉📜📋📅📆📇📁📂✂️📌📎✒️✏️📏📐📕📗📘📙📓📔📒📚📖🔖📛🔬🔭📰🎨🎬🎤🎧🎼🎵🎶🎹🎻🎺🎷🎸👾🎮🃏🎴🀄️🎲🎯🏈🏀⚽️⚾️🎾🎱🏉🎳⛳️🚵🚴🏁🏇🏆🎿🏂🏊🏄🎣☕️🍵🍶🍼🍺🍻🍸🍹🍷🍴🍕🍔🍟🍗🍖🍝🍛🍤🍱🍣🍥🍙🍘🍚🍜🍲🍢🍡🍳🍞🍩🍮🍦🍨🍧🎂🍰🍪🍫🍬🍭🍯🍎🍏🍊🍋🍒🍇🍉🍓🍑🍈🍌🍐🍍🍠🍆🍅🌽🏠🏡🏫🏢🏣🏥🏦🏪🏩🏨💒⛪️🏬🏤🌇🌆🏯🏰⛺️🏭🗼🗾🗻🌄🌅🌃🗽🌉🎠🎡⛲️🎢🚢⛵️🚤🚣⚓️🚀✈️💺🚁🚂🚊🚉🚞🚆🚄🚅🚈🚇🚝🚋🚃🚎🚌🚍🚙🚘🚗🚕🚖🚛🚚🚨🚓🚔🚒🚑🚐🚲🚡🚟🚠🚜💈🚏🎫🚦🚥⚠️🚧🔰⛽️🏮🎰♨️🗿🎪🎭📍🚩🇬🇧🇷🇺🇫🇷🇯🇵🇰🇷🇩🇪🇨🇳🇺🇸🇺🇸🇺🇸1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣0️⃣🔟🔢#️⃣🔣⬆️⬇️⬅️➡️🔠🔡🔤↗️↖️↘️↙️↔️↕️🔄◀️▶️🔼🔽↩️↪️ℹ️⏪⏩⏫⏬⤵️⤴️🆗🔀🔁🔂🆕🆙🆒🆓🆖📶🎦🈁🈯️🈳🈵🈴🈲🉐🈹🈺🈶🈚️🚻🚹🚺🚼🚾🚰🚮🅿️♿️🚭🈷🈸🈂Ⓜ️🛂🛄🛅🛃🉑㊙️㊗️🆑🆘🆔🚫🔞📵🚯🚱🚳🚷🚸⛔️✳️❇️❎✅✴️💟🆚📳📴🅰🅱🆎🅾💠➿♻️♈️♉️♊️♋️♌️♍️♎️♏️♐️♑️♒️♓️⛎🔯🏧💹💲💱©®™❌‼️⁉️❗️❓❕❔⭕️🔝🔚🔙🔛🔜🔃🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕖🕗🕘🕙🕚🕡🕢🕣🕤🕥🕦✖️➕➖➗♠️♥️♣️♦️💮💯✔️☑️🔘🔗➰〰〽️🔱◼️◻️◾️◽️▪️▫️🔺🔲🔳⚫️⚪️🔴🔵🔻⬜️⬛️🔶🔷🔸🔹" convertToArray];
@@ -159,21 +152,16 @@ NSDictionary *colorCycle;
         @"chris": @"🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🏊🏊🏊🏊🏊🏊🏊🏊🏊🚣💧💧💧💧💧💧💧💦💙☔🌀🐳🔷🔷🔷🔷🔹🔹🔹🔹🌴🌴🌴🌴🌴🐠🐠🐠🐠👙🚿🚰😘",
         @"animals": @"🐶🐺🐱🐭🐹🐰🐸🐯🐨🐻🐷🐽🐮🐗🐵🐒🐴🐑🐘🐼🐧🐦🐤🐥🐣🐔🐍🐢🐛🐝🐜🐞🐌🐙🐚🐠🐟🐬🐳🐋🐄🐏🐀🐃🐅🐇🐉🐎🐐🐓🐕🐖🐁🐂🐲🐡🐊🐫🐪🐆🐈🐩",
         @"photos": @"🌇🌆🏯🏰⛺️🏭🗼🗾🗻🌄🌅🌃🗽🌉🎠🎡⛲️🎢🚢",
-        @"food": @"☕️🍵🍶🍼🍺🍻🍸🍹🍷🍴🍕🍔🍟🍗🍖🍝🍛🍤🍱🍣🍥🍙🍘🍚🍜🍲🍢🍡🍳🍞🍩🍮🍦🍨🍧🎂🍰🍪🍫🍬🍭🍯🍎🍏🍊🍋🍒🍇🍉🍓🍑🍈🍌🍐🍍🍠🍆🍅🌽"
-        
-        
-        };
+        @"fruit": @"🍹🍎🍏🍊🍋🍒🍒🍇🍉🍓🍑🍈🍌🍐🍍",
+        @"sweets": @"🍥🍩🍮🍦🍨🍧🎂🍰🍪🍫🍬🍭🍯",
+        @"america": @"🍺🍕🍔🍟🍦🌽",
+        @"rich": @"💸🐩🎩👠",
+        @"food": @"☕️🍵🍶🍼🍺🍻🍸🍹🍷🍴🍕🍔🍟🍗🍖🍝🍛🍤🍱🍣🍥🍙🍘🍚🍜🍲🍢🍡🍳🍞🍩🍮🍦🍨🍧🎂🍰🍪🍫🍬🍭🍯🍠🍆🍅🌽"
+    };
 
 
     emojiByColor = [ABEmoji processEmojiDictionary:colors withType:@"color"];
     emojiByConcept = [ABEmoji processEmojiDictionary:concepts withType:@"concept"];
-    
-//    for(NSString *e in allEmoji) {
-//        if([emojiIndex objectForKey:e] == nil) {
-//            DDLogInfo(@"MISSING EMOJI COLOR: %@", e);
-//        }
-//    }
-
     emojiToWords = [NSMutableDictionary dictionary];
     wordsToEmoji = [NSMutableDictionary dictionary];
     
@@ -190,16 +178,7 @@ NSDictionary *colorCycle;
         }
     }
      
-//    DDLogInfo(@"test");
 }
-
-
-
-
-
-
-
-
 
 
 + (NSMutableDictionary *) processEmojiDictionary:(NSDictionary *)stringDict withType:(NSString *)type {
@@ -234,9 +213,6 @@ NSDictionary *colorCycle;
 
 + (NSString *) getRandomEmojiStringWithColor:(NSString *)color {
     NSString *e = [ABEmoji getRandomEmojiForKey:color inDictionary:emojiByColor];
-    if(e == nil) {
-        DDLogInfo(@"why?");
-    }
     return e;
 }
 
@@ -268,19 +244,10 @@ NSDictionary *colorCycle;
 
 
 + (NSString *) emojiWordTransform:(NSString *)string {
-    
     NSArray *e2w = [emojiToWords objectForKey:string];
-
-    if(e2w != nil) {
-        return e2w[arc4random() % [e2w count]];
-    }
-    
+    if(e2w != nil) return e2w[arc4random() % [e2w count]];
     NSArray *w2e = [wordsToEmoji objectForKey:string];
-
-    if(w2e != nil) {
-        return w2e[arc4random() % [w2e count]];
-    }
-    
+    if(w2e != nil) return w2e[arc4random() % [w2e count]];
     return nil;
 }
 
@@ -305,7 +272,6 @@ NSDictionary *colorCycle;
     int d = (int)[components day];
     int m = (int)[components month];
     int y = (int)[components year];
-    
     int c, e;
     double jd;
     int b;

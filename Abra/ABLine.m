@@ -505,12 +505,10 @@
 
 
 - (void) absentlyMutate {
-    
-    [self mirror];
-    
+        
     if([self.lineScriptWords count] == 0) return;
     NSArray *indices = [self locationsOfVisibleWords];
-    NSArray *erased = [self locationsOfErasedWords];    // TODO
+//    NSArray *erased = [self locationsOfErasedWords];    // TODO
     int index = 0;
     
     // Occasionally choose any old word
@@ -523,7 +521,7 @@
         index = [[indices objectAtIndex:randomIndex] intValue];
     }
     
-    if(ABI(12) < 2) {
+    if(ABI(15) < 2 && [indices count] > 1) {
         [[self.lineWords objectAtIndex:index] erase];
         return;
     }
@@ -572,8 +570,6 @@
 
 //- (CGFloat) excessHorizontalWidth {
 //    if(self.lineWidth < kScreenWidth) return 0;
-//    
-//    
 //}
 
 
@@ -583,13 +579,23 @@
 
 
 
+- (void) normalize {
+    if(self.isMirrored) [self mirrorWithDelay:0];
+}
 
-- (void) mirror {
+
+
+- (void) mirrorWithDelay:(CGFloat)delay {
+    
     CGFloat scale = self.isMirrored ? 1.0 : -1.0;
     self.isMirrored = !self.isMirrored;
-    [UIView transitionWithView:self duration:1.5f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationCurveEaseInOut animations:^{
-        self.transform = CGAffineTransformMakeScale(1, scale);
-    } completion:nil];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [UIView transitionWithView:self duration:1.5f + ABF(0.12f) + delay options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationCurveEaseInOut animations:^{
+            self.transform = CGAffineTransformMakeScale(scale, scale);
+        } completion:nil];
+    });
+    
 }
 
 

@@ -75,7 +75,7 @@ NSMutableDictionary *counts;
 }
 
 - (void) recordGraft:(NSString *)text onLine:(int)line atIndex:(int)index {
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    // NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
     
     
 }

@@ -13,7 +13,6 @@
 #import "ABState.h"
 #import "ABVerticalContentFlow.h"
 #import <QuartzCore/QuartzCore.h>
-#import "TTTAttributedLabel.h"
 
 @implementation ABModal
 
@@ -331,10 +330,14 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     [flow addHeading:@"ACKNOWLEDGEMENTS"];
     [flow addParagraph:@"We are grateful to the Center for Book and Paper Arts at Columbia College Chicago for their support of this work: Stephen Woodall, tireless mentor; Amy Rabas, visionary paper artist; and Clif Meador, Jessica Cochran, April Sheridan, Michelle Citron, and Paul Catanese, generous interlocutors."];
     [flow addParagraph:@"Additional gratitude to Abraham Avnisan, Steven Baughman, Danny Cannizaro, Samantha Gorman, Stephanie Strickland, Chris Wegman, and Paula Wegman for support and feedback on the app during development."];
-    [flow addParagraph:@"We are indebted to John Cayley, Brian Eno, and Peter Chilvers, whose ambient digital work informed our conception of this project from an early stage."];
+    [flow addParagraph:@"We are also indebted to John Cayley, Brian Eno, and Peter Chilvers, whose ambient poetics informed our conception of this project from its early stages."];
     [flow addSpecialItalicizedParagraph:@"Some of Abra's text appeared in slightly different form in Action, Yes!; The &Now Awards 3; Black Warrior Review; Bone Bouquet; The Collagist; Joyland Poetry; Lana Turner: A Journal of Poetry and Opinion; Lit; Peep/Show; SPECS; Spoon River Poetry Review; and VLAK."];
     [flow addSectionMargin];
-    
+
+    [flow addHeading:@"CONTACT"];
+    [flow addParagraph:@"Comments, questions, bugs, spectacular screenshots? abraalivingtext@gmail.com"];
+    [flow addSectionMargin];
+
     [flow refreshFrame];
 }
 
@@ -386,8 +389,11 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 - (void) setTipContentForWelcome {
     ABVerticalContentFlow *flow = [self startTipFlow];
     [flow addHeading:@"WELCOME TO ABRA!"];
-    [flow addParagraph:@"Abra is a living poetry instrument/spellbook. She responds to touch. Caress the words and watch them shift under your fingers."];
-    [flow addParagraph:@"Spin the rainbow dial to navigate to other poems in the Abra cycle. Touch the top of the screen to reveal a toolbar."];
+//    [flow addParagraph:@"This app is a poetry instrument/spellbook that responds to touch. Caress the words and watch them shift under your fingers."];
+//    [flow addParagraph:@"There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own."];
+
+    [flow addParagraph:@"This app is a poetry instrument/spellbook that responds to touch."];
+    [flow addParagraph:@"Caress the words and watch them shift under your fingers. Spin the rainbow dial to navigate. Touch the top of the screen for tools."];
     [flow addParagraph:@"There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own."];
     [flow addItalicParagraph:@"(Tap outside this box to close it.)"];
     [flow refreshFrame];
@@ -398,8 +404,8 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     ABVerticalContentFlow *flow = [self startTipFlow];
     [flow addHeading:@"GRAFTING"];
     [flow addParagraph:@"You are about to graft words for the first time."];
-    [flow addParagraph:@"Type anything in the box that appears. You may enter multiple words if you wish; separate them by spaces. Once you've closed the box, draw with your finger to write your words into the screen."];
-    [flow addParagraph:@"Abra will learn and remember new words — of any alphabet — that you teach her."];
+    [flow addParagraph:@"Type anything in the box that appears. You may enter multiple words if you wish; separate them by spaces. Once you've closed the box, draw with your finger to write onto the screen."];
+    [flow addParagraph:@"Abra will learn and remember new words — of any alphabet."];
     [flow refreshFrame];
     [self applyTipFlow:flow];
 }

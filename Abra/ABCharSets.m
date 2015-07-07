@@ -7,6 +7,7 @@
 //
 
 
+#import "ABCharSets.h"
 #import "ABEmoji.h"
 #import "emojis.h"
 #import "ABConstants.h"

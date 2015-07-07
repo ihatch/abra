@@ -33,8 +33,92 @@ masquerade
 reclusive
 
 
+WORDS_TO_EMOJI
+transform
+symbols
+emoji
+images
+image
+glyphs
+hieroglyphs
+japan
+translate
+other
+pistol
+dewstrop
+flowerette
+
+
+TWINS
+twins
+twin
+double
+redouble
+conjoin
+conjoined
+abra
+oracle
+
+
+RICH
+rich
+wealthy
+wealth
+money
+riches
+bling
+
+
+FRUIT
+sweet
+fruit
+berry
+shucked
+apple
+reds
+craving
+sugar
+ripe
+
+
+SWEETS
+candy
+lick
+lollipop
+nestle
+glazed
+
+
+AMERICA
+america
+american
+usa
+
+
 RANDOM_COLORIZE
 sexstatic
+penis
+
+
+MIRROR
+mirror
+rim
+blinds
+venetian
+
+
+PAST_GRAFT
+memory
+remember
+past
+graft
+me
+myself
+i
+deja
+vu
+again
+membrane
 
 
 ALLITERATIVE_ERASE
@@ -182,7 +266,8 @@ thread
 BLACK_BOX
 web
 network
-heaving
+patterned
+armored
 
 
 AREA_TOP
@@ -388,7 +473,6 @@ own
 harvest
 mechanism
 inattention
-repeat
 broken
 program
 field
@@ -424,7 +508,6 @@ clenching
 schism
 specter
 harmonic
-center
 rot
 fraying
 boss
@@ -460,7 +543,6 @@ newer
 such
 maintain
 fire
-bling
 licking
 flaming
 tongues
@@ -476,7 +558,6 @@ does
 python
 power
 ethical
-obligation
 constrict
 itself
 salmon
@@ -484,14 +565,12 @@ rot
 banks
 river
 hollow
-2D
 plane
 exiting
 voiceless
 palace
 slapped
 fuel
-slaves
 real
 spade
 entry
@@ -511,7 +590,6 @@ itself
 antithesis
 ouroboros
 zero
-mouth
 speaking
 black
 hole
@@ -519,7 +597,6 @@ hunger
 dying
 bugs
 impossible
-mirror
 recursive
 touch
 

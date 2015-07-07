@@ -35,7 +35,10 @@
 
 - (void) animateToYPosition:(CGFloat)y duration:(CGFloat)duration delay:(CGFloat)delay;
 
-- (NSString *) lineAsPlainTextString;
+- (NSArray *) locationsOfVisibleWords;
 
+- (NSString *) lineAsPlainTextString;
+- (void) mirrorWithDelay:(CGFloat)delay;
+- (void) normalize;
 
 @end

@@ -35,14 +35,13 @@
 
 NSMutableArray *ABLines;
 ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
-
 ABIconBar *iconBar;
-ABBlackCurtain *graftCurtain, *settingsCurtain, *infoCurtain;
-ABBlackCurtain *tipCurtain;
+ABBlackCurtain *graftCurtain, *settingsCurtain, *infoCurtain, *tipCurtain;
 ABModal *graftModal, *settingsModal, *infoModal;
 ABModal *welcomeTip, *graftTip, *cadabraTip, *spellModeTip;
 UITextField *graftTextField;
 NSString *currentTip;
+UIImageView *twinsView;
 
 BOOL carouselIsAnimating, preventInput;
 CGPoint touchStart;
@@ -75,7 +74,51 @@ CGPoint touchStart;
     DDLogInfo(@"Screen: %f x %f", kScreenWidth, kScreenHeight);
     self.view.backgroundColor = [UIColor blackColor];
     self.view.userInteractionEnabled = YES;
+    
+    [self initTwinsImage];
 }
+
+
+
+
+- (UIImage *) imageWithImage:(UIImage *)image scaledToHeight: (float) i_height {
+    float oldHeight = image.size.height;
+    float scaleFactor = i_height / oldHeight;
+    float newHeight = oldHeight * scaleFactor;
+    float newWidth = image.size.width * scaleFactor;
+    UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight));
+    [image drawInRect:CGRectMake(0, 0, newWidth, newHeight)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+- (void) initTwinsImage {
+    UIImage *image = [UIImage imageNamed:@"abra_twins.png"];
+    image = [self imageWithImage:image scaledToHeight:self.view.frame.size.height - 50];
+    twinsView = [[UIImageView alloc] initWithImage:image];
+    twinsView.frame = CGRectMake((kScreenWidth - image.size.width) / 2, 25, image.size.width, image.size.height);
+    twinsView.alpha = 0;
+    twinsView.hidden = YES;
+    [self.view addSubview:twinsView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(flashTwins) name:@"flashTwins" object:nil];
+}
+
+- (void) flashTwins {
+    twinsView.hidden = NO;
+    [UIView animateWithDuration:1.0 animations:^() {
+        twinsView.alpha = 0.3;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:1.0 animations:^() {
+            twinsView.alpha = 0;
+        } completion:^(BOOL finished) {
+            twinsView.hidden = YES;
+        }];
+    }];
+}
+
+
 
 
 - (void) initLines {
@@ -457,7 +500,7 @@ CGPoint touchStart;
 
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:7.5];
-    [self.carousel setAlpha:0.8];
+    [self.carousel setAlpha:0.85];
     [UIView commitAnimations];
 }
 
@@ -504,7 +547,7 @@ CGPoint touchStart;
         case iCarouselOptionSpacing: { return value * 1.21f; }
         case iCarouselOptionFadeMin: { return -0.1f; }
         case iCarouselOptionFadeMax: { return 0.35f; }
-        case iCarouselOptionFadeRange: { return 1.01f; }
+        case iCarouselOptionFadeRange: { return 1.31f; }
         case iCarouselOptionFadeMinAlpha: { return 0.26f; }
         default: { return value; }
     }

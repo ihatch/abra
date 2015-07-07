@@ -45,7 +45,7 @@ NSUserDefaults *defaults;
 
 int tipWelcome, tipGraft, tipSpellMode, tipCadabra;
 BOOL settingAutonomousMutation, settingAutoplay, settingIPhoneDisplayMode, settingIPhoneDisplayModeHasChanged;
-BOOL secretSettingSpaceyMode, linesAreFlipped, linesAreWoven;
+BOOL secretSettingSpaceyMode, linesAreFlipped, linesAreWoven, linesAreMirrored;
 
 BOOL DEV_PREVENT_TIPS;
 
@@ -63,7 +63,7 @@ static ABState *ABStateInstance = NULL;
 - (id) init {
     if(self = [super init]) {
         
-        DEV_PREVENT_TIPS = YES;
+        DEV_PREVENT_TIPS = NO;
         [ABState resetTips];
         [ABState initTips];
         
@@ -562,6 +562,16 @@ static ABState *ABStateInstance = NULL;
 + (BOOL) checkLinesAreFlipped {
     return linesAreFlipped;
 }
+
+
+
++ (void) setLinesMirrored:(BOOL)value {
+    linesAreMirrored = value;
+}
++ (BOOL) checkLinesMirrored {
+    return linesAreMirrored;
+}
+
 
 
 

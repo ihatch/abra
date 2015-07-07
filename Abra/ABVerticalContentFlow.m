@@ -9,7 +9,6 @@
 #import "ABVerticalContentFlow.h"
 #import "ABConstants.h"
 #import "ABUI.h"
-#import "TTTAttributedLabel.h"
 #import <QuartzCore/QuartzCore.h>
 
 
@@ -340,15 +339,6 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versio
     self.appendYPosition += labelHeight;
     self.appendYPosition += self.paragraphMarginBottom;
 }
-
-
-//- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-//    if ([touch.view isKindOfClass:[TTTAttributedLabel class]] || [touch.view isKindOfClass:[UIImageView class]]) {
-//        return FALSE;
-//    } else {
-//        return TRUE;
-//    }
-//}
 
 
 

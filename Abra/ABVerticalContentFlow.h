@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TTTAttributedLabel.h"
 
-@interface ABVerticalContentFlow : UIView <TTTAttributedLabelDelegate>
+@interface ABVerticalContentFlow : UIView
 
 @property (nonatomic) CGFloat appendYPosition;
 @property (nonatomic) CGFloat headingMarginBottom;

@@ -19,9 +19,9 @@
 @property (nonatomic) int sourceStanza;
 @property (nonatomic) int morphCount;
 @property (nonatomic) int emojiCount;
-@property (nonatomic) int nonAsciiCount;
+// @property (nonatomic) int nonAsciiCount;
 @property (nonatomic) BOOL hasRunChecks;
-@property (nonatomic) BOOL isNumber;
+// @property (nonatomic) BOOL isNumber;
 @property (nonatomic) BOOL marginLeft;
 @property (nonatomic) BOOL marginRight;
 @property (nonatomic) BOOL isGrafted;

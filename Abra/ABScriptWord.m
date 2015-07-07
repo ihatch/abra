@@ -42,7 +42,7 @@
 
 @implementation ABScriptWord
 
-@synthesize text, sourceStanza, marginLeft, marginRight, family, leftSisters, rightSisters, isGrafted, emojiCount, nonAsciiCount, isNumber;
+@synthesize text, sourceStanza, marginLeft, marginRight, family, leftSisters, rightSisters, isGrafted, emojiCount; // isNumber  nonAsciiCount
 
 - (id) initWithText:(NSString *)wordText sourceStanza:(int)stanza inFamily:(NSArray *)fam isGrafted:(BOOL)isGraft {
     if(self = [super init]) {
@@ -53,8 +53,8 @@
         self.marginLeft = YES;
         self.marginRight = YES;
         self.emojiCount = 0;
-        self.nonAsciiCount = 0;
-        self.isNumber = NO;
+//         self.nonAsciiCount = 0;
+//        self.isNumber = NO;
         self.hasRunChecks = NO;
         self.cadabra = [ABData checkMagicWord:wordText];
         
@@ -93,26 +93,25 @@
 
 
 - (void) runChecks {
-    self.isNumber = [self numberCheck] != 0;
-    self.nonAsciiCount = [self nonAsciiCheck];
-    if(self.nonAsciiCount > 0) {
-        self.emojiCount = [self emojiCheck];
-    }
+//    self.isNumber = [self numberCheck] != 0;
+//    self.nonAsciiCount = [self nonAsciiCheck];
+//    if(self.nonAsciiCount > 0) {
+    self.emojiCount = [self emojiCheck];
+//    }
     self.hasRunChecks = YES;
 }
 
 - (int) emojiCheck {
     return [self checkWithRegex:EMOJI_REGEX];
 }
-- (int) nonAsciiCheck {
-    return [self checkWithRegex:NON_ASCII_REGEX];
-}
+//- (int) nonAsciiCheck {
+//    return [self checkWithRegex:NON_ASCII_REGEX];
+//}
 
 // TODO ?
-- (int) numberCheck {
-    return 0;
-//    return [self checkWithRegex:NUMBERS_REGEX];
-}
+//- (int) numberCheck {
+////    return [self checkWithRegex:NUMBERS_REGEX];
+//}
 
 - (int) checkWithRegex:(NSString *)regexString {
     NSError *error = nil;
@@ -124,9 +123,7 @@
 
 
 - (NSArray *) charArray {
-    if (_myCharArray == nil) {
-        _myCharArray = [self.text convertToArray];
-    }
+    if (_myCharArray == nil) _myCharArray = [self.text convertToArray];
     return _myCharArray;
 }
 
@@ -146,10 +143,10 @@
 
     copy.marginLeft = word.marginLeft;
     copy.marginRight = word.marginRight;
-
-    copy.isNumber = word.isNumber;
     copy.emojiCount = word.emojiCount;
-    copy.nonAsciiCount = word.nonAsciiCount;
+
+//    copy.isNumber = word.isNumber;
+//    copy.nonAsciiCount = word.nonAsciiCount;
     
     copy.leftSisters = [[NSMutableArray alloc] initWithArray:word.leftSisters copyItems:YES];
     copy.rightSisters = [[NSMutableArray alloc] initWithArray:word.rightSisters copyItems:YES];
