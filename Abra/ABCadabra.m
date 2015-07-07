@@ -18,61 +18,13 @@
 #import "ABEmoji.h"
 #import "ABScript.h"
 #import "ABHistory.h"
+#import "ABApprentice.h"
 
-
-typedef NS_ENUM(NSInteger, fadeType) {
-    FADE_TOP,
-    FADE_BOTTOM,
-    FADE_LEFT,
-    FADE_RIGHT,
-    FADE_INNER,
-    FADE_OUTER,
-    FADE_RANDOM
-};
-
-
-typedef NS_ENUM(NSInteger, spellFxType) {
-    SPELL_FX_MUTATE,
-    SPELL_FX_ERASE,
-    SPELL_FX_PRUNE,
-    SPELL_FX_TREES,
-    SPELL_FX_CHRIS,
-    SPELL_FX_CHESS,
-    SPELL_FX_ONE_SYMBOL,
-    SPELL_FX_STANZA_EMOJI
-};
-
-
-typedef NS_ENUM(NSInteger, spellType) {
-    SPELL_SPIN_WORDS,
-    SPELL_REDACT_WORDS,
-    SPELL_ALLITERATIVE_ERASURE,
-    SPELL_RANDOM_ERASURE,
-    SPELL_RAINBOW,
-    SPELL_SPACEY_MODE,
-    SPELL_EMOJI_COLOR_SHIFT,
-    SPELL_ERASE_ALL_EMOJI,
-    SPELL_ERASE_ALL_EXCEPT_EMOJI,
-    SPELL_EMOJI_FOREST,
-    SPELL_FLIP_LINE_ORDER,
-    SPELL_SHUFFLE_WORDS,
-    SPELL_BLACK_BOX_QUOTE,
-    SPELL_RANDOM_FADE_MUTATION
-};
-
-
-
-
-
-
-
-
-// Methods to split string that work with extended chars (emoji)
 @interface NSString (ConvertToArray)
-- (NSArray *)convertToArray;
+- (NSArray *) convertToArray;
 @end
 @implementation NSString (ConvertToArray)
-- (NSArray *)convertToArray {
+- (NSArray *) convertToArray {
     NSMutableArray *arr = [NSMutableArray array];
     NSUInteger i = 0;
     while (i < self.length) {
@@ -85,14 +37,11 @@ typedef NS_ENUM(NSInteger, spellType) {
 }
 @end
 
-
-// This category enhances NSMutableArray by providing
-// methods to randomly shuffle the elements.
 @interface NSMutableArray (Shuffling)
-- (void)shuffle;
+- (void) shuffle;
 @end
 @implementation NSMutableArray (Shuffling)
-- (void)shuffle {
+- (void) shuffle {
     NSUInteger count = [self count];
     for (NSUInteger i = 0; i < count; ++i) {
         NSInteger remainingCount = count - i;
@@ -104,147 +53,168 @@ typedef NS_ENUM(NSInteger, spellType) {
 
 
 
+
+// ----------------------------------------------------------------------------------------
+
+typedef NS_ENUM(NSInteger, areaType) {
+    AREA_TOP, AREA_BOTTOM, AREA_LEFT, AREA_RIGHT, AREA_INNER, AREA_OUTER, AREA_RANDOM
+};
+
+
 @implementation ABCadabra
 
-NSArray *ABLines;
-NSArray *stanzaLines;
-NSMutableArray *stringLines;
-NSMutableArray *allStrings;
-
+NSArray *ABLines, *stanzaLines;
+NSMutableArray *stringLines, *allStrings;
 ABHistory *history;
-
-
+ABApprentice *apprentice;
 
 
 + (void) castSpell:(NSString *)spell withMagicWord:(NSString *)magicWord {
     
-    history.cadabraCount ++;
+    if(apprentice == nil) apprentice = [[ABApprentice alloc] init];
+    if(history == nil) history = [ABHistory history];
+    [history record:MAGIC line:-1 index:-1];
+
     
     ABLines = [ABState getLines];
     stanzaLines = [ABState getCurrentScriptWordLines];
-
     stringLines = [NSMutableArray array];
     allStrings = [NSMutableArray array];
     
     int hasFamilyCount = 0;
     int hasEmojiCount = 0;
-    int isMutatedCount = 0;
-    int isGraftedCount = 0;
-    int totalWords = 0;
+    int mutatedCount = 0;
+    int graftedCount = 0;
+    int visibleCount = 0;
+    int totalWordCount = 0;
+    
     
     NSMutableDictionary *analysis = [NSMutableDictionary dictionary];
     
     
     for(ABLine *line in ABLines) {
+        
         NSMutableArray *stringLine = [NSMutableArray array];
-        for(ABScriptWord *sw in line.lineScriptWords) {
+        int swlen = (int)[line.lineScriptWords count];
+        
+        for(int i = 0; i < swlen; i ++) {
+            
+            ABScriptWord *sw = [line.lineScriptWords objectAtIndex:i];
+            ABWord *w = [line.lineWords objectAtIndex:i];
+            
+            BOOL visible = (w.isErased == NO);
+            
             [allStrings addObject:sw.text];
             [stringLine addObject:sw.text];
             
             analysis = [ABCadabra analyzeLines];
+            
             if(sw.hasFamily) hasFamilyCount ++;
-            if(sw.emojiCount > 0) hasEmojiCount ++;
-            if(sw.morphCount > 0) isMutatedCount ++;
-            if(sw.isGrafted == YES) isGraftedCount ++;
-            totalWords ++;
+            if(visible && sw.emojiCount > 0) hasEmojiCount ++;
+            if(visible && sw.morphCount > 0) mutatedCount ++;
+            if(visible && sw.isGrafted == YES) graftedCount ++;
+            if(visible) visibleCount ++;
+            totalWordCount ++;
         }
         [stringLines addObject:stringLine];
     }
 
     
-    // SPECIFIED SPELL
+    BOOL inSpaceyMode = [ABState checkSpaceyMode];
+
+    // check for conditions like all erased, etc.
+    
+    
+
+    // SPECIFIC SPELL
     if(spell != nil) {
-
         [[NSNotificationCenter defaultCenter] postNotificationName:@"triggerCadabra" object:self];
-
-        if([spell isEqualToString:@"PRUNE_FIRST_LAST"]) [ABCadabra pruneInterior];
-        if([spell isEqualToString:@"SPIN"]) [ABCadabra spinMagic];
-        if([spell isEqualToString:@"REDACT"]) [ABCadabra redactMagic];
-        if([spell isEqualToString:@"ALLITERATIVE_ERASE"]) [ABCadabra firstLetterErasure];
-        if([spell isEqualToString:@"RANDOM_ERASE"]) [ABCadabra randomErasureMagic];
-        if([spell isEqualToString:@"RAINBOW"]) [ABCadabra rainbowMagic];
-        if([spell isEqualToString:@"FOREST"]) [ABCadabra mutateLinesWithFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_TREES];
-        if([spell isEqualToString:@"CHRIS"]) [ABCadabra mutateLinesWithFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_CHRIS];
-        if([spell isEqualToString:@"FLIP_LINE_ORDER"]) [ABCadabra flipLines];
-        if([spell isEqualToString:@"SHUFFLE"]) [ABCadabra randomlyReorderWords];
-        if([spell isEqualToString:@"SPACEY_MODE"]) [ABCadabra spaceOutLetters];
-        if([spell isEqualToString:@"EMOJI_COLOR_SHIFT"]) [ABCadabra emojiColorShift];
-        if([spell isEqualToString:@"ERASE_ALL_EMOJI"]) [ABCadabra eraseAllEmoji];
-        if([spell isEqualToString:@"ERASE_ALL_EXCEPT_EMOJI"]) [ABCadabra eraseAllExceptEmoji];
-        if([spell isEqualToString:@"WEAVE"]) [ABCadabra flipLines];
-        if([spell isEqualToString:@"BLACK_BOX"]) [ABCadabra blackBox];
-        if([spell isEqualToString:@"FADE_TOP"]) [ABCadabra mutateLinesWithFadeType:FADE_TOP withSpellFxType:SPELL_FX_MUTATE];
-        if([spell isEqualToString:@"FADE_LEFT"]) [ABCadabra mutateLinesWithFadeType:FADE_LEFT withSpellFxType:SPELL_FX_MUTATE];
-        if([spell isEqualToString:@"FADE_RIGHT"]) [ABCadabra mutateLinesWithFadeType:FADE_RIGHT withSpellFxType:SPELL_FX_MUTATE];
-        if([spell isEqualToString:@"FADE_BOTTOM"]) [ABCadabra mutateLinesWithFadeType:FADE_BOTTOM withSpellFxType:SPELL_FX_MUTATE];
-        if([spell isEqualToString:@"FADE_CENTER"]) [ABCadabra mutateLinesWithFadeType:FADE_INNER withSpellFxType:SPELL_FX_MUTATE];
-        if([spell isEqualToString:@"FADE_PERIMETER"]) [ABCadabra mutateLinesWithFadeType:FADE_OUTER withSpellFxType:SPELL_FX_MUTATE];
-        if([spell isEqualToString:@"MOON_PHASE"]) [ABCadabra moonPhase];
         
-        
-        
-
         
     // RANDOM SPELL
     } else {
+        
+        if(inSpaceyMode && ABI(12) < 5) [ABState setSpaceyMode:NO];
+        
+        BOOL ok = NO;
+        NSString *s;
+        
+        while(ok == NO) {
+            
+            s = [apprentice randomSpell];
+            
+            // Don't do emoji transforms unless there are emoji
+            if(([s isEqualToString:@"EMOJI_COLOR_SHIFT"] || [s isEqualToString:@"ERASE_ALL_EMOJI"] || [s isEqualToString:@"ERASE_ALL_EXCEPT_EMOJI"]) && hasEmojiCount == 0) {
+                continue;
+            }
+            
+            if(([s isEqualToString:@"ERASE_ALL_EMOJI"] || [s isEqualToString:@"ERASE_ALL_EXCEPT_EMOJI"]) && hasEmojiCount == visibleCount) {
+                continue;
+            }
 
-        [ABCadabra mutateLinesWithFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_ONE_SYMBOL];
-        
-        
-        return;
+            if(([s isEqualToString:@"SPACEY_MODE"] || [s isEqualToString:@"SPACEY_SPACE"]) && inSpaceyMode) {
+                continue;
+            }
 
-        
-        // to add
-        [ABCadabra boostMutation];
-
-        
-        
-        
-        int chance = ABI(20);
-        DDLogInfo(@"chance %d", chance);
-        
-        if([ABState checkSpaceyMode] == YES && ABI(12) < 5) {
-            [ABState setSpaceyMode:NO];
-        } else if(hasEmojiCount > 0 && ABI(12) < 2) {
-            [ABCadabra emojiColorShift];
-        } else if(hasEmojiCount > 0 && hasEmojiCount < totalWords && ABI(12) < 2) {
-            [ABCadabra eraseAllExceptEmoji];
-        } else if(hasEmojiCount > 0 && hasEmojiCount < totalWords && ABI(12) < 2) {
-            [ABCadabra eraseAllEmoji];
-        } else if(chance == 0) {
-            [ABCadabra flipLines]; // weaveLines TODO bug
-        } else if(chance == 1) {
-            [ABCadabra flipLines];
-        } else if(chance == 2) {
-            [ABCadabra randomlyReorderWords];
-        } else if(chance == 3) {
-            [ABCadabra blackBox];
-        } else if(chance == 4) {
-            [ABCadabra spaceOutLetters];
-        } else if(chance == 5) {
-            [ABCadabra pruneInterior];
-        } else if(chance == 6) {
-            [ABCadabra spinMagic];
-        } else if(chance == 7) {
-            [ABCadabra redactMagic];
-        } else if(chance == 8) {
-            [ABCadabra firstLetterErasure];
-        } else if(chance == 9) {
-            [ABCadabra rainbowMagic];
-        } else if(chance == 10) {
-            [ABCadabra randomErasureMagic];
-        } else if(chance == 11) {
-            [ABCadabra mutateLinesWithFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_STANZA_EMOJI];
-        } else if(chance == 12) {
-            [ABCadabra mutateLinesWithFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_STANZA_EMOJI];
-        } else if(chance == 13) {
-            [ABCadabra mutateLinesWithFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_TREES];
-        } else if(chance > 13) {
-            [ABCadabra mutateLinesWithFadeType:FADE_RANDOM withSpellFxType:SPELL_FX_MUTATE];
+            
+            ok = YES;
         }
+        
+        spell = s;
 
     }
+
+
+    DDLogInfo(@"spell: %@", spell);
+    
+    if([spell isEqualToString:@"PRUNE_FIRST_LAST"]) [ABCadabra pruneInterior];
+    if([spell isEqualToString:@"SPIN"]) [ABCadabra spin];
+    if([spell isEqualToString:@"REDACT"]) [ABCadabra redact];
+    if([spell isEqualToString:@"ALLITERATIVE_ERASE"]) [ABCadabra alliterativeErase];
+    if([spell isEqualToString:@"RANDOM_ERASE"]) [ABCadabra randomErase];
+    if([spell isEqualToString:@"RANDOM_PRUNE"]) [ABCadabra randomPrune];
+    if([spell isEqualToString:@"MINOR_ERASE"]) [ABCadabra randomMinorErase];
+    if([spell isEqualToString:@"ERASE_ALL"]) [ABCadabra eraseAll];
+    if([spell isEqualToString:@"RAINBOW"]) [ABCadabra rainbow];
+    if([spell isEqualToString:@"RANDOM_COLORIZE"]) [ABCadabra randomColorize];
+    if([spell isEqualToString:@"FLIP_LINE_ORDER"]) [ABCadabra flipLines];
+    if([spell isEqualToString:@"SHUFFLE"]) [ABCadabra shuffle];
+    if([spell isEqualToString:@"SPACEY_MODE"]) [ABCadabra spaceOutLetters];
+    if([spell isEqualToString:@"SPACEY_SPACE"]) [ABCadabra spaceySpace];
+    
+    if([spell isEqualToString:@"EMOJI_COLOR_SHIFT"]) [ABCadabra emojiColorShift];
+    if([spell isEqualToString:@"ERASE_ALL_EMOJI"]) [ABCadabra eraseAllEmoji];
+    if([spell isEqualToString:@"ERASE_ALL_EXCEPT_EMOJI"]) [ABCadabra eraseAllExceptEmoji];
+    if([spell isEqualToString:@"WEAVE"]) [ABCadabra flipLines]; // TODO
+    if([spell isEqualToString:@"BLACK_BOX"]) [ABCadabra blackBox];
+    if([spell isEqualToString:@"BOOST_MUTATION"]) [ABCadabra boostMutation];
+    if([spell isEqualToString:@"MOON_PHASE"]) [ABCadabra moonPhase];
+
+    if([spell isEqualToString:@"AREA_RANDOM"]) [ABCadabra areaEffect:AREA_RANDOM withFx:@"MUTATE"];
+    if([spell isEqualToString:@"AREA_TOP"]) [ABCadabra areaEffect:AREA_TOP withFx:@"MUTATE"];
+    if([spell isEqualToString:@"AREA_LEFT"]) [ABCadabra areaEffect:AREA_LEFT withFx:@"MUTATE"];
+    if([spell isEqualToString:@"AREA_RIGHT"]) [ABCadabra areaEffect:AREA_RIGHT withFx:@"MUTATE"];
+    if([spell isEqualToString:@"AREA_BOTTOM"]) [ABCadabra areaEffect:AREA_BOTTOM withFx:@"MUTATE"];
+    if([spell isEqualToString:@"AREA_INNER"]) [ABCadabra areaEffect:AREA_INNER withFx:@"MUTATE"];
+    if([spell isEqualToString:@"AREA_OUTER"]) [ABCadabra areaEffect:AREA_OUTER withFx:@"MUTATE"];
+    
+    if([spell isEqualToString:@"FOREST"]) [ABCadabra areaEffect:AREA_RANDOM withFx:@"TREES"];
+    if([spell isEqualToString:@"CHRIS"]) [ABCadabra areaEffect:AREA_RANDOM withFx:@"CHRIS"];
+    if([spell isEqualToString:@"CHESS"]) [ABCadabra areaEffect:AREA_RANDOM withFx:@"CHESS"];
+    if([spell isEqualToString:@"DEATH"]) [ABCadabra areaEffect:AREA_RANDOM withFx:@"DEATH"];
+    
+    if([spell hasPrefix:@"WORDS_"]) [ABCadabra areaEffect:AREA_RANDOM withFx:spell];
+    if([spell isEqualToString:@"STANZA_COLOR_EMOJI"]) [ABCadabra areaEffect:AREA_RANDOM withFx:spell];
+
+    
 }
+
+
+
+
+
+
+
 
 
 
@@ -312,10 +282,10 @@ ABHistory *history;
 
 + (void) randomlyAddSW:(ABScriptWord *)sw intoSWLines:(NSArray *)swLines {
     
-    int lineIndex = ABI([swLines count]);
+    int lineIndex = ABI((int)[swLines count]);
     NSMutableArray *line = [NSMutableArray arrayWithArray:[swLines objectAtIndex:lineIndex]];
     
-    int rndIndex = ABI([line count]);
+    int rndIndex = ABI((int)[line count]);
     [line insertObject:sw atIndex:rndIndex];
     
     [ABState updateCurrentScriptWordLinesWithLine:line atIndex:lineIndex];
@@ -362,7 +332,16 @@ ABHistory *history;
 
 
 
-+ (ABScriptWord *) randomSWFromString:(NSString *)string {
+
++ (ABScriptWord *) randomSWWordFromString:(NSString *)string {
+    NSArray *arr = [string componentsSeparatedByString:@" "];
+    NSUInteger randomIndex = arc4random() % [arr count];
+    return [ABData getScriptWordAndRunChecks:[arr objectAtIndex:randomIndex]];
+}
+
+
+
++ (ABScriptWord *) randomSWCharacterFromString:(NSString *)string {
     NSArray *arr = [string convertToArray];
     NSUInteger randomIndex = arc4random() % [arr count];
     return [ABData getScriptWordAndRunChecks:[arr objectAtIndex:randomIndex]];
@@ -455,7 +434,7 @@ ABHistory *history;
 
 
 + (void) blackBox {
-    NSArray *newLines = [ABCadabra splitParagraphIntoLinesOfScriptWords:BLACK_BOX_QUOTE];
+    NSArray *newLines = [ABCadabra splitParagraphIntoLinesOfScriptWords:BLOCK_BLACK_BOX];
     int num = 0;
     for(NSArray *array in newLines) {
         if(num == [ABLines count]) return;
@@ -479,38 +458,63 @@ ABHistory *history;
 
 
 
++ (int) averageSourceStanzasFor:(ABScriptWord *)sw1 and:(ABScriptWord *)sw2 {
+    int ss1 = (sw1 != nil) ? sw1.sourceStanza : [ABState getCurrentStanza];
+    int ss2 = (sw2 != nil) ? sw2.sourceStanza : [ABState getCurrentStanza];
+    return floor((ss2 + ss1) / 2);
+}
 
-+ (NSMutableArray *) applySpellFx:(spellFxType)spellFx toLine:(NSArray *)line withMap:(NSArray *)map {
+
+// "before" only used for sourceStanza avg
++ (NSArray *) insertSW:(ABScriptWord *)sw0 afterSW:(ABScriptWord *)sw1 andBefore:(ABScriptWord *)sw2 {
+    int ss = [ABCadabra averageSourceStanzasFor:sw1 and:sw2];
+    
+    sw0.sourceStanza = ss;
+    return @[sw1, sw0];
+}
+
+// "before" only used for sourceStanza avg
++ (NSArray *) replaceWithSW:(ABScriptWord *)sw0 afterSW:(ABScriptWord *)sw1 andBefore:(ABScriptWord *)sw2 {
+    int ss = [ABCadabra averageSourceStanzasFor:sw1 and:sw2];
+    sw0.sourceStanza = ss;
+    return @[sw0];
+}
+
+
++ (NSMutableArray *) applySpellFx:(NSString *)spellFx toLine:(NSArray *)line withMap:(NSArray *)map {
     
     if([map count] != [line count]) DDLogError(@"count mismatch!");
     NSMutableArray *newLine = [NSMutableArray array];
 
-    NSString *fxSymbols;
-    if(spellFx == SPELL_FX_ONE_SYMBOL) {
-        fxSymbols = SYMBOLS_DEATH;
-    }
+    ABScriptWord *nextSW = nil;
+    int lineCount = (int)[line count];
     
-    
-    int i = 0;
-    for(ABScriptWord *sw in line) {
+    for(int i = 0; i < lineCount; i ++) {
 
+        ABScriptWord *sw = [line objectAtIndex:i];
+        if(i + 1 < lineCount) nextSW = [line objectAtIndex:i + 1]; else nextSW = nil;
+        
         if([[map objectAtIndex:i] boolValue] == NO) {
             [newLine addObject:sw];
         
         } else {
             NSArray *newSWs = @[];
             
-            if(spellFx == SPELL_FX_MUTATE) {
+            if([spellFx isEqualToString:@"MUTATE"]) {
                 // Added this occasional pass to offset mutational doubling / tripling
-                if(ABI(10) > 1) newSWs = [ABMutate mutateWord:sw inLine:line];
+                if(ABI(10) == 0) continue;
+                newSWs = [ABMutate mutateWord:sw inLine:line];
             }
 
-            if(spellFx == SPELL_FX_TREES) newSWs = @[sw, [ABCadabra getEmojiForConcept:@"forest"]];
-            if(spellFx == SPELL_FX_CHRIS) newSWs = @[sw, [ABCadabra getEmojiForConcept:@"chris"]];
-            if(spellFx == SPELL_FX_ONE_SYMBOL) newSWs = @[sw, [ABCadabra randomSWFromString:fxSymbols]];
+            if([spellFx isEqualToString:@"TREES"]) newSWs = [ABCadabra insertSW:[ABCadabra getEmojiForConcept:@"forest"] afterSW:sw andBefore:nextSW];
+            if([spellFx isEqualToString:@"CHRIS"]) newSWs = [ABCadabra insertSW:[ABCadabra getEmojiForConcept:@"chris"] afterSW:sw andBefore:nextSW];
+            if([spellFx isEqualToString:@"DEATH"]) newSWs = [ABCadabra replaceWithSW:[ABCadabra randomSWCharacterFromString:SYMBOLS_DEATH] afterSW:sw andBefore:nextSW];
+            if([spellFx isEqualToString:@"CHESS"]) newSWs = [ABCadabra insertSW:[ABCadabra randomSWCharacterFromString:SYMBOLS_CHESS] afterSW:sw andBefore:nextSW];
 
-
-            if(spellFx == SPELL_FX_STANZA_EMOJI) {
+            if([spellFx hasPrefix:@"WORDS_"]) newSWs = [ABCadabra insertSW:[apprentice randomSWFrom:spellFx] afterSW:sw andBefore:nextSW];
+            
+            
+            if([spellFx isEqualToString:@"STANZA_COLOR_EMOJI"]) {
                 int stanza = sw.sourceStanza > -1 ? sw.sourceStanza : [ABState getCurrentStanza];
                 stanza = stanza % 42;
                 NSString *emoji = [ABEmoji getEmojiForStanza:stanza];
@@ -523,7 +527,6 @@ ABHistory *history;
 
             [newLine addObjectsFromArray:newSWs];
         }
-        i ++;
     }
     return newLine;
 }
@@ -571,50 +574,50 @@ ABHistory *history;
 }
 
 
-+ (void) mutateLinesWithFadeType:(fadeType)type withSpellFxType:(spellFxType)spellFx {
++ (void) areaEffect:(areaType)type withFx:(NSString *)spellFx {
 
     CGFloat top, bottom, left = 0.0f, right = 0.0f, verticalIncrement, verticalOdds, inner, outer;
     BOOL isVertical = NO, isRadiant = NO;
     
-    if(type == FADE_RANDOM) {
-        type = (fadeType) (arc4random() % (int) FADE_RANDOM);
+    if(type == AREA_RANDOM) {
+        type = (areaType) (arc4random() % (int) AREA_RANDOM);
     }
 
     // Horiz fades
-    if(type == FADE_LEFT) {
+    if(type == AREA_LEFT) {
         left = ABF(0.6f) + 0.1f;
         right = 0.0f;
     }
-    if(type == FADE_RIGHT) {
+    if(type == AREA_RIGHT) {
         left = 0.0f;
         right = ABF(0.6f) + 0.1f;
     }
 
     // Vertical fades
-    if(type == FADE_TOP) {
+    if(type == AREA_TOP) {
         top = ABF(0.6f) + 0.1f;
         bottom = 0.0f;
     }
-    if(type == FADE_BOTTOM) {
+    if(type == AREA_BOTTOM) {
         top = 0.0f;
         bottom = ABF(0.6f) + 0.1f;
     }
-    if(type == FADE_TOP || type == FADE_BOTTOM) {
+    if(type == AREA_TOP || type == AREA_BOTTOM) {
         isVertical = YES;
         verticalIncrement = (bottom - top) / [stanzaLines count];
         verticalOdds = top;
     }
     
     // Radiant fades
-    if(type == FADE_INNER) {
+    if(type == AREA_INNER) {
         inner = ABF(0.6f) + 0.1f;
         outer = -0.2f;
     }
-    if(type == FADE_OUTER) {
+    if(type == AREA_OUTER) {
         inner = -0.2f;
         outer = ABF(0.6f) + 0.1f;
     }
-    if(type == FADE_OUTER || type == FADE_INNER) {
+    if(type == AREA_OUTER || type == AREA_INNER) {
         isVertical = YES;
         isRadiant = YES;
         verticalOdds = outer;
@@ -623,6 +626,8 @@ ABHistory *history;
 
 
     int num = 0;
+    
+    NSMutableArray *newLines = [NSMutableArray array];
 
     for(NSArray *line in stanzaLines) {
 
@@ -634,11 +639,11 @@ ABHistory *history;
         if(isRadiant) {
             NSArray *splits = [ABCadabra splitArrayInHalf:line];
             NSArray *map1, *map2;
-            if(type == FADE_INNER) {
+            if(type == AREA_INNER) {
                 map1 = [ABCadabra mapWithOddsFrom:0 to:verticalOdds * 2 totalItems:(int)[splits[0] count] minIndex:0 maxIndex:(int)[splits[0] count]];
                 map2 = [ABCadabra mapWithOddsFrom:verticalOdds * 2 to:0 totalItems:(int)[splits[1] count] minIndex:0 maxIndex:(int)[splits[1] count]];
             }
-            if(type == FADE_OUTER) {
+            if(type == AREA_OUTER) {
                 map1 = [ABCadabra mapWithOddsFrom:ABF(0.3f) + 0.4f to:verticalOdds totalItems:(int)[splits[0] count] minIndex:0 maxIndex:(int)[splits[0] count]];
                 map2 = [ABCadabra mapWithOddsFrom:verticalOdds to:ABF(0.3f) + 0.4f totalItems:(int)[splits[1] count] minIndex:0 maxIndex:(int)[splits[1] count]];
             }
@@ -650,8 +655,7 @@ ABHistory *history;
         
         NSMutableArray *newLine = [ABCadabra applySpellFx:spellFx toLine:line withMap:map];
         
-        [ABState updateCurrentScriptWordLinesWithLine:newLine atIndex:num];
-        [[ABLines objectAtIndex:num] changeWordsToWords:[NSArray arrayWithArray:newLine]];
+        [newLines addObject:newLine];
         num ++;
         
         if(isVertical || isRadiant) {
@@ -662,7 +666,16 @@ ABHistory *history;
             }
         }
     }
+    
+    
+    
+    for(int i = 0; i < [newLines count]; i ++) {
+        NSArray *line = [newLines objectAtIndex:i];
+        [ABState updateCurrentScriptWordLinesWithLine:line atIndex:i];
+        [[ABLines objectAtIndex:i] changeWordsToWords:[NSArray arrayWithArray:line]];
+    }
 
+    
 }
 
 
@@ -689,9 +702,10 @@ ABHistory *history;
     }
 
     CGFloat d = 0;
+    CGFloat speed = ABF(0.04f);
     for(int i=0; i < c; i++) {
         ABLine *line = [ABLines objectAtIndex:i];
-        [line animateToYPosition:[[pos objectAtIndex:i] floatValue] duration:2.0f + (0.08f * i) delay:(0.12f * d)];
+        [line animateToYPosition:[[pos objectAtIndex:i] floatValue] duration:2.0f + ((speed + 0.06f) * i) delay:((0.10f + speed) * d)];
         d ++;
         d += (d / 20);
     }
@@ -748,16 +762,29 @@ ABHistory *history;
 
 
 
-+ (NSArray *) spaceyLettersMagic:(NSArray *)lines {
++ (NSArray *) spaceyLettersMagic:(NSArray *)lines andSpaceOut:(BOOL)spaceOut inTransition:(BOOL)inTransition {
     
     if(lines == nil) lines = [ABState getCurrentScriptWordLines];
-
+    NSArray *abLines = [ABState getLines];
+ 
     int num = 0;
     NSMutableArray *newLines = [NSMutableArray array];
-    for(NSArray *array in lines) {
+    
+    for(int i=0; i<[lines count]; i++) {
+        NSArray *array = [lines objectAtIndex:i];
+        ABLine *wordLine = [abLines objectAtIndex:i];
         NSMutableArray *newLine = [NSMutableArray array];
-        for(ABScriptWord *sw in array) {
-            [newLine addObjectsFromArray:[ABMutate splitWordIntoLetters:sw andSpaceOut:NO]];
+        
+        for(int j=0; j<[array count]; j++) {
+            ABScriptWord *sw = [array objectAtIndex:j];
+            if(inTransition == NO) {
+                ABWord *w = [wordLine.lineWords objectAtIndex:j];
+                if(w.isErased || w.isRedacted) {
+                    [newLine addObject:sw];
+                    continue;
+                }
+            }
+            [newLine addObjectsFromArray:[ABMutate splitWordIntoLetters:sw andSpaceOut:spaceOut]];
         }
         [newLines addObject:newLine];
         num ++;
@@ -768,17 +795,21 @@ ABHistory *history;
 
 + (void) spaceOutLetters {
     [ABState setSpaceyMode:YES];
-    [ABState changeAllLinesToLines:[ABCadabra spaceyLettersMagic:nil]];
+    [ABState changeAllLinesToLines:[ABCadabra spaceyLettersMagic:nil andSpaceOut:NO inTransition:NO]];
+}
+
++ (void) spaceySpace {
+    [ABState changeAllLinesToLines:[ABCadabra spaceyLettersMagic:nil andSpaceOut:YES inTransition:NO]];
 }
 
 
 
 
 
-+ (void) randomlyReorderWords {
++ (void) shuffle {
 
     int num = 0;
-    for(NSArray *array in stanzaLines) {  // TODO: check for iPhone mode!!!  crashes here when index gets above 4
+    for(NSArray *array in stanzaLines) {
         NSMutableArray *newLine = [NSMutableArray arrayWithArray:array];
         [newLine shuffle];
         [ABState updateCurrentScriptWordLinesWithLine:newLine atIndex:num];
@@ -797,7 +828,6 @@ ABHistory *history;
         NSMutableArray *newLine = [NSMutableArray array];
         for(ABScriptWord *sw in array) {
             if(sw.emojiCount > 0) {
-//                NSString *text = sw.text;
                 NSArray *array = [sw charArray];
                 NSMutableArray *newText = [NSMutableArray array];
                 for(NSString *str in array) {
@@ -849,29 +879,127 @@ ABHistory *history;
 
 
 
-+ (void) rainbowMagic {
++ (void) rainbow {
     
     int col = 0;
-    int l = 0;
+    int l = 0, lineNum = 0;
     for(ABLine *line in ABLines) {
+
+        NSMutableArray *newLine = [NSMutableArray array];
         int i = 0;
         col = l;
         l = l + 2;
+        int replacements = 0;
+
         for(ABWord *w in line.lineWords) {
+            
             [w fadeColorToSourceStanza:col];
             ABScriptWord *sw = [line.lineScriptWords objectAtIndex:i];
-            sw.sourceStanza = col;
+            
+            if(sw.emojiCount > 0) {
+                NSArray *array = [sw charArray];
+                NSMutableArray *newText = [NSMutableArray array];
+                for(NSString *str in array) {
+                    if([ABEmoji isEmoji:str]) {
+                        NSString *replacement = [ABEmoji getEmojiForStanza:col];
+                        DDLogInfo(@"%i %@", col, replacement);
+                        [newText addObject:replacement];
+                        replacements ++;
+                    } else {
+                        [newText addObject:str];
+                    }
+                }
+                ABScriptWord *newSW = [ABData getScriptWord:[newText componentsJoinedByString:@""]];
+                if(!newSW.hasRunChecks) [newSW runChecks];
+                newSW.sourceStanza = col;
+                [newLine addObject:newSW];
+
+            } else {
+                sw.sourceStanza = col;
+                [newLine addObject:sw];
+            }
+
             if(++ col == [ABScript totalStanzasCount]) col = 0;
             i ++;
         }
+        
+        if(replacements > 0) {
+            [ABState updateCurrentScriptWordLinesWithLine:newLine atIndex:lineNum];
+            [[ABLines objectAtIndex:lineNum] changeWordsToWords:[NSArray arrayWithArray:newLine]];
+        }
+        
+        lineNum ++;
+    }
+}
+
+
+
++ (void) randomColorize {
+    
+    int max = [ABScript totalStanzasCount];
+    int col = ABI(max);
+    int lineNum = 0;
+    for(ABLine *line in ABLines) {
+        
+        NSMutableArray *newLine = [NSMutableArray array];
+        int i = 0;
+        int replacements = 0;
+        
+        for(ABWord *w in line.lineWords) {
+            
+            if(col > max) col -= max;
+            if(col < 0) col += max;
+            
+            [w fadeColorToSourceStanza:col];
+            ABScriptWord *sw = [line.lineScriptWords objectAtIndex:i];
+            
+            if(sw.emojiCount > 0) {
+                NSArray *array = [sw charArray];
+                NSMutableArray *newText = [NSMutableArray array];
+                for(NSString *str in array) {
+                    if([ABEmoji isEmoji:str]) {
+                        NSString *replacement = [ABEmoji getEmojiForStanza:col];
+                        DDLogInfo(@"%i %@", col, replacement);
+                        [newText addObject:replacement];
+                        replacements ++;
+                    } else {
+                        [newText addObject:str];
+                    }
+                }
+                ABScriptWord *newSW = [ABData getScriptWord:[newText componentsJoinedByString:@""]];
+                if(!newSW.hasRunChecks) [newSW runChecks];
+                newSW.sourceStanza = col;
+                [newLine addObject:newSW];
+                
+            } else {
+                sw.sourceStanza = col;
+                [newLine addObject:sw];
+            }
+            
+            col += ABI(8);
+            
+        }
+        
+        if(replacements > 0) {
+            [ABState updateCurrentScriptWordLinesWithLine:newLine atIndex:lineNum];
+            [[ABLines objectAtIndex:lineNum] changeWordsToWords:[NSArray arrayWithArray:newLine]];
+        }
+        
+        lineNum ++;
     }
 }
 
 
 
 
+
+
+
+
+
+
 // TODO : make this better
-+ (void) firstLetterErasure {
++ (void) alliterativeErase {
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
@@ -914,24 +1042,72 @@ ABHistory *history;
 
 
 
-+ (void) randomErasureMagic {
++ (void) randomErase {
+    CGFloat speed = ABF(1.0) + 1.2;
+    CGFloat odds = ABI(8) + 1;
     for(ABLine *line in ABLines) {
         for(ABWord *w in line.lineWords) {
-            if(ABI(9) < 7) [w eraseWithDelay:ABF(1.5)];
+            if(ABI(9) < odds) [w eraseWithDelay:ABF(speed)];
         }
     }
 }
 
 
-+ (void) redactMagic {
+
++ (void) randomMinorErase {
+    CGFloat speed = ABF(1.0) + 1.2;
+    CGFloat odds = ABI(2) + 1;
     for(ABLine *line in ABLines) {
         for(ABWord *w in line.lineWords) {
-            if(ABI(9) < 7) [w redact];
+            if(ABI(9) < odds) [w eraseWithDelay:ABF(speed)];
         }
     }
 }
 
-+ (void) spinMagic {
+
++ (void) randomPrune {
+    CGFloat odds = ABI(4) + 4;
+    int num = 0;
+    for(NSArray *line in stanzaLines) {
+        if([line count] == 0) continue;
+        NSMutableArray *newLine = [NSMutableArray array];
+        for(ABScriptWord *sw in line) {
+            if(ABI(9) < odds) [newLine addObject:sw];
+        }
+        
+        [ABState updateCurrentScriptWordLinesWithLine:newLine atIndex:num];
+        [[ABLines objectAtIndex:num] changeWordsToWords:[NSArray arrayWithArray:newLine]];
+        num ++;
+    }
+}
+
+
+
+
+
+
+
++ (void) eraseAll {
+    CGFloat speed = ABF(0.5) + 1.0;
+    for(ABLine *line in ABLines) {
+        for(ABWord *w in line.lineWords) {
+            [w eraseWithDelay:ABF(speed)];
+        }
+    }
+}
+
+
+
++ (void) redact {
+    CGFloat odds = ABI(5) + 3;
+    for(ABLine *line in ABLines) {
+        for(ABWord *w in line.lineWords) {
+            if(ABI(9) < odds) [w redact];
+        }
+    }
+}
+
++ (void) spin {
     for(ABLine *line in ABLines) {
         for(ABWord *w in line.lineWords) {
             [w spin];

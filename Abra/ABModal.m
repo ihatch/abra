@@ -309,8 +309,7 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     
     [flow addHeading:@"OVERVIEW"];
     [flow addParagraph:@"Abra is a multifaceted project supported by an Expanded Artists’ Books grant from the Center for Book and Paper Arts (Columbia College Chicago). Its two main manifestations are this app, available free for iPad and iPhone, and a limited-edition clothbound artists’ book. The two can be read separately or together, with an iPad inserted into a slot in the back of the book."];
-    [flow addParagraph:@"Abra's text was composed by Amaranth Borsuk and Kate Durbin. This app was designed and coded by Ian Hatcher. Art direction and decision-making for both artists’ book and app were undertaken in tandem as a team."];
-//    [flow addImage:@"abra_twins_spread.png"];
+    [flow addParagraph:@"Abra's main text was composed by Amaranth Borsuk and Kate Durbin. This app was designed and coded by Ian Hatcher. Art direction and decision-making for both artists’ book and app were undertaken in tandem as a trio."];
     [flow addParagraph:@"For information on the conceptual framework and background of the project, please see our site:"];
     [flow addLink:@"http://a-b-r-a.com"];
     [flow addSectionMargin];
@@ -331,7 +330,8 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     
     [flow addHeading:@"ACKNOWLEDGEMENTS"];
     [flow addParagraph:@"We are grateful to the Center for Book and Paper Arts at Columbia College Chicago for their support of this work: Stephen Woodall, tireless mentor; Amy Rabas, visionary paper artist; and Clif Meador, Jessica Cochran, April Sheridan, Michelle Citron, and Paul Catanese, generous interlocutors."];
-    [flow addParagraph:@"Additional thanks to Abraham Avnisan, Steven Baughman, Danny Cannizaro, Samantha Gorman, Stephanie Strickland, Chris Wegman, and Paula Wegman for support and feedback on the app."];
+    [flow addParagraph:@"Additional gratitude to Abraham Avnisan, Steven Baughman, Danny Cannizaro, Samantha Gorman, Stephanie Strickland, Chris Wegman, and Paula Wegman for support and feedback on the app during development."];
+    [flow addParagraph:@"We are indebted to John Cayley, Brian Eno, and Peter Chilvers, whose ambient digital work informed our conception of this project from an early stage."];
     [flow addSpecialItalicizedParagraph:@"Some of Abra's text appeared in slightly different form in Action, Yes!; The &Now Awards 3; Black Warrior Review; Bone Bouquet; The Collagist; Joyland Poetry; Lana Turner: A Journal of Poetry and Opinion; Lit; Peep/Show; SPECS; Spoon River Poetry Review; and VLAK."];
     [flow addSectionMargin];
     
@@ -386,7 +386,7 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 - (void) setTipContentForWelcome {
     ABVerticalContentFlow *flow = [self startTipFlow];
     [flow addHeading:@"WELCOME TO ABRA!"];
-    [flow addParagraph:@"The Abra app is a poetry instrument/spellbook. Caress words and watch them change under your fingers."];
+    [flow addParagraph:@"Abra is a living poetry instrument/spellbook. She responds to touch. Caress the words and watch them shift under your fingers."];
     [flow addParagraph:@"Spin the rainbow dial to navigate to other poems in the Abra cycle. Touch the top of the screen to reveal a toolbar."];
     [flow addParagraph:@"There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own."];
     [flow addItalicParagraph:@"(Tap outside this box to close it.)"];
@@ -399,15 +399,15 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     [flow addHeading:@"GRAFTING"];
     [flow addParagraph:@"You are about to graft words for the first time."];
     [flow addParagraph:@"Type anything in the box that appears. You may enter multiple words if you wish; separate them by spaces. Once you've closed the box, draw with your finger to write your words into the screen."];
-    [flow addParagraph:@"Abra will learn and remember new words — of any alphabet — that you teach her. Over time her vocabulary will become yours."];
+    [flow addParagraph:@"Abra will learn and remember new words — of any alphabet — that you teach her."];
     [flow refreshFrame];
     [self applyTipFlow:flow];
 }
 
 - (void) setTipContentForSpellMode {
     ABVerticalContentFlow *flow = [self startTipFlow];
-    [flow addHeading:@"NEW SPELL SELECTED"];
-    [flow addParagraph:@"Tap or drag your finger across the text to cast the spell."];
+    [flow addHeading:@"SPELL MODES"];
+    [flow addParagraph:@"The four icons on the left side of the toolbar are Spell Modes. Tap or drag your finger across the text to cast the spell you just selected."];
     [flow refreshFrame];
     [self applyTipFlow:flow];
 }

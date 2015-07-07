@@ -170,6 +170,16 @@
     self.alpha = 0;
 }
 
+
+- (void) quickHide {
+    self.alpha = 0;
+}
+
+- (void) quickShow {
+    self.alpha = 1.0;
+}
+
+
 - (void) erase {
     self.isErased = YES;
     CGFloat speed = [self speed];

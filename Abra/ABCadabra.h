@@ -13,8 +13,9 @@
 
 + (void) castSpell:(NSString *)spell withMagicWord:(NSString *)magicWord;
 
-+ (NSArray *) spaceyLettersMagic:(NSArray *)lines;
++ (NSArray *) spaceyLettersMagic:(NSArray *)lines andSpaceOut:(BOOL)spaceOut inTransition:(BOOL)inTransition;
 
 + (void) revealCadabraWords;
+
 
 @end

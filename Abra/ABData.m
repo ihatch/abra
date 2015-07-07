@@ -51,7 +51,6 @@
 @interface ABData ()
 
 + (NSString *) filePathWithName:(NSString *)name;
-+ (BOOL) fileExistsWithName:(NSString *)name;
 + (NSDictionary *) loadDataForKey:(NSString *)key;
 + (NSMutableDictionary *) loadMutableDataForKey:(NSString *)key;
 + (NSMutableDictionary *) loadPrecompiledData:(NSString *)key;
@@ -121,6 +120,17 @@ static ABData *ABDataInstance = NULL;
 // INIT LISTS AND TABLES //
 ///////////////////////////
 
+
+
+#pragma mark - Application's Documents directory
+
+// Returns the URL to the application's Documents directory.
+- (NSURL *) applicationDocumentsDirectory {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+
+
 + (void) setABScriptWordsDictionary:(NSMutableDictionary *) scriptWordsDictionary {
     abScriptWordsDictionary = scriptWordsDictionary;
 }
@@ -134,6 +144,8 @@ static ABData *ABDataInstance = NULL;
 + (void) initCoreDictionary {
     NSMutableDictionary *diceDictionary = [ABData loadPrecompiledData:@"coreDiceDictionary"];
     if(diceDictionary == nil) {
+//        NSString *path = [[NSBundle mainBundle] pathForResource:@"diceErrata" ofType:@"txt"];
+
         DDLogError(@"%@", @">> ERROR: CORE MUTATIONS TABLE NOT FOUND");
         [ABDice generateDiceDictionary];
         [ABData saveData:diceDictionary forKey:@"coreDiceDictionary"];
@@ -170,14 +182,7 @@ static ABData *ABDataInstance = NULL;
     return filePath;
 }
 
-+ (BOOL) fileExistsWithName:(NSString *)name {
-    NSString *filePath = [ABData filePathWithName:name];
-    return [[NSFileManager defaultManager] fileExistsAtPath:filePath];
-}
-
-
 + (NSMutableDictionary *) loadPrecompiledData:(NSString *)key {
-    if(![ABData fileExistsWithName:key]) return nil;
     NSString *path = [[NSBundle mainBundle] pathForResource:[@"abraData-" stringByAppendingString:key] ofType:nil];
     NSData *data = [NSData dataWithContentsOfFile:path];
     NSMutableDictionary *savedData = [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -216,6 +221,18 @@ static ABData *ABDataInstance = NULL;
 + (void) loadDiceAdditions {
     [ABDice setDiceAdditions:[ABData loadDataForKey:@"diceAdditions"]];
 }
+
+
+
++ (NSDictionary *) loadGestureHistory {
+    return [ABData loadDataForKey:@"gestureHistory"];
+}
+
++ (void) saveGestureHistory:(NSMutableDictionary *) gestureHistory {
+    DDLogInfo(@"Saving gesture history");
+    [ABData saveData:gestureHistory forKey:@"gestureHistory"];
+}
+
 
 
 
@@ -468,8 +485,6 @@ static ABData *ABDataInstance = NULL;
 
 
 
-
-
 + (void) initMagicWords {
     
     NSString *path = [[NSBundle mainBundle] pathForResource:@"magicWords" ofType:@"txt"];
@@ -488,9 +503,6 @@ static ABData *ABDataInstance = NULL;
             [magicWordsIndex setObject:cadabra forKey:w];
         }
     }
-    
-    DDLogInfo(@"xcfs");
-    
 }
 
 
@@ -498,6 +510,10 @@ static ABData *ABDataInstance = NULL;
     if(magicWordsIndex == nil) [ABData initMagicWords];
     return [magicWordsIndex objectForKey:word];
 }
+
+
+
+
 
 
 

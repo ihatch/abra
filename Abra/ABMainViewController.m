@@ -48,8 +48,8 @@ BOOL carouselIsAnimating, preventInput;
 CGPoint touchStart;
 
 
-
 - (void) viewDidLoad {
+    
     [super viewDidLoad];
 
     [self initScreen];

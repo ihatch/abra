@@ -18,6 +18,7 @@
 @property (nonatomic) CGFloat yPosition;
 @property (nonatomic) NSArray *wordWidthsWithMargins;
 @property (nonatomic) BOOL lossyTransitions;
+@property (nonatomic) BOOL isMirrored;
 
 - (id) initWithWords:(NSArray *)words andYPosition:(CGFloat)y andHeight:(CGFloat)lineHeight andLineNumber:(int)lineNum;
 
@@ -33,6 +34,8 @@
 - (int) checkPoint:(CGPoint)point;
 
 - (void) animateToYPosition:(CGFloat)y duration:(CGFloat)duration delay:(CGFloat)delay;
+
+- (NSString *) lineAsPlainTextString;
 
 
 @end

@@ -64,27 +64,28 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     [self.navigationController.toolbar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1]];
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithWhite:0.1 alpha:1]];
     
-    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:ABRA_SYSTEM_FONT size:[ABUI scaleYWithIphone:7.0f ipad:11.0f]]} forState:UIControlStateNormal];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSFontAttributeName : [UIFont fontWithName:ABRA_SYSTEM_FONT size:[ABUI scaleYWithIphone:9.0f ipad:13.0f]]} forState:UIControlStateNormal];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"DONE", nil) style:UIBarButtonItemStylePlain
-                                                                                           target:self
-                                                                                           action:@selector(done:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"CLOSE", nil)
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:@selector(done:)];
     if (!self.toolbarItems) {
         UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                                        target:nil
                                                                                        action:nil];
 
-        UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"📷 SAVE TO PHOTOS", nil)
+        UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"📷 Save to Photos", nil)
                                                                             style:UIBarButtonItemStylePlain
                                                                            target:self
                                                                            action:@selector(saveToCameraRoll:)];
         
-        UIBarButtonItem *facebookButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"🐬 POST TO FACEBOOK", nil)
+        UIBarButtonItem *facebookButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"🐬 Post to Facebook", nil)
                                                                             style:UIBarButtonItemStylePlain
                                                                            target:self
                                                                            action:@selector(postToFacebook:)];
 
-        UIBarButtonItem *twitterButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"🐥 POST TO TWITTER", nil)
+        UIBarButtonItem *twitterButton = [[UIBarButtonItem alloc] initWithTitle:PELocalizedString(@"🐥 Post to Twitter", nil)
                                                                             style: UIBarButtonItemStylePlain
                                                                            target:self
                                                                            action:@selector(postToTwitter:)];

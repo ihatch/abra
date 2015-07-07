@@ -59,6 +59,8 @@ NSMutableDictionary *diceAdditionsDictionary;
 
 NSMutableDictionary *coreDiceDictionaryBackup;
 
+NSMutableDictionary *oneWayAdditionsDictionary;
+
 
 //////////
 // INIT //
@@ -68,6 +70,7 @@ NSMutableDictionary *coreDiceDictionaryBackup;
     diceDictionary = dict;
     coreDiceDictionaryBackup = [[NSMutableDictionary alloc] initWithDictionary:diceDictionary copyItems:YES];
     [ABDice loadErrataAndAddToDictionary];
+    [ABDice loadConstWordsAndAddToDictionary];
     [ABDice initCacheWithLexicon:[diceDictionary allKeys]];
 }
 
@@ -90,7 +93,7 @@ NSMutableDictionary *coreDiceDictionaryBackup;
 }
 
 
-+ (void) addEntriesToDictionary:(NSArray *)entries {
++ (void) addEntries:(NSArray *)entries toDictionary:(NSMutableDictionary *)dictionary {
     int entriesCount = (int)[entries count];
     for (int i = 0; i < entriesCount; i++) {
         NSArray *terms = [entries[i] componentsSeparatedByString:@" "];
@@ -100,7 +103,7 @@ NSMutableDictionary *coreDiceDictionaryBackup;
         for (int j = 1; j < termsCount; j++) {
             [others addObject:terms[j]];
         }
-        [diceDictionary setObject:[NSArray arrayWithArray:others] forKey:key];
+        [dictionary setObject:[NSArray arrayWithArray:others] forKey:key];
     }
 }
 
@@ -109,9 +112,21 @@ NSMutableDictionary *coreDiceDictionaryBackup;
     NSString *path = [[NSBundle mainBundle] pathForResource:@"diceErrata" ofType:@"txt"];
     NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     NSArray *entries = [rawText componentsSeparatedByString:@"\n"];
-    [ABDice addEntriesToDictionary:entries];
+    [ABDice addEntries:entries toDictionary:diceDictionary];
     DDLogInfo(@"%@", @"Dice errata: done.");
 }
+
+
++ (void) loadConstWordsAndAddToDictionary {
+    oneWayAdditionsDictionary = [NSMutableDictionary dictionary];
+    DDLogInfo(@"%@", @"Dice const words: loading ...");
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"diceConst" ofType:@"txt"];
+    NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    NSArray *entries = [rawText componentsSeparatedByString:@"\n"];
+    [ABDice addEntries:entries toDictionary:oneWayAdditionsDictionary];
+    DDLogInfo(@"%@", @"Dice const words: done.");
+}
+
 
 + (void) resetLexicon {
     diceDictionary = [[NSMutableDictionary alloc] initWithDictionary:coreDiceDictionaryBackup copyItems:YES];
@@ -119,6 +134,11 @@ NSMutableDictionary *coreDiceDictionaryBackup;
     diceAdditionsDictionary = [NSMutableDictionary dictionary];
     [ABData saveDiceAdditions:diceAdditionsDictionary];
 }
+
+
+
+
+
 
 
 
@@ -331,8 +351,9 @@ NSMutableDictionary *coreDiceDictionaryBackup;
 
 
 + (NSMutableArray *) diceForKey:(NSString *)text {
-    if(![diceDictionary objectForKey:text]) return nil;
-    return [diceDictionary objectForKey:text];
+    if([diceDictionary objectForKey:text]) return [diceDictionary objectForKey:text];
+    if([oneWayAdditionsDictionary objectForKey:text]) return [oneWayAdditionsDictionary objectForKey:text];
+    return nil;
 }
 
 

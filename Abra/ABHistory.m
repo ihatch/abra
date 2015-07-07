@@ -7,10 +7,13 @@
 //
 
 #import "ABHistory.h"
+#import "ABConstants.h"
 
 @implementation ABHistory
 
 NSUserDefaults *defaults;
+NSMutableArray *currentGesture;
+NSMutableDictionary *counts;
 
 #pragma mark Singleton Methods
 
@@ -24,62 +27,67 @@ NSUserDefaults *defaults;
 
 - (id)init {
     if (self = [super init]) {
+
         defaults = [NSUserDefaults standardUserDefaults];
+        counts = [NSMutableDictionary dictionary];
+
+        // Track shares and longpress - TODO
+        int mutate = (int)[defaults integerForKey:[NSString stringWithFormat:@"spellCount-%i", (int)(SpellMode)MUTATE]];
+        int cadabra = (int)[defaults integerForKey:[NSString stringWithFormat:@"spellCount-%i", (int)(SpellMode)MAGIC]];
+        int erase = (int)[defaults integerForKey:[NSString stringWithFormat:@"spellCount-%i", (int)(SpellMode)ERASE]];
+        int prune = (int)[defaults integerForKey:[NSString stringWithFormat:@"spellCount-%i", (int)(SpellMode)PRUNE]];
+        int graft = (int)[defaults integerForKey:[NSString stringWithFormat:@"spellCount-%i", (int)(SpellMode)GRAFT]];
         
-        self.mutateCount = (int)[defaults integerForKey:@"mutateCount"];
-        self.cadabraCount = (int)[defaults integerForKey:@"cadabraCount"];
-        self.shareCount = (int)[defaults integerForKey:@"shareCount"];
-        self.eraseCount = (int)[defaults integerForKey:@"eraseCount"];
-        self.pruneCount = (int)[defaults integerForKey:@"pruneCount"];
-        self.graftCount = (int)[defaults integerForKey:@"graftCount"];
-        self.magicTapCount = (int)[defaults integerForKey:@"magicTapCount"];
+        [counts setObject:@(mutate) forKey:@((SpellMode)MUTATE)];
+        [counts setObject:@(graft) forKey:@((SpellMode)GRAFT)];
+        [counts setObject:@(erase) forKey:@((SpellMode)ERASE)];
+        [counts setObject:@(prune) forKey:@((SpellMode)PRUNE)];
+        [counts setObject:@(cadabra) forKey:@((SpellMode)MAGIC)];
+
+        DDLogInfo(@"<#> History :: %i %i %i %i %i", mutate, graft, erase, prune, cadabra);
     }
 
     return self;
 }
 
 
-- (void) setMutateCount:(int)count {
-    _mutateCount = count;
-    [defaults setInteger:count forKey:@"mutateCount"];
+
+- (void) record:(SpellMode)mode line:(int)line index:(int)index {
+    [self increment:mode];
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    DDLogInfo(@"RECORD: %f %li %i %i", timeStamp, (long)mode, line, index);
+    
+}
+
+
+
+- (void) increment:(SpellMode *)mode {
+    NSInteger current = [counts objectForKey:@((SpellMode)mode)];
+    current ++;
+    [counts setObject:@(current) forKey:@((SpellMode)mode)];
+    [defaults setInteger:current forKey:[NSString stringWithFormat:@"spellCount-%i", (int)(SpellMode)mode]];
     [defaults synchronize];
 }
 
-- (void) setCadabraCount:(int)count {
-    _cadabraCount = count;
-    [defaults setInteger:count forKey:@"cadabraCount"];
-    [defaults synchronize];
+
+- (void) startGesture {
+    
 }
 
-- (void) setShareCount:(int)count {
-    _shareCount = count;
-    [defaults setInteger:count forKey:@"shareCount"];
-    [defaults synchronize];
+- (void) recordGraft:(NSString *)text onLine:(int)line atIndex:(int)index {
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    
+    
 }
 
-- (void) setEraseCount:(int)count {
-    _eraseCount = count;
-    [defaults setInteger:count forKey:@"eraseCount"];
-    [defaults synchronize];
+- (void) endGesture {
+    
 }
 
-- (void) setPruneCount:(int)count {
-    _pruneCount = count;
-    [defaults setInteger:count forKey:@"pruneCount"];
-    [defaults synchronize];
-}
 
-- (void) setGraftcount:(int)count {
-    _graftCount = count;
-    [defaults setInteger:count forKey:@"graftCount"];
-    [defaults synchronize];
-}
 
-- (void) setMagicTapCount:(int)count {
-    _magicTapCount = count;
-    [defaults setInteger:count forKey:@"cadabraCount"];
-    [defaults synchronize];
-}
+
+
 
 
 

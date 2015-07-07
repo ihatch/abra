@@ -13,9 +13,10 @@
 
 @implementation ABAppDelegate
 
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self initCocoaLumberjack];
-    [self initKeyboard];
+    [self initKeyboard];    
     return YES;
 }
 
@@ -59,5 +60,10 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
 
 }
+
+
+
+
+
 
 @end

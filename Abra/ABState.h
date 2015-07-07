@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, InteractivityMode) { MUTATE, GRAFT, MAGIC, PRUNE, ERASE };
+typedef NS_ENUM(NSInteger, SpellMode) { MUTATE, GRAFT, MAGIC, PRUNE, ERASE };
 typedef NS_ENUM(NSInteger, modalType) { GRAFT_MODAL, SETTINGS_MODAL, INFO_MODAL, TIP_MODAL };
+typedef NS_ENUM(NSInteger, behaviorArcs) { ARC_GROWING, ARC_SHRINKING, ARC_MUTATING, ARC_REMEMBERING };  // TODO
 
 @interface ABState : NSObject
 
@@ -38,8 +39,8 @@ typedef NS_ENUM(NSInteger, modalType) { GRAFT_MODAL, SETTINGS_MODAL, INFO_MODAL,
 + (void) pause;
 + (void) resume;
 + (void) reset;
-+ (void) setInteractivityModeTo:(InteractivityMode)mode;
-+ (InteractivityMode) getCurrentInteractivityMode;
++ (void) setSpellModeTo:(SpellMode)mode;
++ (SpellMode) getCurrentSpellMode;
 
 + (BOOL) attemptGesture;
 + (void) disallowGestures;
@@ -83,6 +84,10 @@ typedef NS_ENUM(NSInteger, modalType) { GRAFT_MODAL, SETTINGS_MODAL, INFO_MODAL,
 + (BOOL) checkLinesAreWoven;
 
 // ---------
+
++ (void) incrementUserActions;
++ (void) copyAllTextToClipboard;
+
 
 + (void) applicationWillResignActive;
 + (void) applicationDidBecomeActive;

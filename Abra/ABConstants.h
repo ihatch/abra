@@ -19,6 +19,9 @@ int ABI(int max);
 
 @interface ABConstants : NSObject
 
+extern NSString *const ABRA_VERSION;
+
+
 extern int const ABRA_START_LINE;
 extern int const ABRA_START_STANZA;
 
@@ -51,14 +54,21 @@ extern NSString *const NON_ASCII_REGEX;
 extern NSString *const NUMBERS_REGEX;
 
 
-extern NSString *const BLACK_BOX_QUOTE;
+extern NSString *const BLOCK_BLACK_BOX;
+extern NSString *const WORDS_DONE_HERE;
+extern NSString *const WORDS_SPEAK;
+extern NSString *const WORDS_COLOR_BARS;
+extern NSString *const WORDS_ATTENTION;
+extern NSString *const WORDS_SYNC_RATES;
+extern NSString *const WORDS_NETWORK;
+extern NSString *const WORDS_PYTHON;
+extern NSString *const WORDS_PERIMETER;
+extern NSString *const WORDS_STING;
+
 
 
 extern NSString *const SYMBOLS_CHESS;
 extern NSString *const SYMBOLS_DEATH;
-
-
-
 
 
 // DEV CONSTS

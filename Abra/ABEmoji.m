@@ -78,7 +78,7 @@ NSDictionary *colorCycle;
     
     
     colorCycle = @{
-        @(0): @"pink",
+        @(0): @"red",
         @(1): @"pink",
         @(2): @"orange",
         @(3): @"orange",
@@ -100,15 +100,15 @@ NSDictionary *colorCycle;
         @(19): @"blue",
         @(20): @"blue",
         @(21): @"blue",
-        @(22): @"darkBlue",
+        @(22): @"blue",
         @(23): @"darkBlue",
         @(24): @"grayBlue",
-        @(25): @"blue",
-        @(26): @"black",
+        @(25): @"grayBlue",
+        @(26): @"grayBlue",
         @(27): @"black",
-        @(28): @"clocks",
-        @(29): @"blackAndWhite",
-        @(30): @"blackAndWhite",
+        @(28): @"black",
+        @(29): @"purple",
+        @(30): @"purple",
         @(31): @"purple",
         @(32): @"purple",
         @(33): @"purple",
@@ -156,7 +156,12 @@ NSDictionary *colorCycle;
     
     NSDictionary *concepts = @{
         @"forest": @"🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🎄🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌱🌱🌱🌱🌱🌱🌱🌱🌱🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🐛🐝🐜🐞🐌🍂🍂🌿🌾🍄🌵🌴🌰🌼🌸🌷🍀🌻🌺🍁🍃",
-        @"chris": @"🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🏊🏊🏊🏊🏊🏊🏊🏊🏊🚣💧💧💧💧💧💧💧💦💙☔🌀🐳🔷🔷🔷🔷🔹🔹🔹🔹🌴🌴🌴🌴🌴🐠🐠🐠🐠👙🚿🚰😘"
+        @"chris": @"🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🏊🏊🏊🏊🏊🏊🏊🏊🏊🚣💧💧💧💧💧💧💧💦💙☔🌀🐳🔷🔷🔷🔷🔹🔹🔹🔹🌴🌴🌴🌴🌴🐠🐠🐠🐠👙🚿🚰😘",
+        @"animals": @"🐶🐺🐱🐭🐹🐰🐸🐯🐨🐻🐷🐽🐮🐗🐵🐒🐴🐑🐘🐼🐧🐦🐤🐥🐣🐔🐍🐢🐛🐝🐜🐞🐌🐙🐚🐠🐟🐬🐳🐋🐄🐏🐀🐃🐅🐇🐉🐎🐐🐓🐕🐖🐁🐂🐲🐡🐊🐫🐪🐆🐈🐩",
+        @"photos": @"🌇🌆🏯🏰⛺️🏭🗼🗾🗻🌄🌅🌃🗽🌉🎠🎡⛲️🎢🚢",
+        @"food": @"☕️🍵🍶🍼🍺🍻🍸🍹🍷🍴🍕🍔🍟🍗🍖🍝🍛🍤🍱🍣🍥🍙🍘🍚🍜🍲🍢🍡🍳🍞🍩🍮🍦🍨🍧🎂🍰🍪🍫🍬🍭🍯🍎🍏🍊🍋🍒🍇🍉🍓🍑🍈🍌🍐🍍🍠🍆🍅🌽"
+        
+        
         };
 
 
@@ -228,7 +233,11 @@ NSDictionary *colorCycle;
 }
 
 + (NSString *) getRandomEmojiStringWithColor:(NSString *)color {
-    return [ABEmoji getRandomEmojiForKey:color inDictionary:emojiByColor];
+    NSString *e = [ABEmoji getRandomEmojiForKey:color inDictionary:emojiByColor];
+    if(e == nil) {
+        DDLogInfo(@"why?");
+    }
+    return e;
 }
 
 + (NSString *) getRandomEmojiStringWithConcept:(NSString *)concept {
@@ -279,7 +288,11 @@ NSDictionary *colorCycle;
 
 + (NSString *) getEmojiForStanza:(int)stanza {
     NSString *key = colorCycle[@(stanza)];
-    return [ABEmoji getRandomEmojiStringWithColor:key];
+    NSString *e = [ABEmoji getRandomEmojiStringWithColor:key];
+    if(e == nil) {
+        DDLogInfo(@"FAIL");
+    }
+    return e;
 }
 
 

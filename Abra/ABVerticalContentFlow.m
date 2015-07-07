@@ -15,7 +15,7 @@
 
 @implementation ABVerticalContentFlow
 
-UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont;
+UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versionFont;
 
 
 - (id) initWithFrame:(CGRect)frame {
@@ -25,6 +25,7 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont;
     flowersFont = [UIFont fontWithName:ABRA_FLOWERS_FONT size:[ABUI scaleYWithIphone:9.5f ipad:15.0f]];
     italicFont = [UIFont fontWithName:ABRA_ITALIC_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
     linkFont = [UIFont fontWithName:ABRA_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
+    versionFont = [UIFont fontWithName:ABRA_SYSTEM_FONT size:[ABUI scaleYWithIphone:6.5f ipad:11.0f]];
     
     self = [super initWithFrame:frame];
     if (self) {
@@ -187,18 +188,39 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont;
 }
 
 
-// Only used for logos -- so tapping logo takes you to the CBPA site
+// Only used for logos -- so tapping logo takes you to the CBPA site - or SHOULD... sigh
 - (void) addImageToBottom:(NSString *)imageName {
+    
     UIImage *image = [UIImage imageNamed:imageName];
     image = [self imageWithImage:image scaledToWidth:self.frame.size.width * 2];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-    imageView.frame = CGRectMake(0, self.frame.size.height - (image.size.height / 2) - [ABUI scaleYWithIphone:15.0f ipad:30.0f], image.size.width / 2, image.size.height / 2);
+    
+    CGFloat y = self.frame.size.height - (image.size.height / 2) - [ABUI scaleYWithIphone:15.0f ipad:30.0f];
+    imageView.frame = CGRectMake(0, y, image.size.width / 2, image.size.height / 2);
     
     [imageView setUserInteractionEnabled:YES];
     UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnLogos:)];
     [imageView addGestureRecognizer:gesture];
     [self addSubview:imageView];
+    
+    // Version hack.
+    [self addVersionToYPosition:y - [ABUI scaleYWithIphone:19.0f ipad:30.0f]];
+    
 }
+
+
+
+- (void) addVersionToYPosition:(CGFloat)y {
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 1000)];
+    label.text = ABRA_VERSION;
+    label.font = versionFont;
+    [label setTextColor:[UIColor colorWithRed:0.9 green:0.85 blue:0.78 alpha:0.4]];
+    label.frame = CGRectMake(0, y, self.frame.size.width, 12.0f);
+    
+    [self addSubview:label];
+}
+
 
 
 - (void) userTappedOnLogos:(UIGestureRecognizer*)gestureRecognizer {

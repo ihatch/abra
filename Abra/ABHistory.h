@@ -7,19 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ABState.h"
 
 @interface ABHistory : NSObject
 
-@property (nonatomic) int mutateCount;
-@property (nonatomic) int cadabraCount;
-@property (nonatomic) int shareCount;
-@property (nonatomic) int eraseCount;
-@property (nonatomic) int pruneCount;
-@property (nonatomic) int graftCount;
-@property (nonatomic) int magicTapCount;
-
 + (id) history;
-
-
+- (void) record:(SpellMode)mode line:(int)line index:(int)index;
 
 @end

@@ -435,10 +435,17 @@ static ABMutate *ABMutateInstance = NULL;
     
     NSArray *dice = [ABDice diceForKey:word.text];
     if([dice count] == 0) {
+        
         DDLogWarn(@">> Dice match not found: %@ - ", word.text);
-        // TODO: simple pattern analysis to swap in, say, emoji for emoji
-        // or text for emoji based on emoji.h (or mutate that text)
-        // or a string similarly sized in char count
+        if([ABEmoji isEmoji:word.text]) {
+            NSString *emoji = [ABEmoji getEmojiOfSameColorAsEmoji:word.text];
+            if(emoji) return [ABData getScriptWord:emoji];
+            NSString *emojiMatch = [ABEmoji emojiWordTransform:word.text];
+            if(emojiMatch) return [ABData getScriptWord:emojiMatch];
+        }
+
+        // TODO: or a string similarly sized in char count ??
+        
         ABScriptWord *result = [ABMutate attemptMatchBySpellCheck:word];
         if(result != nil) {
             DDLogWarn(@">> Found match by spell check: %@ -> %@ ", word.text, result.text);
@@ -481,9 +488,11 @@ static ABMutate *ABMutateInstance = NULL;
             new = [ABData getScriptWord:w];
         }
     }
+    
     @catch (NSException *exception) {
         DDLogError(@">> DICE ERROR: %@", word.text);
     }
+    
     @finally {
         // To make changes more colorful sooner, change this last digit:
         new.sourceStanza = word.sourceStanza + ABI(word.morphCount) + 1;

@@ -106,9 +106,49 @@ NSArray *icons;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
     [self addGestureRecognizer:tap];
 
+    UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
+    longpress.minimumPressDuration = 0.75;
+    longpress.delegate = self;
+    [self addGestureRecognizer:longpress];
+
+    
     self.hidden = NO;
 }
 
+
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+
+
+- (IBAction) longPress:(UILongPressGestureRecognizer *)gesture {
+    
+    if (gesture.state != UIGestureRecognizerStateBegan) return;
+    CGPoint point = [gesture locationInView:self];
+    int target = [self checkPoint:point];
+    ABIcon *icon = target > -1 ? [icons objectAtIndex:target] : nil;
+    
+    if(icon == nil || self.isVisible == NO) {
+        
+        if(currentModeIcon && currentModeIcon == icon && icon.iconType == GRAFT_ICON) {
+            [self triggerGraft];  // TODO : MAKE RANDOM FROM GRAFTED ? OR LAY ACTION
+            return;
+        }
+
+        [self showIcons];
+        return;
+    }
+    
+    iconType type = icon.iconType;
+    
+    if(type == MUTATE_ICON) [ABCadabra castSpell:@"AREA_RANDOM" withMagicWord:nil];
+    //        if(type == GRAFT_ICON) [self triggerGraft];
+    if(type == PRUNE_ICON) [ABCadabra castSpell:@"RANDOM_PRUNE" withMagicWord:nil];
+    if(type == ERASE_ICON) [ABCadabra castSpell:@"MINOR_ERASE" withMagicWord:nil];
+
+    if(type == SHARE_ICON) [ABState copyAllTextToClipboard];
+    if(type == SETTINGS_ICON) [ABCadabra castSpell:@"SHUFFLE" withMagicWord:nil];
+}
 
 
 
@@ -185,9 +225,9 @@ NSArray *icons;
         
         [icon highlight];
         
-        if(type == MUTATE_ICON) [ABState setInteractivityModeTo:MUTATE];
-        if(type == PRUNE_ICON) [ABState setInteractivityModeTo:PRUNE];
-        if(type == ERASE_ICON) [ABState setInteractivityModeTo:ERASE];
+        if(type == MUTATE_ICON) [ABState setSpellModeTo:MUTATE];
+        if(type == PRUNE_ICON) [ABState setSpellModeTo:PRUNE];
+        if(type == ERASE_ICON) [ABState setSpellModeTo:ERASE];
         if(type == GRAFT_ICON) [self triggerGraft];
         
         currentModeIcon = icon;
@@ -211,7 +251,7 @@ NSArray *icons;
 
 
 - (void) triggerGraft {
-    [ABState setInteractivityModeTo:GRAFT];
+    [ABState setSpellModeTo:GRAFT];
     [mainViewController pressedGraftButton];
 }
 
@@ -220,7 +260,7 @@ NSArray *icons;
     if(currentModeIcon && currentModeIcon != mutateIcon) [currentModeIcon lowlight];
     currentModeIcon = mutateIcon;
     [mutateIcon highlight];
-    [ABState setInteractivityModeTo:MUTATE];
+    [ABState setSpellModeTo:MUTATE];
 
 }
 

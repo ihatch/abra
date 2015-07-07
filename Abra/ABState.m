@@ -34,8 +34,11 @@ int dialThrottleMs;
 
 typedef NS_ENUM(NSInteger, ScriptDirection) { FORWARD, BACKWARD };
 ScriptDirection scriptDirection;
-InteractivityMode currentInteractivityMode;
+SpellMode currentSpellMode;
 CGFloat mutationLevel;
+
+int userActionsOnThisStanza;
+int autoMutationsOnThisStanza;
 
 ABHistory *history;
 NSUserDefaults *defaults;
@@ -43,6 +46,9 @@ NSUserDefaults *defaults;
 int tipWelcome, tipGraft, tipSpellMode, tipCadabra;
 BOOL settingAutonomousMutation, settingAutoplay, settingIPhoneDisplayMode, settingIPhoneDisplayModeHasChanged;
 BOOL secretSettingSpaceyMode, linesAreFlipped, linesAreWoven;
+
+BOOL DEV_PREVENT_TIPS;
+
 
 
 static ABState *ABStateInstance = NULL;
@@ -57,6 +63,10 @@ static ABState *ABStateInstance = NULL;
 - (id) init {
     if(self = [super init]) {
         
+        DEV_PREVENT_TIPS = YES;
+        [ABState resetTips];
+        [ABState initTips];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(transitionStanza:) name:@"transitionStanza" object:nil];
         history = [ABHistory history];
         
@@ -68,9 +78,12 @@ static ABState *ABStateInstance = NULL;
         lastGestureTime = CACurrentMediaTime();
         preventGestures = NO;
 
+        userActionsOnThisStanza = 0;
+        autoMutationsOnThisStanza = 0;
+
         currentStanza = ABRA_START_STANZA;
         scriptDirection = FORWARD;
-        currentInteractivityMode = MUTATE;
+        currentSpellMode = MUTATE;
 
         settingIPhoneDisplayModeHasChanged = NO;
         secretSettingSpaceyMode = NO;
@@ -202,12 +215,15 @@ static ABState *ABStateInstance = NULL;
     // Chance to turn off spacey mode, if it's on
     if(secretSettingSpaceyMode == YES) {
         if(ABI(3) == 0) secretSettingSpaceyMode = NO;
-        else newLines = [ABCadabra spaceyLettersMagic:newLines];
+        else newLines = [ABCadabra spaceyLettersMagic:newLines andSpaceOut:NO inTransition:YES];
     }
     
     currentStanza = index;
     currentScriptWordLines = newLines;
     [ABState changeAllLinesToLines:newLines];
+    
+    userActionsOnThisStanza = 0;
+    autoMutationsOnThisStanza = 0;
     
 }
 
@@ -268,6 +284,7 @@ static ABState *ABStateInstance = NULL;
     int max = MIN((int)[currentScriptWordLines count], [ABState numberOfLinesToDisplay]);
     int i = ABI(max);
     [[ABLines objectAtIndex:i] absentlyMutate];
+    autoMutationsOnThisStanza ++;
 }
 
 
@@ -328,12 +345,12 @@ static ABState *ABStateInstance = NULL;
     }
 }
 
-+ (void) setInteractivityModeTo:(InteractivityMode)mode {
-    currentInteractivityMode = mode;
++ (void) setSpellModeTo:(SpellMode)mode {
+    currentSpellMode = mode;
 }
 
-+ (InteractivityMode) getCurrentInteractivityMode {
-    return currentInteractivityMode;
++ (SpellMode) getCurrentSpellMode {
+    return currentSpellMode;
 }
 
 
@@ -377,7 +394,7 @@ static ABState *ABStateInstance = NULL;
 }
 
 + (void) boostMutationLevel {
-    mutationLevel += 3 + ABI(7);
+    mutationLevel += 3 + ABI(3);
     if(mutationLevel > 15) mutationLevel = 15;
 }
 
@@ -409,6 +426,7 @@ static ABState *ABStateInstance = NULL;
 
 
 + (BOOL) shouldShowTip:(NSString *)tip {
+    if(DEV_PREVENT_TIPS) return NO;
     if([tip isEqualToString:@"welcome"] && !tipWelcome) return YES;
     if([tip isEqualToString:@"graft"] && !tipGraft) return YES;
     if([tip isEqualToString:@"mode"] && !tipSpellMode) return YES;
@@ -436,11 +454,14 @@ static ABState *ABStateInstance = NULL;
     [defaults synchronize];
 }
 
+
+
 + (void) resetTips {
-    tipWelcome = 0;
-    tipGraft = 0;
-    tipSpellMode = 0;
-    tipCadabra = 0;
+//    tipWelcome = 0;
+//    tipGraft = 0;
+//    tipSpellMode = 0;
+//    tipCadabra = 0;
+    defaults = [NSUserDefaults standardUserDefaults];
     [defaults setInteger:0 forKey:@"tip-welcome"];
     [defaults setInteger:0 forKey:@"tip-graft"];
     [defaults setInteger:0 forKey:@"tip-mode"];
@@ -555,6 +576,26 @@ static ABState *ABStateInstance = NULL;
 
 
 
+
+
++ (void) incrementUserActions {
+    userActionsOnThisStanza ++;
+}
+
+
++ (void) copyAllTextToClipboard {
+
+    NSMutableArray *text = [NSMutableArray array];
+    for(ABLine *line in ABLines) [text addObject:[line lineAsPlainTextString]];
+    NSString *copyString = [text componentsJoinedByString:@"\n"];
+
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = copyString;
+    
+    DDLogInfo(@"COPY TO CLIPBOARD:\n\n%@", copyString);
+    [[[UIAlertView alloc] initWithTitle:@"" message:@"Copied text to clipboard." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+
+}
 
 
 

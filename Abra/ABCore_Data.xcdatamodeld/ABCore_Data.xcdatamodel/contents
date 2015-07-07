@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14D136" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Gesture" syncable="YES">
+        <attribute name="endTime" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="gestureType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numOfLines" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="startTime" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="actions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GestureAction" inverseName="gesture" inverseEntity="GestureAction" syncable="YES"/>
+    </entity>
+    <entity name="GestureAction" syncable="YES">
+        <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="line" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="newString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="relativeTime" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="gesture" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Gesture" inverseName="actions" inverseEntity="Gesture" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Gesture" positionX="-315" positionY="-54" width="128" height="118"/>
+        <element name="GestureAction" positionX="-92" positionY="23" width="128" height="118"/>
+    </elements>
+</model>

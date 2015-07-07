@@ -38,8 +38,10 @@
         self.yPosition = y;
         self.lineWords = [NSMutableArray array];
         self.lossyTransitions = NO;
+        
         [self setFrame:CGRectMake(0, y, kScreenWidth, lineHeight)];
         matcher = [[ABMatch alloc] init];
+        history = [ABHistory history];
   
         // For position testing
         // self.backgroundColor = [UIColor colorWithHue:0.2 saturation:0.3 brightness:0.4 alpha:0.3];
@@ -87,8 +89,6 @@
     self.lineScriptWords = @[];
     self.lineWidth = 0;
 }
-
-
 
 
 
@@ -272,6 +272,41 @@
 }
 
 
+- (NSString *) lineAsPlainTextString {
+    
+    NSMutableArray *plainText = [NSMutableArray array];
+    BOOL prevMarginRight = NO;
+    
+    for(int i=0; i<[self.lineWords count]; i++){
+        
+        ABWord *w = [self.lineWords objectAtIndex:i];
+        ABScriptWord *sw = [self.lineScriptWords objectAtIndex:i];
+        
+        if(!w.marginLeft && prevMarginRight) {
+            if([plainText count] > 0 && [[plainText lastObject] isEqualToString:@" "]) {
+                [plainText removeObjectAtIndex:[plainText count] - 1];
+            }
+        }
+        
+        if(w.isErased) {
+            for(int j=0; j < [sw.charArray count]; j ++) [plainText addObject:@" "];
+        } else if(w.isRedacted) {
+            for(int j=0; j < [sw.charArray count]; j ++) [plainText addObject:@"█"];
+        } else {
+            [plainText addObject:w.text];
+        }
+        
+        if(w.marginRight) {
+            [plainText addObject:@" "];
+        } else {
+            prevMarginRight = NO;
+        }
+    }
+    
+    return [plainText componentsJoinedByString:@""];
+}
+
+
 - (NSArray *) wordsXPositions {
     
     // Hack to fix weird slight off center phenomenon
@@ -287,6 +322,7 @@
     for(int i=0; i<[self.lineWords count]; i++){
         
         ABWord *w = [self.lineWords objectAtIndex:i];
+        
         CGFloat wordWidth = [w width];
         CGFloat wordWidthWithMargins = wordWidth;
         
@@ -296,7 +332,7 @@
         }
         
         [xPositions addObject:[NSNumber numberWithFloat:total]];
-
+        
         if(w.marginRight) {
             total += fontMargin;
             wordWidthWithMargins += fontMargin;
@@ -365,40 +401,51 @@
 }
 
 - (void) touchOrTap:(CGPoint)point {
-    
     int index = [self checkPoint:point];
     if(index == -1) return;
+    SpellMode mode = [ABState getCurrentSpellMode];
+    [self lineAction:mode index:index byLiveUser:YES];
+}
+
+
+- (void) lineAction:(SpellMode)mode index:(int)index byLiveUser:(BOOL)liveUser {
     
-    InteractivityMode mode = [ABState getCurrentInteractivityMode];
+    if(index > [self.lineWords count]) return;
+    if(index > [self.lineScriptWords count]) return;
+    
     ABWord *w = self.lineWords[index];
     ABScriptWord *sw = self.lineScriptWords[index];
     
-    if(mode == ERASE) {
+    if(mode == MUTATE) {
         if(w.isErased) return;
-        [self.lineWords[index] erase];
-        history.eraseCount ++;
-        return; // only return due to update at end of fn
+        if(w.isRedacted) return;
+        [self replaceWordAtIndex:index withArray:[ABMutate mutateWord:sw inLine:self.lineScriptWords]];
+    }
+    
+    if(mode == GRAFT) {
+        NSArray *graftArray = [ABMutate graftWord:sw];
+        [self replaceWordAtIndex:index withArray:graftArray];
     }
 
     if(mode == PRUNE) {
         [self replaceWordAtIndex:index withArray:@[]];
-        history.pruneCount ++;
-    }
-
-    if(mode == MUTATE) {
-        if(w.isErased) return;
-        [self replaceWordAtIndex:index withArray:[ABMutate mutateWord:sw inLine:self.lineScriptWords]];
-        history.mutateCount ++;
     }
     
-    if(mode == GRAFT) {
-        [self replaceWordAtIndex:index withArray:[ABMutate graftWord:sw]];
-        history.graftCount ++;
+    if(mode == ERASE) {
+        if(w.isErased) return;
+        [self.lineWords[index] erase];
+    }
+    
+    
+    if(liveUser) {
+        [ABState incrementUserActions];
+        [history record:mode line:self.lineNumber index:index];
     }
 
+    if(mode == ERASE) return; // No update for erasures
     [ABState updateCurrentScriptWordLinesWithLine:self.lineScriptWords atIndex:self.lineNumber];
-}
 
+}
 
 
 
@@ -459,6 +506,8 @@
 
 - (void) absentlyMutate {
     
+    [self mirror];
+    
     if([self.lineScriptWords count] == 0) return;
     NSArray *indices = [self locationsOfVisibleWords];
     NSArray *erased = [self locationsOfErasedWords];    // TODO
@@ -484,7 +533,7 @@
     NSArray *newSWs = [ABMutate mutateWord:sw inLine:self.lineScriptWords];
     NSMutableArray *newTexts = [NSMutableArray array];
     for(ABScriptWord *nsw in newSWs) {
-        if(ABI(11) < 2) continue;
+        if(ABI(17) < 2) continue;
         // don't allow morphCount to increment much when absently mutating
         if(nsw.morphCount > 2) nsw.morphCount = ABI(2);
         [newTexts addObject:nsw.text];
@@ -533,6 +582,15 @@
 }
 
 
+
+
+- (void) mirror {
+    CGFloat scale = self.isMirrored ? 1.0 : -1.0;
+    self.isMirrored = !self.isMirrored;
+    [UIView transitionWithView:self duration:1.5f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationCurveEaseInOut animations:^{
+        self.transform = CGAffineTransformMakeScale(1, scale);
+    } completion:nil];
+}
 
 
 

@@ -10,7 +10,7 @@
 #import "PECropViewController.h"
 #import "ABMainViewController.h"
 
-@interface ABIconBar : UIView <PECropViewControllerDelegate>
+@interface ABIconBar : UIView <PECropViewControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic) BOOL isVisible;
 @property (nonatomic) BOOL isAnimating;
