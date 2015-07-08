@@ -47,8 +47,6 @@
         [self hideInstantly];
     }
     return self;
-    
-    
 }
 
 
@@ -71,17 +69,13 @@
 - (UILabel *) createSymbolLabelWithText:(NSString *)text {
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.iconWidth, self.iconHeight)];
+
     label.text = text;
     label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [ABUI darkGoldColor2];
     
-    
-    if(self.iconType == FLOWER_ICON) {
-        label.font = [UIFont fontWithName:ABRA_FLOWERS_FONT size:self.symbolFontSize];
-    } else {
-        label.font = [UIFont fontWithName:ABRA_SYSTEM_FONT size:self.symbolFontSize];
-    }
-    
-    [label setTextColor:[ABUI darkGoldColor2]];
+    NSString *fontName = (self.iconType == FLOWER_ICON) ? ABRA_FLOWERS_FONT : ABRA_SYSTEM_FONT;
+    label.font = [UIFont fontWithName:fontName size:self.symbolFontSize];
     
     CGFloat y;
     if(self.iconType == FLOWER_ICON) {

@@ -14,6 +14,9 @@
 
 @property (strong, nonatomic) ABInfoViewController *infoViewController;
 
+- (void) prevNextFeedbackFlash;
+- (void) twinsFlash;
+
 - (void) showGraftModal;
 - (void) showInfoView;
 - (void) showSettingsModal;
@@ -21,11 +24,8 @@
 
 - (void) blackCurtainDidDisappear;
 - (BOOL) userDidTouchOutsideGraftBox;
-- (void) pressedGraftButton;
+- (void) userDidPressGraftButton;
 
 - (void) carouselFlash;
-- (void) prevNextFeedbackFlash;
-
-- (void) flashTwins;
 
 @end

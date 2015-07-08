@@ -12,6 +12,7 @@
 @interface ABHistory : NSObject
 
 + (id) history;
+
 - (void) record:(SpellMode)mode line:(int)line index:(int)index;
 
 @end

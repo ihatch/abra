@@ -1,24 +1,25 @@
 //
-//  ABVerticalContentFlow.m
+//  ABFlow.m
 //  Abra
 //
 //  Created by Ian Hatcher on 6/27/15.
 //  Copyright (c) 2015 Ian Hatcher. All rights reserved.
 //
 
-#import "ABVerticalContentFlow.h"
+#import "ABFlow.h"
 #import "ABConstants.h"
 #import "ABUI.h"
 #import <QuartzCore/QuartzCore.h>
 
 
-@implementation ABVerticalContentFlow
+@implementation ABFlow
 
-UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versionFont;
-
+UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versionFont, *authorsFont;
+UIImageView *logosView;
 
 - (id) initWithFrame:(CGRect)frame {
 
+    authorsFont = [UIFont fontWithName:ABRA_ITALIC_FONT size:[ABUI scaleYWithIphone:10.0f ipad:16.0f]];
     contentFont = [UIFont fontWithName:ABRA_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
     headingFont = [UIFont fontWithName:ABRA_SYSTEM_FONT size:[ABUI scaleYWithIphone:9.5f ipad:15.0f]];
     flowersFont = [UIFont fontWithName:ABRA_FLOWERS_FONT size:[ABUI scaleYWithIphone:9.5f ipad:15.0f]];
@@ -65,7 +66,10 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versio
 
 - (UILabel *) addLabelWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color shadow:(BOOL)shadow italic:(BOOL)italic url:(NSString *)url {
     
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 1000)];
+    BOOL authors = font == authorsFont;
+    CGFloat x = authors ? [ABUI scaleXWithIphone:20.0f ipad:80.0f] : 0;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(x, 0, self.frame.size.width, 1000)];
 
     label.font = font;
     label.lineBreakMode = NSLineBreakByWordWrapping;
@@ -77,8 +81,8 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versio
     }
 
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.minimumLineHeight = self.lineHeight;
-    style.maximumLineHeight = self.lineHeight;
+    style.minimumLineHeight = authors ? [ABUI scaleYWithIphone:16.0f ipad:30.0f] : self.lineHeight;
+    style.maximumLineHeight = authors ? [ABUI scaleYWithIphone:16.0f ipad:30.0f] : self.lineHeight;
     if(self.isSelfCentered) style.alignment = NSTextAlignmentCenter;
     NSDictionary *attrs = @{NSParagraphStyleAttributeName : style};
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:text attributes:attrs];
@@ -90,8 +94,13 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versio
         [attrString addAttribute:NSFontAttributeName value:flowersFont range:NSMakeRange([text length] - 1, 1)];
         [attrString addAttribute:NSForegroundColorAttributeName value:[ABUI darkGoldColor2] range:NSMakeRange([text length] - 1, 1)];
         [attrString addAttribute:NSKernAttributeName value:@(1.5f) range:NSMakeRange(0, [text length])];
+        
+    } else if(italic && font == authorsFont) {
+        [attrString addAttribute:NSFontAttributeName value:authorsFont range:NSMakeRange(0, [text length])];
+        
     } else if(italic) {
         [attrString addAttribute:NSFontAttributeName value:italicFont range:NSMakeRange(0, [text length])];
+        
     } else {
         [attrString addAttribute:NSFontAttributeName value:contentFont range:NSMakeRange(0, [text length])];
     }
@@ -100,7 +109,7 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versio
     
     
     CGFloat labelHeight = [self heightForLabel:label];
-    label.frame = CGRectMake(0, self.appendYPosition, self.frame.size.width, labelHeight);
+    label.frame = CGRectMake(x, self.appendYPosition, self.frame.size.width, labelHeight);
     
     if(shadow) {
         label.layer.shadowColor = [label.textColor CGColor];
@@ -154,8 +163,16 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versio
 
 
 
-- (void) addAuthors:(NSString *)text {
-    [self addLabelWithText:text font:contentFont color:[ABUI whiteTextColor] shadow:NO italic:YES url:nil];
+- (void) addAuthors{
+    
+    NSString *text = @"  by Amaranth Borsuk\n             Kate Durbin\n                    Ian Hatcher\n                           & You";
+    
+    if([ABUI isIphone]) {
+        text = @"    by Amaranth Borsuk\n             Kate Durbin\n                    Ian Hatcher\n                             & You";
+    }
+    
+    self.appendYPosition -= [ABUI scaleYWithIphone:5.0f ipad:-5.0f];
+    [self addLabelWithText:text font:authorsFont color:[ABUI whiteTextColor] shadow:NO italic:YES url:nil];
     self.appendYPosition += self.paragraphMarginBottom;
 }
 
@@ -183,7 +200,7 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versio
     imageView.frame = CGRectMake(0, self.appendYPosition, image.size.width / 2, image.size.height / 2);
 
     [self addSubview:imageView];
-    self.appendYPosition += (image.size.height / 2) + self.imageMargin;
+    self.appendYPosition += (image.size.height / 2);
 }
 
 
@@ -200,24 +217,38 @@ UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versio
     [imageView setUserInteractionEnabled:YES];
     UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnLogos:)];
     [imageView addGestureRecognizer:gesture];
+    imageView.alpha = 0.7;
     [self addSubview:imageView];
     
     // Version hack.
     [self addVersionToYPosition:y - [ABUI scaleYWithIphone:19.0f ipad:30.0f]];
-    
+    logosView = imageView;
+}
+
+- (void) bringLogosToFront {
+    [self bringSubviewToFront:logosView];
 }
 
 
-
 - (void) addVersionToYPosition:(CGFloat)y {
-    
+
+    NSBundle *bundle = [NSBundle mainBundle];
+    // NSString *appVersion = [bundle objectForInfoDictionaryKey:(NSString *)@"CFBundleShortVersionString"];
+    NSString *appBuildNumber = [bundle objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 1000)];
-    label.text = ABRA_VERSION;
+    label.text = [NSString stringWithFormat:@"v%@", appBuildNumber];
     label.font = versionFont;
     [label setTextColor:[UIColor colorWithRed:0.9 green:0.85 blue:0.78 alpha:0.4]];
     label.frame = CGRectMake(0, y, self.frame.size.width, 12.0f);
     
     [self addSubview:label];
+}
+
+
+
+- (void) adjustBottomMargin {
+    self.appendYPosition -= [ABUI scaleYWithIphone:4.0f ipad:0];
 }
 
 

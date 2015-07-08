@@ -13,48 +13,16 @@
 #import "ABScriptWord.h"
 #import "ABScript.h"
 #import "ABEmoji.h"
-
-// Methods to split string that work with extended chars (emoji)
-@interface NSString (ConvertToArray)
-- (NSArray *)convertToArray;
-- (NSMutableArray *) convertToMutableArray;
-@end
-@implementation NSString (ConvertToArray)
-- (NSArray *)convertToArray {
-    NSMutableArray *arr = [NSMutableArray array];
-    NSUInteger i = 0;
-    while (i < self.length) {
-        NSRange range = [self rangeOfComposedCharacterSequenceAtIndex:i];
-        NSString *chStr = [self substringWithRange:range];
-        [arr addObject:chStr];
-        i += range.length;
-    }
-    return arr;
-}
-- (NSMutableArray *) convertToMutableArray {
-    NSMutableArray *arr = [NSMutableArray array];
-    NSUInteger i = 0;
-    while (i < self.length) {
-        NSRange range = [self rangeOfComposedCharacterSequenceAtIndex:i];
-        NSString *chStr = [self substringWithRange:range];
-        [arr addObject:chStr];
-        i += range.length;
-    }
-    return arr;
-}
-@end
-
-
+#import "NSString+ABExtras.h"
 
 
 // Private
 @interface ABData ()
 
-+ (NSString *) filePathWithName:(NSString *)name;
-+ (NSDictionary *) loadDataForKey:(NSString *)key;
-+ (NSMutableDictionary *) loadMutableDataForKey:(NSString *)key;
-+ (NSMutableDictionary *) loadPrecompiledData:(NSString *)key;
-
+//+ (NSString *) filePathWithName:(NSString *)name;
+//+ (NSDictionary *) loadDataForKey:(NSString *)key;
+//+ (NSMutableDictionary *) loadMutableDataForKey:(NSString *)key;
+//+ (NSMutableDictionary *) loadPrecompiledData:(NSString *)key;
 
 @end
 
@@ -68,8 +36,6 @@ NSMutableDictionary *abScriptWordsDictionary;
 NSMutableArray *pastGrafts;        // an array of arrays of individual word strings
 NSMutableArray *pastGraftStrings;  // an array of strings consisting of space-separated words
 NSMutableSet *allPastGraftTerms;
-
-NSMutableDictionary *graftsByCharCount;
 
 NSArray *currentGraftWords;
 int graftIndex;
@@ -104,9 +70,7 @@ static ABData *ABDataInstance = NULL;
     [ABEmoji initEmoji];
     DDLogInfo(@"== initMagicWords");
     [ABData initMagicWords];
-    
-    
-    
+
     DDLogInfo(@"===== DATA: loaded. =====");
 }
 
@@ -120,19 +84,11 @@ static ABData *ABDataInstance = NULL;
 // INIT LISTS AND TABLES //
 ///////////////////////////
 
-
-
 #pragma mark - Application's Documents directory
 
 // Returns the URL to the application's Documents directory.
 - (NSURL *) applicationDocumentsDirectory {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-}
-
-
-
-+ (void) setABScriptWordsDictionary:(NSMutableDictionary *) scriptWordsDictionary {
-    abScriptWordsDictionary = scriptWordsDictionary;
 }
 
 + (void) initCoreScript {
@@ -144,8 +100,6 @@ static ABData *ABDataInstance = NULL;
 + (void) initCoreDictionary {
     NSMutableDictionary *diceDictionary = [ABData loadPrecompiledData:@"coreDiceDictionary"];
     if(diceDictionary == nil) {
-//        NSString *path = [[NSBundle mainBundle] pathForResource:@"diceErrata" ofType:@"txt"];
-
         DDLogError(@"%@", @">> ERROR: CORE MUTATIONS TABLE NOT FOUND");
         [ABDice generateDiceDictionary];
         [ABData saveData:diceDictionary forKey:@"coreDiceDictionary"];
@@ -154,11 +108,14 @@ static ABData *ABDataInstance = NULL;
     }
 }
 
++ (void) setABScriptWordsDictionary:(NSMutableDictionary *) scriptWordsDictionary {
+    abScriptWordsDictionary = scriptWordsDictionary;
+}
+
 + (void) resetLexicon {
     [pastGrafts removeAllObjects];
     [pastGraftStrings removeAllObjects];
     [allPastGraftTerms removeAllObjects];
-    [graftsByCharCount removeAllObjects];
     currentGraftWords = [NSArray array];
     [ABData saveGrafts];
     [ABDice resetLexicon];
@@ -222,8 +179,6 @@ static ABData *ABDataInstance = NULL;
     [ABDice setDiceAdditions:[ABData loadDataForKey:@"diceAdditions"]];
 }
 
-
-
 + (NSDictionary *) loadGestureHistory {
     return [ABData loadDataForKey:@"gestureHistory"];
 }
@@ -233,185 +188,6 @@ static ABData *ABDataInstance = NULL;
     [ABData saveData:gestureHistory forKey:@"gestureHistory"];
 }
 
-
-
-
-
-
-
-
-
-
-
-
-////////////
-// GRAFTS //
-////////////
-
-
-// --------------- FILES ---------------
-
-
-+ (void) loadGrafts {
-    
-    graftsByCharCount = [NSMutableDictionary dictionary];
-
-    NSMutableArray *grafts = [ABData loadArrayOfStringsFromFile:@"pastGraftStrings"];
-    if(!grafts || [grafts count] == 0 || [grafts isEqualToArray:@[@""]]) {
-        DDLogInfo(@"No past grafts found. Initializing empty arrays.");
-        pastGraftStrings = [NSMutableArray array];
-        pastGrafts = [NSMutableArray array];
-        return;
-    }
-    
-    pastGraftStrings = grafts;
-    pastGrafts = [NSMutableArray array];
-    for(NSString *graft in grafts) {
-        NSArray *words = [graft componentsSeparatedByString:@" "];
-        [allPastGraftTerms unionSet:[NSSet setWithArray:words]];
-        [pastGrafts addObject:words];
-        [ABData processGraftWordsIntoScriptWords:words andDice:NO];
-    }
-    
-    DDLogInfo(@"Past grafts loaded: %ld", (long)[pastGrafts count]);
-}
-
-
-+ (void) saveGrafts {
-    [ABData saveArrayOfStrings:pastGraftStrings toFile:@"pastGraftStrings"];
-}
-
-
-
-+ (void) saveArrayOfStrings:(NSMutableArray *)array toFile:(NSString *)key {
-    DDLogInfo(@"Saving strings data for key: %@", key);
-
-    NSString *string = [array componentsJoinedByString:@"\n"];
-    NSData *data = [string dataUsingEncoding:NSUTF16StringEncoding];
-
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *path = [paths objectAtIndex:0];
-    path = [path stringByAppendingPathComponent:key];
-    
-    BOOL result = [[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil];
-    if(result == NO) DDLogError(@"ERROR: could not save file: %@", key);
-}
-
-
-
-+ (NSMutableArray *) loadArrayOfStringsFromFile:(NSString *)key {
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *path = [paths objectAtIndex:0];
-    path = [path stringByAppendingPathComponent:key];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        DDLogError(@"ERROR: File not found: %@", key);
-        return nil;
-    }
-    
-    NSData *data = [[NSData alloc] initWithContentsOfFile:path];
-    if(!data) {
-        DDLogError(@"ERROR: No data for file: %@", key);
-        return nil;
-    }
-
-    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF16StringEncoding];
-    return [NSMutableArray arrayWithArray:[string componentsSeparatedByString:@"\n"]];
-}
-
-
-
-// --------------- HELPERS ---------------
-
-
-+ (NSArray *) processGraftWordsIntoScriptWords:(NSArray *)words andDice:(BOOL)dice {
-    if(dice) [ABDice updateDiceDictionaryWithStrings:words];
-    NSArray *scriptWords = [ABScript parseGraftArrayIntoScriptWords:words];
-    return scriptWords;
-}
-
-
-+ (NSString *) filterGraftText:(NSString *)text {
-    NSCharacterSet *charactersToRemove = [NSCharacterSet illegalCharacterSet];
-    text = [[text componentsSeparatedByCharactersInSet:charactersToRemove] componentsJoinedByString:@""];
-    
-    NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    text = [text stringByTrimmingCharactersInSet:whitespace];
-    return text;
-}
-
-// TODO
-//+ (void) addGraftStringToCharCountIndex:(NSString *)string {
-//    NSNumber *count = @([[string convertToMutableArray] count]);
-//    if([graftsByCharCount objectForKey:count] == nil) {
-//        [graftsByCharCount setObject:[NSMutableArray array] forKey:count];
-//    }
-//    [[graftsByCharCount objectForKey:count] addObject:string];
-//}
-
-
-
-// --------------- INTERFACE ---------------
-
-
-+ (BOOL) graftText:(NSString *)text {
-    
-    text = [ABData filterGraftText:text];
-    if ([text length] == 0) return NO;
-    
-    NSArray *words = [text componentsSeparatedByString:@" "];
-    if([words count] == 0) return NO;
-    
-    [ABData graftNewWords:words];
-    
-    [pastGrafts addObject:words];
-    [pastGraftStrings addObject:text];
-    
-    [ABData saveGrafts];
-    
-    return YES;
-}
-
-
-+ (void) graftNewWords:(NSArray *)words {
-    NSArray *scriptWords = [ABData processGraftWordsIntoScriptWords:words andDice:YES];
-    [pastGrafts addObject:words];
-    currentGraftWords = scriptWords;
-    graftIndex = 0;
-}
-
-
-+ (ABScriptWord *) getWordToGraft {
-    if([currentGraftWords count] == 0) return [ABData getScriptWord:@"?"];
-    ABScriptWord *w = [currentGraftWords objectAtIndex:graftIndex];
-    graftIndex ++;
-    if(graftIndex == [currentGraftWords count]) graftIndex = 0;
-    return w;
-}
-
-
-+ (ABScriptWord *) getPastGraftWord {
-    if([pastGrafts count] == 0) return nil;
-    NSArray *past = [pastGrafts objectAtIndex:(arc4random() % [pastGrafts count])];
-    NSString *word = [past objectAtIndex:(arc4random() % [past count])];
-    return [[abScriptWordsDictionary objectForKey:word] copyOfThisWord];
-}
-
-
-+ (NSMutableArray *) getPastGraftsWithCharCount:(int)count {
-    return [graftsByCharCount objectForKey:@(count)];
-}
-
-+ (NSString *) getPastGraftString {
-    if([pastGraftStrings count] == 0) return @"? ?";
-    return [pastGraftStrings objectAtIndex:(arc4random() % [pastGraftStrings count])];
-}
-
-
-//+ (NSMutableArray *) getPastGraftSimilarToWord:(NSString *)word {
-//    
-//}
 
 
 
@@ -452,7 +228,7 @@ static ABData *ABDataInstance = NULL;
         if(check) [sw runChecks];
         [abScriptWordsDictionary setObject:sw forKey:text];
         
-    // Use existing scriptWord, but update its familial connections
+        // Use existing scriptWord, but update its familial connections
     } else {
         if(family || leftSis || rightSis) {
             if(family) [sw addFamily:family];
@@ -464,10 +240,9 @@ static ABData *ABDataInstance = NULL;
         sw = [sw copyOfThisWord];
         sw.sourceStanza = stanza;
     }
-
+    
     return sw;
 }
-
 
 
 + (ABScriptWord *) getRandomScriptWord {
@@ -488,11 +263,163 @@ static ABData *ABDataInstance = NULL;
 
 
 
+////////////
+// GRAFTS //
+////////////
+
+
+// --------------- FILES ---------------
+
++ (void) loadGrafts {
+    
+    NSMutableArray *grafts = [ABData loadArrayOfStringsFromFile:@"pastGraftStrings"];
+    if(!grafts || [grafts count] == 0 || [grafts isEqualToArray:@[@""]]) {
+        DDLogInfo(@"No past grafts found. Initializing empty arrays.");
+        pastGraftStrings = [NSMutableArray array];
+        pastGrafts = [NSMutableArray array];
+        return;
+    }
+    
+    pastGraftStrings = grafts;
+    pastGrafts = [NSMutableArray array];
+    for(NSString *graft in grafts) {
+        NSArray *words = [graft componentsSeparatedByString:@" "];
+        [allPastGraftTerms unionSet:[NSSet setWithArray:words]];
+        [pastGrafts addObject:words];
+        [ABData processGraftWordsIntoScriptWords:words andDice:NO];
+    }
+    
+    DDLogInfo(@"Past grafts loaded: %ld", (long)[pastGrafts count]);
+}
+
+
++ (void) saveGrafts {
+    [ABData saveArrayOfStrings:pastGraftStrings toFile:@"pastGraftStrings"];
+}
+
+
++ (void) saveArrayOfStrings:(NSMutableArray *)array toFile:(NSString *)key {
+    DDLogInfo(@"Saving strings data for key: %@", key);
+
+    NSString *string = [array componentsJoinedByString:@"\n"];
+    NSData *data = [string dataUsingEncoding:NSUTF16StringEncoding];
+
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];
+    path = [path stringByAppendingPathComponent:key];
+    
+    BOOL result = [[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil];
+    if(result == NO) DDLogError(@"ERROR: could not save file: %@", key);
+}
+
+
++ (NSMutableArray *) loadArrayOfStringsFromFile:(NSString *)key {
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];
+    path = [path stringByAppendingPathComponent:key];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        DDLogError(@"ERROR: File not found: %@", key);
+        return nil;
+    }
+    
+    NSData *data = [[NSData alloc] initWithContentsOfFile:path];
+    if(!data) {
+        DDLogError(@"ERROR: No data for file: %@", key);
+        return nil;
+    }
+
+    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF16StringEncoding];
+    return [NSMutableArray arrayWithArray:[string componentsSeparatedByString:@"\n"]];
+}
+
+
+
+// --------------- HELPERS ---------------
+
++ (NSArray *) processGraftWordsIntoScriptWords:(NSArray *)words andDice:(BOOL)dice {
+    if(dice) [ABDice updateDiceDictionaryWithStrings:words];
+    NSArray *scriptWords = [ABScript parseGraftArrayIntoScriptWords:words];
+    return scriptWords;
+}
+
+
++ (NSString *) filterGraftText:(NSString *)text {
+    NSCharacterSet *charactersToRemove = [NSCharacterSet illegalCharacterSet];
+    text = [[text componentsSeparatedByCharactersInSet:charactersToRemove] componentsJoinedByString:@""];
+    
+    NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    text = [text stringByTrimmingCharactersInSet:whitespace];
+    return text;
+}
+
+
+
+// --------------- INTERFACE ---------------
+
++ (BOOL) graftText:(NSString *)text {
+
+    text = [ABData filterGraftText:text];
+    if ([text length] == 0) return NO;
+    
+    NSArray *words = [text componentsSeparatedByString:@" "];
+    if([words count] == 0) return NO;
+    
+    [ABData graftNewWords:words];
+    
+    [pastGrafts addObject:words];
+    [pastGraftStrings addObject:text];
+    
+    [ABData saveGrafts];
+    return YES;
+}
+
++ (void) graftNewWords:(NSArray *)words {
+    NSArray *scriptWords = [ABData processGraftWordsIntoScriptWords:words andDice:YES];
+    [pastGrafts addObject:words];
+    currentGraftWords = scriptWords;
+    graftIndex = 0;
+}
+
++ (ABScriptWord *) getWordToGraft {
+    if([currentGraftWords count] == 0) return [ABData getScriptWord:@"?"];
+    ABScriptWord *w = [currentGraftWords objectAtIndex:graftIndex];
+    graftIndex ++;
+    if(graftIndex == [currentGraftWords count]) graftIndex = 0;
+    return w;
+}
+
++ (ABScriptWord *) getPastGraftWord {
+    if([pastGrafts count] == 0) return nil;
+    NSArray *past = [pastGrafts objectAtIndex:(arc4random() % [pastGrafts count])];
+    NSString *word = [past objectAtIndex:(arc4random() % [past count])];
+    return [[abScriptWordsDictionary objectForKey:word] copyOfThisWord];
+}
+
+
+// TODO
++ (NSString *) getPastGraftString {
+    if([pastGraftStrings count] == 0) return @"? ?";
+    return [pastGraftStrings objectAtIndex:(arc4random() % [pastGraftStrings count])];
+}
+
+
+
+
+
+
+
+
+
+/////////////////
+// MAGIC WORDS //
+/////////////////
 
 
 + (void) initMagicWords {
     
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"magicWords" ofType:@"txt"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"magic_words" ofType:@"txt"];
     NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     NSArray *rawSets = [rawText componentsSeparatedByString:@"\n\n\n"];
     
@@ -515,25 +442,6 @@ static ABData *ABDataInstance = NULL;
     if(magicWordsIndex == nil) [ABData initMagicWords];
     return [magicWordsIndex objectForKey:word];
 }
-
-
-
-
-
-
-
-
-
-
-
-/////////////////////// DEV FNS ///////////////////////
-
-+ (void) createLocalDataCacheDEV {
-    [ABDice generateDiceDictionary];
-}
-
-/////////////////////// END DEV FNS ///////////////////////
-
 
 
 

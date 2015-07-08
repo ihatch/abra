@@ -17,43 +17,48 @@
 @property (nonatomic) CGPoint startPoint;
 @property (nonatomic) CGFloat width;
 @property (nonatomic) CGFloat height;
-@property (nonatomic) BOOL isNew;
+
 @property (nonatomic) BOOL marginLeft;
 @property (nonatomic) BOOL marginRight;
-@property (nonatomic) int sourceStanza;
-@property (nonatomic) BOOL isGrafted;
-@property (nonatomic) BOOL isErased;
-@property (nonatomic) BOOL isRedacted;
-@property (nonatomic) BOOL isMirrored;
-@property (nonatomic) BOOL isSpinning;
 @property (nonatomic) BOOL hasAnimatedIn;
+@property (nonatomic) BOOL isErased;
+@property (nonatomic) BOOL isGrafted;
+@property (nonatomic) BOOL isLocked;
+@property (nonatomic) BOOL isNew;
+@property (nonatomic) BOOL isMirrored;
+@property (nonatomic) BOOL isRedacted;
+@property (nonatomic) BOOL isSpinning;
+@property (nonatomic) BOOL isSelfDestructing;
+
+@property (nonatomic) int sourceStanza;
+@property (nonatomic) ABLine *parentLine;
+@property (nonatomic) ABScriptWord *scriptWord;
 @property (nonatomic) NSString *wordID;
 
 @property (nonatomic) UIDynamicAnimator *animator;
 @property (nonatomic) POPBasicAnimation *animationX;
 @property (nonatomic) POPBasicAnimation *animationAlpha;
 @property (nonatomic) POPBasicAnimation *animationSize;
-@property (nonatomic) ABScriptWord *scriptWord;
-
-@property (nonatomic) ABLine *parentLine;
-@property (nonatomic) BOOL *locked;
-@property (nonatomic) BOOL *isSelfDestructing;
 
 - (id) initWithFrame:(CGRect)frame andScriptWord:(ABScriptWord *) word;
 
 - (void) animateIn;
-- (void) moveToXPosition:(CGFloat)x;
 - (void) setXPosition:(CGFloat)x;
+- (void) moveToXPosition:(CGFloat)x;
+
 - (void) dim;
 - (void) quickDim;
+
 - (void) erase;
 - (void) eraseInstantly;
 - (void) eraseWithDelay:(CGFloat)delay;
+
 - (void) selfDestruct;
 - (void) selfDestructMorph;
+
+- (void) fadeColorToSourceStanza:(int)stanza;
 - (void) redact;
 - (void) spin;
-- (void) fadeColorToSourceStanza:(int)stanza;
 
 
 @end

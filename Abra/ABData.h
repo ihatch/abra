@@ -13,12 +13,12 @@
 
 + (void) initData;
 
-+ (NSArray *) loadWordList;
-
 + (void) initCoreDictionary;
 + (void) saveDiceAdditions:(NSMutableDictionary *) diceAdditions;
 + (void) setABScriptWordsDictionary:(NSMutableDictionary *) scriptWordsDictionary;
++ (void) resetLexicon;
 
++ (NSArray *) loadWordList;
 
 + (ABScriptWord *) getScriptWord:(NSString *)text;
 + (ABScriptWord *) getScriptWordAndRunChecks:(NSString *)text;
@@ -26,16 +26,12 @@
 + (ABScriptWord *) scriptWord:(NSString *)text stanza:(int)stanza fam:(NSArray *)family leftSis:(NSString *)leftSis rightSis:(NSString *)rightSis graft:(BOOL)graft check:(BOOL)check;
 + (ABScriptWord *) getRandomScriptWord;
 
-
-+ (void) graftNewWords:(NSArray *)words;
 + (BOOL) graftText:(NSString *)text;
++ (void) graftNewWords:(NSArray *)words;
 + (ABScriptWord *) getWordToGraft;
 + (ABScriptWord *) getPastGraftWord;
 
 + (NSString *) checkMagicWord:(NSString *)word;
-
-+ (void) resetLexicon;
-
 
 
 @end

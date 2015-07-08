@@ -48,11 +48,12 @@ CGPoint touchStart;
 
 
 - (void) viewDidLoad {
-    
+
     [super viewDidLoad];
+    [ABData initData];
 
     [self initScreen];
-    [ABData initData];
+    [self initTwinsImage];
     [self initLines];
     [self initGestures];
     [self initInfoView];
@@ -70,55 +71,24 @@ CGPoint touchStart;
 
 
 
+
+//////////
+// INIT //
+//////////
+
+
 - (void) initScreen {
     DDLogInfo(@"Screen: %f x %f", kScreenWidth, kScreenHeight);
     self.view.backgroundColor = [UIColor blackColor];
     self.view.userInteractionEnabled = YES;
-    
-    [self initTwinsImage];
 }
 
-
-
-
-- (UIImage *) imageWithImage:(UIImage *)image scaledToHeight: (float) i_height {
-    float oldHeight = image.size.height;
-    float scaleFactor = i_height / oldHeight;
-    float newHeight = oldHeight * scaleFactor;
-    float newWidth = image.size.width * scaleFactor;
-    UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight));
-    [image drawInRect:CGRectMake(0, 0, newWidth, newHeight)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-}
 
 - (void) initTwinsImage {
-    UIImage *image = [UIImage imageNamed:@"abra_twins.png"];
-    image = [self imageWithImage:image scaledToHeight:self.view.frame.size.height - 50];
-    twinsView = [[UIImageView alloc] initWithImage:image];
-    twinsView.frame = CGRectMake((kScreenWidth - image.size.width) / 2, 25, image.size.width, image.size.height);
-    twinsView.alpha = 0;
-    twinsView.hidden = YES;
+    twinsView = [ABUI twinsImageView];
     [self.view addSubview:twinsView];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(flashTwins) name:@"flashTwins" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(twinsFlash) name:@"twinsFlash" object:nil];
 }
-
-- (void) flashTwins {
-    twinsView.hidden = NO;
-    [UIView animateWithDuration:1.0 animations:^() {
-        twinsView.alpha = 0.3;
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:1.0 animations:^() {
-            twinsView.alpha = 0;
-        } completion:^(BOOL finished) {
-            twinsView.hidden = YES;
-        }];
-    }];
-}
-
-
 
 
 - (void) initLines {
@@ -136,9 +106,9 @@ CGPoint touchStart;
 
 
 
-///////////////////////////
-// NAVIGATION / GESTURES //
-///////////////////////////
+//////////////////////////////////////
+// NAVIGATION / GESTURES / FEEDBACK //
+//////////////////////////////////////
 
 - (void) initGestures {
 
@@ -190,7 +160,6 @@ CGPoint touchStart;
     // Flash prev/next
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prevNextFeedbackFlash) name:@"prevNextFeedbackFlash" object:nil];
 
-
 }
 
 
@@ -241,9 +210,7 @@ CGPoint touchStart;
     }
 }
 
-
 - (IBAction) longPress:(UILongPressGestureRecognizer *)gesture {
-    
     if(preventInput) return;
     [ABClock updateLastInteractionTime];
     if(gesture.state == UIGestureRecognizerStateBegan) {
@@ -298,13 +265,29 @@ CGPoint touchStart;
 }
 
 
+- (void) twinsFlash {
+    twinsView.hidden = NO;
+    [UIView animateWithDuration:1.0 animations:^() {
+        twinsView.alpha = 0.3;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:1.0 animations:^() {
+            twinsView.alpha = 0;
+        } completion:^(BOOL finished) {
+            twinsView.hidden = YES;
+        }];
+    }];
+}
+
+
+
+
+
 
 
 
 ///////////////////////
 // MODALS / CONTROLS //
 ///////////////////////
-
 
 
 - (void) blackCurtainDidDisappear {
@@ -323,7 +306,7 @@ CGPoint touchStart;
         if([currentTip isEqualToString:@"graft"]) [self showGraftModal];
         if([currentTip isEqualToString:@"cadabra"]) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"triggerCadabra" object:self];
-            [ABCadabra castSpell:nil withMagicWord:nil];
+            [ABCadabra castSpell];
         }
         currentTip = nil;
     }
@@ -334,6 +317,7 @@ CGPoint touchStart;
     [ABState allowGestures];
     preventInput = NO;
 }
+
 
 
 
@@ -351,12 +335,9 @@ CGPoint touchStart;
     [self.view addSubview:graftCurtain];
 }
 
-- (void) pressedGraftButton {
-    if([ABState shouldShowTip:@"graft"] == 0) {
-        [self showGraftModal];
-    } else {
-        [self showTip:@"graft"];
-    }
+- (void) userDidPressGraftButton {
+    if([ABState shouldShowTip:@"graft"] == 0) [self showGraftModal];
+    else [self showTip:@"graft"];
 }
 
 
@@ -451,7 +432,6 @@ CGPoint touchStart;
     
     [tipCurtain show];
 }
-
 
 
 

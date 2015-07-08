@@ -9,46 +9,7 @@
 #import "ABDice.h"
 #import "ABData.h"
 #import "ABConstants.h"
-
-// Method to split string that works with extended chars (emoji)
-@interface NSString (ConvertToArray)
-- (NSMutableArray *) convertToMutableArray;
-@end
-@implementation NSString (ConvertToArray)
-- (NSMutableArray *) convertToMutableArray {
-    NSMutableArray *arr = [NSMutableArray array];
-    NSUInteger i = 0;
-    while (i < self.length) {
-        NSRange range = [self rangeOfComposedCharacterSequenceAtIndex:i];
-        NSString *chStr = [self substringWithRange:range];
-        [arr addObject:chStr];
-        i += range.length;
-    }
-    return arr;
-}
-@end
-
-
-
-
-
-// PRIVATE METHODS
-@interface ABDice ()
-
-// init
-+ (void) loadErrataAndAddToDictionary;
-
-// cache
-+ (void) initCacheWithLexicon:(NSArray *)lexicon;
-+ (void) updateCacheWithLexicon:(NSArray *)lexicon;
-
-// internal
-+ (CGFloat) diceCoefficientWithString:(NSString *)s andString:(NSString *)t;
-+ (NSArray *) topMatchesForTerm:(NSString *)term inLexicon:(NSArray *)lexicon;
-+ (NSDictionary *) topCoreMatchesForLexicon:(NSArray *)lexicon;
-+ (NSDictionary *) getMatchesForKeys:(NSArray *)strings inLexicon:(NSArray *)lexicon;
-
-@end
+#import "NSString+ABExtras.h"
 
 
 @implementation ABDice
@@ -56,15 +17,16 @@
 NSMutableDictionary *charArrayCache;
 NSMutableDictionary *diceDictionary;
 NSMutableDictionary *diceAdditionsDictionary;
-
 NSMutableDictionary *coreDiceDictionaryBackup;
-
 NSMutableDictionary *oneWayAdditionsDictionary;
 
 
-//////////
-// INIT //
-//////////
+
+
+
+//////////////////
+// INIT / RESET //
+//////////////////
 
 + (void) setDiceDictionary:(NSMutableDictionary *)dict {
     diceDictionary = dict;
@@ -109,7 +71,7 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 
 + (void) loadErrataAndAddToDictionary {
     DDLogInfo(@"%@", @"Dice errata: loading ...");
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"diceErrata" ofType:@"txt"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"dice_errata" ofType:@"txt"];
     NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     NSArray *entries = [rawText componentsSeparatedByString:@"\n"];
     [ABDice addEntries:entries toDictionary:diceDictionary];
@@ -120,7 +82,7 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 + (void) loadConstWordsAndAddToDictionary {
     oneWayAdditionsDictionary = [NSMutableDictionary dictionary];
     DDLogInfo(@"%@", @"Dice const words: loading ...");
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"diceConst" ofType:@"txt"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"dice_const" ofType:@"txt"];
     NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     NSArray *entries = [rawText componentsSeparatedByString:@"\n"];
     [ABDice addEntries:entries toDictionary:oneWayAdditionsDictionary];
@@ -140,12 +102,9 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 
 
 
-
-
 ///////////
 // CACHE //
 ///////////
-
 
 + (void) initCacheWithLexicon:(NSArray *)lexicon {
     NSMutableDictionary *arrays = [NSMutableDictionary dictionary];
@@ -158,7 +117,6 @@ NSMutableDictionary *oneWayAdditionsDictionary;
     
     charArrayCache = arrays;
 }
-
 
 + (void) updateCacheWithLexicon:(NSArray *)lexicon {
     NSMutableDictionary *arrays = [NSMutableDictionary dictionary];
@@ -178,13 +136,9 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 
 
 
-
-
 //////////////
 // MATCHING //
 //////////////
-
-
 
 + (CGFloat) diceCoefficientWithString:(NSString *)s andString:(NSString *)t {
     
@@ -219,7 +173,6 @@ NSMutableDictionary *oneWayAdditionsDictionary;
     
     return (CGFloat) matches / (n + m);
 }
-
 
 
 
@@ -263,7 +216,6 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 + (NSDictionary *) topCoreMatchesForLexicon:(NSArray *)lexicon {
     
     DDLogInfo(@"Core dice matches: computing ...");
-    
     NSMutableDictionary *tops = [NSMutableDictionary dictionary];
     [ABDice initCacheWithLexicon:lexicon];
     
@@ -275,17 +227,14 @@ NSMutableDictionary *oneWayAdditionsDictionary;
     }
     
     DDLogInfo(@"Core dice matches: done.");
-    
     return tops;
 }
-
 
 
 
 + (NSDictionary *) getMatchesForKeys:(NSArray *)strings inLexicon:(NSArray *)lexicon {
     
     DDLogInfo(@"New dice: computing ...");
-    
     NSMutableDictionary *tops = [NSMutableDictionary dictionary];
     
     for(NSString * term in strings) {
@@ -296,11 +245,8 @@ NSMutableDictionary *oneWayAdditionsDictionary;
     }
     
     DDLogInfo(@"New dice: done.");
-    
     return tops;
 }
-
-
 
 
 
@@ -342,9 +288,6 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 
 
 
-
-
-
 ////////////
 // PUBLIC //
 ////////////
@@ -357,12 +300,9 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 }
 
 
-
-
 + (void) updateDiceDictionaryWithStrings:(NSArray *)strings {
     
     DDLogInfo(@"Dice dictionary: updating ... ");
-    
     NSMutableArray *newWords = [NSMutableArray array];
     for(NSString *w in strings) {
         if([diceDictionary objectForKey:w] == nil) [newWords addObject:w];
@@ -377,7 +317,6 @@ NSMutableDictionary *oneWayAdditionsDictionary;
     
     [ABDice crossReferenceTerms:diceAdditions];
     [ABData saveDiceAdditions:diceAdditionsDictionary];
-    
     DDLogInfo(@"%@", @"Dice dictionary: done updating.");
 }
 

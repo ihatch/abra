@@ -15,52 +15,7 @@
 #import "ABData.h"
 #import "ABDice.h"
 #import "ABEmoji.h"
-
-
-// Method to split string that works with extended chars (emoji)
-@interface NSString (ConvertToArray)
-- (NSArray *)convertToArray;
-@end
-@implementation NSString (ConvertToArray)
-- (NSArray *)convertToArray {
-    NSMutableArray *arr = [NSMutableArray array];
-    NSUInteger i = 0;
-    while (i < self.length) {
-        NSRange range = [self rangeOfComposedCharacterSequenceAtIndex:i];
-        NSString *chStr = [self substringWithRange:range];
-        [arr addObject:chStr];
-        i += range.length;
-    }
-    return arr;
-}
-@end
-
-// This category enhances NSMutableArray by providing
-// methods to randomly shuffle the elements.
-@interface NSMutableArray (Shuffling)
-- (void) shuffle;
-@end
-@implementation NSMutableArray (Shuffling)
-- (void) shuffle {
-    NSUInteger count = [self count];
-    for (NSUInteger i = 0; i < count; ++i) {
-        NSInteger remainingCount = count - i;
-        NSInteger exchangeIndex = i + arc4random_uniform((u_int32_t )remainingCount);
-        [self exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
-    }
-}
-@end
-
-
-
-
-// PRIVATE
-@interface ABMutate ()
-
-+ (NSArray *) alterOneWord:(ABScriptWord *)oldWord inLine:(NSArray *)line withMutationType:(mutationType)type;
-
-@end
-
+#import "NSString+ABExtras.h"
 
 
 @implementation ABMutate
@@ -79,11 +34,347 @@ static ABMutate *ABMutateInstance = NULL;
 
 
 
++ (NSArray *) mutateWord:(ABScriptWord *)sw inLine:(NSArray *)line {
+    // DDLogInfo(@"mutationLevel %d", [ABState checkMutationLevel]);
+    mutationType type = RANDOM;
+    if([ABState checkMutationLevel] < 1 || (ABI(7) < 4)) type = DICE;
+    return [ABMutate alterOneWord:sw inLine:line withMutationType:type];
+}
+
++ (NSArray *) graftWord:(ABScriptWord *)sw {
+    return [ABMutate alterOneWord:sw inLine:nil withMutationType:GRAFTWORD];
+}
+
++ (NSArray *) explodeWord:(ABScriptWord *)sw {
+    return [ABMutate alterOneWord:sw inLine:nil withMutationType:EXPLODE];
+}
+
++ (NSArray *) multiplyWord:(ABScriptWord *)sw {
+    return [ABMutate alterOneWord:sw inLine:nil withMutationType:CLONE];
+}
+
+
+// Returns NEW words, not entire line. Line is passed in just for context and using that info for effects
++ (NSArray *) alterOneWord:(ABScriptWord *)oldWord inLine:(NSArray *)line withMutationType:(mutationType)type {
+    
+    NSArray *newWords;
+    
+    if(type == DICE) {
+        
+        NSString *emojiTransform = [ABEmoji emojiWordTransform:oldWord.text];
+        ABScriptWord *sw;
+        
+        if(emojiTransform == nil) sw = [ABMutate attemptMatchBySpellCheck:oldWord];
+
+        if(emojiTransform != nil && ABI(25) == 0) {
+            sw = [ABData getScriptWordAndRunChecks:emojiTransform];
+            newWords = @[sw];
+
+        } else if(sw != nil && ABI(7) == 0) {
+            [sw runChecks];
+            newWords = @[sw];
+            
+        } else {
+            if(ABI(40) == 0) {
+                newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
+                newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
+
+            } else if(ABI(9) == 0) {
+                newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
+                newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
+            
+            } else {
+                newWords = @[[ABMutate throwDiceCoefficient:oldWord]];
+            }
+        }
+    
+    } else if(type == RANDOM) {
+        newWords = [ABMutate mutate:oldWord andLocalWords:line mutationLevel:5 lineLength:(int)[line count]];
+        
+    } else if(type == GRAFTWORD) {
+        ABScriptWord *gw = [ABData getWordToGraft];
+        gw.sourceStanza = oldWord.sourceStanza;
+        newWords = @[gw];
+        
+    } else if(type == EXPLODE) {
+        newWords = [ABMutate splitWordIntoLetters:oldWord andSpaceOut:NO];
+        
+    } else if(type == CLONE) {
+        newWords = @[oldWord, oldWord];
+    }
+    
+    for(int i=0; i < [newWords count]; i ++) {
+        ABScriptWord *w = [newWords objectAtIndex:i];
+        w.morphCount = oldWord.morphCount + 1;
+    }
+    
+    return [NSArray arrayWithArray:newWords];
+}
+
+
+
+
+
+
+/////////////////
+// SPELL CHECK //
+/////////////////
+
+
++ (NSArray *) spellCheck:(NSString *)string {
+    NSRange stringRange = NSMakeRange(0, string.length);
+    NSRange range = [textChecker rangeOfMisspelledWordInString:string range:stringRange startingAt:stringRange.location wrap:NO language:@"en_US"];
+    NSArray *arrGuessed = [textChecker guessesForWordRange:range inString:string language:@"en_US"];
+    return arrGuessed;
+}
+
+
++ (ABScriptWord *) attemptMatchBySpellCheck:(ABScriptWord *)word {
+    
+    // Is word already misspelled?
+    NSArray *simple = [ABMutate spellCheck:word.text];
+    if([simple count] > 0) {
+        ABScriptWord *sw = [ABData getScriptWord:simple[0]];
+        return sw;
+    }
+    
+    // don't run on short words. otherwise stanza gradually dwindle to letter fragments
+    if([[word.text convertToArray] count] < 6) return nil;
+
+    // try cutting a letter...
+    NSString *cut = [ABMutate cutFirstOrLastLetter:word.text];
+    NSArray *cuts = [ABMutate spellCheck:cut];
+    if([cuts count]) return [ABData getScriptWord:simple[0] withSourceStanza:word.sourceStanza];
+    
+    // no? okay, try a scrambler...
+    NSString *scrambled = [ABMutate scrambleString:word.text];
+    NSArray *scram = [ABMutate spellCheck:scrambled];
+    if([scram count]) return [ABData getScriptWord:scram[0] withSourceStanza:word.sourceStanza];
+    
+    // still no? okay, make a slice of it, then spellcheck that
+    NSArray *slices = [ABMutate sliceStringInHalf:word.text];
+    NSString *slice;
+    NSArray *matches;
+
+    if(slices == nil) return nil;
+    slice = [slices objectAtIndex:0];
+
+    if([slice length] > 2) {
+        matches = [ABMutate spellCheck: slice];
+        if([matches count] > 0) {
+            ABScriptWord *sw = [ABData getScriptWord:matches[0] withSourceStanza:word.sourceStanza];
+            return sw;
+        }
+    }
+
+    return nil;
+}
+
+
+
+
+
+
+/////////////////
+// COUP DE DÉS //
+/////////////////
+
+
++ (ABScriptWord *) throwDiceCoefficient:(ABScriptWord *)word {
+    
+    NSArray *dice = [ABDice diceForKey:word.text];
+    if([dice count] == 0) return [ABMutate noDiceFallbackMatch:word];
+    
+    ABScriptWord *sw = [ABScriptWord copyScriptWord:word];
+    
+    @try {
+        
+        int range = 4 + (word.morphCount * 3);
+        int max = (int)[dice count];
+        if(range > max) range = max;
+        
+        if(max > 0 && word.morphCount < 2 && word.isGrafted) {
+            sw = [ABMutate rollDiceMatch:word dice:dice range:range max:max];
+            
+        } else if(range == max && ABI(5) == 0) {
+            sw = [ABData getPastGraftWord];
+            if(!sw) sw = [ABScript trulyRandomWord];
+            DDLogWarn(@"Radical (random) dice mutation: %@ -> %@", word.text, sw.text);
+            sw.morphCount = (int)(sw.morphCount / 3);
+            
+        } else {
+            sw = [ABMutate rollDiceMatch:word dice:dice range:range max:max];
+        }
+    }
+    
+    @catch (NSException *exception) {
+        DDLogError(@">> DICE ERROR: %@", word.text);
+    }
+    
+    @finally {
+        // To make changes more colorful sooner, change this last digit:
+        sw.sourceStanza = word.sourceStanza + ABI(word.morphCount) + 1;
+        return sw;
+    }
+}
+
+
++ (ABScriptWord *) rollDiceMatch:(ABScriptWord *)word dice:(NSArray *)dice range:(int)range max:(int)max {
+    int randomIndex = ABI(range);
+    NSString *diceWord = [dice objectAtIndex:randomIndex];
+    if(!diceWord) {
+        DDLogWarn(@"ERROR: Bad dice match for: %@", word.text);
+        return word;
+    }
+//    DDLogVerbose(@"[+] Dice: %@ -> %@ (%i)", word.text, diceWord, word.morphCount);
+    return [ABData getScriptWord:diceWord];
+    
+}
+
+
++ (ABScriptWord *) noDiceFallbackMatch:(ABScriptWord *)word {
+    
+    ABScriptWord *result;
+
+    // Emoji?
+    if([ABEmoji isEmoji:word.text]) result = [ABMutate diceMatchForEmoji:word.text];
+    if(result) return result;
+    
+    // Spell check match?
+    result = [ABMutate attemptMatchBySpellCheck:word];
+    if(result) {
+        [result runChecks];
+        DDLogInfo(@">> Spell check dice match: %@ -> %@ ", word.text, result.text);
+        return result;
+    }
+    
+    // No dice!
+    DDLogWarn(@">> Dice match failed! Returning a random - %@", word.text);
+    return [ABScript trulyRandomWord];
+}
+
+
++ (ABScriptWord *) diceMatchForEmoji:(NSString *)string {
+    NSString *result = [ABEmoji getEmojiOfSameColorAsEmoji:string];
+    if(result) return [ABData getScriptWord:result];
+    result = [ABEmoji emojiWordTransform:result];
+    if(result) return [ABData getScriptWord:result];
+    DDLogWarn(@"ERROR: Emoji match failed! %@", string);
+    return nil;
+}
+
+
+
+
+
+
+
+
+
+
+
+///////////////////
+// REMIX STANZAS //  ("Abra classic")
+///////////////////
+
+
++ (NSArray *) mutateLines:(NSArray *)stanza atMutationLevel:(int)mutationLevel {
+    
+    NSArray *targetStanza = stanza;
+    NSMutableArray *newStanza = [NSMutableArray array];
+    NSArray *allTargetWords = [ABScript allWordsInLines:stanza];
+    
+    for(int l=0; l < [targetStanza count]; l ++) {
+        
+        NSArray *targetLine = [targetStanza objectAtIndex:l];
+        NSMutableArray *newLine = [NSMutableArray array];
+        
+        int lineLength = [ABMutate totalCharLengthOfWordObjs:targetLine];
+        
+        for(int w=0; w < [targetLine count]; w ++) {
+            
+            ABScriptWord *targetWord = [targetLine objectAtIndex:w];
+            if([targetWord.text isEqualToString:@""]) continue;
+            
+            // Allow target word to pass unimpeded?
+            if(ABI(32) > mutationLevel && targetWord.isGrafted == NO) {
+                [newLine addObject:targetWord];
+                continue;
+            }
+            
+            // Add a mutation
+            [newLine addObjectsFromArray:[ABMutate mutate:targetWord andLocalWords:allTargetWords mutationLevel:mutationLevel lineLength:lineLength]];
+        }
+        
+        NSArray *filteredLine = [ABMutate cutWordsOutOfTooLongLine:newLine];
+        [newStanza addObject:filteredLine];
+    }
+    
+    NSArray *result = [NSArray arrayWithArray:newStanza];
+    return result;
+}
+
+
++ (NSArray *) remixStanza:(NSArray *)stanza andOldStanza:(NSArray *)oldStanza atMutationLevel:(int)mutationLevel {
+    return [ABMutate remixStanza:stanza andOldStanza:oldStanza atMutationLevel:mutationLevel andLimitTo:0];
+}
+
+
++ (NSArray *) remixStanza:(NSArray *)stanza andOldStanza:(NSArray *)oldStanza atMutationLevel:(int)mutationLevel andLimitTo:(int)limit {
+    
+    DDLogInfo(@"mutationLevel %d", mutationLevel);
+    
+    
+    int changes = 0;
+    NSArray *targetStanza = stanza;
+    NSMutableArray *newStanza = [NSMutableArray array];
+    
+    for(int l=0; l < [targetStanza count]; l ++) {
+        
+        NSArray *targetLine = [targetStanza objectAtIndex:l];
+        NSArray *oldLine = (l < [oldStanza count]) ? [oldStanza objectAtIndex:l] : nil;
+        NSMutableArray *newLine = [NSMutableArray array];
+        
+        int lineLength = [ABMutate totalCharLengthOfWordObjs:targetLine];
+        
+        for(int w=0; w < [targetLine count]; w ++) {
+            
+            ABScriptWord *targetWord = [targetLine objectAtIndex:w];
+            
+            // Allow target new word to pass unimpeded?
+            if((ABI(16) > mutationLevel && targetWord.isGrafted == NO) ||
+               (limit > 0 && changes > limit - 1)) {
+                [newLine addObject:targetWord];
+                continue;
+            }
+            
+            // Count number of mutations
+            changes ++;
+            
+            // Add random word from old stanza
+            if(ABI(20) < 7 && [oldLine count] > 0) {
+                [newLine addObject:[oldLine objectAtIndex:(arc4random() % [oldLine count])]];
+                continue;
+            }
+            
+            // Add a mutation
+            [newLine addObjectsFromArray:[ABMutate mutate:targetWord andLocalWords:targetLine mutationLevel:mutationLevel lineLength:lineLength]];
+        }
+        
+        NSArray *filteredLine = [ABMutate cutWordsOutOfTooLongLine:newLine];
+        [newStanza addObject:filteredLine];
+    }
+    
+    NSArray *result = [NSArray arrayWithArray:newStanza];
+    return result;
+}
+
+
 
 + (NSArray *) mutate:(ABScriptWord *)targetWord andLocalWords:(NSArray *)localWords mutationLevel:(int)mutationLevel lineLength:(int)lineLength {
     
     DDLogInfo(@"mutationLevel %d %d", [ABState checkMutationLevel], mutationLevel);
-
+    
     
     NSArray *returnArray;
     ABScriptWord *stanzaWord = [ABScript randomScriptWordFromSet:localWords];
@@ -97,7 +388,6 @@ static ABMutate *ABMutateInstance = NULL;
     if(lineLength > 100) odds = 6;
     if(lineLength > 110) odds = 7;
     if(lineLength > 120) odds = 8;
-    
     
     // Look for user-submitted text; if found, cut it up
     if(ABI(20) < 10 && [targetWord isGrafted]) {
@@ -117,7 +407,7 @@ static ABMutate *ABMutateInstance = NULL;
         }
         returnArray = @[targetWord, duplicate];
     }
-
+    
     // Destroy target word
     else if(odds > 0 && ABI(20) < odds) {
         returnArray = @[];
@@ -163,196 +453,9 @@ static ABMutate *ABMutateInstance = NULL;
 
 
 
-
-+ (NSArray *) explodeWord:(ABScriptWord *)sw {
-    return [ABMutate alterOneWord:sw inLine:nil withMutationType:EXPLODE];
-}
-
-+ (NSArray *) multiplyWord:(ABScriptWord *)sw {
-    return [ABMutate alterOneWord:sw inLine:nil withMutationType:CLONE];
-}
-
-+ (NSArray *) graftWord:(ABScriptWord *)sw {
-    return [ABMutate alterOneWord:sw inLine:nil withMutationType:GRAFTWORD];
-}
-
-+ (NSArray *) mutateWord:(ABScriptWord *)sw inLine:(NSArray *)line {
-    DDLogInfo(@"mutationLevel %d", [ABState checkMutationLevel]);
-
-    mutationType type = RANDOM;
-    if([ABState checkMutationLevel] < 1 || (ABI(7) < 4)) type = DICE;
-    return [ABMutate alterOneWord:sw inLine:line withMutationType:type];
-}
-
-
-// Returns NEW words, not entire line. Line is passed in just for context and using that info for effects
-+ (NSArray *) alterOneWord:(ABScriptWord *)oldWord inLine:(NSArray *)line withMutationType:(mutationType)type {
-    
-    NSArray *newWords;
-    
-    if(type == DICE) {
-        
-        // TODO: check for emoji precedent
-
-        NSString *emojiTransform = [ABEmoji emojiWordTransform:oldWord.text];
-        ABScriptWord *sw;
-        
-        if(emojiTransform == nil) sw = [ABMutate attemptMatchBySpellCheck:oldWord];
-
-        if(emojiTransform != nil && ABI(25) == 0) {
-            newWords = @[[ABData getScriptWord:emojiTransform]];
-
-        } else if(sw != nil && ABI(7) == 0) {
-            newWords = @[sw];
-            
-        } else {
-            if(ABI(40) == 0) {
-                newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
-                newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
-
-            } else if(ABI(9) == 0) {
-                newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
-                newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
-            
-            } else {
-                newWords = @[[ABMutate throwDiceCoefficient:oldWord]];
-            }
-        }
-    
-    } else if(type == RANDOM) {
-        newWords = [ABMutate mutate:oldWord andLocalWords:line mutationLevel:5 lineLength:(int)[line count]];
-        
-    } else if(type == EXPLODE) {
-        newWords = [ABMutate splitWordIntoLetters:oldWord andSpaceOut:NO];
-        
-    } else if(type == GRAFTWORD) {
-        ABScriptWord *gw = [ABData getWordToGraft];
-        gw.sourceStanza = oldWord.sourceStanza;
-        newWords = @[gw];
-        
-    } else if(type == CLONE) {
-        newWords = @[oldWord, oldWord];
-    }
-    
-    for(int i=0; i < [newWords count]; i ++) {
-        ABScriptWord *w = [newWords objectAtIndex:i];
-        w.morphCount = oldWord.morphCount + 1;
-    }
-    
-    return [NSArray arrayWithArray:newWords];
-}
-
-
-
-
-
-+ (NSArray *) mutateLines:(NSArray *)stanza atMutationLevel:(int)mutationLevel {
-    
-    NSArray *targetStanza = stanza;
-    NSMutableArray *newStanza = [NSMutableArray array];
-    NSArray *allTargetWords = [ABScript allWordsInLines:stanza];
-    
-    for(int l=0; l < [targetStanza count]; l ++) {
-        
-        NSArray *targetLine = [targetStanza objectAtIndex:l];
-        NSMutableArray *newLine = [NSMutableArray array];
-        
-        int lineLength = [ABMutate totalCharLengthOfWordObjs:targetLine];
-        
-        for(int w=0; w < [targetLine count]; w ++) {
-            
-            ABScriptWord *targetWord = [targetLine objectAtIndex:w];
-            if([targetWord.text isEqualToString:@""]) continue;
-            
-            // Allow target word to pass unimpeded?
-            if(ABI(32) > mutationLevel && targetWord.isGrafted == NO) {
-                [newLine addObject:targetWord];
-                continue;
-            }
-            
-            // Add a mutation
-            [newLine addObjectsFromArray:[ABMutate mutate:targetWord andLocalWords:allTargetWords mutationLevel:mutationLevel lineLength:lineLength]];
-        }
-        
-        NSArray *filteredLine = [ABMutate cutWordsOutOfTooLongLine:newLine];
-        [newStanza addObject:filteredLine];
-    }
-    
-    NSArray *result = [NSArray arrayWithArray:newStanza];
-    return result;
-}
-
-
-
-
-
-+ (NSArray *) remixStanza:(NSArray *)stanza andOldStanza:(NSArray *)oldStanza atMutationLevel:(int)mutationLevel {
-    return [ABMutate remixStanza:stanza andOldStanza:oldStanza atMutationLevel:mutationLevel andLimitTo:0];
-}
-
-
-
-
-
-+ (NSArray *) remixStanza:(NSArray *)stanza andOldStanza:(NSArray *)oldStanza atMutationLevel:(int)mutationLevel andLimitTo:(int)limit {
-    
-    DDLogInfo(@"mutationLevel %d", mutationLevel);
-
-    
-    int changes = 0;
-    NSArray *targetStanza = stanza;
-    NSMutableArray *newStanza = [NSMutableArray array];
-    
-    for(int l=0; l < [targetStanza count]; l ++) {
-        
-        NSArray *targetLine = [targetStanza objectAtIndex:l];
-        NSArray *oldLine = ([oldStanza count] < l) ? [oldStanza objectAtIndex:l] : nil;
-        NSMutableArray *newLine = [NSMutableArray array];
-        
-        int lineLength = [ABMutate totalCharLengthOfWordObjs:targetLine];
-        
-        for(int w=0; w < [targetLine count]; w ++) {
-            
-            ABScriptWord *targetWord = [targetLine objectAtIndex:w];
-            
-            // Allow target new word to pass unimpeded?
-            if((ABI(16) > mutationLevel && targetWord.isGrafted == NO) ||
-               (limit > 0 && changes > limit - 1)) {
-                [newLine addObject:targetWord];
-                continue;
-            }
-            
-            // Count number of mutations
-            changes ++;
-            
-            // Add random word from old stanza
-            if(ABI(20) < 7 && [oldLine count] > 0) {
-                [newLine addObject:[oldLine objectAtIndex:(arc4random() % [oldLine count])]];
-                continue;
-            }
-            
-            // Add a mutation
-            [newLine addObjectsFromArray:[ABMutate mutate:targetWord andLocalWords:targetLine mutationLevel:mutationLevel lineLength:lineLength]];
-        }
-        
-        NSArray *filteredLine = [ABMutate cutWordsOutOfTooLongLine:newLine];
-        [newStanza addObject:filteredLine];
-    }
-    
-    NSArray *result = [NSArray arrayWithArray:newStanza];
-    return result;
-}
-
-
-
-
-
-
-
 + (ABScriptWord *) randomWordWithMutationLevel:(CGFloat)mutationLevel {
-    DDLogInfo(@"mutationLevel %f", mutationLevel);
-    int index = [ABState getCurrentStanza];
     
+    int index = [ABState getCurrentStanza];
     CGFloat range = 10 + (mutationLevel * 4);
     int stanzaCount = [ABScript scriptStanzasCount];
     if(range > stanzaCount) range = stanzaCount - 1;
@@ -368,138 +471,15 @@ static ABMutate *ABMutateInstance = NULL;
 }
 
 
-+ (NSArray *) spellCheck:(NSString *)string {
-    NSRange stringRange = NSMakeRange(0, string.length);
-    NSRange range = [textChecker rangeOfMisspelledWordInString:string range:stringRange startingAt:stringRange.location wrap:NO language:@"en_US"];
-    NSArray *arrGuessed = [textChecker guessesForWordRange:range inString:string language:@"en_US"];
-    return arrGuessed;
-}
-
-
-+ (ABScriptWord *) attemptMatchBySpellCheck:(ABScriptWord *)word {
-    
-    // Is word already misspelled?
-    NSArray *simple = [ABMutate spellCheck:word.text];
-    if([simple count] > 0) {
-        ABScriptWord *sw = [ABData getScriptWord:simple[0]];
-        return sw;
-    }
-    
-    // don't run on short words. otherwise they dwindle to letter fragments
-    if([[word.text convertToArray] count] < 6) return nil;
-
-    
-    // try cutting a letter...
-    NSString *cut = [ABMutate cutFirstOrLastLetter:word.text];
-    NSArray *cuts = [ABMutate spellCheck:cut];
-    
-    if([cuts count]) return [ABData getScriptWord:simple[0] withSourceStanza:word.sourceStanza];
-    
-    // okay, try a scrambler...
-    NSString *scrambled = [ABMutate scrambleString:word.text];
-    NSArray *scram = [ABMutate spellCheck:scrambled];
-    
-    if([scram count]) return [ABData getScriptWord:scram[0] withSourceStanza:word.sourceStanza];
-    
-    
-    // If not, make a slice of it, then spellcheck that
-    NSArray *slices = [ABMutate sliceStringInHalf:word.text];
-//    if(slices) DDLogInfo(@"Slice: %@ | %@", slices[0], slices[1]);
-//    else DDLogInfo(@"Slice fail :( %@", word.text);
-    NSString *slice;
-    NSArray *matches;
-    
-    if(slices == nil) {
-//        DDLogWarn(@"Spell check failed for %@ !", word.text);
-        return nil;
-    }
-    
-    slice = [slices objectAtIndex:0];
-
-    if([slice length] > 2) {
-        matches = [ABMutate spellCheck: slice];
-        if([matches count] > 0) {
-            ABScriptWord *sw = [ABData getScriptWord:matches[0] withSourceStanza:word.sourceStanza];
-            return sw;
-        }
-    }
-
-//    DDLogWarn(@"Spell check really really failed for %@ ! :(", word.text);
-    return nil;
-    
-}
 
 
 
-+ (ABScriptWord *) throwDiceCoefficient:(ABScriptWord *)word {
-    
-    NSArray *dice = [ABDice diceForKey:word.text];
-    if([dice count] == 0) {
-        
-        DDLogWarn(@">> Dice match not found: %@ - ", word.text);
-        if([ABEmoji isEmoji:word.text]) {
-            NSString *emoji = [ABEmoji getEmojiOfSameColorAsEmoji:word.text];
-            if(emoji) return [ABData getScriptWord:emoji];
-            NSString *emojiMatch = [ABEmoji emojiWordTransform:word.text];
-            if(emojiMatch) return [ABData getScriptWord:emojiMatch];
-        }
 
-        // TODO: or a string similarly sized in char count ??
-        
-        ABScriptWord *result = [ABMutate attemptMatchBySpellCheck:word];
-        if(result != nil) {
-            DDLogWarn(@">> Found match by spell check: %@ -> %@ ", word.text, result.text);
-            return result;
-        }
-        
-        DDLogWarn(@">> Spell check match failed too! Returning something random :( - %@", word.text);
-        return [ABScript trulyRandomWord];
-    }
-    
-    ABScriptWord *new = [ABScriptWord copyScriptWord:word];
-    
-    @try {
-        int range = 4 + (word.morphCount * 3);
-        int max = (int)[dice count];
-        if(range > max) range = max;
-        if(max > 0 && word.morphCount < 2 && word.isGrafted) {
-            int randomIndex = ABI(range);
-            NSString *w = [dice objectAtIndex:randomIndex];
-            if(!w) {
-                DDLogWarn(@">> Problematic dice match for: %@", word.text);
-                return word;
-            }
-            DDLogVerbose(@"* Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
-            new = [ABData getScriptWord:w];
-            
-        } else if(range == max && ABI(5) == 0) {
-            new = [ABData getPastGraftWord];
-            if(!new) new = [ABScript trulyRandomWord];
-            DDLogWarn(@"!!! Random (radical) mutation: %@ -> %@", word.text, new.text);
-            new.morphCount = (int)(new.morphCount / 3);
-        } else {
-            int randomIndex = ABI(range);
-            NSString *w = [dice objectAtIndex:randomIndex];
-            if(!w) {
-                DDLogWarn(@">> Problematic dice match for: %@", word.text);
-                return word;
-            }
-            DDLogVerbose(@"* Dice: %@ -> %@ (%i)", word.text, [dice objectAtIndex:randomIndex], word.morphCount);
-            new = [ABData getScriptWord:w];
-        }
-    }
-    
-    @catch (NSException *exception) {
-        DDLogError(@">> DICE ERROR: %@", word.text);
-    }
-    
-    @finally {
-        // To make changes more colorful sooner, change this last digit:
-        new.sourceStanza = word.sourceStanza + ABI(word.morphCount) + 1;
-        return new;
-    }
-}
 
+
+/////////////
+// HELPERS //
+/////////////
 
 
 + (ABScriptWord *) fuseWordObjects:(NSArray *)objs {
@@ -534,23 +514,24 @@ static ABMutate *ABMutateInstance = NULL;
         if(i != [wordText length] - 1 && !spaceOut) sw.marginRight = NO;
         [array addObject:sw];
     }
+    
     return [NSArray arrayWithArray:array];
 }
 
 
-
 + (NSArray *) sliceWordInHalf:(ABScriptWord *)word {
-
+    
     NSArray *slices = [ABMutate sliceStringInHalf:word.text];
     if(slices == nil) return @[word];
-
+    
     ABScriptWord *first = [ABData getScriptWord:slices[0] withSourceStanza:word.sourceStanza];
     ABScriptWord *second = [ABData getScriptWord:slices[1] withSourceStanza:word.sourceStanza];
     first.marginRight = NO;
     second.marginLeft = YES;
-
+    
     return @[first, second];
 }
+
 
 // Index is start of second substring (ie, length of first)
 + (NSArray *) sliceString:(NSString *)string atIndex:(int)index {
@@ -560,6 +541,7 @@ static ABMutate *ABMutateInstance = NULL;
     NSString *two = [[chars subarrayWithRange:NSMakeRange(index, len - index)] componentsJoinedByString:@""];
     return @[one, two];
 }
+
 
 + (NSArray *) sliceStringInHalf:(NSString *)string {
     
@@ -577,18 +559,15 @@ static ABMutate *ABMutateInstance = NULL;
     if(half > 9) half ++;
     if(half > 11) half ++;
     if(half > 13) half ++;
-
+    
     return [ABMutate sliceString:string atIndex:half];
-
 }
-
 
 
 + (NSString *) scrambleString:(NSString *)string {
     
     NSMutableArray *original = [NSMutableArray arrayWithArray:[string convertToArray]];
     NSMutableArray *new = [[NSMutableArray alloc] initWithArray:original copyItems:YES];
-    
     [new shuffle];
     
     for(int i=0; i < [original count]; i++) {
@@ -598,31 +577,28 @@ static ABMutate *ABMutateInstance = NULL;
     }
     
     return [new componentsJoinedByString:@""];
-    
 }
 
 
-
+// kinda janky but works ok
 + (NSString *) cutFirstOrLastLetter: (NSString *)string {
+    
     NSMutableArray *original = [NSMutableArray arrayWithArray:[string convertToArray]];
     int c = (int)[original count];
+    
     if(c < 2) return nil;
     if(c < 4 && ABI(2 == 0)) {
         return [[ABMutate sliceString:string atIndex:c - 1] objectAtIndex:0];
     }
-    
-    // TODO: RETURN TO THIS
     if(c < 5 && ABI(2 == 0)) {
         return [[ABMutate sliceString:string atIndex:1] objectAtIndex:0];
     }
-    
     return [[ABMutate sliceString:string atIndex:1] objectAtIndex:0];
 }
 
 
 + (int) totalCharLengthOfWordObjs:(NSArray *)objs {
     int t = 0;
-    
     for(int i=0; i < [objs count]; i++){
         ABScriptWord *o = objs[i];
         t += [o.text length];
@@ -647,11 +623,6 @@ static ABMutate *ABMutateInstance = NULL;
     
     return [NSArray arrayWithArray:newLine];
 }
-
-
-
-
-
 
 
 

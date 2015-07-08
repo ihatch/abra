@@ -12,14 +12,14 @@
 #import "ABUI.h"
 
 @implementation ABGestureArrow {
-    BOOL isAnimating;
     CGFloat colorOffset;
     CGFloat fontSize;
+    BOOL isAnimating;
     BOOL offsetIsStanzaSpecific;
 }
 
 
-- (id)initWithType:(NSString *)type {
+- (id) initWithType:(NSString *)type {
     
     CGRect frame;
     NSString *text;

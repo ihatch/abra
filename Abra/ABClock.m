@@ -12,19 +12,15 @@
 
 @implementation ABClock
 
-typedef NS_ENUM(NSInteger, ClockState) {
-    RUNNING,
-    PAUSED,
-    DEACTIVATED
-};
-
-BOOL autoProgress;
+typedef NS_ENUM(NSInteger, ClockState) { RUNNING, PAUSED, DEACTIVATED };
 
 NSTimer *timer;
 ClockState clockState;
+BOOL autoProgress;
 
 CGFloat speed;
 CGFloat stanzaInterval;
+
 double lastStanzaTime;
 double nextStanzaTime;
 double lastInteractionTime;

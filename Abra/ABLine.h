@@ -10,35 +10,33 @@
 
 @interface ABLine : UIView
 
-
 @property (nonatomic) int lineNumber;
-@property (nonatomic) NSArray *lineScriptWords;
-@property (nonatomic) NSMutableArray *lineWords;
-@property (nonatomic) CGFloat lineWidth;
 @property (nonatomic) CGFloat yPosition;
+@property (nonatomic) CGFloat lineWidth;
+@property (nonatomic) NSMutableArray *lineWords;
+@property (nonatomic) NSArray *lineScriptWords;
 @property (nonatomic) NSArray *wordWidthsWithMargins;
 @property (nonatomic) BOOL lossyTransitions;
 @property (nonatomic) BOOL isMirrored;
 
 - (id) initWithWords:(NSArray *)words andYPosition:(CGFloat)y andHeight:(CGFloat)lineHeight andLineNumber:(int)lineNum;
 
-- (void) changeWordsToWords:(NSArray *) words;
-- (void) replaceWordAtIndex:(int)index withArray:(NSArray *)newWords;
 - (void) destroyAllWords;
+- (void) replaceWordAtIndex:(int)index withArray:(NSArray *)newWords;
+- (void) changeWordsToWords:(NSArray *) words;
 - (void) absentlyMutate;
 
+- (int) checkPoint:(CGPoint)point;
 - (void) touch:(CGPoint)point;
 - (void) tap:(CGPoint)point;
-- (void) longPress:(CGPoint)point;
 - (void) doubleTap:(CGPoint)point;
-- (int) checkPoint:(CGPoint)point;
+- (void) longPress:(CGPoint)point;
 
 - (void) animateToYPosition:(CGFloat)y duration:(CGFloat)duration delay:(CGFloat)delay;
-
-- (NSArray *) locationsOfVisibleWords;
-
-- (NSString *) lineAsPlainTextString;
 - (void) mirrorWithDelay:(CGFloat)delay;
-- (void) normalize;
+
+- (NSString *) convertToString;
+- (NSArray *) indicesOfVisibleWords;
+- (BOOL) includesGraftedContent;
 
 @end

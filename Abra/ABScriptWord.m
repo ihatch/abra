@@ -11,57 +11,33 @@
 #import "ABScriptWord.h"
 #import "ABConstants.h"
 #import "ABData.h"
+#import "NSString+ABExtras.h"
 
-// Method to split string that works with extended chars (emoji)
-@interface NSString (ConvertToArray)
-- (NSArray *)convertToArray;
-@end
-@implementation NSString (ConvertToArray)
-- (NSArray *)convertToArray {
-    NSMutableArray *arr = [NSMutableArray array];
-    NSUInteger i = 0;
-    while (i < self.length) {
-        NSRange range = [self rangeOfComposedCharacterSequenceAtIndex:i];
-        NSString *chStr = [self substringWithRange:range];
-        [arr addObject:chStr];
-        i += range.length;
-    }
-    return arr;
-}
-@end
-
-
-// Private
 @interface ABScriptWord ()
-
 @property (nonatomic) NSArray *myCharArray;
-
 @end
-
 
 
 @implementation ABScriptWord
-
-@synthesize text, sourceStanza, marginLeft, marginRight, family, leftSisters, rightSisters, isGrafted, emojiCount; // isNumber  nonAsciiCount
 
 - (id) initWithText:(NSString *)wordText sourceStanza:(int)stanza inFamily:(NSArray *)fam isGrafted:(BOOL)isGraft {
     if(self = [super init]) {
 
         self.text = wordText;
+        
         self.sourceStanza = stanza;
         self.isGrafted = isGraft;
         self.marginLeft = YES;
         self.marginRight = YES;
-        self.emojiCount = 0;
-//         self.nonAsciiCount = 0;
-//        self.isNumber = NO;
+        
         self.hasRunChecks = NO;
+        self.emojiCount = 0;
+
         self.cadabra = [ABData checkMagicWord:wordText];
         
         self.family = [NSMutableArray array];
         self.leftSisters = [NSMutableArray array];
         self.rightSisters = [NSMutableArray array];
-
         if(fam != nil) [self addFamily:fam];
         
         if(isGraft) [self runChecks];
@@ -71,14 +47,19 @@
 }
 
 
+
+// FAMILY
+
 - (void) addFamily:(NSArray *)array {
     for(NSString *s in array){
         self.family = [self addDistinct:s toArray:self.family];
     }
 }
+
 - (void) addLeftSister:(NSString *)string {
     self.leftSisters = [self addDistinct:string toArray:self.leftSisters];
 }
+
 - (void) addRightSister:(NSString *)string {
     self.rightSisters = [self addDistinct:string toArray:self.rightSisters];
 }
@@ -92,26 +73,18 @@
 }
 
 
+
+// PROPERTY CHECKS
+
 - (void) runChecks {
-//    self.isNumber = [self numberCheck] != 0;
-//    self.nonAsciiCount = [self nonAsciiCheck];
-//    if(self.nonAsciiCount > 0) {
+    if(self.hasRunChecks) return;
     self.emojiCount = [self emojiCheck];
-//    }
     self.hasRunChecks = YES;
 }
 
 - (int) emojiCheck {
     return [self checkWithRegex:EMOJI_REGEX];
 }
-//- (int) nonAsciiCheck {
-//    return [self checkWithRegex:NON_ASCII_REGEX];
-//}
-
-// TODO ?
-//- (int) numberCheck {
-////    return [self checkWithRegex:NUMBERS_REGEX];
-//}
 
 - (int) checkWithRegex:(NSString *)regexString {
     NSError *error = nil;
@@ -121,6 +94,9 @@
     return numberOfMatches;
 }
 
+
+
+// CACHED FOR FASTER COMPARISONS
 
 - (NSArray *) charArray {
     if (_myCharArray == nil) _myCharArray = [self.text convertToArray];
@@ -133,6 +109,9 @@
 
 
 
+
+// COPIES
+
 - (ABScriptWord *) copyOfThisWord {
     return [ABScriptWord copyScriptWord:self];
 }
@@ -144,14 +123,11 @@
     copy.marginLeft = word.marginLeft;
     copy.marginRight = word.marginRight;
     copy.emojiCount = word.emojiCount;
-
-//    copy.isNumber = word.isNumber;
-//    copy.nonAsciiCount = word.nonAsciiCount;
-    
     copy.leftSisters = [[NSMutableArray alloc] initWithArray:word.leftSisters copyItems:YES];
     copy.rightSisters = [[NSMutableArray alloc] initWithArray:word.rightSisters copyItems:YES];
     copy.hasFamily = word.hasFamily;
-
+    copy.hasRunChecks = word.hasRunChecks;
+    
     return copy;
 }
 

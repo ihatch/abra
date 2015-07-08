@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class ABMainViewController;
-@class ABVerticalContentFlow;
+@class ABFlow;
 
 @interface ABModal : UIView
 
@@ -22,7 +22,7 @@
 
 @property (nonatomic) UITextField *textField;
 @property (nonatomic) UIScrollView *scrollView;
-@property (nonatomic) ABVerticalContentFlow *contentFlow;
+@property (nonatomic) ABFlow *contentFlow;
 
 
 - (id) initWithType:(NSInteger)type andMainVC:(ABMainViewController *)mainVC;

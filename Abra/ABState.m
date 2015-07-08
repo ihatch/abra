@@ -45,7 +45,7 @@ NSUserDefaults *defaults;
 
 int tipWelcome, tipGraft, tipSpellMode, tipCadabra;
 BOOL settingAutonomousMutation, settingAutoplay, settingIPhoneDisplayMode, settingIPhoneDisplayModeHasChanged;
-BOOL secretSettingSpaceyMode, linesAreFlipped, linesAreWoven, linesAreMirrored;
+NSMutableDictionary *fxStates;
 
 BOOL DEV_PREVENT_TIPS;
 
@@ -86,12 +86,11 @@ static ABState *ABStateInstance = NULL;
         currentSpellMode = MUTATE;
 
         settingIPhoneDisplayModeHasChanged = NO;
-        secretSettingSpaceyMode = NO;
-        linesAreFlipped = NO;
+        fxStates = [NSMutableDictionary dictionary];
         
         [ABClock start];
-        
     }
+
     return self;
 }
 
@@ -213,9 +212,9 @@ static ABState *ABStateInstance = NULL;
     }
     
     // Chance to turn off spacey mode, if it's on
-    if(secretSettingSpaceyMode == YES) {
-        if(ABI(3) == 0) secretSettingSpaceyMode = NO;
-        else newLines = [ABCadabra spaceyLettersMagic:newLines andSpaceOut:NO inTransition:YES];
+    if([ABState fx:@"spacey"] == YES) {
+        if(ABI(3) == 0) [ABState setFx:@"spacey" to:NO];
+        else newLines = [ABCadabra spaceyLetters:newLines andSpaceOut:NO inTransition:YES];
     }
     
     currentStanza = index;
@@ -318,10 +317,10 @@ static ABState *ABStateInstance = NULL;
     else [ABState manuallyTransitionStanzaWithIncrement:-1];
 }
 
+// Deprecated
 + (void) accelerate {
     [ABClock accelerate];
 }
-
 + (void) decelerate {
     [ABClock decelerate];
 }
@@ -486,41 +485,32 @@ static ABState *ABStateInstance = NULL;
 }
 
 
-// Auto-mutation
-
++ (BOOL) getAutoMutation {
+    return settingAutonomousMutation;
+}
 + (void) setAutoMutation:(BOOL)value {
     settingAutonomousMutation = value;
 }
 
-+ (BOOL) getAutoMutation {
+
++ (BOOL) getAutoplay {
     return settingAutonomousMutation;
 }
-
-
-// Autoplay
-
 + (void) setAutoplay:(BOOL)value {
     settingAutoplay = value;
     if(value == YES) [ABClock startAutoProgress];
     else [ABClock stopAutoProgress];
 }
 
-+ (BOOL) getAutoplay {
-    return settingAutonomousMutation;
-}
 
-
-// iPhone mode
-
-+ (void) setIPhoneMode:(BOOL)value {
-    settingIPhoneDisplayMode = value;
-    settingIPhoneDisplayModeHasChanged = YES;
-}
 
 + (BOOL) getIPhoneMode {
     return settingIPhoneDisplayMode;
 }
-
++ (void) setIPhoneMode:(BOOL)value {
+    settingIPhoneDisplayMode = value;
+    settingIPhoneDisplayModeHasChanged = YES;
+}
 + (BOOL) checkForChangedDisplayMode {
     if(settingIPhoneDisplayModeHasChanged == NO) return NO;
     for(ABLine *line in ABLines) [line destroyAllWords];
@@ -529,12 +519,23 @@ static ABState *ABStateInstance = NULL;
 }
 
 
-// Reset lexicon
 
-+ (void) setResetLexicon {
-    DDLogInfo(@"set setResetLexicon");
-    [ABData resetLexicon];
-    [[[UIAlertView alloc] initWithTitle:@"" message:@"“our birth is but a sleep and a forgetting...” ―wordsworth" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+
+
+
+
+///////////////////////
+// CADABRA FX STATES //
+///////////////////////
+
++ (void) setFx:(NSString *)fx to:(BOOL)value {
+    [fxStates setObject:@(value) forKey:fx];
+}
+
++ (BOOL) fx:(NSString *)fx {
+    NSNumber *value = [fxStates objectForKey:fx];
+    if(value == nil) return NO;
+    return [value boolValue];
 }
 
 
@@ -542,50 +543,9 @@ static ABState *ABStateInstance = NULL;
 
 
 
-//////////////////////
-// CADABRA SETTINGS //
-//////////////////////
-
-
-+ (void) setSpaceyMode:(BOOL)value {
-    secretSettingSpaceyMode = value;
-}
-+ (BOOL) checkSpaceyMode {
-    return secretSettingSpaceyMode;
-}
-
-
-
-+ (void) setLinesAreFlipped:(BOOL)value {
-    linesAreFlipped = value;
-}
-+ (BOOL) checkLinesAreFlipped {
-    return linesAreFlipped;
-}
-
-
-
-+ (void) setLinesMirrored:(BOOL)value {
-    linesAreMirrored = value;
-}
-+ (BOOL) checkLinesMirrored {
-    return linesAreMirrored;
-}
-
-
-
-
-+ (void) setLinesAreWoven:(BOOL)value {
-    linesAreWoven = value;
-}
-+ (BOOL) checkLinesAreWoven {
-    return linesAreWoven;
-}
-
-
-
-
-
+//////////
+// MISC //
+//////////
 
 
 + (void) incrementUserActions {
@@ -596,7 +556,7 @@ static ABState *ABStateInstance = NULL;
 + (void) copyAllTextToClipboard {
 
     NSMutableArray *text = [NSMutableArray array];
-    for(ABLine *line in ABLines) [text addObject:[line lineAsPlainTextString]];
+    for(ABLine *line in ABLines) [text addObject:[line convertToString]];
     NSString *copyString = [text componentsJoinedByString:@"\n"];
 
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];

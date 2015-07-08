@@ -11,7 +11,9 @@
 #import "ABMainViewController.h"
 #import "ABUI.h"
 #import "ABState.h"
-#import "ABVerticalContentFlow.h"
+#import "ABFlow.h"
+#import "ABData.h"
+#import "ABModalContent.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation ABModal
@@ -236,7 +238,10 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 }
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(buttonIndex == 1) [ABState setResetLexicon];
+    if(buttonIndex == 1) {
+        [ABData resetLexicon];
+        [[[UIAlertView alloc] initWithTitle:@"" message:@"“our birth is but a sleep and a forgetting...” ―wordsworth" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    }
 }
 
 
@@ -249,7 +254,7 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 ///////////////
 
 - (void) setDimensionsForInfoView {
-    self.w = kScreenWidth - [ABUI scaleXWithIphone:90 ipad:120];
+    self.w = kScreenWidth - [ABUI scaleXWithIphone:120 ipad:120];
     self.h = kScreenHeight - [ABUI scaleYWithIphone:60 ipad:200];
     self.x = (kScreenWidth - self.w) / 2;
     self.y = (kScreenHeight - self.h) / 2;
@@ -269,9 +274,9 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     // Titles
     infoTitlesView = [[UIView alloc] initWithFrame:infoTitlesFrame];
     infoTitlesView.backgroundColor = [UIColor clearColor];
-    CGRect titlesFrame = CGRectMake([ABUI scaleXWithIphone:15 ipad:30], 0, infoTitlesFrame.size.width - [ABUI scaleXWithIphone:60 ipad:100], containerHeight);
-    ABVerticalContentFlow *titleLogosFlow = [[ABVerticalContentFlow alloc] initWithFrame:titlesFrame];
-    [self addContentToTitleLogosFlow:titleLogosFlow];
+    CGRect titlesFrame = CGRectMake([ABUI scaleXWithIphone:15 ipad:30], 0, infoTitlesFrame.size.width - [ABUI scaleXWithIphone:50 ipad:100], containerHeight);
+    ABFlow *titleLogosFlow = [[ABFlow alloc] initWithFrame:titlesFrame];
+    titleLogosFlow = [ABModalContent infoTitleLogos:titleLogosFlow];
     [infoTitlesView addSubview:titleLogosFlow];
     [self.innerView addSubview:infoTitlesView];
     
@@ -280,65 +285,16 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     scrollView.userInteractionEnabled = YES;
     scrollView.showsVerticalScrollIndicator = YES;
     CGRect contentFrame = CGRectMake(0, 0, infoContentFrame.size.width - [ABUI scaleXWithIphone:15 ipad:30], 3000);
-    ABVerticalContentFlow *contentFlow = [[ABVerticalContentFlow alloc] initWithFrame:contentFrame];
-    [self addContentToInfoContentFlow:contentFlow];
+    ABFlow *contentFlow = [[ABFlow alloc] initWithFrame:contentFrame];
+    contentFlow = [ABModalContent infoContent:contentFlow];
     [scrollView addSubview:contentFlow];
     scrollView.contentSize = contentFlow.frame.size;
     [self.innerView addSubview:scrollView];
     self.scrollView = scrollView;
-}
-
-
-- (void) addContentToTitleLogosFlow:(ABVerticalContentFlow *)flow {
-    [flow addImage:@"abra_emboss.png"];
-    [flow addAuthors:@"     by Amaranth Borsuk\n            Kate Durbin\n                  Ian Hatcher\n                          & You"];
-    [flow addSectionMargin];
-    [flow addImageToBottom:@"abra_logos_4.png"];
-    [flow refreshFrame];
-}
-
-
-- (void) addContentToInfoContentFlow:(ABVerticalContentFlow *)flow {
     
-    [flow addHeading:@"INTRODUCTION"];
-    [flow addParagraph:@"The Abra app is a poetry instrument/spellbook that responds to touch. Caress the words and watch them shift under your fingers."];
-    [flow addParagraph:@"At the bottom of the screen is a rainbow dial, by which you can navigate to different poems in the Abra cycle. Touch the top of the screen to reveal a toolbar."];
-    [flow addParagraph:@"There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own."];
-    [flow addSectionMargin];
     
-    [flow addHeading:@"OVERVIEW"];
-    [flow addParagraph:@"Abra is a multifaceted project supported by an Expanded Artists’ Books grant from the Center for Book and Paper Arts (Columbia College Chicago). Its two main manifestations are this app, available free for iPad and iPhone, and a limited-edition clothbound artists’ book. The two can be read separately or together, with an iPad inserted into a slot in the back of the book."];
-    [flow addParagraph:@"Abra's main text was composed by Amaranth Borsuk and Kate Durbin. This app was designed and coded by Ian Hatcher. Art direction and decision-making for both artists’ book and app were undertaken in tandem as a trio."];
-    [flow addParagraph:@"For information on the conceptual framework and background of the project, please see our site:"];
-    [flow addLink:@"http://a-b-r-a.com"];
-    [flow addSectionMargin];
-    
-    [flow addHeading:@"ARTISTS' BOOK"];
-    [flow addParagraph:@"The Abra artists' book features blind letterpress impressions, heat-sensitive disappearing ink, foil-stamping, and laser-cut openings. These last can serve as windows, revealing the screen of an embedded iPad running this app, conjoining the analog and digital into a single reading experience."];
-    [flow addImage:@"artists_book_spread_4.png"];
-    [flow addParagraph:@"The artists' book was fabricated by Amy Rabas at the Center for Book and Paper Arts, with help from graduate students in Inter-Arts."];
-    [flow addParagraph:@"To learn more about this edition or order a copy:"];
-    [flow addLink:@"http://a-b-r-a.com/artists-book"];
-    [flow addSectionMargin];
-    
-    [flow addHeading:@"PAPERBACK"];
-    [flow addParagraph:@"In addition to this app and the limited-edition artist’s book, Abra is available widely as a trade paperback from 1913 Press."];
-    [flow addParagraph:@"In this edition, the poem’s stanzas meld one into the next, each recycling language from the preceding and animating as the reader turns the page. Illustrations by visual artist Zach Kleyn grow and mutate on facing pages, eventually reaching across the book’s gutter to meld with the text."];
-    [flow addLink:@"http://www.journal1913.org/publications/abra/"];
-    [flow addSectionMargin];
-    
-    [flow addHeading:@"ACKNOWLEDGEMENTS"];
-    [flow addParagraph:@"We are grateful to the Center for Book and Paper Arts at Columbia College Chicago for their support of this work: Stephen Woodall, tireless mentor; Amy Rabas, visionary paper artist; and Clif Meador, Jessica Cochran, April Sheridan, Michelle Citron, and Paul Catanese, generous interlocutors."];
-    [flow addParagraph:@"Additional gratitude to Abraham Avnisan, Steven Baughman, Danny Cannizaro, Samantha Gorman, Stephanie Strickland, Chris Wegman, and Paula Wegman for support and feedback on the app during development."];
-    [flow addParagraph:@"We are also indebted to John Cayley, Brian Eno, and Peter Chilvers, whose ambient poetics informed our conception of this project from its early stages."];
-    [flow addSpecialItalicizedParagraph:@"Some of Abra's text appeared in slightly different form in Action, Yes!; The &Now Awards 3; Black Warrior Review; Bone Bouquet; The Collagist; Joyland Poetry; Lana Turner: A Journal of Poetry and Opinion; Lit; Peep/Show; SPECS; Spoon River Poetry Review; and VLAK."];
-    [flow addSectionMargin];
-
-    [flow addHeading:@"CONTACT"];
-    [flow addParagraph:@"Comments, questions, bugs, spectacular screenshots? abraalivingtext@gmail.com"];
-    [flow addSectionMargin];
-
-    [flow refreshFrame];
+//    [self bringSubviewToFront:infoTitlesView];
+    [titleLogosFlow bringLogosToFront];
 }
 
 
@@ -363,14 +319,14 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     self.y = (kScreenHeight - self.h) / 2;
 }
 
-- (ABVerticalContentFlow *) startTipFlow {
+- (ABFlow *) startTipFlow {
     CGRect flowFrame = CGRectMake(viewMargin * 2, 0, self.innerView.frame.size.width - (viewMargin * 4), 500);
-    ABVerticalContentFlow *flow = [[ABVerticalContentFlow alloc] initWithFrame:flowFrame];
+    ABFlow *flow = [[ABFlow alloc] initWithFrame:flowFrame];
     flow.isSelfCentered = YES;
     return flow;
 }
 
-- (void) applyTipFlow:(ABVerticalContentFlow *)flow {
+- (void) applyTipFlow:(ABFlow *)flow {
     
     CGRect outerFrame = self.frame;
     outerFrame.size.height = [flow flowHeight] + (viewMargin * 4) + (margin * 2);
@@ -387,43 +343,26 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 
 
 - (void) setTipContentForWelcome {
-    ABVerticalContentFlow *flow = [self startTipFlow];
-    [flow addHeading:@"WELCOME TO ABRA!"];
-//    [flow addParagraph:@"This app is a poetry instrument/spellbook that responds to touch. Caress the words and watch them shift under your fingers."];
-//    [flow addParagraph:@"There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own."];
-
-    [flow addParagraph:@"This app is a poetry instrument/spellbook that responds to touch."];
-    [flow addParagraph:@"Caress the words and watch them shift under your fingers. Spin the rainbow dial to navigate. Touch the top of the screen for tools."];
-    [flow addParagraph:@"There are many ways to interact with Abra. Read, write, and experiment to discover Abra's secrets and make her poems your own."];
-    [flow addItalicParagraph:@"(Tap outside this box to close it.)"];
-    [flow refreshFrame];
+    ABFlow *flow = [self startTipFlow];
+    flow = [ABModalContent tipWelcome:flow];
     [self applyTipFlow:flow];
 }
 
 - (void) setTipContentForGraft {
-    ABVerticalContentFlow *flow = [self startTipFlow];
-    [flow addHeading:@"GRAFTING"];
-    [flow addParagraph:@"You are about to graft words for the first time."];
-    [flow addParagraph:@"Type anything in the box that appears. You may enter multiple words if you wish; separate them by spaces. Once you've closed the box, draw with your finger to write onto the screen."];
-    [flow addParagraph:@"Abra will learn and remember new words — of any alphabet."];
-    [flow refreshFrame];
+    ABFlow *flow = [self startTipFlow];
+    flow = [ABModalContent tipGraft:flow];
     [self applyTipFlow:flow];
 }
 
 - (void) setTipContentForSpellMode {
-    ABVerticalContentFlow *flow = [self startTipFlow];
-    [flow addHeading:@"SPELL MODES"];
-    [flow addParagraph:@"The four icons on the left side of the toolbar are Spell Modes. Tap or drag your finger across the text to cast the spell you just selected."];
-    [flow refreshFrame];
+    ABFlow *flow = [self startTipFlow];
+    flow = [ABModalContent tipSpellMode:flow];
     [self applyTipFlow:flow];
 }
 
 - (void) setTipContentForCadabra {
-    ABVerticalContentFlow *flow = [self startTipFlow];
-    [flow addHeading:@"CADABRA"];
-    [flow addParagraph:@"Pressing the Cadabra button, as you just did, casts an unpredictable spell. There are many possible Cadabra effects. Some Cadabras only occur under unusual conditions, or after you have done certain things."];
-    [flow addParagraph:@"You can also cast Cadabras by pressing and holding your finger on magic words within the text."];
-    [flow refreshFrame];
+    ABFlow *flow = [self startTipFlow];
+    flow = [ABModalContent tipCadabra:flow];
     [self applyTipFlow:flow];
 }
 

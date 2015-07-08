@@ -85,13 +85,11 @@
 }
 
 
-
 // called from main VC to close graft modal
 - (void) hideWithSuccess:(BOOL)success {
     if(success == NO && self.isGraftCurtain) [self.iconBar selectMutate];
     [self hide];
 }
-
 
 
 @end

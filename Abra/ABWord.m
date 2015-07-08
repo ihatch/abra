@@ -18,7 +18,7 @@
 
 @implementation ABWord
 
-@synthesize width, height, isNew, startPoint, marginLeft, marginRight, sourceStanza, isGrafted, animationX, animationAlpha, animationSize, wordID, locked, isSelfDestructing;
+@synthesize width, height, isNew, startPoint, marginLeft, marginRight, sourceStanza, isGrafted, animationX, animationAlpha, animationSize, wordID, isLocked, isSelfDestructing;
 
 
 - (id) initWithFrame:(CGRect)frame andScriptWord:(ABScriptWord *) word {
@@ -33,7 +33,7 @@
         self.sourceStanza = word.sourceStanza;
         
         self.isNew = YES;
-        self.locked = YES;
+        self.isLocked = YES;
         self.isSelfDestructing = NO;
         self.isErased = NO;
         self.isRedacted = NO;
@@ -65,16 +65,16 @@
     
 }
 
-
 - (CGFloat) speed {
     return [ABClock currentSpeed];
 }
-
 
 - (CGFloat) convertLeftToCenter:(CGFloat)x {
     CGFloat r = x + (self.width / 2);
     return r;
 }
+
+
 
 
 
@@ -101,39 +101,11 @@
         self.transform = CGAffineTransformMakeScale(randomSize, randomSize);
         self.hasAnimatedIn = YES;
     } completion:^(BOOL finished) {}];
-    
 }
-
 
 - (void) unlock {
-    self.locked = NO;
+    self.isLocked = NO;
 }
-
-
-
-- (void) dim {
-    if(self.isErased) return;
-    CGFloat speed = [self speed];
-    [UIView animateWithDuration:(speed * 1.5) delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        self.alpha = 0.85;
-    } completion:^(BOOL finished) {}];
-}
-
-
-- (void) quickDim {
-    if(self.isErased) return;
-    if(self.hasAnimatedIn == NO) return;
-    CGFloat prevAlpha = self.alpha;
-    [UIView animateWithDuration:0.8 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        self.alpha = 0.5;
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.8 delay:0.9 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-            self.alpha = prevAlpha;
-        } completion:^(BOOL finished) {}];
-
-    }];
-}
-
 
 
 - (void) setXPosition:(CGFloat)x {
@@ -165,19 +137,34 @@
 
 
 
-- (void) eraseInstantly {
-    self.isErased = YES;
-    self.alpha = 0;
+
+
+- (void) dim {
+    if(self.isErased) return;
+    CGFloat speed = [self speed];
+    [UIView animateWithDuration:(speed * 1.5) delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+        self.alpha = 0.85;
+    } completion:^(BOOL finished) {}];
 }
 
 
-- (void) quickHide {
-    self.alpha = 0;
+- (void) quickDim {
+    if(self.isErased) return;
+    if(self.hasAnimatedIn == NO) return;
+    CGFloat prevAlpha = self.alpha;
+    [UIView animateWithDuration:0.8 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+        self.alpha = 0.5;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.8 delay:0.9 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+            self.alpha = prevAlpha;
+        } completion:^(BOOL finished) {}];
+    }];
 }
 
-- (void) quickShow {
-    self.alpha = 1.0;
-}
+
+
+
+
 
 
 - (void) erase {
@@ -186,6 +173,11 @@
     [UIView animateWithDuration:(speed * 1.5) delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         self.alpha = 0;
     } completion:^(BOOL finished) {}];
+}
+
+- (void) eraseInstantly {
+    self.isErased = YES;
+    self.alpha = 0;
 }
 
 - (void) eraseWithDelay:(CGFloat)delay {
@@ -198,10 +190,22 @@
 
 
 
+// TODO ?
+- (void) quickHide {
+    self.alpha = 0;
+}
+
+- (void) quickShow {
+    self.alpha = 1.0;
+}
+
+
+
+
 - (void) selfDestruct {
 
     self.isSelfDestructing = YES;
-    self.locked = YES;
+    self.isLocked = YES;
     
     CGFloat speed = ([self speed] + 2) / 3;
     CGFloat delay = speed * ABF(0.5);
@@ -218,7 +222,7 @@
 - (void) selfDestructMorph {
     
     self.isSelfDestructing = YES;
-    self.locked = YES;
+    self.isLocked = YES;
     
     CGFloat speed = ([self speed] + 2) / 3;
     CGFloat delay = 0;
@@ -231,6 +235,8 @@
         [self removeFromSuperview];
     }];
 }
+
+
 
 
 
@@ -253,20 +259,6 @@
 }
 
 
-// TODO
-- (void) mirror {
-    if(self.isErased) return;
-    CGFloat scale = self.isMirrored ? 1.0 : -1.0;
-    self.isMirrored = !self.isMirrored;
-    [UIView transitionWithView:self duration:1.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationCurveEaseInOut animations:^{
-        self.transform = CGAffineTransformMakeScale(1, scale);
-    } completion:nil];
-}
-
-
-
-
-
 - (void) spin {
     self.isSpinning = YES;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ABF(0.2) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -283,6 +275,22 @@
     rotationAnimation.repeatCount = repeat;
     [view.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 }
+
+
+
+
+// TODO ?
+- (void) mirror {
+    if(self.isErased) return;
+    CGFloat scale = self.isMirrored ? 1.0 : -1.0;
+    self.isMirrored = !self.isMirrored;
+    [UIView transitionWithView:self duration:1.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationCurveEaseInOut animations:^{
+        self.transform = CGAffineTransformMakeScale(1, scale);
+    } completion:nil];
+}
+
+
+
 
 @end
 

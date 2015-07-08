@@ -13,13 +13,6 @@
 #import "ABConstants.h"
 #import "ABScriptWord.h"
 
-typedef NS_ENUM(NSInteger, mutationType) {
-    DICE,
-    RANDOM,
-    GRAFTWORD,
-    EXPLODE,
-    CLONE
-};
 
 @implementation ABScript
 
@@ -36,7 +29,7 @@ static ABScript *ABScriptInstance = NULL;
 
 
 
-// Now this class is initialized by ABData, so this comes first:
+// This class is initialized via ABData
 
 + (void) initScriptWithDataArray:(NSArray *)scriptDataArray {
     script = scriptDataArray;
@@ -50,10 +43,10 @@ static ABScript *ABScriptInstance = NULL;
 
 
 
+
 /////////////////////////////////////
 // PARSE FILES + BUILD DATA ARRAYS //
 /////////////////////////////////////
-
 
 
 // Create nested structure of word objects
@@ -86,7 +79,6 @@ static ABScript *ABScriptInstance = NULL;
         for (int j = 0; j < [lines count]; j++) {
             
             [linesObjs addObject:[NSMutableArray array]];
-            
             lines[j] = [lines[j] componentsSeparatedByString:@" "];
 
             int thisLineCount = (int)[lines[j] count];
@@ -147,8 +139,6 @@ static ABScript *ABScriptInstance = NULL;
                 
                 [scriptWordsDictionary setObject:[ABScriptWord copyScriptWord:sw] forKey:text];
             }
-            
-            
         }
         
         // Add the cleaned and parsed array of word objects
@@ -236,7 +226,6 @@ static ABScript *ABScriptInstance = NULL;
 }
 
 
-
 + (NSArray *) allWordsInLines:(NSArray *)stanza {
     NSMutableArray *words = [NSMutableArray array];
     for(int l=0; l < [stanza count]; l ++) {
@@ -249,11 +238,9 @@ static ABScript *ABScriptInstance = NULL;
 }
 
 
-
 + (ABScriptWord *) randomScriptWordFromSet:(NSArray *)words {
     return [words objectAtIndex:ABI((int)[words count])];
 }
-
 
 
 + (ABScriptWord *) trulyRandomWord {
@@ -268,7 +255,7 @@ static ABScript *ABScriptInstance = NULL;
 
 
 ///////////////////////
-// BASIC LINE MIXING //
+// BASIC LINE MIXING //   (for loop-point stanza)
 ///////////////////////
 
 
@@ -276,8 +263,6 @@ static ABScript *ABScriptInstance = NULL;
     
     NSArray *lines1 = oldStanzaLines;
     NSArray *lines2 = script[stanzaIndex];
-    
-    
     
     NSMutableArray *remixStanza = [NSMutableArray array];
     
@@ -328,7 +313,6 @@ static ABScript *ABScriptInstance = NULL;
     
     for(int i=0; i<[words count]; i++) {
         ABScriptWord *sw = [ABData scriptWord:words[i] stanza:-1 fam:words leftSis:nil rightSis:nil graft:YES check:YES];
-//        ABScriptWord *sw = [[ABScriptWord alloc] initWithText:words[i] sourceStanza:-1 inFamily:words isGrafted:YES];
         [scriptWords addObject:sw];
     }
     
@@ -359,8 +343,6 @@ static ABScript *ABScriptInstance = NULL;
     
     return [NSArray arrayWithArray:mixedLines];
 }
-
-
 
 
 

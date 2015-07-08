@@ -41,9 +41,10 @@
 + (UIImage *)imageWithColor:(UIColor *)color;
 
 
-+ (UIButton *) horizontalButtonWithText:(NSString *)text andFrame:(CGRect)frame;
++ (UIImageView *) twinsImageView;
 
-+ (UIButton *) createInfoViewWithFrame:(CGRect)frame;
+
++ (UIButton *) horizontalButtonWithText:(NSString *)text andFrame:(CGRect)frame;
 
 
 @end

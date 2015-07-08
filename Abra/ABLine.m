@@ -17,7 +17,6 @@
 #import "ABHistory.h"
 #import "ABCadabra.h"
 
-
 @implementation ABLine {
     ABMatch *matcher;
     ABHistory *history;
@@ -29,7 +28,6 @@
 // CREATE / DELETE WORDS //
 ///////////////////////////
 
-
 - (id) initWithWords:(NSArray *)words andYPosition:(CGFloat)y andHeight:(CGFloat)lineHeight andLineNumber:(int)lineNum {
     
     if(self = [super init]) {
@@ -40,6 +38,7 @@
         self.lossyTransitions = NO;
         
         [self setFrame:CGRectMake(0, y, kScreenWidth, lineHeight)];
+        
         matcher = [[ABMatch alloc] init];
         history = [ABHistory history];
   
@@ -80,7 +79,7 @@
 
 
 - (void) destroyAllWords {
-
+    
     for(int i=0, l=(int)[self.lineWords count]; i<l; i++) {
         [self.lineWords[i] selfDestruct];
     }
@@ -237,12 +236,55 @@
 
 
 
+- (void) absentlyMutate {
+    
+    if([self.lineScriptWords count] == 0) return;
+    NSArray *indices = [self indicesOfVisibleWords];
+    int index = 0;
+    
+    // Occasionally choose any old word
+    if(ABI(8) == 0 || [indices count] == 0) {
+        index = ABI((int)[self.lineScriptWords count]);
+        
+        // But usually, only select from among visible ones
+    } else {
+        NSUInteger randomIndex = arc4random() % [indices count];
+        index = [[indices objectAtIndex:randomIndex] intValue];
+    }
+    
+    if(ABI(15) < 2 && [indices count] > 1) {
+        [[self.lineWords objectAtIndex:index] erase];
+        return;
+    }
+    
+    ABScriptWord *sw = [self.lineScriptWords objectAtIndex:index];
+    
+    NSArray *newSWs = [ABMutate mutateWord:sw inLine:self.lineScriptWords];
+    NSMutableArray *newTexts = [NSMutableArray array];
+    for(ABScriptWord *nsw in newSWs) {
+        if(ABI(17) < 2) continue;
+        // don't allow morphCount to increment much when absently mutating
+        if(nsw.morphCount > 2) nsw.morphCount = ABI(2);
+        [newTexts addObject:nsw.text];
+    }
+    
+    DDLogInfo(@"Absently mutate (line %i): %@ -> %@", self.lineNumber, sw.text, [newTexts componentsJoinedByString:@" "]);
+    
+    [self replaceWordAtIndex:index withArray:newSWs];
+    [ABState updateCurrentScriptWordLinesWithLine:self.lineScriptWords atIndex:self.lineNumber];
+}
 
 
 
-////////////////
-// MOVE WORDS //
-////////////////
+
+
+
+
+
+
+///////////////////
+// WORD MOVEMENT //
+///////////////////
 
 
 - (void) moveWordsToNewPositions {
@@ -260,50 +302,6 @@
         
         [word moveToXPosition:[xPositions[i] floatValue]];
     }
-}
-
-
-- (NSArray *) currentWordsTextArray {
-    NSMutableArray *words = [NSMutableArray array];
-    for(int i=0; i<[self.lineWords count]; i++) {
-        [words addObject:[self.lineWords[i] text]];
-    }
-    return [words copy];
-}
-
-
-- (NSString *) lineAsPlainTextString {
-    
-    NSMutableArray *plainText = [NSMutableArray array];
-    BOOL prevMarginRight = NO;
-    
-    for(int i=0; i<[self.lineWords count]; i++){
-        
-        ABWord *w = [self.lineWords objectAtIndex:i];
-        ABScriptWord *sw = [self.lineScriptWords objectAtIndex:i];
-        
-        if(!w.marginLeft && prevMarginRight) {
-            if([plainText count] > 0 && [[plainText lastObject] isEqualToString:@" "]) {
-                [plainText removeObjectAtIndex:[plainText count] - 1];
-            }
-        }
-        
-        if(w.isErased) {
-            for(int j=0; j < [sw.charArray count]; j ++) [plainText addObject:@" "];
-        } else if(w.isRedacted) {
-            for(int j=0; j < [sw.charArray count]; j ++) [plainText addObject:@"█"];
-        } else {
-            [plainText addObject:w.text];
-        }
-        
-        if(w.marginRight) {
-            [plainText addObject:@" "];
-        } else {
-            prevMarginRight = NO;
-        }
-    }
-    
-    return [plainText componentsJoinedByString:@""];
 }
 
 
@@ -366,10 +364,9 @@
 
 
 
-
-/////////////////////////////////////////
-// INTERACTIVITY AND MUTATION TRIGGERS //
-/////////////////////////////////////////
+/////////////
+// ACTIONS //
+/////////////
 
 
 - (int) checkPoint:(CGPoint)point {
@@ -385,7 +382,7 @@
     
     if(target > -1) {
         ABWord *targetWord = [self.lineWords objectAtIndex:target];
-        if(targetWord.locked) target = -1;
+        if(targetWord.isLocked) target = -1;
     }
     
     return target;
@@ -399,7 +396,6 @@
 - (void) tap:(CGPoint)point {
     [self touchOrTap:point];
 }
-
 - (void) touchOrTap:(CGPoint)point {
     int index = [self checkPoint:point];
     if(index == -1) return;
@@ -448,9 +444,6 @@
 }
 
 
-
-
-
 - (void) doubleTap:(CGPoint)point {
 
     int index = [self checkPoint:point];
@@ -462,7 +455,6 @@
 }
 
 
-
 // cadabra check
 - (void) longPress:(CGPoint)point {
     
@@ -472,7 +464,7 @@
     if(sw.cadabra == nil) {
         [ABCadabra revealCadabraWords];
     } else {
-        [ABCadabra castSpell:sw.cadabra withMagicWord:sw.text];
+        [ABCadabra castSpell:sw.cadabra magicWord:sw.text];
     }
     
 }
@@ -480,71 +472,9 @@
 
 
 
-- (NSArray *) locationsOfVisibleWords {
-    NSMutableArray *locs = [NSMutableArray array];
-    for(int i=0; i<[self.lineWords count]; i ++) {
-        ABWord *w = [self.lineWords objectAtIndex:i];
-        if(w.isErased) continue;
-        if(w.isRedacted) continue;
-        [locs addObject:@(i)];
-    }
-    return locs;
-}
-
-- (NSArray *) locationsOfErasedWords {
-    NSMutableArray *locs = [NSMutableArray array];
-    for(int i=0; i<[self.lineWords count]; i ++) {
-        ABWord *w = [self.lineWords objectAtIndex:i];
-        if(w.isErased) continue;
-        if(w.isRedacted) continue;
-        [locs addObject:@(i)];
-    }
-    return locs;
-}
-
-
-
-- (void) absentlyMutate {
-        
-    if([self.lineScriptWords count] == 0) return;
-    NSArray *indices = [self locationsOfVisibleWords];
-//    NSArray *erased = [self locationsOfErasedWords];    // TODO
-    int index = 0;
-    
-    // Occasionally choose any old word
-    if(ABI(8) == 0 || [indices count] == 0) {
-        index = ABI((int)[self.lineScriptWords count]);
-        
-    // But usually, only select from among visible ones
-    } else {
-        NSUInteger randomIndex = arc4random() % [indices count];
-        index = [[indices objectAtIndex:randomIndex] intValue];
-    }
-    
-    if(ABI(15) < 2 && [indices count] > 1) {
-        [[self.lineWords objectAtIndex:index] erase];
-        return;
-    }
-
-    ABScriptWord *sw = [self.lineScriptWords objectAtIndex:index];
-    
-    NSArray *newSWs = [ABMutate mutateWord:sw inLine:self.lineScriptWords];
-    NSMutableArray *newTexts = [NSMutableArray array];
-    for(ABScriptWord *nsw in newSWs) {
-        if(ABI(17) < 2) continue;
-        // don't allow morphCount to increment much when absently mutating
-        if(nsw.morphCount > 2) nsw.morphCount = ABI(2);
-        [newTexts addObject:nsw.text];
-    }
-
-    DDLogInfo(@"Absently mutate (line %i): %@ -> %@", self.lineNumber, sw.text, [newTexts componentsJoinedByString:@" "]);
-
-    [self replaceWordAtIndex:index withArray:newSWs];
-    [ABState updateCurrentScriptWordLinesWithLine:self.lineScriptWords atIndex:self.lineNumber];
-}
-
-
-
+///////////////////
+// LINE MOVEMENT //
+///////////////////
 
 
 - (void) animateToYPosition:(CGFloat)y duration:(CGFloat)duration delay:(CGFloat)delay {
@@ -555,6 +485,75 @@
     } completion:^(BOOL finished) {}];
 }
 
+
+- (void) mirrorWithDelay:(CGFloat)delay {
+    
+    CGFloat scale = self.isMirrored ? 1.0 : -1.0;
+    self.isMirrored = !self.isMirrored;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [UIView transitionWithView:self duration:1.5f + ABF(0.12f) + delay options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationCurveEaseInOut animations:^{
+            self.transform = CGAffineTransformMakeScale(scale, scale);
+        } completion:nil];
+    });
+}
+
+
+
+
+
+
+///////////////////
+// EXTERNAL INFO //
+///////////////////
+
+
+- (NSString *) convertToString {
+    
+    NSMutableArray *plainText = [NSMutableArray array];
+    BOOL prevMarginRight = NO;
+    
+    for(int i=0; i<[self.lineWords count]; i++){
+        
+        ABWord *w = [self.lineWords objectAtIndex:i];
+        ABScriptWord *sw = [self.lineScriptWords objectAtIndex:i];
+        
+        if(!w.marginLeft && prevMarginRight) {
+            if([plainText count] > 0 && [[plainText lastObject] isEqualToString:@" "]) {
+                [plainText removeObjectAtIndex:[plainText count] - 1];
+            }
+        }
+        
+        if(w.isErased) {
+            for(int j=0; j < [sw.charArray count]; j ++) [plainText addObject:@" "];
+        } else if(w.isRedacted) {
+            for(int j=0; j < [sw.charArray count]; j ++) [plainText addObject:@"█"];
+        } else {
+            [plainText addObject:w.text];
+        }
+        
+        if(w.marginRight) {
+            [plainText addObject:@" "];
+        } else {
+            prevMarginRight = NO;
+        }
+    }
+    
+    return [plainText componentsJoinedByString:@""];
+}
+
+
+
+- (NSArray *) indicesOfVisibleWords {
+    NSMutableArray *locs = [NSMutableArray array];
+    for(int i=0; i<[self.lineWords count]; i ++) {
+        ABWord *w = [self.lineWords objectAtIndex:i];
+        if(w.isErased) continue;
+        if(w.isRedacted) continue;
+        [locs addObject:@(i)];
+    }
+    return locs;
+}
 
 
 - (BOOL) includesGraftedContent {
@@ -567,36 +566,13 @@
 
 
 // TODO
-
 //- (CGFloat) excessHorizontalWidth {
 //    if(self.lineWidth < kScreenWidth) return 0;
 //}
+//- (BOOL) cutDownLineToScreenWidth {
+//    return NO;
+//}
 
-
-- (BOOL) cutDownLineToScreenWidth {
-    return NO;
-}
-
-
-
-- (void) normalize {
-    if(self.isMirrored) [self mirrorWithDelay:0];
-}
-
-
-
-- (void) mirrorWithDelay:(CGFloat)delay {
-    
-    CGFloat scale = self.isMirrored ? 1.0 : -1.0;
-    self.isMirrored = !self.isMirrored;
-
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [UIView transitionWithView:self duration:1.5f + ABF(0.12f) + delay options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationCurveEaseInOut animations:^{
-            self.transform = CGAffineTransformMakeScale(scale, scale);
-        } completion:nil];
-    });
-    
-}
 
 
 

@@ -19,19 +19,13 @@ int ABI(int max);
 
 @interface ABConstants : NSObject
 
-extern NSString *const ABRA_VERSION;
-
-
-extern int const ABRA_START_LINE;
-extern int const ABRA_START_STANZA;
-
-extern BOOL const ABRA_ABSENTLY_MUTATE;
-
-
 extern NSString *const ABRA_FONT;
 extern NSString *const ABRA_ITALIC_FONT;
 extern NSString *const ABRA_FLOWERS_FONT;
 extern NSString *const ABRA_SYSTEM_FONT;
+
+extern int const ABRA_START_LINE;
+extern int const ABRA_START_STANZA;
 
 extern CGFloat const ABRA_NORMAL_SPEED;
 extern CGFloat const ABRA_FASTEST_SPEED;
@@ -50,11 +44,14 @@ extern CGFloat const ABRA_GESTURE_TIME_BUFFER;
 extern CGFloat const ABRA_TICKER_INTERVAL;
 
 extern NSString *const EMOJI_REGEX;
-extern NSString *const NON_ASCII_REGEX;
-extern NSString *const NUMBERS_REGEX;
 
+// -----
+
+extern NSString *const SYMBOLS_CHESS;
+extern NSString *const SYMBOLS_DEATH;
 
 extern NSString *const BLOCK_BLACK_BOX;
+
 extern NSString *const WORDS_DONE_HERE;
 extern NSString *const WORDS_SPEAK;
 extern NSString *const WORDS_COLOR_BARS;
@@ -65,15 +62,6 @@ extern NSString *const WORDS_PYTHON;
 extern NSString *const WORDS_PERIMETER;
 extern NSString *const WORDS_STING;
 
-
-
-extern NSString *const SYMBOLS_CHESS;
-extern NSString *const SYMBOLS_DEATH;
-
-
-// DEV CONSTS
-
-extern BOOL const GENERATE_CORE_DICTIONARY;
 
 
 

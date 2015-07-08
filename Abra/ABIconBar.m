@@ -131,7 +131,7 @@ NSArray *icons;
     if(icon == nil || self.isVisible == NO) {
         
         if(currentModeIcon && currentModeIcon == icon && icon.iconType == GRAFT_ICON) {
-            [self triggerGraft];  // TODO : MAKE RANDOM FROM GRAFTED ? OR LAY ACTION
+            [ABCadabra castSpell:@"PAST_GRAFT"]; // TODO: current graft instead?
             return;
         }
 
@@ -141,14 +141,14 @@ NSArray *icons;
     
     iconType type = icon.iconType;
     
-    if(type == MUTATE_ICON) [ABCadabra castSpell:@"AREA_RANDOM" withMagicWord:nil];
-    if(type == GRAFT_ICON) [ABCadabra castSpell:@"PAST_GRAFT" withMagicWord:nil];
-    if(type == PRUNE_ICON) [ABCadabra castSpell:@"RANDOM_PRUNE" withMagicWord:nil];
-    if(type == ERASE_ICON) [ABCadabra castSpell:@"MINOR_ERASE" withMagicWord:nil];
-    if(type == CADABRA_ICON) [mainViewController flashTwins];
+    if(type == MUTATE_ICON) [ABCadabra castSpell:@"AREA_RANDOM"];
+    if(type == GRAFT_ICON) [ABCadabra castSpell:@"PAST_GRAFT"];
+    if(type == PRUNE_ICON) [ABCadabra castSpell:@"RANDOM_PRUNE"];
+    if(type == ERASE_ICON) [ABCadabra castSpell:@"MINOR_ERASE"];
+    if(type == CADABRA_ICON) [mainViewController twinsFlash];
     if(type == SHARE_ICON) [ABState copyAllTextToClipboard];
-    if(type == SETTINGS_ICON) [ABCadabra castSpell:@"SHUFFLE" withMagicWord:nil];
-    // if(type == INFO_ICON) [ABCadabra castSpell:@"PAST_GRAFT" withMagicWord:nil];
+    if(type == SETTINGS_ICON) [ABCadabra castSpell:@"SHUFFLE"];
+    // if(type == INFO_ICON) [ABCadabra castSpell:@"PAST_GRAFT"];
 }
 
 
@@ -188,7 +188,7 @@ NSArray *icons;
         if([ABState shouldShowTip:@"cadabra"]) {
             [mainViewController showTip:@"cadabra"];
         } else {
-            [ABCadabra castSpell:nil withMagicWord:nil];
+            [ABCadabra castSpell];
         }
         return;
     }
@@ -253,7 +253,7 @@ NSArray *icons;
 
 - (void) triggerGraft {
     [ABState setSpellModeTo:GRAFT];
-    [mainViewController pressedGraftButton];
+    [mainViewController userDidPressGraftButton];
 }
 
 
@@ -337,9 +337,9 @@ NSArray *icons;
     else
         UIGraphicsBeginImageContext(self.window.bounds.size);
     
-    //    [self.window.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
+    // [self.window.layer renderInContext:UIGraphicsGetCurrentContext()];
     // CGRect mainBounds = mainViewController.view.bounds;
+
     CGRect cropBounds = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
     
     [mainViewController.view drawViewHierarchyInRect:cropBounds afterScreenUpdates:NO];
@@ -381,7 +381,6 @@ NSArray *icons;
     cropViewController = [[PECropViewController alloc] init];
     cropViewController.delegate = self;
     cropViewController.image = image;
-    //controller.image = self.imageView.image;
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cropViewController];
     [mainViewController presentViewController:navigationController animated:YES completion:nil];

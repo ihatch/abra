@@ -21,6 +21,7 @@
 @property (nonatomic) ABMainViewController *mainVC;
 
 - (id) initWithIconBar:(ABIconBar *)bar andMainVC:(ABMainViewController *)main;
+
 - (void) show;
 - (void) hide;
 - (void) hideWithSuccess:(BOOL)success;

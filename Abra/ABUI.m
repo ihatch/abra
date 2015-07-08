@@ -151,7 +151,6 @@ static ABUI *ABUIInstance = NULL;
 
 + (UIColor *) goldColor {
     return [UIColor colorWithHue:0.1 saturation:(0.3) brightness:1 alpha:1];
-//    return [ABUI progressHueColorWithOffset:0.10];
 }
 
 + (UIColor *) darkGoldColor {
@@ -217,40 +216,33 @@ static ABUI *ABUIInstance = NULL;
 
 
 
-///////////////
-// INFO VIEW //
-///////////////
 
 
-+ (UIView *) createInfoViewWithFrame:(CGRect)frame {
-    infoView = [[UIView alloc] initWithFrame:CGRectMake(80, 0, 864, 768)];
-    infoView.backgroundColor = [UIColor blackColor];
-    UIWebView *infoWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 864, 768)]; //  self.view.bounds
-    infoWebView.backgroundColor = [UIColor blackColor];
-    NSString *infoPath = [[NSBundle mainBundle] pathForResource:@"abraInfo" ofType:@"html"];
-    if (infoPath) {
-        NSData *htmlData = [NSData dataWithContentsOfFile:infoPath];
-        [infoWebView loadData:htmlData MIMEType:@"text/html" textEncodingName:@"utf-8" baseURL:[[NSBundle mainBundle] bundleURL]];
-    }
-    infoWebView.scrollView.scrollEnabled = NO;
-    infoWebView.scrollView.bounces = NO;
-    [infoWebView setHidden:YES];
-    [infoWebView setDelegate:ABUIInstance];
-    
-    [infoView addSubview:infoWebView];
-    return infoView;
+////////////////////////
+// CENTERED MVC IMAGE //
+////////////////////////
+
++ (UIImage *) imageWithImage:(UIImage *)image scaledToHeight: (float) i_height {
+    float oldHeight = image.size.height;
+    float scaleFactor = i_height / oldHeight;
+    float newHeight = oldHeight * scaleFactor;
+    float newWidth = image.size.width * scaleFactor;
+    UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight));
+    [image drawInRect:CGRectMake(0, 0, newWidth, newHeight)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
-
-- (void) webViewDidFinishLoad:(UIWebView *)webView{
-    [self performSelector:@selector(showInfoWebView:) withObject:webView afterDelay:0.1];
++ (UIImageView *) twinsImageView {
+    UIImage *image = [UIImage imageNamed:@"abra_twins.png"];
+    image = [ABUI imageWithImage:image scaledToHeight:kScreenHeight - 50];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    imageView.frame = CGRectMake((kScreenWidth - image.size.width) / 2, 25, image.size.width, image.size.height);
+    imageView.alpha = 0;
+    imageView.hidden = YES;
+    return imageView;
 }
-
-- (void) showInfoWebView:(UIWebView *)webView {
-    [webView setHidden:NO];
-}
-
-
 
 
 
