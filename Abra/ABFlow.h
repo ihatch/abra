@@ -25,6 +25,7 @@
 - (void) addItalicParagraph:(NSString *)text;
 - (void) addImage:(NSString *)imageName;
 - (void) addImageToBottom:(NSString *)imageName;
+- (void) addImageMargin;
 - (void) addAuthors;
 - (void) addLink:(NSString *)url;
 
@@ -32,7 +33,6 @@
 - (void) addSpecialItalicizedParagraph:(NSString *)text;
 
 - (void) refreshFrame;
-- (void) bringLogosToFront;
 - (void) adjustBottomMargin;
 
 @end

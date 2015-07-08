@@ -54,7 +54,7 @@ NSMutableDictionary *counts;
 
 - (void) record:(SpellMode)mode line:(int)line index:(int)index {
     [self increment:mode];
-    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+//    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
 //    DDLogInfo(@"RECORD: %f %li %i %i", timeStamp, (long)mode, line, index);
     
 }

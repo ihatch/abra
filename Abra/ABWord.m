@@ -66,7 +66,7 @@
 }
 
 - (CGFloat) speed {
-    return [ABClock currentSpeed];
+    return [ABClock speed];
 }
 
 - (CGFloat) convertLeftToCenter:(CGFloat)x {
@@ -183,8 +183,17 @@
 - (void) eraseWithDelay:(CGFloat)delay {
     self.isErased = YES;
     CGFloat speed = [self speed];
-    [UIView animateWithDuration:(speed * ABF(1.5) + 0.4) delay:delay options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+    [UIView animateWithDuration:(speed * ABF(1.5) + (speed * 0.4)) delay:(speed * delay) options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         self.alpha = 0;
+    } completion:^(BOOL finished) {}];
+}
+
+- (void) uneraseWithDelay:(CGFloat)delay {
+    if(!self.isErased) return;
+    self.isErased = NO;
+    CGFloat speed = [self speed];
+    [UIView animateWithDuration:(speed * ABF(1.5) + (speed * 0.4)) delay:(speed * delay) options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+        self.alpha = 1.0;
     } completion:^(BOOL finished) {}];
 }
 
@@ -212,8 +221,10 @@
     CGFloat duration = speed * (2.0 + ABF(3.0));
 
     [UIView animateWithDuration:duration delay:delay options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        self.alpha = 0;
-        self.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
+        if(!self.isErased) {
+            self.alpha = 0;
+            self.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
+        }
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
     }];
@@ -229,8 +240,10 @@
     CGFloat duration = speed * (2.0 + ABF(3.0));
     
     [UIView animateWithDuration:duration delay:delay options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        self.alpha = 0;
-        self.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
+        if(!self.isErased) {
+            self.alpha = 0;
+            self.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
+        }
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
     }];
@@ -258,11 +271,10 @@
     } completion:nil];
 }
 
-
 - (void) spin {
     self.isSpinning = YES;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(ABF(0.2) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self runSpinAnimationOnView:self duration:0.55 + ABF(1.75) rotations:1 repeat:INFINITY];
+        [self runSpinAnimationOnView:self duration:(0.55 + ABF(1.75)) rotations:1 repeat:INFINITY];
     });
 }
 

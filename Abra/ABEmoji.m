@@ -208,7 +208,7 @@ NSDictionary *colorCycle;
     NSArray *colors = [eDict objectForKey:@"color"];
     if(colors == nil) {
         DDLogError(@"No colors dict for: %@", emoji);
-        return [ABEmoji getRandomEmojiForKey:@"misc" inDictionary:emojiByColor];
+        return [ABEmoji getRandomEmojiForKey:@"MISC" inDictionary:emojiByColor];
     }
 
     NSString *color = colors[arc4random() % [colors count]];

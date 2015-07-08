@@ -15,7 +15,7 @@
 @implementation ABFlow
 
 UIFont *contentFont, *headingFont, *italicFont, *linkFont, *flowersFont, *versionFont, *authorsFont;
-UIImageView *logosView;
+UIView *logosView;
 
 - (id) initWithFrame:(CGRect)frame {
 
@@ -67,7 +67,7 @@ UIImageView *logosView;
 - (UILabel *) addLabelWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color shadow:(BOOL)shadow italic:(BOOL)italic url:(NSString *)url {
     
     BOOL authors = font == authorsFont;
-    CGFloat x = authors ? [ABUI scaleXWithIphone:20.0f ipad:80.0f] : 0;
+    CGFloat x = authors ? [ABUI scaleXWithIphone:20.0f ipad:0] : 0;
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(x, 0, self.frame.size.width, 1000)];
 
@@ -165,13 +165,13 @@ UIImageView *logosView;
 
 - (void) addAuthors{
     
-    NSString *text = @"  by Amaranth Borsuk\n             Kate Durbin\n                    Ian Hatcher\n                           & You";
+    NSString *text = @" by Amaranth Borsuk\n            Kate Durbin\n                   Ian Hatcher\n                          & You";
     
     if([ABUI isIphone]) {
         text = @"    by Amaranth Borsuk\n             Kate Durbin\n                    Ian Hatcher\n                             & You";
     }
     
-    self.appendYPosition -= [ABUI scaleYWithIphone:5.0f ipad:-5.0f];
+    self.appendYPosition -= [ABUI scaleYWithIphone:5.0f ipad:0];
     [self addLabelWithText:text font:authorsFont color:[ABUI whiteTextColor] shadow:NO italic:YES url:nil];
     self.appendYPosition += self.paragraphMarginBottom;
 }
@@ -191,20 +191,25 @@ UIImageView *logosView;
 
     
 - (void) addImage:(NSString *)imageName {
-
     self.appendYPosition += self.imageMargin;
 
     UIImage *image = [UIImage imageNamed:imageName];
     image = [self imageWithImage:image scaledToWidth:self.frame.size.width * 2];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     imageView.frame = CGRectMake(0, self.appendYPosition, image.size.width / 2, image.size.height / 2);
-
     [self addSubview:imageView];
+
     self.appendYPosition += (image.size.height / 2);
 }
 
 
-// Only used for logos -- so tapping logo takes you to the CBPA site - or SHOULD... sigh
+- (void) addImageMargin {
+    self.appendYPosition += self.imageMargin;
+    
+}
+
+
+// Only used for logos -- and tapping logo takes you to the CBPA site
 - (void) addImageToBottom:(NSString *)imageName {
     
     UIImage *image = [UIImage imageNamed:imageName];
@@ -213,20 +218,15 @@ UIImageView *logosView;
     
     CGFloat y = self.frame.size.height - (image.size.height / 2) - [ABUI scaleYWithIphone:15.0f ipad:30.0f];
     imageView.frame = CGRectMake(0, y, image.size.width / 2, image.size.height / 2);
-    
+    imageView.alpha = 0.95;
     [imageView setUserInteractionEnabled:YES];
     UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedOnLogos:)];
     [imageView addGestureRecognizer:gesture];
-    imageView.alpha = 0.7;
     [self addSubview:imageView];
     
     // Version hack.
     [self addVersionToYPosition:y - [ABUI scaleYWithIphone:19.0f ipad:30.0f]];
-    logosView = imageView;
-}
-
-- (void) bringLogosToFront {
-    [self bringSubviewToFront:logosView];
+    
 }
 
 
@@ -248,7 +248,7 @@ UIImageView *logosView;
 
 
 - (void) adjustBottomMargin {
-    self.appendYPosition -= [ABUI scaleYWithIphone:4.0f ipad:0];
+    self.appendYPosition += [ABUI scaleYWithIphone:-4.0f ipad:2.0f];
 }
 
 

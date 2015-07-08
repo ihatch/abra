@@ -111,7 +111,7 @@ static ABClock *ABClockInstance = NULL;
     lastInteractionTime = CACurrentMediaTime();
 }
 
-+ (CGFloat) currentSpeed {
++ (CGFloat) speed {
     return speed;
 }
 

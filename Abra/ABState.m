@@ -63,8 +63,8 @@ static ABState *ABStateInstance = NULL;
 - (id) init {
     if(self = [super init]) {
         
-        DEV_PREVENT_TIPS = NO;
-        [ABState resetTips];
+        DEV_PREVENT_TIPS = YES;
+//        [ABState resetTips];
         [ABState initTips];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(transitionStanza:) name:@"transitionStanza" object:nil];
@@ -108,18 +108,22 @@ static ABState *ABStateInstance = NULL;
     
     NSArray *stanza = [ABScript linesAtStanzaNumber:currentStanza];
     currentScriptWordLines = stanza;
+    int numLines = [ABState numberOfLinesToDisplay];
     
     int lineHeight = [ABUI abraLineHeight];
-    CGFloat heightOffset = (kScreenHeight - (lineHeight * [ABState numberOfLinesToDisplay])) / 2;
+    CGFloat heightOffset = (kScreenHeight - (lineHeight * numLines)) / 2;
     
     ABLines = [NSMutableArray array];
     
     int p = 0;
-    for(int s = ABRA_START_LINE; s < ABRA_START_LINE + [ABState numberOfLinesToDisplay]; s ++) {
+    for(int s = ABRA_START_LINE; s < ABRA_START_LINE + numLines; s ++) {
         NSArray *words = (s < [stanza count]) ? stanza[s] : [ABScript emptyLine];
         CGFloat y = heightOffset + (p++ * lineHeight);
         [ABLines addObject:[[ABLine alloc] initWithWords:words andYPosition:y andHeight:lineHeight andLineNumber:s]];
     }
+    
+    if(numLines < 7) [ABClock setSpeedTo:0.85];
+    else [ABClock setSpeedTo:1.0];
     
     return ABLines;
 }

@@ -267,10 +267,10 @@ CGPoint touchStart;
 
 - (void) twinsFlash {
     twinsView.hidden = NO;
-    [UIView animateWithDuration:1.0 animations:^() {
+    [UIView animateWithDuration:1.2 animations:^() {
         twinsView.alpha = 0.3;
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:1.0 animations:^() {
+        [UIView animateWithDuration:1.2 animations:^() {
             twinsView.alpha = 0;
         } completion:^(BOOL finished) {
             twinsView.hidden = YES;

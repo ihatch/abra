@@ -12,6 +12,7 @@
 #import "ABMutate.h"
 #import "ABEmoji.h"
 #import "ABData.h"
+#import "ABLine.h"
 #import "ABState.h"
 #import "NSString+ABExtras.h"
 
@@ -169,6 +170,51 @@ NSDictionary *wordsDict;
 
 
 
+- (NSArray *) fullMapWithPercent:(CGFloat)percent andStanzaLines:(NSArray *)lines {
+    
+    int totalWords = 0;
+    for(NSArray *line in lines) totalWords += [line count];
+    int numYes = (int)floor(totalWords * percent);
+
+    NSMutableArray *map = [NSMutableArray array];
+    for(int i=0; i<totalWords; i++) [map addObject:@(NO)];
+    
+    int placed = 0;
+    
+    while(placed < numYes) {
+        int x = arc4random_uniform(totalWords);
+        if([[map objectAtIndex:x] boolValue] == NO) {
+            [map replaceObjectAtIndex:x withObject:@(YES)];
+            placed ++;
+        }
+    }
+    
+    return [NSArray arrayWithArray:map];
+}
+
+- (NSArray *) fullMapWithPercent:(CGFloat)percent andABLines:(NSArray *)lines {
+    
+    int totalWords = 0;
+    for(ABLine *line in lines) totalWords += [line.lineWords count];
+    int numYes = (int)floor(totalWords * percent);
+    
+    NSMutableArray *map = [NSMutableArray array];
+    for(int i=0; i<totalWords; i++) [map addObject:@(NO)];
+    
+    int placed = 0;
+    
+    while(placed < numYes) {
+        int x = arc4random_uniform(totalWords);
+        if([[map objectAtIndex:x] boolValue] == NO) {
+            [map replaceObjectAtIndex:x withObject:@(YES)];
+            placed ++;
+        }
+    }
+    
+    return [NSArray arrayWithArray:map];
+}
+
+
 
 
 
@@ -295,8 +341,12 @@ NSDictionary *wordsDict;
     
     int i = 0;
     for(ABScriptWord *sw in line) {
+
+        // pass over this spot
         if([[map objectAtIndex:i] boolValue] == NO) {
             [newLine addObject:sw];
+            
+        
         } else {
             if(ABI(10) > 1) {
                 NSArray *new = [ABMutate mutateWord:sw inLine:line];

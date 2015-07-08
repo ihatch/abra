@@ -166,6 +166,18 @@ die
 ostrich
 
 
+ERASE_AND_ADD
+implode
+elsewhere
+commode
+echoes
+accompanies
+caulflower
+commence
+breed
+aswoon
+
+
 FLIP_LINE_ORDER
 cascade
 crescendos
@@ -325,12 +337,14 @@ stitches
 SPACEY_MODE
 copious
 coppice
-implode
 spacious
 matrix
 neo
 letters
-little
+characters
+dismember
+members
+split
 
 
 SPACEY_SPACE
@@ -371,7 +385,21 @@ redouble
 conjoin
 conjoined
 abra
+double
 oracle
+
+
+UNERASE_ALL
+rising
+rapture
+squinting
+remains
+orchid
+synapses
+glorious
+teeming
+volupt
+whole
 
 
 WEAVE

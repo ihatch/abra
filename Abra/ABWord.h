@@ -52,6 +52,7 @@
 - (void) erase;
 - (void) eraseInstantly;
 - (void) eraseWithDelay:(CGFloat)delay;
+- (void) uneraseWithDelay:(CGFloat)delay;
 
 - (void) selfDestruct;
 - (void) selfDestructMorph;

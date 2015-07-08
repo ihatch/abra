@@ -61,13 +61,11 @@
     [flow addAuthors];
     [flow addSectionMargin];
     [flow addImageToBottom:@"abra_logos_10.png"];
-    [flow refreshFrame];
     return flow;
 }
 
 
 + (ABFlow *) infoContent:(ABFlow *)flow {
-    
     [flow addHeading:@"INTRODUCTION"];
     [flow addParagraph:@"The Abra app is a poetry instrument/spellbook that responds to touch. Caress the words and watch them shift under your fingers."];
     [flow addParagraph:@"At the bottom of the screen is a rainbow dial, by which you can navigate to different poems in the Abra cycle. Touch the top of the screen to reveal a toolbar."];
@@ -84,6 +82,7 @@
     [flow addHeading:@"ARTISTS' BOOK"];
     [flow addParagraph:@"The Abra artists' book features blind letterpress impressions, heat-sensitive disappearing ink, foil-stamping, and laser-cut openings. These last can serve as windows, revealing the screen of an embedded iPad running this app, conjoining the analog and digital into a single reading experience."];
     [flow addImage:@"artists_book_spread_4.png"];
+    [flow addImageMargin];
     [flow addParagraph:@"The artists' book was fabricated by Amy Rabas at the Center for Book and Paper Arts, with help from graduate students in Inter-Arts."];
     [flow addParagraph:@"To learn more about this edition or order a copy:"];
     [flow addLink:@"http://a-b-r-a.com/artists-book"];

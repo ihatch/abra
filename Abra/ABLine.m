@@ -13,6 +13,7 @@
 #import "ABLine.h"
 #import "ABScriptWord.h"
 #import "ABMutate.h"
+#import "ABClock.h"
 #import "ABUI.h"
 #import "ABHistory.h"
 #import "ABCadabra.h"
@@ -461,6 +462,9 @@
     int index = [self checkPoint:point];
     if(index == -1) return;
     ABScriptWord *sw = self.lineScriptWords[index];
+    ABWord *w = self.lineWords[index];
+    if(w.isErased) return;
+    
     if(sw.cadabra == nil) {
         [ABCadabra revealCadabraWords];
     } else {
@@ -478,21 +482,22 @@
 
 
 - (void) animateToYPosition:(CGFloat)y duration:(CGFloat)duration delay:(CGFloat)delay {
+    CGFloat speed = [ABClock speed];
     CGRect newFrame = self.frame;
     newFrame.origin.y = y;
-    [UIView animateWithDuration:duration delay:delay options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState animations:^() {
+    [UIView animateWithDuration:speed * duration delay:speed * delay options:UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState animations:^() {
         self.frame = newFrame;
     } completion:^(BOOL finished) {}];
 }
 
 
 - (void) mirrorWithDelay:(CGFloat)delay {
-    
+    CGFloat speed = [ABClock speed];
     CGFloat scale = self.isMirrored ? 1.0 : -1.0;
     self.isMirrored = !self.isMirrored;
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [UIView transitionWithView:self duration:1.5f + ABF(0.12f) + delay options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationCurveEaseInOut animations:^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, speed * delay * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [UIView transitionWithView:self duration:(speed * (1.5f + ABF(0.12f) + delay)) options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationCurveEaseInOut animations:^{
             self.transform = CGAffineTransformMakeScale(scale, scale);
         } completion:nil];
     });

@@ -26,7 +26,8 @@
 - (NSArray *) locationsOfMutationsIn:(NSArray *)SWArray;
 
 - (NSArray *) mapWithOddsFrom:(CGFloat)startOdds to:(CGFloat)endOdds total:(int)totalItems min:(int)min max:(int)max;
-
+- (NSArray *) fullMapWithPercent:(CGFloat)percent andStanzaLines:(NSArray *)lines;
+- (NSArray *) fullMapWithPercent:(CGFloat)percent andABLines:(NSArray *)lines;
 
 - (int) averageSourceStanzas:(ABScriptWord *)sw1 and:(ABScriptWord *)sw2;
 

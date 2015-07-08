@@ -291,10 +291,6 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     scrollView.contentSize = contentFlow.frame.size;
     [self.innerView addSubview:scrollView];
     self.scrollView = scrollView;
-    
-    
-//    [self bringSubviewToFront:infoTitlesView];
-    [titleLogosFlow bringLogosToFront];
 }
 
 
