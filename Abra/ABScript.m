@@ -109,6 +109,7 @@ static ABScript *ABScriptInstance = NULL;
                 ABScriptWord *sw = [ABData getScriptWord:text withSourceStanza:i];
                 // Don't check extra properties because we know it's from the original script.
                 // If sometime later I modify this to allow importing other texts, I need to checkProperties here.
+                // TODO: revamp this shit and standardize w/ how graphs are processed
 
                 if(connectNextWord) {
                     connectLastAndCurrent = YES;
@@ -130,8 +131,8 @@ static ABScript *ABScriptInstance = NULL;
                 }
                 
                 if(connectLastAndCurrent && lastWordObj != nil) {
-                    [sw addLeftSister:[lastWordObj text]];
-                    [lastWordObj addRightSister:text];
+                    [sw addLeftSisters:@[[lastWordObj text]]];
+                    [lastWordObj addRightSisters:@[text]];
                 }
                 
                 lastWordObj = sw;
@@ -169,10 +170,10 @@ static ABScript *ABScriptInstance = NULL;
     sw2.marginLeft = NO; sw2.marginRight = NO;
     sw3.marginLeft = NO;
     
-    [sw1 addRightSister:sw2.text];
-    [sw2 addLeftSister:sw1.text];
-    [sw2 addRightSister:sw3.text];
-    [sw3 addLeftSister:sw2.text];
+    [sw1 addRightSisters:@[sw2.text]];
+    [sw2 addLeftSisters:@[sw1.text]];
+    [sw2 addRightSisters:@[sw3.text]];
+    [sw3 addLeftSisters:@[sw2.text]];
     
     return @[sw1, sw2, sw3];
 }
@@ -299,50 +300,6 @@ static ABScript *ABScriptInstance = NULL;
 
 
 
-
-
-
-//////////////
-// GRAFTING //
-//////////////
-
-
-+ (NSArray *) parseGraftArrayIntoScriptWords:(NSArray *)words {
-    
-    NSMutableArray *scriptWords = [NSMutableArray array];
-    
-    for(int i=0; i<[words count]; i++) {
-        ABScriptWord *sw = [ABData scriptWord:words[i] stanza:-1 fam:words leftSis:nil rightSis:nil graft:YES check:YES];
-        [scriptWords addObject:sw];
-    }
-    
-    return [NSArray arrayWithArray:scriptWords];
-}
-
-
-
-+ (NSArray *) graftText:(NSArray *)scriptWords intoStanzaLines:(NSArray *)stanzaLines {
-
-    int slc = (int)[stanzaLines count];
-    int gtc = (int)[scriptWords count];
-    
-    NSMutableArray *mixedLines = [NSMutableArray array];
-    for(int l=0; l<slc; l++) {
-        NSMutableArray *line = [NSMutableArray array];
-        BOOL spent = NO;
-        for(int i=0; i < [stanzaLines[l] count]; i++) {
-            if(spent == NO && ABI(11) == 0) {
-                ABScriptWord *w = [ABScriptWord copyScriptWord:scriptWords[ABI(gtc)]];
-                w.isGrafted = YES;
-                [line addObject:w];
-            }
-            [line addObject:stanzaLines[l][i]];
-        }
-        [mixedLines addObject:line];
-    }
-    
-    return [NSArray arrayWithArray:mixedLines];
-}
 
 
 

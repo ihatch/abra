@@ -11,10 +11,11 @@
 #import "ABScriptWord.h"
 #import "ABConstants.h"
 #import "ABData.h"
+#import "ABEmoji.h"
 #import "NSString+ABExtras.h"
 
 @interface ABScriptWord ()
-@property (nonatomic) NSArray *myCharArray;
+@property (nonatomic) NSArray *cachedCharArray;
 @end
 
 
@@ -23,24 +24,40 @@
 - (id) initWithText:(NSString *)wordText sourceStanza:(int)stanza inFamily:(NSArray *)fam isGrafted:(BOOL)isGraft {
     if(self = [super init]) {
 
-        self.text = wordText;
-        
-        self.sourceStanza = stanza;
-        self.isGrafted = isGraft;
-        self.marginLeft = YES;
-        self.marginRight = YES;
-        
-        self.hasRunChecks = NO;
-        self.emojiCount = 0;
+        _text = wordText;
+        _cachedCharArray = [wordText convertToArray];
 
-        self.cadabra = [ABData checkMagicWord:wordText];
+        _sourceStanza = stanza;
+        _isGrafted = isGraft;
+        _marginLeft = YES;
+        _marginRight = YES;
+
+        _cadabra = [ABData checkMagicWord:wordText];
+
+        _hasRunChecks = NO;
+        _emojiCount = 0;
         
-        self.family = [NSMutableArray array];
-        self.leftSisters = [NSMutableArray array];
-        self.rightSisters = [NSMutableArray array];
+        _family = [NSArray array];
+        _leftSisters = [NSArray array];
+        _rightSisters = [NSArray array];
+        
         if(fam != nil) [self addFamily:fam];
-        
         if(isGraft) [self runChecks];
+        
+        
+        /*
+        NSRange stringRange = NSMakeRange(0, self.text.length);
+        NSDictionary* languageMap = @{@"Latn" : @[@"en"]};
+        [self.text enumerateLinguisticTagsInRange:stringRange
+                                      scheme:NSLinguisticTagSchemeLexicalClass
+                                     options:NSLinguisticTaggerOmitWhitespace
+                                 orthography:[NSOrthography orthographyWithDominantScript:@"Latn" languageMap:languageMap]
+                                  usingBlock:^(NSString *tag, NSRange tokenRange, NSRange sentenceRange, BOOL *stop) {
+                                      // Log info to console for debugging purposes
+                                      NSString *currentEntity = [self.text substringWithRange:tokenRange];
+                                      NSLog(@"%@ is a %@, tokenRange (%d,%d)",currentEntity,tag,tokenRange.length,tokenRange.location);
+                                  }];
+         */
         
     }
     return self;
@@ -51,46 +68,72 @@
 // FAMILY
 
 - (void) addFamily:(NSArray *)array {
-    for(NSString *s in array){
-        self.family = [self addDistinct:s toArray:self.family];
+
+    if(array == nil) return;
+    NSInteger count = [array count];
+    if(count == 0 || count == 1) return;
+
+    NSMutableArray *fam = [NSMutableArray arrayWithArray:array];
+    for (NSInteger index = (count - 1); index >= 0; index--) {
+        NSString *s = array[index];
+        if ([s isEqualToString:_text]) {
+            [fam removeObjectAtIndex:index];
+        }
     }
+    
+    _family = [self addDistinct:[NSArray arrayWithArray:fam] toArray:_family];
 }
 
-- (void) addLeftSister:(NSString *)string {
-    self.leftSisters = [self addDistinct:string toArray:self.leftSisters];
+
+- (void) addLeftSisters:(NSArray *)sisters {
+    if(sisters == nil) return;
+    if([sisters count] == 0) return;
+    NSArray *result = [self addDistinct:sisters toArray:_leftSisters];
+    _leftSisters = result;
 }
 
-- (void) addRightSister:(NSString *)string {
-    self.rightSisters = [self addDistinct:string toArray:self.rightSisters];
+- (void) addRightSisters:(NSArray *)sisters {
+    if(sisters == nil) return;
+    if([sisters count] == 0) return;
+    NSArray *result = [self addDistinct:sisters toArray:_rightSisters];
+    _rightSisters = result;
 }
 
-- (NSMutableArray *) addDistinct:(NSString *)string toArray:(NSMutableArray *)array {
-    if([string isEqualToString:self.text]) return array;
-    if([array indexOfObject:string] != NSNotFound) return array;
-    [array addObject:[string copy]];
-    self.hasFamily = YES;
-    return array;
+- (NSMutableArray *) addDistinct:(NSArray *)array1 toArray:(NSArray *)array2 {
+    _hasFamily = YES;
+    NSArray *array = [array1 arrayByAddingObjectsFromArray:array2];
+    return [array valueForKeyPath:@"@distinctUnionOfObjects.self"];
 }
+
+
 
 
 
 // PROPERTY CHECKS
 
 - (void) runChecks {
-    if(self.hasRunChecks) return;
-    self.emojiCount = [self emojiCheck];
-    self.hasRunChecks = YES;
+    if(_hasRunChecks) return;
+    _emojiCount = [self emojiCheck];
+    if(_emojiCount > 1 /* || self.emojiCount != [_myCharArray count] */) {
+        [self checkEmojiProperties];
+    }
+    _hasRunChecks = YES;
+}
+
+- (void) checkEmojiProperties {
+    _emojiProperties = [ABEmoji getEmojiPropertiesForCharArray:_cachedCharArray ofString:_text];
 }
 
 - (int) emojiCheck {
     return [self checkWithRegex:EMOJI_REGEX];
 }
 
+
 - (int) checkWithRegex:(NSString *)regexString {
     NSError *error = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexString options:NSRegularExpressionCaseInsensitive error:&error];
     NSAssert(regex, @"Unable to create regular expression");
-    int numberOfMatches = (int)[regex numberOfMatchesInString:self.text options:0 range:NSMakeRange(0, [self.text length])];
+    int numberOfMatches = (int)[regex numberOfMatchesInString:_text options:0 range:NSMakeRange(0, [_text length])];
     return numberOfMatches;
 }
 
@@ -99,12 +142,11 @@
 // CACHED FOR FASTER COMPARISONS
 
 - (NSArray *) charArray {
-    if (_myCharArray == nil) _myCharArray = [self.text convertToArray];
-    return _myCharArray;
+    return _cachedCharArray;
 }
 
 - (int) charLength {
-    return (int)[[self charArray] count];
+    return (int)[_cachedCharArray count];
 }
 
 
@@ -112,14 +154,28 @@
 
 // COPIES
 
-- (ABScriptWord *) copyOfThisWord {
-    return [ABScriptWord copyScriptWord:self];
+- (id) copyWithZone:(NSZone *)zone {
+    ABScriptWord *copy = [ABScriptWord allocWithZone:zone];
+    copy->_text = [_text copyWithZone:zone];
+    copy->_cachedCharArray = [_cachedCharArray copyWithZone:zone];
+    copy->_sourceStanza = _sourceStanza;
+    copy->_isGrafted = _isGrafted;
+    copy->_marginLeft = _marginLeft;
+    copy->_marginRight = _marginRight;
+    copy->_hasRunChecks = _hasRunChecks;
+    copy->_emojiCount = _emojiCount;
+    copy->_cadabra = [_cadabra copyWithZone:zone];
+    copy->_family = [_family copyWithZone:zone];
+    copy->_leftSisters = [_leftSisters copyWithZone:zone];
+    copy->_rightSisters = [_rightSisters copyWithZone:zone];
+    copy->_family = [_family copyWithZone:zone];
+    return copy;
 }
 
 + (ABScriptWord *) copyScriptWord:(ABScriptWord *)word {
     
     ABScriptWord *copy = [[ABScriptWord alloc] initWithText:word.text sourceStanza:word.sourceStanza inFamily:word.family isGrafted:word.isGrafted];
-
+    
     copy.marginLeft = word.marginLeft;
     copy.marginRight = word.marginRight;
     copy.emojiCount = word.emojiCount;

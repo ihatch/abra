@@ -19,12 +19,12 @@ UIView *logosView;
 
 - (id) initWithFrame:(CGRect)frame {
 
-    authorsFont = [UIFont fontWithName:ABRA_ITALIC_FONT size:[ABUI scaleYWithIphone:10.0f ipad:16.0f]];
-    contentFont = [UIFont fontWithName:ABRA_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
+    authorsFont = [UIFont fontWithName:ABRA_ITALIC_FONT size:[ABUI scaleYWithIphone:10.2f ipad:15.0f]];
+    contentFont = [UIFont fontWithName:ABRA_FONT size:[ABUI scaleYWithIphone:11.5f ipad:16.0f]];
     headingFont = [UIFont fontWithName:ABRA_SYSTEM_FONT size:[ABUI scaleYWithIphone:9.5f ipad:15.0f]];
     flowersFont = [UIFont fontWithName:ABRA_FLOWERS_FONT size:[ABUI scaleYWithIphone:9.5f ipad:15.0f]];
-    italicFont = [UIFont fontWithName:ABRA_ITALIC_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
-    linkFont = [UIFont fontWithName:ABRA_FONT size:[ABUI scaleYWithIphone:11.0f ipad:16.0f]];
+    italicFont = [UIFont fontWithName:ABRA_ITALIC_FONT size:[ABUI scaleYWithIphone:11.5f ipad:16.0f]];
+    linkFont = [UIFont fontWithName:ABRA_FONT size:[ABUI scaleYWithIphone:11.5f ipad:16.0f]];
     versionFont = [UIFont fontWithName:ABRA_SYSTEM_FONT size:[ABUI scaleYWithIphone:6.5f ipad:11.0f]];
     
     self = [super initWithFrame:frame];
@@ -34,7 +34,7 @@ UIView *logosView;
         self.paragraphMarginBottom = [ABUI scaleYWithIphone:7.0f ipad:10.0f];
         self.sectionMarginBottom = [ABUI scaleYWithIphone:20.0f ipad:35.0f];
         self.imageMargin = [ABUI scaleYWithIphone:10.0f ipad:15.0f];
-        self.lineHeight = [ABUI scaleYWithIphone:20.0f ipad:30.0f];
+        self.lineHeight = [ABUI isSmallIphone] ? 20.0f : [ABUI scaleYWithIphone:20.0f ipad:30.0f];
     }
     return self;
 }
@@ -67,7 +67,7 @@ UIView *logosView;
 - (UILabel *) addLabelWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color shadow:(BOOL)shadow italic:(BOOL)italic url:(NSString *)url {
     
     BOOL authors = font == authorsFont;
-    CGFloat x = authors ? [ABUI scaleXWithIphone:20.0f ipad:0] : 0;
+    CGFloat x = authors ? [ABUI scaleXWithIphone:20.0f ipad:12.0f] : 0;
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(x, 0, self.frame.size.width, 1000)];
 
@@ -81,8 +81,8 @@ UIView *logosView;
     }
 
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.minimumLineHeight = authors ? [ABUI scaleYWithIphone:16.0f ipad:30.0f] : self.lineHeight;
-    style.maximumLineHeight = authors ? [ABUI scaleYWithIphone:16.0f ipad:30.0f] : self.lineHeight;
+    style.minimumLineHeight = authors ? [ABUI scaleYWithIphone:16.0f ipad:24.0f] : self.lineHeight;
+    style.maximumLineHeight = authors ? [ABUI scaleYWithIphone:16.0f ipad:24.0f] : self.lineHeight;
     if(self.isSelfCentered) style.alignment = NSTextAlignmentCenter;
     NSDictionary *attrs = @{NSParagraphStyleAttributeName : style};
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:text attributes:attrs];
@@ -165,13 +165,13 @@ UIView *logosView;
 
 - (void) addAuthors{
     
-    NSString *text = @" by Amaranth Borsuk\n            Kate Durbin\n                   Ian Hatcher\n                          & You";
+    NSString *text = @"   by Amaranth Borsuk\n              Kate Durbin\n                     Ian Hatcher\n                            & You";
     
     if([ABUI isIphone]) {
         text = @"    by Amaranth Borsuk\n             Kate Durbin\n                    Ian Hatcher\n                             & You";
     }
     
-    self.appendYPosition -= [ABUI scaleYWithIphone:5.0f ipad:0];
+    self.appendYPosition -= [ABUI scaleYWithIphone:5.0f ipad:-15.0f];
     [self addLabelWithText:text font:authorsFont color:[ABUI whiteTextColor] shadow:NO italic:YES url:nil];
     self.appendYPosition += self.paragraphMarginBottom;
 }

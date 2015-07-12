@@ -22,5 +22,6 @@
 
 + (NSString *) getEmojiForCurrentMoonPhase;
 
++ (NSArray *) getEmojiPropertiesForCharArray:(NSArray *)charArray ofString:(NSString *)string;
 
 @end

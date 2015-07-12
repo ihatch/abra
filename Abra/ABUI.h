@@ -14,6 +14,7 @@
 @interface ABUI : NSObject <UIWebViewDelegate>
 
 + (BOOL) isIphone;
++ (BOOL) isSmallIphone;
 
 + (CGFloat) iPadToUniversalW:(CGFloat)n;
 + (CGFloat) iPadToUniversalH:(CGFloat)n;

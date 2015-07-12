@@ -30,7 +30,4 @@
 
 + (NSArray *) mixStanzaLines:(NSArray *)oldStanzaLines withStanzaAtIndex:(int)stanzaIndex;
 
-+ (NSArray *) parseGraftArrayIntoScriptWords:(NSArray *)words;
-+ (NSArray *) graftText:(NSArray *)scriptWords intoStanzaLines:(NSArray *)stanzaLines;
-
 @end

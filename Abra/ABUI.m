@@ -49,17 +49,22 @@ static ABUI *ABUIInstance = NULL;
 }
 
 + (CGFloat) scaleXWithIphone:(CGFloat)iphone ipad:(CGFloat)ipad {
+    if([ABUI isSmallIphone]) iphone *= 0.9f;
     return iphone + ((kScreenWidth - 568) / ((1024 - 568) / (ipad - iphone)));
 }
 
 + (CGFloat) scaleYWithIphone:(CGFloat)iphone ipad:(CGFloat)ipad {
+    if([ABUI isSmallIphone]) iphone *= 0.9f;
     return iphone + ((kScreenHeight - 320) / ((768 - 320) / (ipad - iphone)));
 }
 
 + (BOOL) isIphone {
-    return (kScreenWidth < 750);
+    return (kScreenWidth < 650);
 }
 
++ (BOOL) isSmallIphone {
+    return kScreenWidth < 500;
+}
 
 
 

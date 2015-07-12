@@ -110,7 +110,7 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
         // Initialize Compose View Controller
         SLComposeViewController *vc = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
         // Configure Compose View Controller
-        [vc setInitialText:@"Mutating poetry with Abra - a-b-r-a.com"];
+        [vc setInitialText:@"Made with Abra - a-b-r-a.com"];
         [vc addImage:self.cropView.croppedImage];
         // Present Compose View Controller
         [self presentViewController:vc animated:YES completion:nil];
@@ -126,7 +126,7 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     
     if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
         SLComposeViewController *vc = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-        [vc setInitialText:@"Mutating poetry with #AbraApp"];
+        [vc setInitialText:@"#AbraApp"];
         [vc addImage:self.cropView.croppedImage];
         [vc addURL: [NSURL URLWithString: @"http://a-b-r-a.com"]];
         [self presentViewController:vc animated:YES completion:nil];

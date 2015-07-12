@@ -8,7 +8,6 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-
 #import "ABConstants.h"
 #import "ABUI.h"
 #import "ABScript.h"
@@ -63,7 +62,7 @@ static ABState *ABStateInstance = NULL;
 - (id) init {
     if(self = [super init]) {
         
-        DEV_PREVENT_TIPS = YES;
+        DEV_PREVENT_TIPS = NO;
 //        [ABState resetTips];
         [ABState initTips];
         
@@ -142,7 +141,12 @@ static ABState *ABStateInstance = NULL;
 
 
 + (int) numberOfLinesToDisplay {
-    if([ABUI isIphone] || settingIPhoneDisplayMode == YES) return 5; else return 11;
+    if(settingIPhoneDisplayMode == YES) return 5;
+    if(kScreenWidth < 600) return 5;
+    if(kScreenWidth < 700) return 6;
+    if(kScreenWidth < 800) return 7;
+    return 11;
+//    if([ABUI isIphone] || settingIPhoneDisplayMode == YES) return 5; else return 11;
 }
 
 

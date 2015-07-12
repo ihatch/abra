@@ -168,34 +168,22 @@ NSDictionary *wordsDict;
 }
 
 
-
-
 - (NSArray *) fullMapWithPercent:(CGFloat)percent andStanzaLines:(NSArray *)lines {
-    
-    int totalWords = 0;
-    for(NSArray *line in lines) totalWords += [line count];
-    int numYes = (int)floor(totalWords * percent);
-
-    NSMutableArray *map = [NSMutableArray array];
-    for(int i=0; i<totalWords; i++) [map addObject:@(NO)];
-    
-    int placed = 0;
-    
-    while(placed < numYes) {
-        int x = arc4random_uniform(totalWords);
-        if([[map objectAtIndex:x] boolValue] == NO) {
-            [map replaceObjectAtIndex:x withObject:@(YES)];
-            placed ++;
-        }
-    }
-    
-    return [NSArray arrayWithArray:map];
+    return [self fullMapWithPercent:percent lines:lines isABLines:NO];
 }
-
 - (NSArray *) fullMapWithPercent:(CGFloat)percent andABLines:(NSArray *)lines {
+    return [self fullMapWithPercent:percent lines:lines isABLines:YES];
+}
+
+- (NSArray *) fullMapWithPercent:(CGFloat)percent lines:(NSArray *)lines isABLines:(BOOL)isAB {
     
     int totalWords = 0;
-    for(ABLine *line in lines) totalWords += [line.lineWords count];
+    if(isAB) {
+        for(ABLine *line in lines) totalWords += [line.lineWords count];
+    } else {
+        for(NSArray *line in lines) totalWords += [line count];
+    }
+
     int numYes = (int)floor(totalWords * percent);
     
     NSMutableArray *map = [NSMutableArray array];
@@ -213,7 +201,6 @@ NSDictionary *wordsDict;
     
     return [NSArray arrayWithArray:map];
 }
-
 
 
 

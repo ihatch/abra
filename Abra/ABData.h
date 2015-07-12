@@ -20,14 +20,22 @@
 
 + (NSArray *) loadWordList;
 
+
+
 + (ABScriptWord *) getScriptWord:(NSString *)text;
 + (ABScriptWord *) getScriptWordAndRunChecks:(NSString *)text;
+
 + (ABScriptWord *) getScriptWord:(NSString *)text withSourceStanza:(int)sourceStanza;
+
 + (ABScriptWord *) scriptWord:(NSString *)text stanza:(int)stanza fam:(NSArray *)family leftSis:(NSString *)leftSis rightSis:(NSString *)rightSis graft:(BOOL)graft check:(BOOL)check;
+
++ (ABScriptWord *) scriptWord:(NSString *)text stanza:(int)stanza fam:(NSArray *)family leftSisters:(NSArray *)leftSis rightSisters:(NSArray *)rightSis graft:(BOOL)graft check:(BOOL)check;
+
 + (ABScriptWord *) getRandomScriptWord;
 
+
+
 + (BOOL) graftText:(NSString *)text;
-+ (void) graftNewWords:(NSArray *)words;
 + (ABScriptWord *) getWordToGraft;
 + (ABScriptWord *) getPastGraftWord;
 

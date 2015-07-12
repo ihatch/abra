@@ -61,8 +61,11 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 
 - (void) updateColor {
     CGColorRef colRef = [ABUI progressHueColorDark].CGColor;
-    [self.layer setBorderWidth:1.0f];
+    [self.layer setBorderWidth:1.2f];
     [self.layer setBorderColor:colRef];
+    [self.layer setCornerRadius:12.0f];
+    [self.layer setMasksToBounds:YES];
+
     if(self.innerView != nil) {
         [self.innerView.layer setBorderColor:[ABUI progressHueColorDarker].CGColor];
     }
@@ -72,7 +75,7 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     CGRect frame = CGRectMake(viewMargin, viewMargin, self.w - (viewMargin * 2), self.h - (viewMargin * 2));
     UIView *view = [[UIView alloc] initWithFrame:frame];
     view.backgroundColor = [UIColor blackColor];
-    view.layer.cornerRadius = 8.0f;
+    view.layer.cornerRadius = [ABUI scaleXWithIphone:9 ipad:7.0f];
     view.layer.masksToBounds = YES;
     view.layer.borderColor = [ABUI darkGoldColor].CGColor;
     view.layer.borderWidth = 1.0f;
@@ -195,18 +198,20 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 }
 
 - (UILabel *) settingsLabelWithX:(CGFloat)x y:(CGFloat)y text:(NSString *)text {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 5, 260, 20)];
+    int width = ([ABUI isSmallIphone]) ? 215 : 260;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(x, y + 5, width, 20)];
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
     [attributedString addAttribute:NSKernAttributeName value:@(1.0f) range:NSMakeRange(0, [text length])];
     label.attributedText = attributedString;
     label.textAlignment = NSTextAlignmentLeft;
-    label.font = [UIFont fontWithName:ABRA_FONT size:16];
+    label.font = [UIFont fontWithName:ABRA_FONT size:[ABUI scaleXWithIphone:14 ipad:16]];
     [label setTextColor:[ABUI darkGoldColor2]];
     return label;
 }
 
 - (UISwitch *) settingsSwitchWithX:(CGFloat)x y:(CGFloat)y {
-    UISwitch *sw = [[UISwitch alloc] initWithFrame:CGRectMake(250, y, 20, 15)];
+    int width = ([ABUI isSmallIphone]) ? 205 : 250;
+    UISwitch *sw = [[UISwitch alloc] initWithFrame:CGRectMake(width, y, 20, 15)];
     [sw setTintColor:[ABUI darkGoldColor]];
     [sw setOnTintColor:[ABUI goldColor]];
     sw.transform = CGAffineTransformMakeScale(0.8, 0.8);
@@ -284,6 +289,7 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:infoContentFrame];
     scrollView.userInteractionEnabled = YES;
     scrollView.showsVerticalScrollIndicator = YES;
+    scrollView.indicatorStyle =  UIScrollViewIndicatorStyleWhite;
     CGRect contentFrame = CGRectMake(0, 0, infoContentFrame.size.width - [ABUI scaleXWithIphone:15 ipad:30], 3000);
     ABFlow *contentFlow = [[ABFlow alloc] initWithFrame:contentFrame];
     contentFlow = [ABModalContent infoContent:contentFlow];
@@ -296,6 +302,7 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 
 - (void) resetScrollViewPosition {
     [self.scrollView setContentOffset:CGPointMake(0, -self.scrollView.contentInset.top) animated:NO];
+    [self.scrollView flashScrollIndicators];
 }
 
 

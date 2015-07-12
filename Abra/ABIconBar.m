@@ -33,7 +33,7 @@ NSArray *icons;
     barWidth = kScreenWidth;
     barHeight = [ABUI scaleYWithIphone:45 ipad:75];
     
-    self = [super initWithFrame:CGRectMake(0, [ABUI scaleXWithIphone:0 ipad:15], barWidth, barHeight)];
+    self = [super initWithFrame:CGRectMake(0, [ABUI isSmallIphone] ? 0 : [ABUI scaleXWithIphone:0 ipad:15], barWidth, barHeight)];
     if (self) {
         
         mainViewController = main;
@@ -66,10 +66,11 @@ NSArray *icons;
     
     self.isVisible = NO;
     
-    iconWidth = [ABUI scaleXWithIphone:45 ipad:70];
+    iconWidth = [ABUI isSmallIphone] ? 42 : [ABUI scaleXWithIphone:45 ipad:70];
     iconHeight = barHeight;
     
-    iconBufferWidth = 40 + ((kScreenWidth - 568) / 7.5);
+    int bufferOffset = [ABUI isSmallIphone] ? 480 : 568;
+    iconBufferWidth = 40 + ((kScreenWidth - bufferOffset) / 7.5);
     totalIconsWidth = (iconWidth * 9) + (iconBufferWidth * 2);
     
     currentXDrawPos = (barWidth - totalIconsWidth) / 2;

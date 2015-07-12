@@ -95,6 +95,7 @@ ABApprentice *apprentice;
     
     BOOL inSpaceyMode = [ABState fx:@"spacey"];
     BOOL someAreErased = (visibleCount < totalWordCount);
+    BOOL allAreErased = (visibleCount == 0);
     // check for conditions like all erased, etc.
     
     
@@ -119,6 +120,7 @@ ABApprentice *apprentice;
             
             if([ABState fx:@"mirror"] && ABI(4) == 0) s = @"MIRROR";
             if([ABState fx:@"weave"] && ABI(6) == 0) s = @"WEAVE";
+            if(allAreErased) s = @"CAROUSEL_RANDOM_SCROLL";
             
             // Don't do emoji transforms unless there are emoji
             if(([s isEqualToString:@"EMOJI_COLOR_SHIFT"] || [s isEqualToString:@"ERASE_ALL_EMOJI"] || [s isEqualToString:@"ERASE_ALL_EXCEPT_EMOJI"]) && hasEmojiCount == 0) {
@@ -137,16 +139,18 @@ ABApprentice *apprentice;
                 continue;
             }
             
+            
             ok = YES;
         }
         
         spell = s;
     }
 
-
+    
     
     DDLogInfo(@"spell: %@", spell);
     
+    if([spell isEqualToString:@"CAROUSEL_RANDOM_SCROLL"]) [ABCadabra carouselRandomScroll];
     if([spell isEqualToString:@"PRUNE_FIRST_LAST"]) [ABCadabra pruneInterior];
     if([spell isEqualToString:@"SPIN"]) [ABCadabra spin];
     if([spell isEqualToString:@"REDACT"]) [ABCadabra redact];
@@ -246,6 +250,13 @@ ABApprentice *apprentice;
              `'.'. | \__/ || \__., | |  | |  `'.'.
             [\__) )| ;.__/  '.__.'[___][___][\__) )
 ----------------- [__| ------------------------------------------------------------------------------- */
+
+
+
+
++ (void) carouselRandomScroll {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"carouselRandomScroll" object:self];
+}
 
 
 

@@ -309,6 +309,8 @@ CGPoint touchStart;
             [ABCadabra castSpell];
         }
         currentTip = nil;
+    } else {
+        [self showTip:@"welcome"];
     }
 }
 
@@ -482,6 +484,9 @@ CGPoint touchStart;
     [UIView setAnimationDuration:7.5];
     [self.carousel setAlpha:0.85];
     [UIView commitAnimations];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(carouselRandomScroll) name:@"carouselRandomScroll" object:nil];
+
 }
 
 - (NSInteger) numberOfItemsInCarousel:(iCarousel *)carousel {
@@ -549,6 +554,11 @@ CGPoint touchStart;
 - (void) carouselWillBeginDragging:(iCarousel *)carousel {
     carouselIsAnimating = YES;
     [ABClock updateLastInteractionTime];
+}
+
+- (void) carouselRandomScroll {
+    int scroll = ABI(17) + 17;
+    [self.carousel scrollByNumberOfItems:scroll duration:1.4f + (scroll * 0.08)];
 }
 
 - (void) carouselFlash {

@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ABScriptWord : NSObject
+@interface ABScriptWord : NSObject <NSCopying>
 
 @property (nonatomic) NSString *text;
 
-@property (nonatomic) NSMutableArray *family;
-@property (nonatomic) NSMutableArray *leftSisters;
-@property (nonatomic) NSMutableArray *rightSisters;
+@property (nonatomic) NSArray *family;
+@property (nonatomic) NSArray *leftSisters;
+@property (nonatomic) NSArray *rightSisters;
+@property (nonatomic) NSArray *emojiProperties;
 
 @property (nonatomic) int sourceStanza;
 @property (nonatomic) int morphCount;
@@ -34,13 +35,13 @@
 - (id) initWithText:(NSString *)wordText sourceStanza:(int)stanza inFamily:(NSArray *)fam isGrafted:(BOOL)isGraft;
 
 - (void) addFamily:(NSArray *)array;
-- (void) addLeftSister:(NSString *)wordText;
-- (void) addRightSister:(NSString *)wordText;
+- (void) addLeftSisters:(NSArray *)sisters;
+- (void) addRightSisters:(NSArray *)sisters;
 
 - (void) runChecks;
 
-- (ABScriptWord *) copyOfThisWord;
 + (ABScriptWord *) copyScriptWord:(ABScriptWord *)word;
 
+- (id)copyWithZone:(NSZone *)zone;
 
 @end

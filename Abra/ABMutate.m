@@ -16,6 +16,7 @@
 #import "ABDice.h"
 #import "ABEmoji.h"
 #import "NSString+ABExtras.h"
+#import "NSString+Tokenize.h"
 
 
 @implementation ABMutate
@@ -75,14 +76,26 @@ static ABMutate *ABMutateInstance = NULL;
             newWords = @[sw];
             
         } else {
-            if(ABI(40) == 0) {
-                newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
-                newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
-
-            } else if(ABI(9) == 0) {
-                newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
-                newWords = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self"];
             
+            if(ABI(9) == 0) {
+                
+                BOOL ok = NO;
+                int tries = 0;
+                
+                while(ok == NO && tries < 10) {
+
+                    if(ABI(40) == 0) {
+                        newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
+                        
+                    } else {
+                        newWords = @[[ABMutate throwDiceCoefficient:oldWord], [ABMutate throwDiceCoefficient:oldWord]];
+                    }
+
+                    NSArray *strings = [newWords valueForKeyPath:@"@distinctUnionOfObjects.self.text"];
+                    if([strings count] == [newWords count]) ok = YES;
+                    tries ++;
+                }
+
             } else {
                 newWords = @[[ABMutate throwDiceCoefficient:oldWord]];
             }
@@ -185,7 +198,7 @@ static ABMutate *ABMutateInstance = NULL;
     NSArray *dice = [ABDice diceForKey:word.text];
     if([dice count] == 0) return [ABMutate noDiceFallbackMatch:word];
     
-    ABScriptWord *sw = [ABScriptWord copyScriptWord:word];
+    ABScriptWord *sw = [sw copy];
     
     @try {
         
@@ -240,12 +253,39 @@ static ABMutate *ABMutateInstance = NULL;
     if([ABEmoji isEmoji:word.text]) result = [ABMutate diceMatchForEmoji:word.text];
     if(result) return result;
     
+    // Multiple emoji?
+    if(word.emojiCount > 0) {
+        NSArray *tokens = word.text.arrayWithWordTokenize;
+        NSMutableDictionary *cDict = [NSMutableDictionary dictionary];
+        NSMutableArray *combo = [NSMutableArray array];
+        for(NSString *token in tokens) {
+            if([cDict objectForKey:token] != nil) {
+                [combo addObject:[cDict objectForKey:token]];
+                continue;
+            } else {
+                NSString *e = [ABEmoji getEmojiOfSameColorAsEmoji:token];
+                if(e != nil) {
+                    [cDict setObject:e forKey:token];
+                    [combo addObject:e];
+                } else {
+                    [combo addObject:token];
+                }
+            }
+        }
+        return [ABData getScriptWordAndRunChecks:[combo componentsJoinedByString:@""]];
+    }
+
     // Spell check match?
     result = [ABMutate attemptMatchBySpellCheck:word];
     if(result) {
         [result runChecks];
         DDLogInfo(@">> Spell check dice match: %@ -> %@ ", word.text, result.text);
         return result;
+    }
+
+    // Random grafted?
+    if(word.isGrafted) {
+        return [ABData getPastGraftWord];
     }
     
     // No dice!
@@ -400,7 +440,7 @@ static ABMutate *ABMutateInstance = NULL;
     
     // Look for user-submitted text; if found, duplicate it
     else if(ABI(20) < 18 && [targetWord isGrafted]) {
-        ABScriptWord *duplicate = [targetWord copyOfThisWord];
+        ABScriptWord *duplicate = [targetWord copy];
         if(ABI(2) == 0) {
             duplicate.isGrafted = NO;
             duplicate.sourceStanza = [ABState getCurrentStanza];
