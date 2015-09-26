@@ -135,9 +135,6 @@ NSDictionary *colorCycle;
     emojiByColor = [ABEmoji processEmojiDictionary:colors withType:@"color"];
     emojiByConcept = [ABEmoji processEmojiDictionary:concepts withType:@"concept"];
     
-    
-    
-    
     emojiToWords = [NSMutableDictionary dictionary];
     wordsToEmoji = [NSMutableDictionary dictionary];
     

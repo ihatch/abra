@@ -21,7 +21,6 @@
 
 + (NSArray *) splitWordIntoLetters:(ABScriptWord *)word andSpaceOut:(BOOL)spaceOut;
 
-
 + (NSArray *) mutateLines:(NSArray *)stanza atMutationLevel:(int)mutationLevel;
 
 

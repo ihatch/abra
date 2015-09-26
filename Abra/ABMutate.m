@@ -151,10 +151,10 @@ static ABMutate *ABMutateInstance = NULL;
         return sw;
     }
     
-    // don't run on short words. otherwise stanza gradually dwindle to letter fragments
+    // don't run on short words. otherwise stanza gradually dwindles to letter fragments
     if([[word.text convertToArray] count] < 6) return nil;
 
-    // try cutting a letter...
+    // try cutting a letter to find a new word...
     NSString *cut = [ABMutate cutFirstOrLastLetter:word.text];
     NSArray *cuts = [ABMutate spellCheck:cut];
     if([cuts count]) return [ABData getScriptWord:simple[0] withSourceStanza:word.sourceStanza];

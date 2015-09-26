@@ -13,8 +13,10 @@
 + (void) start;
 + (void) startAutoProgress;
 + (void) stopAutoProgress;
+
 + (CGFloat) speed;
 + (void) setSpeedTo:(CGFloat)speed;
+
 + (void) accelerate;
 + (void) decelerate;
 + (void) pause;

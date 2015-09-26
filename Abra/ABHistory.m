@@ -5,6 +5,10 @@
 //  Created by Ian Hatcher on 6/28/15.
 //  Copyright (c) 2015 Ian Hatcher. All rights reserved.
 //
+//  [ this class is intended to track and later pull from user's action history
+//       in order to mirror user gestures and unlock spells progressively
+//          -- not yet functional ]
+
 
 #import "ABHistory.h"
 #import "ABConstants.h"

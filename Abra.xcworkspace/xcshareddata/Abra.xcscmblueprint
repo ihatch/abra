@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "779E5235ABE4BCD7AE98C87F8892D51E691DACFC",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "779E5235ABE4BCD7AE98C87F8892D51E691DACFC" : 0,
+    "35B5C9A93714EC9BEB56BAE809C5551E5C66E52D" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "4961CB39-6981-4E11-BE98-526AD565F76A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "779E5235ABE4BCD7AE98C87F8892D51E691DACFC" : "Abra",
+    "35B5C9A93714EC9BEB56BAE809C5551E5C66E52D" : "Abra\/CocoaLumberjack"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Abra",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Abra.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:CocoaLumberjack\/CocoaLumberjack.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "35B5C9A93714EC9BEB56BAE809C5551E5C66E52D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/ihatch\/abra.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "779E5235ABE4BCD7AE98C87F8892D51E691DACFC"
+    }
+  ]
+}

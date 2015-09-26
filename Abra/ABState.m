@@ -5,7 +5,6 @@
 //
 //  Created by Ian Hatcher on 12/14/13.
 //  Copyright (c) 2013 Ian Hatcher. All rights reserved.
-//
 
 #import <QuartzCore/QuartzCore.h>
 #import "ABConstants.h"
