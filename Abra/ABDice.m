@@ -47,6 +47,16 @@ NSMutableDictionary *oneWayAdditionsDictionary;
     diceAdditionsDictionary = [NSMutableDictionary dictionaryWithDictionary:dict];
 }
 
+// Won't work for languages that overlap in symbol sets with English...
++ (void) addNonEnglishLanguageDiceDictionary:(NSDictionary *)dict andLangString:(NSString *)langString {
+    DDLogInfo(@"Additional language: %@ - adding %lu entries", langString, (unsigned long)[[dict allKeys] count]);
+    [ABDice updateCacheWithLexicon:[dict allKeys]];
+    for (NSString *key in dict) {
+        [diceDictionary setObject:[dict objectForKey:key] forKey:key];
+    }
+//    diceAdditionsDictionary = [NSMutableDictionary dictionaryWithDictionary:dict];
+}
+
 + (void) generateDiceDictionary {
     DDLogInfo(@"%@", @"Dice dictionary: generating ...");
     diceDictionary = [NSMutableDictionary dictionaryWithDictionary:[ABDice topCoreMatchesForLexicon:[ABData loadWordList]]];
@@ -285,9 +295,6 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 
 
 
-
-
-
 ////////////
 // PUBLIC //
 ////////////
@@ -317,6 +324,23 @@ NSMutableDictionary *oneWayAdditionsDictionary;
     
     [ABDice crossReferenceTerms:diceAdditions];
     [ABData saveDiceAdditions:diceAdditionsDictionary];
+    DDLogInfo(@"%@", @"Dice dictionary: done updating.");
+}
+
+
+// Never runs in live app, just used to create precompiled data in dev
++ (NSDictionary *) createDiceDictionaryToBeSavedWithStrings:(NSArray *)strings {
+    
+    DDLogInfo(@"Dice dictionary: updating with new vocabulary to be saved to a file ... ");
+    NSMutableArray *newWords = [NSMutableArray array];
+    for(NSString *w in strings) { [newWords addObject:w]; }
+    
+    [ABDice updateCacheWithLexicon:newWords];
+    NSArray *oldKeys = [diceDictionary allKeys];
+    NSMutableArray *lexicon = [NSMutableArray arrayWithArray:[oldKeys arrayByAddingObjectsFromArray:newWords]];
+    NSDictionary *diceAdditions = [ABDice getMatchesForKeys:newWords inLexicon:lexicon];
+
+    return diceAdditions;
     DDLogInfo(@"%@", @"Dice dictionary: done updating.");
 }
 

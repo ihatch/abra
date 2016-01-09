@@ -65,12 +65,16 @@ static ABData *ABDataInstance = NULL;
     [ABData initCoreScript];
     DDLogInfo(@"== initCoreDictionary");
     [ABData initCoreDictionary];
+    DDLogInfo(@"== loadOtherLanguages");
+    [ABData loadOtherLanguages];
     DDLogInfo(@"== loadDiceAdditions");
     [ABData loadDiceAdditions];
     DDLogInfo(@"== loadGrafts");
     [ABData loadGrafts];
     DDLogInfo(@"== initMagicWords");
     [ABData initMagicWords];
+    
+//    [ABData createNewDiceDictionaryFromTxtFile:@"words_greek" andSaveToAbraDataFileWithKey:@"greek"];  // saves as "abraData-greek" in Library/Developer/CoreSimulator/???
     
     DDLogInfo(@"===== DATA: loaded. (%f sec) =====", [[NSDate date] timeIntervalSinceDate:methodStart]);
     
@@ -110,6 +114,11 @@ static ABData *ABDataInstance = NULL;
     }
 }
 
++ (void) loadOtherLanguages {
+    NSMutableDictionary *greek = [ABData loadPrecompiledData:@"greek"];
+    [ABDice addNonEnglishLanguageDiceDictionary:greek andLangString:@"Greek"];
+}
+
 + (void) setABScriptWordsDictionary:(NSMutableDictionary *) scriptWordsDictionary {
     abScriptWordsDictionary = scriptWordsDictionary;
 }
@@ -123,6 +132,9 @@ static ABData *ABDataInstance = NULL;
     [ABDice resetLexicon];
     DDLogInfo(@"Reset lexicon!");
 }
+
+
+
 
 
 
@@ -191,6 +203,15 @@ static ABData *ABDataInstance = NULL;
 }
 
 
++ (void) createNewDiceDictionaryFromTxtFile:(NSString *)filename andSaveToAbraDataFileWithKey:(NSString *)key {
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:@"txt"];
+    NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    NSArray *strings = [rawText componentsSeparatedByString:@"\n"];
+    NSDictionary *dict = [ABDice createDiceDictionaryToBeSavedWithStrings:strings];
+    [ABData saveData:dict forKey:key];
+    
+}
 
 
 
@@ -427,14 +448,14 @@ static ABData *ABDataInstance = NULL;
     
     [ABDice updateDiceDictionaryWithStrings:[[NSSet setWithArray:words] allObjects]];
     NSArray *scriptWords = [ABData parseGraftArrayIntoScriptWords:words];
-    [pastGrafts addObject:words];
+    
+    if([ABState getExhibitionMode] == NO) {
+        [pastGraftStrings addObject:text];
+        [pastGrafts addObject:words];
+        [ABData saveGrafts];
+}
     currentGraftWords = scriptWords;
     graftIndex = 0;
-    
-    [pastGrafts addObject:words];
-    [pastGraftStrings addObject:text];
-    
-    [ABData saveGrafts];
     
     NSDate *methodEnd = [NSDate date];
     NSTimeInterval executionTime = [methodEnd timeIntervalSinceDate:methodStart];
@@ -453,10 +474,17 @@ static ABData *ABDataInstance = NULL;
 }
 
 + (ABScriptWord *) getPastGraftWord {
-    if([pastGrafts count] == 0) return [ABData getScriptWord:@"?"];
-    NSArray *past = [pastGrafts objectAtIndex:(arc4random() % [pastGrafts count])];
-    NSString *word = [past objectAtIndex:(arc4random() % [past count])];
-    return [[abScriptWordsDictionary objectForKey:word] copy];
+
+    if([pastGrafts count] > 0) {
+        NSArray *past = [pastGrafts objectAtIndex:(arc4random() % [pastGrafts count])];
+        NSString *word = [past objectAtIndex:(arc4random() % [past count])];
+        return [[abScriptWordsDictionary objectForKey:word] copy];
+    } else if([currentGraftWords count] > 0) {
+        ABScriptWord *w = [currentGraftWords objectAtIndex:(arc4random() % [currentGraftWords count])];
+        return w;
+    } else {
+        return [ABData getScriptWord:@"?"];
+    }
 }
 
 

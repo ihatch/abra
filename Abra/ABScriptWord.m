@@ -114,15 +114,15 @@
 - (void) runChecks {
     if(_hasRunChecks) return;
     _emojiCount = [self emojiCheck];
-    if(_emojiCount > 1 /* || self.emojiCount != [_myCharArray count] */) {
-        [self checkEmojiProperties];
-    }
+//    if(_emojiCount > 1 /* || self.emojiCount != [_myCharArray count] */) {
+//        [self checkEmojiProperties];
+//    }
     _hasRunChecks = YES;
 }
 
-- (void) checkEmojiProperties {
-    _emojiProperties = [ABEmoji getEmojiPropertiesForCharArray:_cachedCharArray ofString:_text];
-}
+//- (void) checkEmojiProperties {
+//    _emojiProperties = [ABEmoji getEmojiPropertiesForCharArray:_cachedCharArray ofString:_text];
+//}
 
 - (int) emojiCheck {
     return [self checkWithRegex:EMOJI_REGEX];

@@ -42,7 +42,7 @@ ABHistory *history;
 NSUserDefaults *defaults;
 
 int tipWelcome, tipGraft, tipSpellMode, tipCadabra;
-BOOL settingAutonomousMutation, settingAutoplay, settingIPhoneDisplayMode, settingIPhoneDisplayModeHasChanged;
+BOOL settingAutonomousMutation, settingAutoplay, settingIPhoneDisplayMode, settingIPhoneDisplayModeHasChanged, settingExhibitionMode;
 NSMutableDictionary *fxStates;
 
 BOOL DEV_PREVENT_TIPS;
@@ -64,6 +64,10 @@ static ABState *ABStateInstance = NULL;
         DEV_PREVENT_TIPS = NO;
 //        [ABState resetTips];
         [ABState initTips];
+        
+        defaults = [NSUserDefaults standardUserDefaults];
+        settingExhibitionMode = (BOOL)[defaults integerForKey:@"exhibition-mode"];
+        NSLog(@"Exhibition mode: %d", settingExhibitionMode);
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(transitionStanza:) name:@"transitionStanza" object:nil];
         history = [ABHistory history];
@@ -525,6 +529,28 @@ static ABState *ABStateInstance = NULL;
     return YES;
 }
 
+
++ (BOOL) getExhibitionMode {
+    return settingExhibitionMode;
+}
++ (void) toggleExhibitionMode {
+    defaults = [NSUserDefaults standardUserDefaults];
+    
+    tipWelcome = (int)[defaults integerForKey:@"tip-welcome"];
+    if(settingExhibitionMode == NO) {
+        settingExhibitionMode = YES;
+        [defaults setInteger:1 forKey:@"exhibition-mode"];
+        [defaults synchronize];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exhibition mode" message:@"Exhibition mode has been turned ON. Abra will not remember grafted words persistently, and 'SHARE' and 'RESET LEXICON' are disabled. To turn off exhibition mode, again press and hold the top bar with three fingers." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        settingExhibitionMode = NO;
+        [defaults setInteger:0 forKey:@"exhibition-mode"];
+        [defaults synchronize];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exhibition mode" message:@"Exhibition mode has been turned OFF. Abra will remember grafted words persistently, and 'SHARE' and 'RESET LEXICON' are enabled." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    }
+}
 
 
 

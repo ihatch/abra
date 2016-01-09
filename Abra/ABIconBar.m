@@ -113,12 +113,29 @@ NSArray *icons;
     [self addGestureRecognizer:longpress];
 
     
+    UILongPressGestureRecognizer *triplepress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(triplePress:)];
+    triplepress.numberOfTouchesRequired = 3;
+    triplepress.minimumPressDuration = 2.00;
+    triplepress.delegate = self;
+    [self addGestureRecognizer:triplepress];
+    
     self.hidden = NO;
 }
 
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return YES;
+}
+
+//- (IBAction) longerpress:(UILongPressGestureRecognizer *)gesture {
+//    if (gesture.state != UIGestureRecognizerStateBegan) return;
+//    
+//}
+
+
+- (IBAction) triplePress:(UILongPressGestureRecognizer *)gesture {
+    if (gesture.state != UIGestureRecognizerStateBegan) return;
+    [ABState toggleExhibitionMode];
 }
 
 
@@ -149,7 +166,7 @@ NSArray *icons;
     if(type == CADABRA_ICON) [mainViewController twinsFlash];
     if(type == SHARE_ICON) [ABState copyAllTextToClipboard];
     if(type == SETTINGS_ICON) [ABCadabra castSpell:@"SHUFFLE"];
-    // if(type == INFO_ICON) [ABCadabra castSpell:@"PAST_GRAFT"];
+//    if(type == INFO_ICON) [ABState toggleExhibitionMode];
 }
 
 
@@ -197,7 +214,12 @@ NSArray *icons;
     
     if(type == SHARE_ICON) {
         [icon flash];
-        [self hideBarThenShare];
+        if([ABState getExhibitionMode] == YES) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Share" message:@"This function has been disabled for exhibition." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+        } else {
+            [self hideBarThenShare];
+        }
         return;
     }
     

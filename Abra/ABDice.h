@@ -12,11 +12,14 @@
 
 + (void) setDiceDictionary:(NSMutableDictionary *)dict;
 + (void) setDiceAdditions:(NSDictionary *)dict;
++ (void) addNonEnglishLanguageDiceDictionary:(NSDictionary *)dict andLangString:(NSString *)langString;
+
 + (void) generateDiceDictionary;
 
 + (NSMutableArray *) diceForKey:(NSString *)text;
-+ (void) updateDiceDictionaryWithStrings:(NSArray *)strings;
 
++ (void) updateDiceDictionaryWithStrings:(NSArray *)strings;
++ (NSDictionary *) createDiceDictionaryToBeSavedWithStrings:(NSArray *)strings;
 + (void) resetLexicon;
 
 @end

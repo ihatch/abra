@@ -70,6 +70,9 @@ typedef NS_ENUM(NSInteger, mutationType) { DICE, RANDOM, GRAFTWORD, EXPLODE, CLO
 + (BOOL) getIPhoneMode;
 + (BOOL) checkForChangedDisplayMode;
 
++ (BOOL) getExhibitionMode;
++ (void) toggleExhibitionMode;
+
 // ---------
 
 + (void) setFx:(NSString *)fx to:(BOOL)value;

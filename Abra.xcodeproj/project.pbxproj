@@ -11,7 +11,6 @@
 		0717AA951B41E43100195527 /* magic_words.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0717AA941B41E43100195527 /* magic_words.txt */; };
 		0718D1DF1B24D96C004EC1D2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0718D1DE1B24D96C004EC1D2 /* Images.xcassets */; };
 		07510C151B46572F00B041A9 /* ABCharSets.m in Sources */ = {isa = PBXBuildFile; fileRef = 07510C141B46572F00B041A9 /* ABCharSets.m */; };
-		07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */; };
 		07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */; };
 		075A1B261B4A1E4500ED6805 /* ABApprentice.m in Sources */ = {isa = PBXBuildFile; fileRef = 075A1B251B4A1E4500ED6805 /* ABApprentice.m */; };
 		075A1B281B4A2DA100ED6805 /* spell_odds.txt in Resources */ = {isa = PBXBuildFile; fileRef = 075A1B271B4A2DA100ED6805 /* spell_odds.txt */; };
@@ -81,6 +80,12 @@
 		07BF3FDB1B25ED7800B1D977 /* ABIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 07BF3FDA1B25ED7800B1D977 /* ABIcon.m */; };
 		07BF3FDE1B25F39100B1D977 /* ABIconBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 07BF3FDD1B25F39100B1D977 /* ABIconBar.m */; };
 		07C9242F19B56E0A00CCFC9C /* dice.txt in Resources */ = {isa = PBXBuildFile; fileRef = 07C9242E19B56E0A00CCFC9C /* dice.txt */; };
+		07CC54F91C418707009976E5 /* words_greek.txt in Resources */ = {isa = PBXBuildFile; fileRef = 07CC54F81C418707009976E5 /* words_greek.txt */; };
+		07CC54FB1C4194E7009976E5 /* abraData-greek in Resources */ = {isa = PBXBuildFile; fileRef = 07CC54FA1C4194E7009976E5 /* abraData-greek */; };
+		07CC55021C41AA90009976E5 /* EmojiHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC54FD1C41AA90009976E5 /* EmojiHelper.m */; };
+		07CC55031C41AA90009976E5 /* MyEmoji.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC54FF1C41AA90009976E5 /* MyEmoji.m */; };
+		07CC55041C41AA90009976E5 /* MyEmojiCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC55011C41AA90009976E5 /* MyEmojiCategory.m */; };
+		07CC55061C41BD9A009976E5 /* Icon-83.5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CC55051C41BD9A009976E5 /* Icon-83.5@2x.png */; };
 		07D1EA011B31E89B00DD0B5F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 07D1EA001B31E89B00DD0B5F /* libsqlite3.dylib */; };
 		07D1EA0A1B38EFDA00DD0B5F /* ABEmoji.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D1EA091B38EFDA00DD0B5F /* ABEmoji.m */; };
 		A1110549E1C24A4CBFD6C0DB /* libPods-Abra.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84407B0D15CE45E5804EAEEE /* libPods-Abra.a */; };
@@ -121,7 +126,6 @@
 		0718D1DE1B24D96C004EC1D2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		07510C131B46572F00B041A9 /* ABCharSets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABCharSets.h; sourceTree = "<group>"; };
 		07510C141B46572F00B041A9 /* ABCharSets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABCharSets.m; sourceTree = "<group>"; };
-		07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "_abraData-coreDiceDictionary"; sourceTree = "<group>"; };
 		07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-coreDiceDictionary"; sourceTree = "<group>"; };
 		075A1B241B4A1E4500ED6805 /* ABApprentice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABApprentice.h; sourceTree = "<group>"; };
 		075A1B251B4A1E4500ED6805 /* ABApprentice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABApprentice.m; sourceTree = "<group>"; };
@@ -206,6 +210,15 @@
 		07BF3FDC1B25F39100B1D977 /* ABIconBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABIconBar.h; sourceTree = "<group>"; };
 		07BF3FDD1B25F39100B1D977 /* ABIconBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABIconBar.m; sourceTree = "<group>"; };
 		07C9242E19B56E0A00CCFC9C /* dice.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dice.txt; sourceTree = "<group>"; };
+		07CC54F81C418707009976E5 /* words_greek.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = words_greek.txt; sourceTree = "<group>"; };
+		07CC54FA1C4194E7009976E5 /* abraData-greek */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-greek"; sourceTree = "<group>"; };
+		07CC54FC1C41AA90009976E5 /* EmojiHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmojiHelper.h; path = ../EmojiHelper.h; sourceTree = "<group>"; };
+		07CC54FD1C41AA90009976E5 /* EmojiHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EmojiHelper.m; path = ../EmojiHelper.m; sourceTree = "<group>"; };
+		07CC54FE1C41AA90009976E5 /* MyEmoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyEmoji.h; path = ../MyEmoji.h; sourceTree = "<group>"; };
+		07CC54FF1C41AA90009976E5 /* MyEmoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyEmoji.m; path = ../MyEmoji.m; sourceTree = "<group>"; };
+		07CC55001C41AA90009976E5 /* MyEmojiCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyEmojiCategory.h; path = ../MyEmojiCategory.h; sourceTree = "<group>"; };
+		07CC55011C41AA90009976E5 /* MyEmojiCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyEmojiCategory.m; path = ../MyEmojiCategory.m; sourceTree = "<group>"; };
+		07CC55051C41BD9A009976E5 /* Icon-83.5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-83.5@2x.png"; sourceTree = "<group>"; };
 		07D1EA001B31E89B00DD0B5F /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		07D1EA081B38EFDA00DD0B5F /* ABEmoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABEmoji.h; sourceTree = "<group>"; };
 		07D1EA091B38EFDA00DD0B5F /* ABEmoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABEmoji.m; sourceTree = "<group>"; };
@@ -289,6 +302,12 @@
 		075B2AEE1A99483300763915 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				07CC54FC1C41AA90009976E5 /* EmojiHelper.h */,
+				07CC54FD1C41AA90009976E5 /* EmojiHelper.m */,
+				07CC54FE1C41AA90009976E5 /* MyEmoji.h */,
+				07CC54FF1C41AA90009976E5 /* MyEmoji.m */,
+				07CC55001C41AA90009976E5 /* MyEmojiCategory.h */,
+				07CC55011C41AA90009976E5 /* MyEmojiCategory.m */,
 				C619F5F6185A55690073DD32 /* ABMatch.h */,
 				C619F5F7185A55690073DD32 /* ABMatch.m */,
 				07A1A7E81A9AE4B60047F7F3 /* emojis.h */,
@@ -303,8 +322,8 @@
 		0763AFC61B4B6C0500701E99 /* etc */ = {
 			isa = PBXGroup;
 			children = (
+				07CC54FA1C4194E7009976E5 /* abraData-greek */,
 				07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */,
-				07597B351B13F25C006F6B5E /* _abraData-coreDiceDictionary */,
 				C604FA0B1850FA5F0076CC96 /* script.txt */,
 				C68B9ED018615C7B007D2BDB /* word_list.txt */,
 				075A1B311B4B32AF00ED6805 /* dice_const.txt */,
@@ -330,6 +349,7 @@
 				07B3397E1B4BA32200D205C6 /* Icon-72@2x.png */,
 				07B3397F1B4BA32200D205C6 /* Icon-76.png */,
 				07B339801B4BA32200D205C6 /* Icon-76@2x.png */,
+				07CC55051C41BD9A009976E5 /* Icon-83.5@2x.png */,
 				07B339811B4BA32200D205C6 /* Icon-120.png */,
 				07B339821B4BA32200D205C6 /* Icon-152.png */,
 				07B339831B4BA32200D205C6 /* Icon-Small-40.png */,
@@ -545,6 +565,7 @@
 		C66636CE187DA6D50046E8DE /* Text Resources */ = {
 			isa = PBXGroup;
 			children = (
+				07CC54F81C418707009976E5 /* words_greek.txt */,
 				0717AA941B41E43100195527 /* magic_words.txt */,
 				075A1B271B4A2DA100ED6805 /* spell_odds.txt */,
 				0763AFC61B4B6C0500701E99 /* etc */,
@@ -700,7 +721,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = abra;
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Ian Hatcher";
 				TargetAttributes = {
 					C6E739F1184BED4600A2A5C3 = {
@@ -741,10 +762,12 @@
 				07B339A61B4BA32200D205C6 /* Icon.png in Resources */,
 				07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */,
 				07B339971B4BA32200D205C6 /* Icon-64.png in Resources */,
+				07CC55061C41BD9A009976E5 /* Icon-83.5@2x.png in Resources */,
 				C68B9ED118615C7B007D2BDB /* word_list.txt in Resources */,
 				07B339941B4BA32200D205C6 /* Icon-60.png in Resources */,
 				07B3399B1B4BA32200D205C6 /* Icon-76@2x.png in Resources */,
 				07B339CB1B4F4BA000D205C6 /* abra_logos_12.png in Resources */,
+				07CC54F91C418707009976E5 /* words_greek.txt in Resources */,
 				C6E73A01184BED4600A2A5C3 /* InfoPlist.strings in Resources */,
 				07A6E6521B42320A00A5231C /* Default.png in Resources */,
 				07B339961B4BA32200D205C6 /* Icon-60@3x.png in Resources */,
@@ -781,7 +804,7 @@
 				07B339A71B4BA32200D205C6 /* Icon@2x.png in Resources */,
 				C604FA0C1850FA5F0076CC96 /* script.txt in Resources */,
 				07B339A41B4BA32200D205C6 /* Icon-Small@2x.png in Resources */,
-				07597B371B13F25C006F6B5E /* _abraData-coreDiceDictionary in Resources */,
+				07CC54FB1C4194E7009976E5 /* abraData-greek in Resources */,
 				07B339A91B4BA32200D205C6 /* iTunesArtwork@2x.png in Resources */,
 				07B3399F1B4BA32200D205C6 /* Icon-Small-40@2x.png in Resources */,
 				075B2AFC1A9ABC4B00763915 /* black_2048x1536.png in Resources */,
@@ -837,6 +860,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07CC55031C41AA90009976E5 /* MyEmoji.m in Sources */,
 				075B2AC71A917D7F00763915 /* ABData.m in Sources */,
 				C63DF2EA18A31861002D1EC4 /* ABGestureArrow.m in Sources */,
 				075A1B2D1B4B140600ED6805 /* ABCore_Data.xcdatamodeld in Sources */,
@@ -848,10 +872,12 @@
 				07B339AC1B4C4A0C00D205C6 /* NSString+ABExtras.m in Sources */,
 				C619F5F8185A55690073DD32 /* ABMatch.m in Sources */,
 				C6F76F8B1851220A00BCFAF3 /* ABLine.m in Sources */,
+				07CC55041C41AA90009976E5 /* MyEmojiCategory.m in Sources */,
 				C6E73A13184BED4600A2A5C3 /* ABMainViewController.m in Sources */,
 				075B2AEA1A9945D200763915 /* ABMutate.m in Sources */,
 				07763B5E1B266CBE0074F28B /* ABModal.m in Sources */,
 				07B7D29A19AECE6A001194FD /* iCarousel.m in Sources */,
+				07CC55021C41AA90009976E5 /* EmojiHelper.m in Sources */,
 				C6591B2A185D1B9E001144FC /* ABState.m in Sources */,
 				077668CA1B3F5D91002EFCE1 /* ABFlow.m in Sources */,
 				075A1B261B4A1E4500ED6805 /* ABApprentice.m in Sources */,
@@ -906,6 +932,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Ian Hatcher (94X5W3RLKG)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -965,6 +992,7 @@
 					"$(inherited)",
 					"/Users/ianhatcher/Documents/obj-c/Abra/Abra",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ihatch.abra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -988,6 +1016,7 @@
 					"$(inherited)",
 					"/Users/ianhatcher/Documents/obj-c/Abra/Abra",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ihatch.abra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";

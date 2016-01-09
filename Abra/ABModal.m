@@ -235,9 +235,13 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 }
 
 - (void)changeReset:(id)sender{
-    if([sender isOn]) {
+    if([sender isOn] && [ABState getExhibitionMode] == NO) {
         [sender setOn:NO];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reset lexicon" message:@"This will erase Abra's memory of all previously grafted text. Are you sure?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+        [alert show];
+    } else {
+        [sender setOn:NO];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reset lexicon" message:@"This function has been disabled for exhibition." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
     }
 }

@@ -13,6 +13,9 @@
 #import "ABData.h"
 #import "NSString+ABExtras.h"
 
+#import "EmojiHelper.h"
+#import "MyEmojiCategory.h"
+
 
 @implementation ABEmoji
 
@@ -22,7 +25,11 @@ NSMutableDictionary *emojiByConcept;
 NSMutableDictionary *emojiToWords;
 NSMutableDictionary *wordsToEmoji;
 
-NSMutableDictionary *stringsWithEmojiProperties;
+NSArray<MyEmojiCategory *> *emojiCategories;
+NSMutableDictionary *emojis;
+NSMutableDictionary *emojisFitzToGeneric;
+NSMutableDictionary *emojisByCategory;
+NSMutableArray *emojisByFitz;
 
 NSArray *allEmoji;
 NSDictionary *colorCycle;
@@ -31,16 +38,6 @@ NSDictionary *colorCycle;
 + (void) initEmoji {
     
     emojiIndex = [NSMutableDictionary dictionary];
-    stringsWithEmojiProperties = [NSMutableDictionary dictionary];
-    
-    allEmoji = [@"😄😃😀😊☺️😉😍😘😚😗😙😜😝😛😳😁😔😌😒😞😣😢😂😭😪😥😰😅😓😩😫😨😱😠😡😤😖😆😋😷😎😴😵😲😟😦😧😈👿😮😬😐😕😯😶😇😏😑👲👳👮👷💂👶👦👧👨👩👴👵👱👼👸😺😸😻😽😼🙀😿😹😾👹👺🙈🙉🙊💀👽💩🔥✨🌟💫💥💢💦💧💤💨👂👀👃👅👄👍👎👌👊✊✌️👋✋👐👆👇👉👈🙌🙏☝️👏💪🚶🏃💃👫👪👬👭💏💑👯🙆🙅💁🙋💆💇💅👰🙎🙍🙇🎩👑👒👟👞👡👠👢👕👔👚👗🎽👖👘👙💼👜👝👛👓🎀🌂💄💛💙💜💚❤️💔💗💓💕💖💞💘💌💋💍💎👤👥💬👣💭🐶🐺🐱🐭🐹🐰🐸🐯🐨🐻🐷🐽🐮🐗🐵🐒🐴🐑🐘🐼🐧🐦🐤🐥🐣🐔🐍🐢🐛🐝🐜🐞🐌🐙🐚🐠🐟🐬🐳🐋🐄🐏🐀🐃🐅🐇🐉🐎🐐🐓🐕🐖🐁🐂🐲🐡🐊🐫🐪🐆🐈🐩🐾💐🌸🌷🍀🌹🌻🌺🍁🍃🍂🌿🌾🍄🌵🌴🌲🌳🌰🌱🌼🌐🌞🌝🌚🌑🌒🌓🌔🌕🌖🌗🌘🌜🌛🌙🌍🌎🌏🌋🌌🌠⭐️☀️⛅️☁️⚡️☔️❄️⛄️🌀🌁🌈🌊🎍💝🎎🎒🎓🎏🎆🎇🎐🎑🎃👻🎅🎄🎁🎋🎉🎊🎈🎌🔮🎥📷📹📼💿📀💽💾💻📱☎️📞📟📠📡📺📻🔊🔉🔈🔇🔔🔕📢📣⏳⌛️⏰⌚️🔓🔒🔏🔐🔑🔎💡🔦🔆🔅🔌🔋🔍🛁🛀🚿🚽🔧🔩🔨🚪🚬💣🔫🔪💊💉💰💴💵💷💶💳💸📲📧📥📤✉️📩📨📯📫📪📬📭📮📦📝📄📃📑📊📈📉📜📋📅📆📇📁📂✂️📌📎✒️✏️📏📐📕📗📘📙📓📔📒📚📖🔖📛🔬🔭📰🎨🎬🎤🎧🎼🎵🎶🎹🎻🎺🎷🎸👾🎮🃏🎴🀄️🎲🎯🏈🏀⚽️⚾️🎾🎱🏉🎳⛳️🚵🚴🏁🏇🏆🎿🏂🏊🏄🎣☕️🍵🍶🍼🍺🍻🍸🍹🍷🍴🍕🍔🍟🍗🍖🍝🍛🍤🍱🍣🍥🍙🍘🍚🍜🍲🍢🍡🍳🍞🍩🍮🍦🍨🍧🎂🍰🍪🍫🍬🍭🍯🍎🍏🍊🍋🍒🍇🍉🍓🍑🍈🍌🍐🍍🍠🍆🍅🌽🏠🏡🏫🏢🏣🏥🏦🏪🏩🏨💒⛪️🏬🏤🌇🌆🏯🏰⛺️🏭🗼🗾🗻🌄🌅🌃🗽🌉🎠🎡⛲️🎢🚢⛵️🚤🚣⚓️🚀✈️💺🚁🚂🚊🚉🚞🚆🚄🚅🚈🚇🚝🚋🚃🚎🚌🚍🚙🚘🚗🚕🚖🚛🚚🚨🚓🚔🚒🚑🚐🚲🚡🚟🚠🚜💈🚏🎫🚦🚥⚠️🚧🔰⛽️🏮🎰♨️🗿🎪🎭📍🚩🇬🇧🇷🇺🇫🇷🇯🇵🇰🇷🇩🇪🇨🇳🇺🇸🇺🇸🇺🇸1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣0️⃣🔟🔢#️⃣🔣⬆️⬇️⬅️➡️🔠🔡🔤↗️↖️↘️↙️↔️↕️🔄◀️▶️🔼🔽↩️↪️ℹ️⏪⏩⏫⏬⤵️⤴️🆗🔀🔁🔂🆕🆙🆒🆓🆖📶🎦🈁🈯️🈳🈵🈴🈲🉐🈹🈺🈶🈚️🚻🚹🚺🚼🚾🚰🚮🅿️♿️🚭🈷🈸🈂Ⓜ️🛂🛄🛅🛃🉑㊙️㊗️🆑🆘🆔🚫🔞📵🚯🚱🚳🚷🚸⛔️✳️❇️❎✅✴️💟🆚📳📴🅰🅱🆎🅾💠➿♻️♈️♉️♊️♋️♌️♍️♎️♏️♐️♑️♒️♓️⛎🔯🏧💹💲💱©®™❌‼️⁉️❗️❓❕❔⭕️🔝🔚🔙🔛🔜🔃🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕖🕗🕘🕙🕚🕡🕢🕣🕤🕥🕦✖️➕➖➗♠️♥️♣️♦️💮💯✔️☑️🔘🔗➰〰〽️🔱◼️◻️◾️◽️▪️▫️🔺🔲🔳⚫️⚪️🔴🔵🔻⬜️⬛️🔶🔷🔸🔹" convertToArray];
-    
-    /*
-     🎭 🇬 🇺 🇫 🇯 🇵 🇺 © ® ™
-     MISSING EMOJI COLOR: ✔➡◻❄⌚⚫▪⛳⬛🎭™✉®↕🅿⌛⛅✒‼㊗©☝♥✖↙⁉
-     ⬅↗▶⬆↪↘⬇⤴ℹ↔◀↩↖⤵
-     */
-    
     
     colorCycle = @{
         @(0): @"RED",
@@ -117,7 +114,6 @@ NSDictionary *colorCycle;
 
     
     
-        // fucked:  🇬🇧🇷🇺🇫🇷🇯🇵🇰🇷🇩🇪🇨🇳🇺🇸🇧🇷🇲🇴🇨🇳🇩🇰🇨🇭🇹🇷🇭🇰🇻🇳🇨🇴🇪🇸🇸🇦
     
     NSDictionary *concepts = @{
         @"FOREST": @"🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🎄🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌱🌱🌱🌱🌱🌱🌱🌱🌱🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🐛🐝🐜🐞🐌🍂🍂🌿🌾🍄🌵🌴🌰🌼🌸🌷🍀🌻🌺🍁🍃",
@@ -150,41 +146,48 @@ NSDictionary *colorCycle;
             [[emojiToWords objectForKey:emoji] addObject:word];
         }
     }
-}
-
-
-
-+ (NSArray *) getEmojiPropertiesForCharArray:(NSArray *)charArray ofString:(NSString *)string {
     
-    NSMutableArray *props = [NSMutableArray array];
-
-    for(NSString *s in charArray) {
-        if([emojiIndex objectForKey:s] == nil) continue;
-        NSMutableDictionary *d = [emojiIndex objectForKey:s];
-        NSArray *a = [d objectForKey:@"color"];
-        if(a != nil && [a count] > 0) {
-            [props addObjectsFromArray:a];
+    emojiCategories = [EmojiHelper getEmoji];
+    emojis = [NSMutableDictionary dictionary];
+    emojisFitzToGeneric = [NSMutableDictionary dictionary];
+    emojisByCategory = [NSMutableDictionary dictionary];
+    emojisByFitz = [NSMutableArray array];
+    emojisByFitz[0] = @"nope";
+    emojisByFitz[1] = [NSMutableArray array];
+    emojisByFitz[2] = [NSMutableArray array];
+    emojisByFitz[3] = [NSMutableArray array];
+    emojisByFitz[4] = [NSMutableArray array];
+    emojisByFitz[5] = [NSMutableArray array];
+    
+    NSMutableArray *all = [NSMutableArray array];
+    
+    for(MyEmojiCategory *cat in emojiCategories) {
+        NSString *catName = cat.name;
+        if(catName == nil) continue;
+        NSMutableArray *catEmojis = [NSMutableArray array];
+        for(MyEmoji *e in cat.emoji) {
+            NSDictionary *eDict = [NSMutableDictionary dictionary];
+            [eDict setValue:catName forKey:@"category"];
+            [eDict setValue:e.variations forKey:@"variations"];
+            [emojis setObject:eDict forKey:e.emojiString];
+            [catEmojis addObject:e.emojiString];
+            [all addObjectsFromArray:e.variations];
+            if([e.variations count] > 1) {
+                for(int i=1; i < [e.variations count]; i ++) {
+                    NSString *fitz = [e.variations objectAtIndex:i];
+                    [emojisByFitz[i] addObject:fitz];
+                    [emojisFitzToGeneric setValue:@{ @"emojiString": e.emojiString, @"fitz": [NSNumber numberWithInteger:i] } forKey:fitz];
+                }
+            }
+            
         }
+        [emojisByCategory setObject:catEmojis forKey:catName];
     }
+    allEmoji = [NSArray arrayWithArray:all];
     
-    [stringsWithEmojiProperties setObject:props forKey:string];
-    return props;
+    
 }
 
-
-//+ (NSString *) complexEmojiMatchWithCharArray:(NSArray *)charArray {
-//    NSMutableDictionary *matched = [NSMutableDictionary dictionary];
-//}
-
-
-//+ (NSString *) emojiPropertiesMatch:(NSString *)string {
-//    NSArray *sProps = [stringsWithEmojiProperties objectForKey:string];
-//    if(sProps != nil) {
-//        NSString *best;
-//        int bestScore;
-//        NSArray *keys = [stringsWithEmojiProperties allKeys];
-//    }
-//}
 
 
 
@@ -215,6 +218,10 @@ NSDictionary *colorCycle;
 
 + (NSString *) getRandomEmojiForKey:(NSString *)key inDictionary:(NSMutableDictionary *)dict  {
     NSArray *emojis = [dict objectForKey:key];
+    return [ABEmoji getRandomEmojiInArray:emojis];
+}
+
++ (NSString *) getRandomEmojiInArray:(NSArray *)emojis  {
     NSString *result = nil;
     int i = 0;
     while(i < 50 && result == nil) {
@@ -239,24 +246,38 @@ NSDictionary *colorCycle;
 
 + (NSString *) getEmojiOfSameColorAsEmoji:(NSString *)emoji {
     NSMutableDictionary *eDict = [emojiIndex objectForKey:emoji];
-    if(eDict == nil) {
-        DDLogError(@"No emoji dict for: %@", emoji);
-        return @"?";
-    }
-    
-    NSArray *colors = [eDict objectForKey:@"color"];
-    if(colors == nil) {
-        DDLogError(@"No colors dict for: %@", emoji);
-        return [ABEmoji getRandomEmojiForKey:@"MISC" inDictionary:emojiByColor];
-    }
+    if(eDict != nil) {
+        
+        NSArray *colors = [eDict objectForKey:@"color"];
+        if(colors == nil) {
+            DDLogError(@"No colors dict for: %@", emoji);
+            return [ABEmoji getRandomEmojiForKey:@"MISC" inDictionary:emojiByColor];
+        }
+        
+        NSString *color = colors[arc4random() % [colors count]];
+        return [ABEmoji getRandomEmojiForKey:color inDictionary:emojiByColor];
 
-    NSString *color = colors[arc4random() % [colors count]];
-    return [ABEmoji getRandomEmojiForKey:color inDictionary:emojiByColor];
+    } else {
+        NSDictionary *generic = [emojisFitzToGeneric objectForKey:emoji];
+        if(generic != nil) {
+            NSInteger *index = [(NSNumber *)[generic objectForKey:@"fitz"] integerValue];
+            NSString *fitz = [ABEmoji getRandomEmojiInArray:[emojisByFitz objectAtIndex:index]];
+            return fitz;
+        }
+        
+        eDict = [emojis objectForKey:emoji];
+        if(eDict == nil) {
+            DDLogError(@"No emoji dict for: %@", emoji);
+            return @"?";
+        }
+        NSString *cat = [eDict valueForKey:@"category"];
+        NSString *ret = [ABEmoji getRandomEmojiForKey:cat inDictionary:emojisByCategory];
+        return ret;
+    }
 }
 
 + (BOOL) isEmoji:(NSString *)charString {
-    BOOL wtf = [allEmoji containsObject:charString];
-    return wtf;
+    return [allEmoji containsObject:charString];
 }
 
 
