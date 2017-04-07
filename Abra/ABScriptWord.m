@@ -5,6 +5,8 @@
 //  Created by Ian Hatcher on 2/7/14.
 //  Copyright (c) 2014 Ian Hatcher. All rights reserved.
 //
+//  Basic object type for Abra script words (virtual words with properties, not visible words on-screen)
+
 
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -114,15 +116,8 @@
 - (void) runChecks {
     if(_hasRunChecks) return;
     _emojiCount = [self emojiCheck];
-//    if(_emojiCount > 1 /* || self.emojiCount != [_myCharArray count] */) {
-//        [self checkEmojiProperties];
-//    }
     _hasRunChecks = YES;
 }
-
-//- (void) checkEmojiProperties {
-//    _emojiProperties = [ABEmoji getEmojiPropertiesForCharArray:_cachedCharArray ofString:_text];
-//}
 
 - (int) emojiCheck {
     return [self checkWithRegex:EMOJI_REGEX];

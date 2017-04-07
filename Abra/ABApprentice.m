@@ -5,6 +5,8 @@
 //  Created by Ian Hatcher on 7/5/15.
 //  Copyright (c) 2015 Ian Hatcher. All rights reserved.
 //
+//  Helper functions for Cadabra effects.
+
 
 #import "ABApprentice.h"
 #import "ABConstants.h"

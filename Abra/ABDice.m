@@ -4,7 +4,8 @@
 //
 //  Created by Ian Hatcher on 1/18/15.
 //
-//
+//  Handles word similarity indices. The name is a reference to Dice coefficient, the starting point for this code.
+
 
 #import "ABDice.h"
 #import "ABData.h"
@@ -47,14 +48,13 @@ NSMutableDictionary *oneWayAdditionsDictionary;
     diceAdditionsDictionary = [NSMutableDictionary dictionaryWithDictionary:dict];
 }
 
-// Won't work for languages that overlap in symbol sets with English...
+// Quick fix to add Russian/Greek support. Won't work for languages that overlap w the English alphabet
 + (void) addNonEnglishLanguageDiceDictionary:(NSDictionary *)dict andLangString:(NSString *)langString {
     DDLogInfo(@"Additional language: %@ - adding %lu entries", langString, (unsigned long)[[dict allKeys] count]);
     [ABDice updateCacheWithLexicon:[dict allKeys]];
     for (NSString *key in dict) {
         [diceDictionary setObject:[dict objectForKey:key] forKey:key];
     }
-//    diceAdditionsDictionary = [NSMutableDictionary dictionaryWithDictionary:dict];
 }
 
 + (void) generateDiceDictionary {

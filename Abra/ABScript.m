@@ -5,6 +5,8 @@
 //  Created by Ian Hatcher on 12/5/13.
 //  Copyright (c) 2013 Ian Hatcher. All rights reserved.
 //
+//  Parses the Abra script into ABScriptWords and stanzas, lines, etc.
+
 
 #import "ABScript.h"
 #import "ABState.h"
@@ -108,7 +110,7 @@ static ABScript *ABScriptInstance = NULL;
                 
                 ABScriptWord *sw = [ABData getScriptWord:text withSourceStanza:i];
                 // Don't check extra properties because we know it's from the original script.
-                // If sometime later I modify this to allow importing other texts, I need to checkProperties here.
+                // If sometime later this is changed to allow importing other texts, I need to checkProperties here.
                 // TODO: revamp this shit and standardize w/ how graphs are processed
 
                 if(connectNextWord) {

@@ -5,6 +5,7 @@
 //  Created by Ian Hatcher on 2/21/15.
 //  Copyright (c) 2015 Ian Hatcher. All rights reserved.
 //
+//  Word mutation behaviors.
 
 
 #import "ABMutate.h"

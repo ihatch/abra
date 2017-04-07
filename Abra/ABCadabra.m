@@ -5,6 +5,8 @@
 //  Created by Ian Hatcher on 6/9/15.
 //  Copyright (c) 2015 Ian Hatcher. All rights reserved.
 //
+//  Cadabra effects handling.
+
 
 #import "ABCadabra.h"
 #import "ABConstants.h"

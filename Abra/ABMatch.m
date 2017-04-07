@@ -5,6 +5,7 @@
 //  Created by Ian Hatcher on 12/12/13.
 //  Copyright (c) 2013 Ian Hatcher. All rights reserved.
 //
+//  Determines which words in lines to keep intact, and where, when changing to a new stanza
 
 #import "ABMatch.h"
 #import "ABScriptWord.h"

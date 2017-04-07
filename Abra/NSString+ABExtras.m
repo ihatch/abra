@@ -5,6 +5,8 @@
 //  Created by Ian Hatcher on 7/7/15.
 //  Copyright (c) 2015 Ian Hatcher. All rights reserved.
 //
+//  Utility methods for Abra strings
+
 
 #import "NSString+ABExtras.h"
 

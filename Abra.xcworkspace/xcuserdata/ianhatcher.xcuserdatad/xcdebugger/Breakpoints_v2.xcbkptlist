@@ -26,7 +26,7 @@
             startingLineNumber = "132"
             endingLineNumber = "132"
             landmarkName = "+progressHueColorWithOffset:"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -234,7 +234,7 @@
             startingLineNumber = "27"
             endingLineNumber = "27"
             landmarkName = "-initWithText:sourceStanza:inFamily:isGrafted:"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -250,7 +250,7 @@
             startingLineNumber = "99"
             endingLineNumber = "99"
             landmarkName = "-addRightSisters:"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

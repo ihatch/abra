@@ -5,6 +5,8 @@
 //  Created by Ian Hatcher on 1/18/15.
 //  Copyright (c) 2015 Ian Hatcher. All rights reserved.
 //
+//  Handles words saved into the lexicon, etc.
+
 
 #import "ABData.h"
 #import "ABConstants.h"
