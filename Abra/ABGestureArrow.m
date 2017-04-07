@@ -21,11 +21,12 @@
 
 - (id) initWithType:(NSString *)type {
     
-    CGRect frame;
+    CGFloat yOffset = [ABUI scaleYWithIphone:38 ipad:58];
+
+    CGRect frame = CGRectMake(kScreenWidth - 52, (kScreenHeight / 2) - yOffset, 50, 50);
     NSString *text;
     fontSize = [ABUI abraFlowersFontSize];
 
-    CGFloat yOffset = [ABUI scaleYWithIphone:38 ipad:58];
     
     if([type isEqualToString:@"forward"]) {
         frame = CGRectMake(kScreenWidth - 52, (kScreenHeight / 2) - yOffset, 50, 50);

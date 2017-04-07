@@ -33,7 +33,7 @@
 
 @implementation ABMainViewController
 
-NSMutableArray *ABLines;
+extern NSMutableArray *ABLines;
 ABGestureArrow *feedbackForward, *feedbackBackward, *feedbackReset;
 ABIconBar *iconBar;
 ABBlackCurtain *graftCurtain, *settingsCurtain, *infoCurtain, *tipCurtain;

@@ -117,7 +117,7 @@ NSDictionary *colorCycle;
     
     NSDictionary *concepts = @{
         @"FOREST": @"🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🎄🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌱🌱🌱🌱🌱🌱🌱🌱🌱🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🐛🐝🐜🐞🐌🍂🍂🌿🌾🍄🌵🌴🌰🌼🌸🌷🍀🌻🌺🍁🍃",
-        @"CHRIS": @"🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🏊🏊🏊🏊🏊🏊🏊🏊🏊🚣💧💧💧💧💧💧💧💦💙☔🌀🐳🔷🔷🔷🔷🔹🔹🔹🔹🌴🌴🌴🌴🌴🐠🐠🐠🐠👙🚿🚰😘",
+        @"CHRIS": @"🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🐬🏊🏊🏊🏊🏊🏊🏊🏊🏊🚣💧💧💧💧💧💧💧💦💙☔🌀🐳🔷🔷🔷🔷🔹🔹🔹🔹🌴🌴🌴🌴🌴🐠🐠🐠🐠👙🚿🚰😘😘😘",
         @"ANIMALS": @"🐶🐺🐱🐭🐹🐰🐸🐯🐨🐻🐷🐽🐮🐗🐵🐒🐴🐑🐘🐼🐧🐦🐤🐥🐣🐔🐍🐢🐛🐝🐜🐞🐌🐙🐚🐠🐟🐬🐳🐋🐄🐏🐀🐃🐅🐇🐉🐎🐐🐓🐕🐖🐁🐂🐲🐡🐊🐫🐪🐆🐈🐩",
         @"PHOTOS": @"🌇🌆🏯🏰⛺️🏭🗼🗾🗻🌄🌅🌃🗽🌉🎠🎡⛲️🎢🚢",
         @"FRUIT": @"🍹🍎🍏🍊🍋🍒🍒🍇🍉🍓🍑🍈🍌🍐🍍",
@@ -260,7 +260,7 @@ NSDictionary *colorCycle;
     } else {
         NSDictionary *generic = [emojisFitzToGeneric objectForKey:emoji];
         if(generic != nil) {
-            NSInteger *index = [(NSNumber *)[generic objectForKey:@"fitz"] integerValue];
+            NSInteger index = [(NSNumber *)[generic objectForKey:@"fitz"] integerValue];
             NSString *fitz = [ABEmoji getRandomEmojiInArray:[emojisByFitz objectAtIndex:index]];
             return fitz;
         }

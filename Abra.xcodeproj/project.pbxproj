@@ -7,16 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0717AA931B40A8CE00195527 /* ABHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0717AA921B40A8CE00195527 /* ABHistory.m */; };
 		0717AA951B41E43100195527 /* magic_words.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0717AA941B41E43100195527 /* magic_words.txt */; };
 		0718D1DF1B24D96C004EC1D2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0718D1DE1B24D96C004EC1D2 /* Images.xcassets */; };
-		07510C151B46572F00B041A9 /* ABCharSets.m in Sources */ = {isa = PBXBuildFile; fileRef = 07510C141B46572F00B041A9 /* ABCharSets.m */; };
 		07597B3A1B1408BF006F6B5E /* abraData-coreDiceDictionary in Resources */ = {isa = PBXBuildFile; fileRef = 07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */; };
 		075A1B261B4A1E4500ED6805 /* ABApprentice.m in Sources */ = {isa = PBXBuildFile; fileRef = 075A1B251B4A1E4500ED6805 /* ABApprentice.m */; };
 		075A1B281B4A2DA100ED6805 /* spell_odds.txt in Resources */ = {isa = PBXBuildFile; fileRef = 075A1B271B4A2DA100ED6805 /* spell_odds.txt */; };
 		075A1B2A1B4B13CD00ED6805 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 075A1B291B4B13CD00ED6805 /* CoreData.framework */; };
 		075A1B2D1B4B140600ED6805 /* ABCore_Data.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 075A1B2B1B4B140600ED6805 /* ABCore_Data.xcdatamodeld */; };
-		075A1B301B4B1F0000ED6805 /* ABDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 075A1B2F1B4B1F0000ED6805 /* ABDB.m */; };
 		075A1B321B4B32AF00ED6805 /* dice_const.txt in Resources */ = {isa = PBXBuildFile; fileRef = 075A1B311B4B32AF00ED6805 /* dice_const.txt */; };
 		075B2AC71A917D7F00763915 /* ABData.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AC51A917D7F00763915 /* ABData.m */; };
 		075B2AC81A917D7F00763915 /* ABDice.m in Sources */ = {isa = PBXBuildFile; fileRef = 075B2AC61A917D7F00763915 /* ABDice.m */; };
@@ -120,20 +117,14 @@
 
 /* Begin PBXFileReference section */
 		03D01643C5EB0DC7B45A27D7 /* Pods-Abra.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abra.release.xcconfig"; path = "Pods/Target Support Files/Pods-Abra/Pods-Abra.release.xcconfig"; sourceTree = "<group>"; };
-		0717AA911B40A8CE00195527 /* ABHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABHistory.h; sourceTree = "<group>"; };
-		0717AA921B40A8CE00195527 /* ABHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABHistory.m; sourceTree = "<group>"; };
 		0717AA941B41E43100195527 /* magic_words.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = magic_words.txt; sourceTree = "<group>"; };
 		0718D1DE1B24D96C004EC1D2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		07510C131B46572F00B041A9 /* ABCharSets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABCharSets.h; sourceTree = "<group>"; };
-		07510C141B46572F00B041A9 /* ABCharSets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABCharSets.m; sourceTree = "<group>"; };
 		07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-coreDiceDictionary"; sourceTree = "<group>"; };
 		075A1B241B4A1E4500ED6805 /* ABApprentice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABApprentice.h; sourceTree = "<group>"; };
 		075A1B251B4A1E4500ED6805 /* ABApprentice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABApprentice.m; sourceTree = "<group>"; };
 		075A1B271B4A2DA100ED6805 /* spell_odds.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = spell_odds.txt; sourceTree = "<group>"; };
 		075A1B291B4B13CD00ED6805 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		075A1B2C1B4B140600ED6805 /* ABCore_Data.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ABCore_Data.xcdatamodel; sourceTree = "<group>"; };
-		075A1B2E1B4B1F0000ED6805 /* ABDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABDB.h; sourceTree = "<group>"; };
-		075A1B2F1B4B1F0000ED6805 /* ABDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABDB.m; sourceTree = "<group>"; };
 		075A1B311B4B32AF00ED6805 /* dice_const.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dice_const.txt; sourceTree = "<group>"; };
 		075B2AC41A917D7F00763915 /* ABData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABData.h; sourceTree = "<group>"; };
 		075B2AC51A917D7F00763915 /* ABData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABData.m; sourceTree = "<group>"; };
@@ -416,17 +407,6 @@
 			name = Buttons;
 			sourceTree = "<group>";
 		};
-		07B339731B4B9ABB00D205C6 /* TODO */ = {
-			isa = PBXGroup;
-			children = (
-				075A1B2E1B4B1F0000ED6805 /* ABDB.h */,
-				075A1B2F1B4B1F0000ED6805 /* ABDB.m */,
-				07510C131B46572F00B041A9 /* ABCharSets.h */,
-				07510C141B46572F00B041A9 /* ABCharSets.m */,
-			);
-			name = TODO;
-			sourceTree = "<group>";
-		};
 		07B339B01B4C673C00D205C6 /* Active */ = {
 			isa = PBXGroup;
 			children = (
@@ -454,7 +434,6 @@
 				C60EB08818A5E9340090BBEB /* ABScriptWord.h */,
 				C60EB08918A5E9340090BBEB /* ABScriptWord.m */,
 				075B2AEE1A99483300763915 /* Helpers */,
-				07B339731B4B9ABB00D205C6 /* TODO */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -530,8 +509,6 @@
 				C6591B29185D1B9E001144FC /* ABState.m */,
 				C6591B2B185D258F001144FC /* ABConstants.h */,
 				C6591B2C185D258F001144FC /* ABConstants.m */,
-				0717AA911B40A8CE00195527 /* ABHistory.h */,
-				0717AA921B40A8CE00195527 /* ABHistory.m */,
 				C6A9D9DD187C5FBD0087F956 /* ABClock.h */,
 				C6A9D9DE187C5FBD0087F956 /* ABClock.m */,
 			);
@@ -721,7 +698,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = abra;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Ian Hatcher";
 				TargetAttributes = {
 					C6E739F1184BED4600A2A5C3 = {
@@ -881,10 +858,7 @@
 				C6591B2A185D1B9E001144FC /* ABState.m in Sources */,
 				077668CA1B3F5D91002EFCE1 /* ABFlow.m in Sources */,
 				075A1B261B4A1E4500ED6805 /* ABApprentice.m in Sources */,
-				07510C151B46572F00B041A9 /* ABCharSets.m in Sources */,
 				C6E73A1E184BFA7400A2A5C3 /* ABWord.m in Sources */,
-				075A1B301B4B1F0000ED6805 /* ABDB.m in Sources */,
-				0717AA931B40A8CE00195527 /* ABHistory.m in Sources */,
 				C60EB08A18A5E9340090BBEB /* ABScriptWord.m in Sources */,
 				C6A9D9DF187C5FBD0087F956 /* ABClock.m in Sources */,
 				07BF3FDB1B25ED7800B1D977 /* ABIcon.m in Sources */,
@@ -927,24 +901,36 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Ian Hatcher (94X5W3RLKG)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -958,16 +944,28 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Ian Hatcher (94X5W3RLKG)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;

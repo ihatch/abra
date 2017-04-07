@@ -316,11 +316,6 @@ static ABData *ABDataInstance = NULL;
     allPastGraftTerms = [NSMutableArray array];
 
     for(NSString *graft in grafts) {
-
-        // IMPLEMENT FOR NON-ENGLISH LANGUAGE INPUT === TODO
-        // NSMutableArray *words = [NSMutableArray arrayWithArray:graft.arrayWithWordTokenize];
-        // Also: NSScanner could help
-        // https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Strings/Articles/Scanners.html
         
         NSMutableArray *words = [NSMutableArray arrayWithArray:[graft componentsSeparatedByString:@" "]];
         [words removeObject:@" "];

@@ -17,7 +17,6 @@
 #import "ABLine.h"
 #import "ABEmoji.h"
 #import "ABScript.h"
-#import "ABHistory.h"
 #import "ABApprentice.h"
 #import "NSString+ABExtras.h"
 
@@ -33,7 +32,6 @@ typedef NS_ENUM(NSInteger, areaType) {
 
 NSArray *ABLines, *stanzaLines;
 NSMutableArray *stringLines, *allStrings;
-ABHistory *history;
 ABApprentice *apprentice;
 
 
@@ -48,10 +46,7 @@ ABApprentice *apprentice;
 + (void) castSpell:(NSString *)spell magicWord:(NSString *)magicWord {
     
     if(apprentice == nil) apprentice = [[ABApprentice alloc] init];
-    if(history == nil) history = [ABHistory history];
     
-    [history record:MAGIC line:-1 index:-1];
-
     ABLines = [ABState getLines];
     stanzaLines = [ABState getCurrentScriptWordLines];
     stringLines = [NSMutableArray array];

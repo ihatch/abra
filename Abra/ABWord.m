@@ -153,7 +153,7 @@
     if(self.hasAnimatedIn == NO) return;
     CGFloat prevAlpha = self.alpha;
     [UIView animateWithDuration:0.8 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        self.alpha = 0.5;
+        self.alpha = 0.34;
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.8 delay:0.9 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
             self.alpha = prevAlpha;
@@ -199,7 +199,7 @@
 
 
 
-// TODO ?
+
 - (void) quickHide {
     self.alpha = 0;
 }
@@ -289,17 +289,6 @@
 }
 
 
-
-
-// TODO ?
-- (void) mirror {
-    if(self.isErased) return;
-    CGFloat scale = self.isMirrored ? 1.0 : -1.0;
-    self.isMirrored = !self.isMirrored;
-    [UIView transitionWithView:self duration:1.0f options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationCurveEaseInOut animations:^{
-        self.transform = CGAffineTransformMakeScale(1, scale);
-    } completion:nil];
-}
 
 
 

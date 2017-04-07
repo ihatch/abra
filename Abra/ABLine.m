@@ -15,12 +15,10 @@
 #import "ABMutate.h"
 #import "ABClock.h"
 #import "ABUI.h"
-#import "ABHistory.h"
 #import "ABCadabra.h"
 
 @implementation ABLine {
     ABMatch *matcher;
-    ABHistory *history;
 }
 
 
@@ -41,7 +39,6 @@
         [self setFrame:CGRectMake(0, y, kScreenWidth, lineHeight)];
         
         matcher = [[ABMatch alloc] init];
-        history = [ABHistory history];
   
         // For position testing
         // self.backgroundColor = [UIColor colorWithHue:0.2 saturation:0.3 brightness:0.4 alpha:0.3];
@@ -436,7 +433,6 @@
     
     if(liveUser) {
         [ABState incrementUserActions];
-        [history record:mode line:self.lineNumber index:index];
     }
 
     if(mode == ERASE) return; // No update for erasures

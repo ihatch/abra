@@ -17,12 +17,11 @@
 #import "ABMutate.h"
 #import "ABData.h"
 #import "ABCadabra.h"
-#import "ABHistory.h"
 
 @implementation ABState
 
 NSArray *currentScriptWordLines;
-NSMutableArray *ABLines;
+extern NSMutableArray *ABLines;
 
 BOOL isInitialized, isAnimating, preventGestures;
 int currentStanza;
@@ -38,7 +37,6 @@ CGFloat mutationLevel;
 int userActionsOnThisStanza;
 int autoMutationsOnThisStanza;
 
-ABHistory *history;
 NSUserDefaults *defaults;
 
 int tipWelcome, tipGraft, tipSpellMode, tipCadabra;
@@ -70,7 +68,6 @@ static ABState *ABStateInstance = NULL;
         NSLog(@"Exhibition mode: %d", settingExhibitionMode);
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(transitionStanza:) name:@"transitionStanza" object:nil];
-        history = [ABHistory history];
         
         [ABState initSettings];
         

@@ -17,7 +17,7 @@
 
 @implementation ABIconBar
 
-ABMainViewController *mainViewController;
+extern ABMainViewController *mainViewController;
 PECropViewController *cropViewController;
 
 CGFloat barWidth, barHeight;

@@ -48,24 +48,24 @@
     MyEmojiCategory *myEmojiCategory = [MyEmojiCategory new];
     myEmojiCategory.name = displayName;
     
-    // The flags category is a bit special, we have to compute the flags and populate the array ourselves
-    if ([displayName isEqualToString:@"Flags"]) {
-      
-      // flagEmoji contains the emoji itself
-      NSArray *flagEmoji = [UIKeyboardEmojiCategory computeEmojiFlagsSortedByLanguage];
-      NSMutableArray *arrFlagEmoji = [NSMutableArray new];
-      
-      // Loop over every flag & wrap them in a dict so it conforms to the other categories
-      for (NSString *flag in flagEmoji) {
-        [arrFlagEmoji addObject:@{
-                                  @"emojiString": flag,
-                                  @"variantMask": @0
-                                  }];
-      }
-      
-      // Set all the emoji on the flag category
-      [category setEmoji:arrFlagEmoji];
-    }
+//    // The flags category is a bit special, we have to compute the flags and populate the array ourselves
+//    if ([displayName isEqualToString:@"Flags"]) {
+//      
+//      // flagEmoji contains the emoji itself
+//      NSArray *flagEmoji = [UIKeyboardEmojiCategory computeEmojiFlagsSortedByLanguage];
+//      NSMutableArray *arrFlagEmoji = [NSMutableArray new];
+//      
+//      // Loop over every flag & wrap them in a dict so it conforms to the other categories
+//      for (NSString *flag in flagEmoji) {
+//        [arrFlagEmoji addObject:@{
+//                                  @"emojiString": flag,
+//                                  @"variantMask": @0
+//                                  }];
+//      }
+//      
+//      // Set all the emoji on the flag category
+//      [category setEmoji:arrFlagEmoji];
+//    }
     
     // Let's create an array of Emoji for this category
     NSMutableArray *categoryEmoji = [NSMutableArray array];
