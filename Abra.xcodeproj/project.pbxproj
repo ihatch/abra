@@ -711,6 +711,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = C6E739E7184BED4600A2A5C3;
@@ -985,7 +986,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Abra/Abra-Prefix.pch";
 				INFOPLIST_FILE = "Abra/Abra-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ianhatcher/Documents/obj-c/Abra/Abra",
@@ -1009,7 +1010,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Abra/Abra-Prefix.pch";
 				INFOPLIST_FILE = "Abra/Abra-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ianhatcher/Documents/obj-c/Abra/Abra",
