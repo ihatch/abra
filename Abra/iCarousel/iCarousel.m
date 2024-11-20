@@ -40,7 +40,7 @@
 #endif
 
 
-#pragma GCC diagnostic ignored "-Wreceiver-is-weak"
+//#pragma GCC diagnostic ignored "-Wreceiver-is-weak"
 #pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
 #pragma GCC diagnostic ignored "-Wobjc-missing-property-synthesis"
 #pragma GCC diagnostic ignored "-Wdirect-ivar-access"
@@ -1505,26 +1505,54 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         
 #ifdef ICAROUSEL_IOS
         
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.1];
-        [UIView setAnimationDelegate:itemView.superview];
-        [UIView setAnimationDidStopSelector:@selector(removeFromSuperview)];
-        [self performSelector:@selector(queueItemView:) withObject:itemView afterDelay:0.1];
-        itemView.superview.layer.opacity = 0.0;
-        [UIView commitAnimations];
+        // First animation
+        [UIView animateWithDuration:0.1
+                         animations:^{
+                             // Animate the opacity of the item's superview
+                             itemView.superview.layer.opacity = 0.0;
+                         }
+                         completion:^(BOOL finished) {
+                             if (finished) {
+                                 // Remove the item's superview after animation completes
+                                 [itemView.superview removeFromSuperview];
+                                 // Call queueItemView: after a delay
+                                 [self performSelector:@selector(queueItemView:) withObject:itemView afterDelay:0.1];
+                             }
+                         }];
+
+        // Second animation
+        [UIView animateWithDuration:INSERT_DURATION
+                              delay:0.1
+                            options:0
+                         animations:^{
+                             // Perform animations (e.g., remove the view at index)
+                             [self removeViewAtIndex:index];
+                             
+                             // Update carousel state
+                             self->_numberOfItems--;
+                             self->_wrapEnabled = !![self valueForOption:iCarouselOptionWrap withDefault:self->_wrapEnabled];
+                             [self updateNumberOfVisibleItems];
+                             
+                             // Adjust scroll offset
+                             self->_scrollOffset = self.currentItemIndex;
+                             
+                             // Trigger any necessary UI updates
+                             [self didScroll];
+                         }
+                         completion:^(BOOL finished) {
+                             if (finished) {
+                                 // Perform depth sorting after animation completes
+                                 [self depthSortViews];
+                             }
+                         }];
         
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDelay:0.1];
-        [UIView setAnimationDuration:INSERT_DURATION];
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDidStopSelector:@selector(depthSortViews)];
-        [self removeViewAtIndex:index];
-        _numberOfItems --;
-        _wrapEnabled = !![self valueForOption:iCarouselOptionWrap withDefault:_wrapEnabled];
-        [self updateNumberOfVisibleItems];
-        _scrollOffset = self.currentItemIndex;
-        [self didScroll];
-        [UIView commitAnimations];
+//        [self removeViewAtIndex:index];
+//        _numberOfItems --;
+//        _wrapEnabled = !![self valueForOption:iCarouselOptionWrap withDefault:_wrapEnabled];
+//        [self updateNumberOfVisibleItems];
+//        _scrollOffset = self.currentItemIndex;
+//        [self didScroll];
+//        [UIView commitAnimations];
         
 #else
 		[NSAnimationContext beginGrouping];
@@ -1588,13 +1616,25 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 #ifdef ICAROUSEL_IOS
         
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:INSERT_DURATION];
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDidStopSelector:@selector(didScroll)];
-        [self transformItemViews];
-        [UIView commitAnimations];
+//        [UIView beginAnimations:nil context:nil];
+//        [UIView setAnimationDuration:INSERT_DURATION];
+//        [UIView setAnimationDelegate:self];
+//        [UIView setAnimationDidStopSelector:@selector(didScroll)];
+//        [self transformItemViews];
+//        [UIView commitAnimations];
+
         
+        [UIView animateWithDuration:INSERT_DURATION
+                         animations:^{
+                             // Perform the transform animation
+                             [self transformItemViews];
+                         }
+                         completion:^(BOOL finished) {
+                             if (finished) {
+                                 // Call didScroll after the animation completes
+                                 [self didScroll];
+                             }
+                         }];
 #else
 		[NSAnimationContext beginGrouping];
 		[[NSAnimationContext currentContext] setAllowsImplicitAnimation:YES];

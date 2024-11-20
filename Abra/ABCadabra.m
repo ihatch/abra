@@ -145,7 +145,7 @@ ABApprentice *apprentice;
 
     
     
-    DDLogInfo(@"spell: %@", spell);
+    NSLog(@"spell: %@", spell);
     
     if([spell isEqualToString:@"CAROUSEL_RANDOM_SCROLL"]) [ABCadabra carouselRandomScroll];
     if([spell isEqualToString:@"PRUNE_FIRST_LAST"]) [ABCadabra pruneInterior];
@@ -304,7 +304,7 @@ ABApprentice *apprentice;
         int i = 0;
         for(ABWord *w in line.lineWords) {
             ABScriptWord *sw = [line.lineScriptWords objectAtIndex:i];
-            DDLogInfo(@"%@ %@", [[sw charArray] objectAtIndex:0], sw.text);
+            NSLog(@"%@ %@", [[sw charArray] objectAtIndex:0], sw.text);
             if([[[sw charArray] objectAtIndex:0] isEqualToString:letter]) {
                 //
             } else {
@@ -319,7 +319,7 @@ ABApprentice *apprentice;
 
 + (NSMutableArray *) applySpellFx:(NSString *)spellFx toLine:(NSArray *)line withMap:(NSArray *)map {
     
-    if([map count] != [line count]) DDLogError(@"count mismatch!");
+    if([map count] != [line count]) NSLog(@"count mismatch!");
     NSMutableArray *newLine = [NSMutableArray array];
     
     ABScriptWord *nsw = nil;
@@ -361,7 +361,7 @@ ABApprentice *apprentice;
                 NSString *emoji = [ABEmoji getEmojiForStanza:stanza];
                 if(!emoji) {
                     emoji = @"?";
-                    DDLogDebug(@"SPELL STANZA EMOJI FAILED FOR STANZA: %d", stanza);
+                    NSLog(@"SPELL STANZA EMOJI FAILED FOR STANZA: %d", stanza);
                 }
                 newSWs = @[[ABData getScriptWordAndRunChecks:emoji]];
             }
@@ -754,7 +754,7 @@ ABApprentice *apprentice;
                 for(NSString *str in array) {
                     if([ABEmoji isEmoji:str]) {
                         NSString *replacement = [ABEmoji getEmojiForStanza:col];
-                        DDLogInfo(@"%i %@", col, replacement);
+                        NSLog(@"%i %@", col, replacement);
                         [newText addObject:replacement];
                         replacements ++;
                     } else {
@@ -811,7 +811,7 @@ ABApprentice *apprentice;
                 for(NSString *str in array) {
                     if([ABEmoji isEmoji:str]) {
                         NSString *replacement = [ABEmoji getEmojiForStanza:col];
-                        DDLogInfo(@"%i %@", col, replacement);
+                        NSLog(@"%i %@", col, replacement);
                         [newText addObject:replacement];
                         replacements ++;
                     } else {

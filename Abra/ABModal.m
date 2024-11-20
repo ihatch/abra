@@ -237,22 +237,58 @@ UIView *infoNav, *infoMain, *mainView, *infoTitlesView;
 - (void)changeReset:(id)sender{
     if([sender isOn] && [ABState getExhibitionMode] == NO) {
         [sender setOn:NO];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reset lexicon" message:@"This will erase Abra's memory of all previously grafted text. Are you sure?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-        [alert show];
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Reset lexicon"
+                                                                                  message:@"This will erase Abra's memory of all previously grafted text. Are you sure?"
+                                                                           preferredStyle:UIAlertControllerStyleAlert];
+
+        // Add the "No" (Cancel) action
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"No"
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:nil];
+
+        // Add the "Yes" action
+        UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"Yes"
+                                                            style:UIAlertActionStyleDestructive
+                                                          handler:^(UIAlertAction *action) {
+            // Handle the "Yes" action
+            [ABData resetLexicon];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@""
+                                                                                      message:@"“our birth is but a sleep and a forgetting...” ―wordsworth"
+                                                                               preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [alertController addAction:okAction];
+            [mainViewController presentViewController:alertController animated:YES completion:nil];
+        }];
+
+        // Add the actions to the alert controller
+        [alertController addAction:cancelAction];
+        [alertController addAction:yesAction];
+
+        // Present the alert controller
+        [mainViewController presentViewController:alertController animated:YES completion:nil];
+        
+        
+        
     } else {
         [sender setOn:NO];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Reset lexicon" message:@"This function has been disabled for exhibition." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
+
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Reset lexicon"
+                                                                                  message:@"This function has been disabled for exhibition."
+                                                                           preferredStyle:UIAlertControllerStyleAlert];
+
+        // Add the "OK" action
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:nil];
+
+        // Add the action to the alert controller
+        [alertController addAction:okAction];
+
+        // Present the alert controller
+        [mainViewController presentViewController:alertController animated:YES completion:nil];
     }
 }
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(buttonIndex == 1) {
-        [ABData resetLexicon];
-        [[[UIAlertView alloc] initWithTitle:@"" message:@"“our birth is but a sleep and a forgetting...” ―wordsworth" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-    }
-}
-
 
 
 

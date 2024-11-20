@@ -39,7 +39,7 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 
 
 + (void) setDiceAdditions:(NSDictionary *)dict {
-    DDLogInfo(@"Dice additions: adding %lu entries", (unsigned long)[[dict allKeys] count]);
+    NSLog(@"Dice additions: adding %lu entries", (unsigned long)[[dict allKeys] count]);
     diceAdditionsDictionary = [NSMutableDictionary dictionary];
     [ABDice updateCacheWithLexicon:[dict allKeys]];
     for (NSString *key in dict) {
@@ -50,7 +50,7 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 
 // Quick fix to add Russian/Greek support. Won't work for languages that overlap w the English alphabet
 + (void) addNonEnglishLanguageDiceDictionary:(NSDictionary *)dict andLangString:(NSString *)langString {
-    DDLogInfo(@"Additional language: %@ - adding %lu entries", langString, (unsigned long)[[dict allKeys] count]);
+    NSLog(@"Additional language: %@ - adding %lu entries", langString, (unsigned long)[[dict allKeys] count]);
     [ABDice updateCacheWithLexicon:[dict allKeys]];
     for (NSString *key in dict) {
         [diceDictionary setObject:[dict objectForKey:key] forKey:key];
@@ -58,9 +58,9 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 }
 
 + (void) generateDiceDictionary {
-    DDLogInfo(@"%@", @"Dice dictionary: generating ...");
+    NSLog(@"%@", @"Dice dictionary: generating ...");
     diceDictionary = [NSMutableDictionary dictionaryWithDictionary:[ABDice topCoreMatchesForLexicon:[ABData loadWordList]]];
-    DDLogInfo(@"%@", @"Dice dictionary: done generating.");
+    NSLog(@"%@", @"Dice dictionary: done generating.");
     [ABDice loadErrataAndAddToDictionary];
 }
 
@@ -80,23 +80,23 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 }
 
 + (void) loadErrataAndAddToDictionary {
-    DDLogInfo(@"%@", @"Dice errata: loading ...");
+    NSLog(@"%@", @"Dice errata: loading ...");
     NSString *path = [[NSBundle mainBundle] pathForResource:@"dice_errata" ofType:@"txt"];
     NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     NSArray *entries = [rawText componentsSeparatedByString:@"\n"];
     [ABDice addEntries:entries toDictionary:diceDictionary];
-    DDLogInfo(@"%@", @"Dice errata: done.");
+    NSLog(@"%@", @"Dice errata: done.");
 }
 
 
 + (void) loadConstWordsAndAddToDictionary {
     oneWayAdditionsDictionary = [NSMutableDictionary dictionary];
-    DDLogInfo(@"%@", @"Dice const words: loading ...");
+    NSLog(@"%@", @"Dice const words: loading ...");
     NSString *path = [[NSBundle mainBundle] pathForResource:@"dice_const" ofType:@"txt"];
     NSString *rawText = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     NSArray *entries = [rawText componentsSeparatedByString:@"\n"];
     [ABDice addEntries:entries toDictionary:oneWayAdditionsDictionary];
-    DDLogInfo(@"%@", @"Dice const words: done.");
+    NSLog(@"%@", @"Dice const words: done.");
 }
 
 
@@ -225,7 +225,7 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 
 + (NSDictionary *) topCoreMatchesForLexicon:(NSArray *)lexicon {
     
-    DDLogInfo(@"Core dice matches: computing ...");
+    NSLog(@"Core dice matches: computing ...");
     NSMutableDictionary *tops = [NSMutableDictionary dictionary];
     [ABDice initCacheWithLexicon:lexicon];
     
@@ -233,10 +233,10 @@ NSMutableDictionary *oneWayAdditionsDictionary;
         if([term isEqualToString:@""]) continue;
         NSArray *topterms = [self topMatchesForTerm:term inLexicon:lexicon];
         [tops setObject:topterms forKey:term];
-        DDLogInfo(@"----- %@", term);
+        NSLog(@"----- %@", term);
     }
     
-    DDLogInfo(@"Core dice matches: done.");
+    NSLog(@"Core dice matches: done.");
     return tops;
 }
 
@@ -244,17 +244,17 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 
 + (NSDictionary *) getMatchesForKeys:(NSArray *)strings inLexicon:(NSArray *)lexicon {
     
-    DDLogInfo(@"New dice: computing ...");
+    NSLog(@"New dice: computing ...");
     NSMutableDictionary *tops = [NSMutableDictionary dictionary];
     
     for(NSString * term in strings) {
         if([term isEqualToString:@""]) continue;
         NSArray *topterms = [self topMatchesForTerm:term inLexicon:lexicon];
         [tops setObject:topterms forKey:term];
-        DDLogInfo(@"----- %@", term);
+        NSLog(@"----- %@", term);
     }
     
-    DDLogInfo(@"New dice: done.");
+    NSLog(@"New dice: done.");
     return tops;
 }
 
@@ -275,7 +275,7 @@ NSMutableDictionary *oneWayAdditionsDictionary;
     NSMutableArray *diceArray = [NSMutableArray arrayWithArray:[ABDice diceForKey:entry]];
     
     if(!diceArray || [diceArray count] == 0) {
-        DDLogWarn(@"Dice listing not found!: %@", entry);
+        NSLog(@"Dice listing not found!: %@", entry);
         return;
     }
     
@@ -309,7 +309,7 @@ NSMutableDictionary *oneWayAdditionsDictionary;
 
 + (void) updateDiceDictionaryWithStrings:(NSArray *)strings {
     
-    DDLogInfo(@"Dice dictionary: updating ... ");
+    NSLog(@"Dice dictionary: updating ... ");
     NSMutableArray *newWords = [NSMutableArray array];
     for(NSString *w in strings) {
         if([diceDictionary objectForKey:w] == nil) [newWords addObject:w];
@@ -324,14 +324,14 @@ NSMutableDictionary *oneWayAdditionsDictionary;
     
     [ABDice crossReferenceTerms:diceAdditions];
     [ABData saveDiceAdditions:diceAdditionsDictionary];
-    DDLogInfo(@"%@", @"Dice dictionary: done updating.");
+    NSLog(@"%@", @"Dice dictionary: done updating.");
 }
 
 
 // Never runs in live app, just used to create precompiled data in dev
 + (NSDictionary *) createDiceDictionaryToBeSavedWithStrings:(NSArray *)strings {
     
-    DDLogInfo(@"Dice dictionary: updating with new vocabulary to be saved to a file ... ");
+    NSLog(@"Dice dictionary: updating with new vocabulary to be saved to a file ... ");
     NSMutableArray *newWords = [NSMutableArray array];
     for(NSString *w in strings) { [newWords addObject:w]; }
     
@@ -341,7 +341,7 @@ NSMutableDictionary *oneWayAdditionsDictionary;
     NSDictionary *diceAdditions = [ABDice getMatchesForKeys:newWords inLexicon:lexicon];
 
     return diceAdditions;
-    DDLogInfo(@"%@", @"Dice dictionary: done updating.");
+//    NSLog(@"%@", @"Dice dictionary: done updating.");
 }
 
 

@@ -157,8 +157,20 @@ UIView *logosView;
 
 - (void) userTappedOnLink:(UIGestureRecognizer*)gestureRecognizer {
     UILabel *label = (UILabel *)gestureRecognizer.view;
-    DDLogInfo(@"%@", label.text);
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:label.text]];
+    NSLog(@"%@", label.text);
+    
+    NSURL *url = [NSURL URLWithString:label.text];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url
+                                           options:@{}
+                                 completionHandler:^(BOOL success) {
+            if (success) {
+                NSLog(@"URL was successfully opened.");
+            } else {
+                NSLog(@"Failed to open URL.");
+            }
+        }];
+    }
 }
 
 
@@ -254,8 +266,19 @@ UIView *logosView;
 
 
 - (void) userTappedOnLogos:(UIGestureRecognizer*)gestureRecognizer {
-    DDLogInfo(@"userTappedOnLogos");
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.colum.edu/academics/media-arts/initiatives/expanded-artists-books.html"]];
+    NSLog(@"userTappedOnLogos");
+    NSURL *url = [NSURL URLWithString:@"http://www.colum.edu/academics/media-arts/initiatives/expanded-artists-books.html"];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url
+                                           options:@{}
+                                 completionHandler:^(BOOL success) {
+            if (success) {
+                NSLog(@"URL was successfully opened.");
+            } else {
+                NSLog(@"Failed to open URL.");
+            }
+        }];
+    }
 }
 
 

@@ -58,27 +58,27 @@ static ABData *ABDataInstance = NULL;
 
 + (void) initData {
     
-    DDLogInfo(@"===== DATA: loading =====");
+    NSLog(@"===== DATA: loading =====");
     NSDate *methodStart = [NSDate date];
 
-    DDLogInfo(@"== initEmoji");
+    NSLog(@"== initEmoji");
     [ABEmoji initEmoji];
-    DDLogInfo(@"== initCoreScript");
+    NSLog(@"== initCoreScript");
     [ABData initCoreScript];
-    DDLogInfo(@"== initCoreDictionary");
+    NSLog(@"== initCoreDictionary");
     [ABData initCoreDictionary];
-    DDLogInfo(@"== loadOtherLanguages");
+    NSLog(@"== loadOtherLanguages");
     [ABData loadOtherLanguages];
-    DDLogInfo(@"== loadDiceAdditions");
+    NSLog(@"== loadDiceAdditions");
     [ABData loadDiceAdditions];
-    DDLogInfo(@"== loadGrafts");
+    NSLog(@"== loadGrafts");
     [ABData loadGrafts];
-    DDLogInfo(@"== initMagicWords");
+    NSLog(@"== initMagicWords");
     [ABData initMagicWords];
     
 //    [ABData createNewDiceDictionaryFromTxtFile:@"words_greek" andSaveToAbraDataFileWithKey:@"greek"];  // saves as "abraData-greek" in Library/Developer/CoreSimulator/???
     
-    DDLogInfo(@"===== DATA: loaded. (%f sec) =====", [[NSDate date] timeIntervalSinceDate:methodStart]);
+    NSLog(@"===== DATA: loaded. (%f sec) =====", [[NSDate date] timeIntervalSinceDate:methodStart]);
     
 }
 
@@ -108,7 +108,7 @@ static ABData *ABDataInstance = NULL;
 + (void) initCoreDictionary {
     NSMutableDictionary *diceDictionary = [ABData loadPrecompiledData:@"coreDiceDictionary"];
     if(diceDictionary == nil) {
-        DDLogError(@"%@", @">> ERROR: CORE MUTATIONS TABLE NOT FOUND");
+        NSLog(@"%@", @">> ERROR: CORE MUTATIONS TABLE NOT FOUND");
         [ABDice generateDiceDictionary];
         [ABData saveData:diceDictionary forKey:@"coreDiceDictionary"];
     } else {
@@ -132,7 +132,7 @@ static ABData *ABDataInstance = NULL;
     currentGraftWords = [NSArray array];
     [ABData saveGrafts];
     [ABDice resetLexicon];
-    DDLogInfo(@"Reset lexicon!");
+    NSLog(@"Reset lexicon!");
 }
 
 
@@ -163,7 +163,7 @@ static ABData *ABDataInstance = NULL;
 }
 
 + (NSDictionary *) loadDataForKey:(NSString *)key {
-    DDLogInfo(@"Loading data for key: %@", key);
+    NSLog(@"Loading data for key: %@", key);
     NSString *filePath = [ABData filePathWithName:key];
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         NSData *data = [NSData dataWithContentsOfFile:filePath];
@@ -187,7 +187,7 @@ static ABData *ABDataInstance = NULL;
 }
 
 + (void) saveDiceAdditions:(NSMutableDictionary *) diceAdditions {
-    DDLogInfo(@"Saving dice additions");
+    NSLog(@"Saving dice additions");
     [ABData saveData:diceAdditions forKey:@"diceAdditions"];
 }
 
@@ -200,7 +200,7 @@ static ABData *ABDataInstance = NULL;
 }
 
 + (void) saveGestureHistory:(NSMutableDictionary *) gestureHistory {
-    DDLogInfo(@"Saving gesture history");
+    NSLog(@"Saving gesture history");
     [ABData saveData:gestureHistory forKey:@"gestureHistory"];
 }
 
@@ -237,7 +237,7 @@ static ABData *ABDataInstance = NULL;
 }
 
 + (ABScriptWord *) getScriptWord:(NSString *)text withSourceStanza:(int)sourceStanza {
-    if(text == nil) DDLogError(@"ERROR: NIL SENT TO getScriptWord");
+    if(text == nil) NSLog(@"ERROR: NIL SENT TO getScriptWord");
     return [ABData scriptWord:text stanza:sourceStanza fam:nil leftSis:nil rightSis:nil graft:NO check:NO];
 }
 
@@ -307,7 +307,7 @@ static ABData *ABDataInstance = NULL;
     
     NSMutableArray *grafts = [ABData loadArrayOfStringsFromFile:@"pastGraftStrings"];
     if(!grafts || [grafts count] == 0 || [grafts isEqualToArray:@[@""]]) {
-        DDLogInfo(@"No past grafts found. Initializing empty arrays.");
+        NSLog(@"No past grafts found. Initializing empty arrays.");
         pastGraftStrings = [NSMutableArray array];
         pastGrafts = [NSMutableArray array];
         return;
@@ -332,7 +332,7 @@ static ABData *ABDataInstance = NULL;
         [ABData parseGraftArrayIntoScriptWords:words];
     }
     
-    DDLogInfo(@"Past grafts loaded: %i (%f sec)", (int)[pastGrafts count], [[NSDate date] timeIntervalSinceDate:methodStart]);
+    NSLog(@"Past grafts loaded: %i (%f sec)", (int)[pastGrafts count], [[NSDate date] timeIntervalSinceDate:methodStart]);
 }
 
 
@@ -345,7 +345,7 @@ static ABData *ABDataInstance = NULL;
 
 
 + (void) saveArrayOfStrings:(NSMutableArray *)array toFile:(NSString *)key {
-    DDLogInfo(@"Saving strings data for key: %@", key);
+    NSLog(@"Saving strings data for key: %@", key);
 
     NSString *string = [array componentsJoinedByString:@"\n"];
     NSData *data = [string dataUsingEncoding:NSUTF16StringEncoding];
@@ -355,7 +355,7 @@ static ABData *ABDataInstance = NULL;
     path = [path stringByAppendingPathComponent:key];
     
     BOOL result = [[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil];
-    if(result == NO) DDLogError(@"ERROR: could not save file: %@", key);
+    if(result == NO) NSLog(@"ERROR: could not save file: %@", key);
 }
 
 
@@ -366,13 +366,13 @@ static ABData *ABDataInstance = NULL;
     path = [path stringByAppendingPathComponent:key];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        DDLogError(@"ERROR: File not found: %@", key);
+        NSLog(@"ERROR: File not found: %@", key);
         return nil;
     }
     
     NSData *data = [[NSData alloc] initWithContentsOfFile:path];
     if(!data) {
-        DDLogError(@"ERROR: No data for file: %@", key);
+        NSLog(@"ERROR: No data for file: %@", key);
         return nil;
     }
 
@@ -456,7 +456,7 @@ static ABData *ABDataInstance = NULL;
     
     NSDate *methodEnd = [NSDate date];
     NSTimeInterval executionTime = [methodEnd timeIntervalSinceDate:methodStart];
-    DDLogInfo(@"++ Graft: %i words (%f sec)", (int)[words count], executionTime);
+    NSLog(@"++ Graft: %i words (%f sec)", (int)[words count], executionTime);
     
     return YES;
 }

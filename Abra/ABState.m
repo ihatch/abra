@@ -196,7 +196,7 @@ static ABState *ABStateInstance = NULL;
         return;
     }
     
-    DDLogInfo(@"Stanza transition: %i -> %i (%i %i)", currentStanza, index, firstIndex, lastIndex);
+    NSLog(@"Stanza transition: %i -> %i (%i %i)", currentStanza, index, firstIndex, lastIndex);
     
     
     if(index == firstIndex - 1) {
@@ -427,7 +427,7 @@ static ABState *ABStateInstance = NULL;
     tipSpellMode = (int)[defaults integerForKey:@"tip-mode"];
     tipCadabra = (int)[defaults integerForKey:@"tip-cadabra"];
     
-    DDLogInfo(@"Tip values: %i %i %i %i", tipWelcome, tipGraft, tipSpellMode, tipCadabra);
+    NSLog(@"Tip values: %i %i %i %i", tipWelcome, tipGraft, tipSpellMode, tipCadabra);
 }
 
 
@@ -539,6 +539,7 @@ static ABState *ABStateInstance = NULL;
         [defaults synchronize];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Exhibition mode" message:@"Exhibition mode has been turned ON. Abra will not remember grafted words persistently, and 'SHARE' and 'RESET LEXICON' are disabled. To turn off exhibition mode, again press and hold the top bar with three fingers." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
+        
     } else {
         settingExhibitionMode = NO;
         [defaults setInteger:0 forKey:@"exhibition-mode"];
@@ -591,7 +592,7 @@ static ABState *ABStateInstance = NULL;
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = copyString;
     
-    DDLogInfo(@"COPY TO CLIPBOARD:\n\n%@", copyString);
+    NSLog(@"COPY TO CLIPBOARD:\n\n%@", copyString);
     [[[UIAlertView alloc] initWithTitle:@"" message:@"Copied text to clipboard." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 
 }

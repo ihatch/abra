@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -31,6 +31,9 @@
 		07763B601B2677A40074F28B /* clear_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 07763B5F1B2677A40074F28B /* clear_button.png */; };
 		07763B631B2773D20074F28B /* ABCadabra.m in Sources */ = {isa = PBXBuildFile; fileRef = 07763B621B2773D20074F28B /* ABCadabra.m */; };
 		077668CA1B3F5D91002EFCE1 /* ABFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 077668C91B3F5D91002EFCE1 /* ABFlow.m */; };
+		07816DD52CED806D009B62B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07816DD42CED806D009B62B7 /* LaunchScreen.storyboard */; };
+		07816DD72CED8540009B62B7 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 07816DD62CED8540009B62B7 /* libz.tbd */; };
+		07816DD92CED8567009B62B7 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 07816DD82CED8567009B62B7 /* libsqlite3.tbd */; };
 		07A6E64F1B4230FD00A5231C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A6E64D1B4230FD00A5231C /* Default@2x.png */; };
 		07A6E6501B4230FD00A5231C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A6E64E1B4230FD00A5231C /* Default-568h@2x.png */; };
 		07A6E6521B42320A00A5231C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 07A6E6511B42320A00A5231C /* Default.png */; };
@@ -83,9 +86,7 @@
 		07CC54F91C418707009976E5 /* words_greek.txt in Resources */ = {isa = PBXBuildFile; fileRef = 07CC54F81C418707009976E5 /* words_greek.txt */; };
 		07CC54FB1C4194E7009976E5 /* abraData-greek in Resources */ = {isa = PBXBuildFile; fileRef = 07CC54FA1C4194E7009976E5 /* abraData-greek */; };
 		07CC55061C41BD9A009976E5 /* Icon-83.5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CC55051C41BD9A009976E5 /* Icon-83.5@2x.png */; };
-		07D1EA011B31E89B00DD0B5F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 07D1EA001B31E89B00DD0B5F /* libsqlite3.dylib */; };
 		07D1EA0A1B38EFDA00DD0B5F /* ABEmoji.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D1EA091B38EFDA00DD0B5F /* ABEmoji.m */; };
-		A1110549E1C24A4CBFD6C0DB /* libPods-Abra.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84407B0D15CE45E5804EAEEE /* libPods-Abra.a */; };
 		C604FA071850F7790076CC96 /* ABScript.m in Sources */ = {isa = PBXBuildFile; fileRef = C604FA061850F7790076CC96 /* ABScript.m */; };
 		C604FA0C1850FA5F0076CC96 /* script.txt in Resources */ = {isa = PBXBuildFile; fileRef = C604FA0B1850FA5F0076CC96 /* script.txt */; };
 		C605E2011888C99A007770E2 /* IMFeFlow1.otf in Resources */ = {isa = PBXBuildFile; fileRef = C605E1FF1888C99A007770E2 /* IMFeFlow1.otf */; };
@@ -97,7 +98,6 @@
 		C6446D281879F04200CFAA20 /* FeGPrm27C.otf in Resources */ = {isa = PBXBuildFile; fileRef = C6446D261879F04200CFAA20 /* FeGPrm27C.otf */; };
 		C6591B2A185D1B9E001144FC /* ABState.m in Sources */ = {isa = PBXBuildFile; fileRef = C6591B29185D1B9E001144FC /* ABState.m */; };
 		C6591B2D185D258F001144FC /* ABConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C6591B2C185D258F001144FC /* ABConstants.m */; };
-		C68B9ECF185FAF96007D2BDB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C68B9ECE185FAF96007D2BDB /* libz.dylib */; };
 		C68B9ED118615C7B007D2BDB /* word_list.txt in Resources */ = {isa = PBXBuildFile; fileRef = C68B9ED018615C7B007D2BDB /* word_list.txt */; };
 		C6A8B02B18B9A628001D3C01 /* ABBlackCurtain.m in Sources */ = {isa = PBXBuildFile; fileRef = C6A8B02A18B9A628001D3C01 /* ABBlackCurtain.m */; };
 		C6A8B02F18BAB0EC001D3C01 /* ABUI.m in Sources */ = {isa = PBXBuildFile; fileRef = C6A8B02E18BAB0EC001D3C01 /* ABUI.m */; };
@@ -116,7 +116,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		03D01643C5EB0DC7B45A27D7 /* Pods-Abra.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abra.release.xcconfig"; path = "Pods/Target Support Files/Pods-Abra/Pods-Abra.release.xcconfig"; sourceTree = "<group>"; };
 		0717AA941B41E43100195527 /* magic_words.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = magic_words.txt; sourceTree = "<group>"; };
 		0718D1DE1B24D96C004EC1D2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		07597B391B1408BF006F6B5E /* abraData-coreDiceDictionary */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-coreDiceDictionary"; sourceTree = "<group>"; };
@@ -150,6 +149,9 @@
 		07763B621B2773D20074F28B /* ABCadabra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABCadabra.m; sourceTree = "<group>"; };
 		077668C81B3F5D91002EFCE1 /* ABFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABFlow.h; sourceTree = "<group>"; };
 		077668C91B3F5D91002EFCE1 /* ABFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABFlow.m; sourceTree = "<group>"; };
+		07816DD42CED806D009B62B7 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		07816DD62CED8540009B62B7 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		07816DD82CED8567009B62B7 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		07A1A7E81A9AE4B60047F7F3 /* emojis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = emojis.h; sourceTree = "<group>"; };
 		07A6E64D1B4230FD00A5231C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		07A6E64E1B4230FD00A5231C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -210,11 +212,8 @@
 		07CC54F81C418707009976E5 /* words_greek.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = words_greek.txt; sourceTree = "<group>"; };
 		07CC54FA1C4194E7009976E5 /* abraData-greek */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "abraData-greek"; sourceTree = "<group>"; };
 		07CC55051C41BD9A009976E5 /* Icon-83.5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-83.5@2x.png"; sourceTree = "<group>"; };
-		07D1EA001B31E89B00DD0B5F /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		07D1EA081B38EFDA00DD0B5F /* ABEmoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABEmoji.h; sourceTree = "<group>"; };
 		07D1EA091B38EFDA00DD0B5F /* ABEmoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABEmoji.m; sourceTree = "<group>"; };
-		84407B0D15CE45E5804EAEEE /* libPods-Abra.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Abra.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		86BA78A39E5E2AD47EE37330 /* Pods-Abra.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abra.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Abra/Pods-Abra.debug.xcconfig"; sourceTree = "<group>"; };
 		C604FA051850F7790076CC96 /* ABScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABScript.h; sourceTree = "<group>"; };
 		C604FA061850F7790076CC96 /* ABScript.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABScript.m; sourceTree = "<group>"; };
 		C604FA0B1850FA5F0076CC96 /* script.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = script.txt; sourceTree = "<group>"; };
@@ -232,7 +231,6 @@
 		C6591B29185D1B9E001144FC /* ABState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABState.m; sourceTree = "<group>"; };
 		C6591B2B185D258F001144FC /* ABConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABConstants.h; sourceTree = "<group>"; };
 		C6591B2C185D258F001144FC /* ABConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABConstants.m; sourceTree = "<group>"; };
-		C68B9ECE185FAF96007D2BDB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		C68B9ED018615C7B007D2BDB /* word_list.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = word_list.txt; sourceTree = "<group>"; };
 		C6A8B02918B9A628001D3C01 /* ABBlackCurtain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABBlackCurtain.h; sourceTree = "<group>"; };
 		C6A8B02A18B9A628001D3C01 /* ABBlackCurtain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABBlackCurtain.m; sourceTree = "<group>"; };
@@ -265,14 +263,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07816DD92CED8567009B62B7 /* libsqlite3.tbd in Frameworks */,
+				07816DD72CED8540009B62B7 /* libz.tbd in Frameworks */,
 				075A1B2A1B4B13CD00ED6805 /* CoreData.framework in Frameworks */,
-				07D1EA011B31E89B00DD0B5F /* libsqlite3.dylib in Frameworks */,
 				C6A9D9D9187B40D20087F956 /* QuartzCore.framework in Frameworks */,
-				C68B9ECF185FAF96007D2BDB /* libz.dylib in Frameworks */,
 				C6E739F7184BED4600A2A5C3 /* UIKit.framework in Frameworks */,
 				C6E739F9184BED4600A2A5C3 /* Foundation.framework in Frameworks */,
 				C6E739FB184BED4600A2A5C3 /* CoreGraphics.framework in Frameworks */,
-				A1110549E1C24A4CBFD6C0DB /* libPods-Abra.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,15 +470,6 @@
 			name = "Icon Bar";
 			sourceTree = "<group>";
 		};
-		3BE9751B18CC7DAA02185714 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				86BA78A39E5E2AD47EE37330 /* Pods-Abra.debug.xcconfig */,
-				03D01643C5EB0DC7B45A27D7 /* Pods-Abra.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		C604FA031850E8340076CC96 /* Words & Lines */ = {
 			isa = PBXGroup;
 			children = (
@@ -602,11 +590,10 @@
 			isa = PBXGroup;
 			children = (
 				0718D1DE1B24D96C004EC1D2 /* Images.xcassets */,
+				07816DD42CED806D009B62B7 /* LaunchScreen.storyboard */,
 				C6E739FC184BED4600A2A5C3 /* Abra */,
 				C6E739F3184BED4600A2A5C3 /* Products */,
-				C68B9ECE185FAF96007D2BDB /* libz.dylib */,
 				F1D00BA050EE485A8C827466 /* Frameworks */,
-				3BE9751B18CC7DAA02185714 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -662,9 +649,9 @@
 		F1D00BA050EE485A8C827466 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				07816DD82CED8567009B62B7 /* libsqlite3.tbd */,
+				07816DD62CED8540009B62B7 /* libz.tbd */,
 				075A1B291B4B13CD00ED6805 /* CoreData.framework */,
-				07D1EA001B31E89B00DD0B5F /* libsqlite3.dylib */,
-				84407B0D15CE45E5804EAEEE /* libPods-Abra.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -676,11 +663,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C6E73A16184BED4600A2A5C3 /* Build configuration list for PBXNativeTarget "Abra" */;
 			buildPhases = (
-				805C2EB8EAF44509B5A82B76 /* Check Pods Manifest.lock */,
 				C6E739EE184BED4600A2A5C3 /* Sources */,
 				C6E739EF184BED4600A2A5C3 /* Frameworks */,
 				C6E739F0184BED4600A2A5C3 /* Resources */,
-				6FD702142E5A45B59F4F8F6B /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -697,14 +682,10 @@
 		C6E739E9184BED4600A2A5C3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = abra;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 1540;
 				ORGANIZATIONNAME = "Ian Hatcher";
-				TargetAttributes = {
-					C6E739F1184BED4600A2A5C3 = {
-						DevelopmentTeam = U595KEB552;
-					};
-				};
 			};
 			buildConfigurationList = C6E739EC184BED4600A2A5C3 /* Build configuration list for PBXProject "Abra" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -767,6 +748,7 @@
 				07B339C61B4F349300D205C6 /* artists_book_ipad.png in Resources */,
 				07B339951B4BA32200D205C6 /* Icon-60@2x.png in Resources */,
 				075B2AF91A9ABC4B00763915 /* black_768x1024.png in Resources */,
+				07816DD52CED806D009B62B7 /* LaunchScreen.storyboard in Resources */,
 				C6446D281879F04200CFAA20 /* FeGPrm27C.otf in Resources */,
 				0717AA951B41E43100195527 /* magic_words.txt in Resources */,
 				07A6E6501B4230FD00A5231C /* Default-568h@2x.png in Resources */,
@@ -799,39 +781,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		6FD702142E5A45B59F4F8F6B /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Abra/Pods-Abra-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		805C2EB8EAF44509B5A82B76 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C6E739EE184BED4600A2A5C3 /* Sources */ = {
@@ -899,15 +848,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -916,6 +875,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -931,7 +891,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -942,15 +902,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -958,6 +928,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -966,7 +937,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -976,21 +947,25 @@
 		};
 		C6E73A17184BED4600A2A5C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 86BA78A39E5E2AD47EE37330 /* Pods-Abra.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImages;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Ian Hatcher (U595KEB552)";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Ian Hatcher (U595KEB552)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = U595KEB552;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Abra/Abra-Prefix.pch";
 				INFOPLIST_FILE = "Abra/Abra-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Abra;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.books";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ianhatcher/Documents/obj-c/Abra/Abra",
 				);
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ihatch.abra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1001,20 +976,24 @@
 		};
 		C6E73A18184BED4600A2A5C3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 03D01643C5EB0DC7B45A27D7 /* Pods-Abra.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImages;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = U595KEB552;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Abra/Abra-Prefix.pch";
 				INFOPLIST_FILE = "Abra/Abra-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Abra;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.books";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ianhatcher/Documents/obj-c/Abra/Abra",
 				);
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ihatch.abra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

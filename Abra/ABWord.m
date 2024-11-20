@@ -13,7 +13,7 @@
 #import "ABClock.h"
 #import "ABLine.h"
 #import "ABUI.h"
-#import <pop/POP.h>
+//#import <pop/POP.h>
 #import <QuartzCore/QuartzCore.h>
 
 @implementation ABWord
@@ -126,15 +126,20 @@
     startPoint = self.center;
     CGFloat speed = [self speed];
     CGFloat duration = speed * (2.0 + ABF(2.5));
+    CGRect newFrame = self.frame;
+    newFrame.origin.x = x;
     
-    self.animationX = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionX];
-    self.animationX.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    self.animationX.duration = duration;
-    self.animationX.toValue = @([self convertLeftToCenter:x]);
+    [UIView animateWithDuration:duration delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+        self.frame = newFrame;
+    } completion:^(BOOL finished) {}];
     
-    [self pop_addAnimation:self.animationX forKey:[NSString stringWithFormat:@"%@%@", @"x-", [self wordID]]];
+    //    self.animationX = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionX];
+//    self.animationX.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+//    self.animationX.duration = duration;
+//    self.animationX.toValue = @([self convertLeftToCenter:x]);
+//    
+//    [self pop_addAnimation:self.animationX forKey:[NSString stringWithFormat:@"%@%@", @"x-", [self wordID]]];
 }
-
 
 
 

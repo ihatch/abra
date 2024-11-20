@@ -111,7 +111,7 @@
     ABWord *pw = self.lineWords[index];
     
     if(psw == nil) {
-        DDLogError(@"ERROR: replaceWordAtIndex did not find a word at index: %i", index);
+        NSLog(@"ERROR: replaceWordAtIndex did not find a word at index: %i", index);
         return;
     }
 
@@ -266,7 +266,7 @@
         [newTexts addObject:nsw.text];
     }
     
-    DDLogInfo(@"Absently mutate (line %i): %@ -> %@", self.lineNumber, sw.text, [newTexts componentsJoinedByString:@" "]);
+    NSLog(@"Absently mutate (line %i): %@ -> %@", self.lineNumber, sw.text, [newTexts componentsJoinedByString:@" "]);
     
     [self replaceWordAtIndex:index withArray:newSWs];
     [ABState updateCurrentScriptWordLinesWithLine:self.lineScriptWords atIndex:self.lineNumber];

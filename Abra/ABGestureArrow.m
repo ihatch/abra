@@ -75,7 +75,7 @@
     CGFloat fadeOutTo = 0.00;
     
     self.textColor = [ABUI progressHueColorPreciselyWithOffset:0];
-    isAnimating = YES;
+    self->isAnimating = YES;
 
     UIColor *newColor;
     
@@ -92,7 +92,7 @@
         [UIView animateWithDuration:ABRA_GESTURE_FEEDBACK_FADE_DURATION animations:^() {
             self.alpha = fadeOutTo;
         } completion:^(BOOL finished) {
-            isAnimating = NO;
+            self->isAnimating = NO;
         }];
     }];
 }

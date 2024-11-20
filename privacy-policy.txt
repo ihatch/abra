@@ -1,0 +1,31 @@
+Abra: A Living Text
+Privacy Policy
+
+Effective Date: 19 Nov 2024
+
+Abra: A Living Text (“the App”) respects your privacy and is committed to protecting it. This Privacy Policy explains how the App handles your personal data.
+
+Data Collection
+The App does not collect, store, or share any personal information. We do not require users to create an account, provide personal details, or share any data with us to use the App. Words entered into Abra's database within the app ("grafting") are stored locally and never sent anywhere else.
+
+Third-Party Services
+The App does not integrate with third-party services that collect user data.
+
+Children’s Privacy
+The App does not knowingly collect any personal information from children under the age of 13. As no data is collected, the App is compliant with the Children’s Online Privacy Protection Act (COPPA).
+
+Data Sharing
+As the App does not collect user data, no information is shared with third parties.
+
+Data Security
+Since no user data is collected or stored, there are no data security risks associated with the App.
+
+Changes to This Privacy Policy
+We may update this Privacy Policy, but it is extremely unlikely. Any changes will be posted within the App or on our website. Continued use of the App constitutes acceptance of any updates.
+
+Contact Us
+If you have any questions or concerns about this Privacy Policy, you can contact us at:
+
+Ian Hatcher
+hi@ianhatcher.net
+

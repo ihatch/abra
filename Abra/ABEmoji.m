@@ -149,7 +149,8 @@ NSDictionary *colorCycle;
         }
     }
     
-    emojiCategories = [EmojiHelper getEmoji];
+    // TODO
+    emojiCategories = [NSArray array]; //[EmojiHelper getEmoji];
     emojis = [NSMutableDictionary dictionary];
     emojisFitzToGeneric = [NSMutableDictionary dictionary];
     emojisByCategory = [NSMutableDictionary dictionary];
@@ -252,7 +253,7 @@ NSDictionary *colorCycle;
         
         NSArray *colors = [eDict objectForKey:@"color"];
         if(colors == nil) {
-            DDLogError(@"No colors dict for: %@", emoji);
+            NSLog(@"No colors dict for: %@", emoji);
             return [ABEmoji getRandomEmojiForKey:@"MISC" inDictionary:emojiByColor];
         }
         
@@ -269,7 +270,7 @@ NSDictionary *colorCycle;
         
         eDict = [emojis objectForKey:emoji];
         if(eDict == nil) {
-            DDLogError(@"No emoji dict for: %@", emoji);
+            NSLog(@"No emoji dict for: %@", emoji);
             return @"?";
         }
         NSString *cat = [eDict valueForKey:@"category"];
@@ -297,7 +298,7 @@ NSDictionary *colorCycle;
     NSString *key = colorCycle[@(stanza)];
     NSString *e = [ABEmoji getRandomEmojiStringWithColor:key];
     if(e == nil) {
-        DDLogInfo(@"FAIL");
+        NSLog(@"FAIL");
     }
     return e;
 }

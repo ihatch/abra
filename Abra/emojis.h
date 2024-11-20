@@ -32,7 +32,6 @@
 @"anchor"                            : @"\U00002693", \
 @"angel"                             : @"\U0001F47C", \
 @"angry"                             : @"\U0001F4A2", \
-@"angry"                             : @"\U0001F620", \
 @"anguished"                         : @"\U0001F627", \
 @"ant bug"                           : @"\U0001F41C", \
 @"apple"                             : @"\U0001F34E", \
@@ -149,7 +148,6 @@
 @"car"                               : @"\U0001F697", \
 @"card index"                        : @"\U0001F4C7", \
 @"carousel horse"                    : @"\U0001F3A0", \
-@"cat"                               : @"\U0001F431", \
 @"cat"                               : @"\U0001F408", \
 @"cd"                                : @"\U0001F4BF", \
 @"chart"                             : @"\U0001F4B9", \
@@ -222,7 +220,6 @@
 @"couple heart"                      : @"\U0001F491", \
 @"couple kiss"                       : @"\U0001F48F", \
 @"cow"                               : @"\U0001F42E", \
-@"cow"                               : @"\U0001F404", \
 @"credit card"                       : @"\U0001F4B3", \
 @"crescent moon"                     : @"\U0001F319", \
 @"crocodile"                         : @"\U0001F40A", \
@@ -254,7 +251,6 @@
 @"dizzy face"                        : @"\U0001F635", \
 @"don't litter"                      : @"\U0001F6AF", \
 @"dog"                               : @"\U0001F436", \
-@"dog"                               : @"\U0001F415", \
 @"dollar"                            : @"\U0001F4B5", \
 @"dolls"                             : @"\U0001F38E", \
 @"dolphin"                           : @"\U0001F42C", \
@@ -278,7 +274,7 @@
 @"eight spoked asterisk"             : @"\U00002733", \
 @"electric plug zap"                 : @"\U0001F50C", \
 @"elephant"                          : @"\U0001F418", \
-@"email"                             : @"\U00002709", \
+@"emails"                             : @"\U00002709", \
 @"end"                               : @"\U0001F51A", \
 @"envelope"                          : @"\U00002709", \
 @"envelope arrow"                    : @"\U0001F4E9", \
@@ -465,7 +461,7 @@
 @"man"                               : @"\U0001F468", \
 @"man gua pi mao"                    : @"\U0001F472", \
 @"man turban"                        : @"\U0001F473", \
-@"shoe"                              : @"\U0001F45E", \
+@"shoes"                              : @"\U0001F45E", \
 @"maple leaf"                        : @"\U0001F341", \
 @"mask masquerade"                   : @"\U0001F637", \
 @"massage"                           : @"\U0001F486", \
@@ -493,7 +489,6 @@
 @"mountain cableway"                 : @"\U0001F6A0", \
 @"mountain railway"                  : @"\U0001F69E", \
 @"mouse"                             : @"\U0001F42D", \
-@"mouse"                             : @"\U0001F401", \
 @"movie camera"                      : @"\U0001F3A5", \
 @"moyai"                             : @"\U0001F5FF", \
 @"muscle strong"                     : @"\U0001F4AA", \
@@ -576,7 +571,6 @@
 @"person pouting face"               : @"\U0001F64E", \
 @"phone call"                        : @"\U0000260E", \
 @"pig"                               : @"\U0001F437", \
-@"pig"                               : @"\U0001F416", \
 @"pig nose"                          : @"\U0001F43D", \
 @"pill"                              : @"\U0001F48A", \
 @"pineapple"                         : @"\U0001F34D", \
@@ -586,7 +580,7 @@
 @"point left"                        : @"\U0001F448", \
 @"point right"                       : @"\U0001F449", \
 @"point up"                          : @"\U0000261D", \
-@"point up"                          : @"\U0001F446", \
+@"pointing up"                          : @"\U0001F446", \
 @"police car"                        : @"\U0001F693", \
 @"poodle"                            : @"\U0001F429", \
 @"poop"                              : @"\U0001F4A9", \
@@ -607,7 +601,7 @@
 @"litter commons sign"               : @"\U0001F6AE", \
 @"question"                          : @"\U00002753", \
 @"rabbit"                            : @"\U0001F430", \
-@"rabbit"                            : @"\U0001F407", \
+@"rabbits"                            : @"\U0001F407", \
 @"racehorse race horse"              : @"\U0001F40E", \
 @"radio"                             : @"\U0001F4FB", \
 @"radio button"                      : @"\U0001F518", \
@@ -717,7 +711,6 @@
 @"speech balloon"                    : @"\U0001F4AC", \
 @"speedboat"                         : @"\U0001F6A4", \
 @"star"                              : @"\U00002B50", \
-@"star"                              : @"\U0001F31F", \
 @"stars"                             : @"\U0001F303", \
 @"station"                           : @"\U0001F689", \
 @"statue liberty america"            : @"\U0001F5FD", \
@@ -760,7 +753,7 @@
 @"thumbsup"                          : @"\U0001F44D", \
 @"ticket"                            : @"\U0001F3AB", \
 @"tiger"                             : @"\U0001F42F", \
-@"tiger"                             : @"\U0001F405", \
+@"tyger"                             : @"\U0001F405", \
 @"tired face"                        : @"\U0001F62B", \
 @"tm mark"                           : @"\U00002122", \
 @"toilet"                            : @"\U0001F6BD", \
@@ -772,7 +765,7 @@
 @"tractor"                           : @"\U0001F69C", \
 @"traffic light"                     : @"\U0001F6A5", \
 @"train railway"                     : @"\U0001F683", \
-@"train railway"                     : @"\U0001F686", \
+@"train railways"                     : @"\U0001F686", \
 @"tram"                              : @"\U0001F68A", \
 @"triangle flag post"                : @"\U0001F6A9", \
 @"triangle ruler"                    : @"\U0001F4D0", \
@@ -798,7 +791,7 @@
 @"unlock"                            : @"\U0001F513", \
 @"up"                                : @"\U0001F199", \
 @"v"                                 : @"\U0000270C", \
-@"traffic light"                     : @"\U0001F6A6", \
+@"traffic lights"                     : @"\U0001F6A6", \
 @"vhs tape"                          : @"\U0001F4FC", \
 @"vibrate mode"                      : @"\U0001F4F3", \
 @"video camera"                      : @"\U0001F4F9", \
@@ -839,7 +832,7 @@
 @"female"                            : @"\U0001F469", \
 @"blouse top clothes"                : @"\U0001F45A", \
 @"hat"                               : @"\U0001F452", \
-@"female"                            : @"\U0001F6BA", \
+@"female2"                            : @"\U0001F6BA", \
 @"worried worry"                     : @"\U0001F61F", \
 @"wrench"                            : @"\U0001F527", \
 @"x"                                 : @"\U0000274C", \

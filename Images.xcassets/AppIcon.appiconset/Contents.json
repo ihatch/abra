@@ -1,11 +1,13 @@
 {
   "images" : [
     {
+      "filename" : "abra-40.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
+      "filename" : "abra-60.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
@@ -17,6 +19,7 @@
       "size" : "29x29"
     },
     {
+      "filename" : "abra-87.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
@@ -28,6 +31,7 @@
       "size" : "40x40"
     },
     {
+      "filename" : "abra-120.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
@@ -45,11 +49,13 @@
       "size" : "60x60"
     },
     {
+      "filename" : "abra-20.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "20x20"
     },
     {
+      "filename" : "abra-40 1.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
@@ -97,6 +103,7 @@
       "size" : "83.5x83.5"
     },
     {
+      "filename" : "abra_gold_icon.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

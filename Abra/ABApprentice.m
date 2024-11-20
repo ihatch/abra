@@ -149,7 +149,7 @@ NSDictionary *wordsDict;
 
 - (NSArray *) mapWithOddsFrom:(CGFloat)startOdds to:(CGFloat)endOdds total:(int)totalItems min:(int)min max:(int)max {
     
-    if(max > totalItems) DDLogError(@"ERROR: Bad counting!");
+    if(max > totalItems) NSLog(@"ERROR: Bad counting!");
     int total = max - min;
     CGFloat oddsSpread = endOdds - startOdds;
     CGFloat oddsIncrement = oddsSpread / total;
@@ -323,7 +323,7 @@ NSDictionary *wordsDict;
 - (NSArray *) mutateMultipleWordsInLine:(NSArray *)line withMap:(NSArray *)map {
     
     if([map count] != [line count]) {
-        DDLogError(@"count mismatch!");
+        NSLog(@"count mismatch!");
     }
     
     NSMutableArray *newLine = [NSMutableArray array];

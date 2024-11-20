@@ -213,7 +213,7 @@ static ABMutate *ABMutateInstance = NULL;
         } else if(range == max && ABI(5) == 0) {
             sw = [ABData getPastGraftWord];
             if(!sw) sw = [ABScript trulyRandomWord];
-            DDLogWarn(@"Radical (random) dice mutation: %@ -> %@", word.text, sw.text);
+            NSLog(@"Radical (random) dice mutation: %@ -> %@", word.text, sw.text);
             sw.morphCount = (int)(sw.morphCount / 3);
             
         } else {
@@ -222,7 +222,7 @@ static ABMutate *ABMutateInstance = NULL;
     }
     
     @catch (NSException *exception) {
-        DDLogError(@">> DICE ERROR: %@", word.text);
+        NSLog(@">> DICE ERROR: %@", word.text);
     }
     
     @finally {
@@ -237,7 +237,7 @@ static ABMutate *ABMutateInstance = NULL;
     int randomIndex = ABI(range);
     NSString *diceWord = [dice objectAtIndex:randomIndex];
     if(!diceWord) {
-        DDLogWarn(@"ERROR: Bad dice match for: %@", word.text);
+        NSLog(@"ERROR: Bad dice match for: %@", word.text);
         return word;
     }
 //    DDLogVerbose(@"[+] Dice: %@ -> %@ (%i)", word.text, diceWord, word.morphCount);
@@ -280,7 +280,7 @@ static ABMutate *ABMutateInstance = NULL;
     result = [ABMutate attemptMatchBySpellCheck:word];
     if(result) {
         [result runChecks];
-        DDLogInfo(@">> Spell check dice match: %@ -> %@ ", word.text, result.text);
+        NSLog(@">> Spell check dice match: %@ -> %@ ", word.text, result.text);
         return result;
     }
 
@@ -290,7 +290,7 @@ static ABMutate *ABMutateInstance = NULL;
     }
     
     // No dice!
-    DDLogWarn(@">> Dice match failed! Returning a random - %@", word.text);
+    NSLog(@">> Dice match failed! Returning a random - %@", word.text);
     return [ABScript trulyRandomWord];
 }
 
@@ -300,7 +300,7 @@ static ABMutate *ABMutateInstance = NULL;
     if(result) return [ABData getScriptWord:result];
     result = [ABEmoji emojiWordTransform:result];
     if(result) return [ABData getScriptWord:result];
-    DDLogWarn(@"ERROR: Emoji match failed! %@", string);
+    NSLog(@"ERROR: Emoji match failed! %@", string);
     return nil;
 }
 
@@ -363,7 +363,7 @@ static ABMutate *ABMutateInstance = NULL;
 
 + (NSArray *) remixStanza:(NSArray *)stanza andOldStanza:(NSArray *)oldStanza atMutationLevel:(int)mutationLevel andLimitTo:(int)limit {
     
-    DDLogInfo(@"mutationLevel %d", mutationLevel);
+    NSLog(@"mutationLevel %d", mutationLevel);
     
     
     int changes = 0;
@@ -414,7 +414,7 @@ static ABMutate *ABMutateInstance = NULL;
 
 + (NSArray *) mutate:(ABScriptWord *)targetWord andLocalWords:(NSArray *)localWords mutationLevel:(int)mutationLevel lineLength:(int)lineLength {
     
-    DDLogInfo(@"mutationLevel %d %d", [ABState checkMutationLevel], mutationLevel);
+    NSLog(@"mutationLevel %d %d", [ABState checkMutationLevel], mutationLevel);
     
     
     NSArray *returnArray;

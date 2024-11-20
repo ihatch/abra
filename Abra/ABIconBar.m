@@ -18,7 +18,7 @@
 @implementation ABIconBar
 
 extern ABMainViewController *mainViewController;
-PECropViewController *cropViewController;
+//PECropViewController *cropViewController;
 
 CGFloat barWidth, barHeight;
 CGFloat iconWidth, iconHeight, iconBufferWidth, totalIconsWidth, currentXDrawPos;
@@ -177,7 +177,7 @@ NSArray *icons;
     int target = [self checkPoint:point];
     ABIcon *icon = target > -1 ? [icons objectAtIndex:target] : nil;
 
-    DDLogInfo(@"Target: %i", target);
+    NSLog(@"Target: %i", target);
     
     if(icon == nil || self.isVisible == NO) {
         
@@ -214,12 +214,12 @@ NSArray *icons;
     
     if(type == SHARE_ICON) {
         [icon flash];
-        if([ABState getExhibitionMode] == YES) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Share" message:@"This function has been disabled for exhibition." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-        } else {
-            [self hideBarThenShare];
-        }
+//        if([ABState getExhibitionMode] == YES || YES) {
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Share" message:@"This function has been disabled for exhibition." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//            [alert show];
+//        } else {
+//            [self hideBarThenShare];
+//        }
         return;
     }
     
@@ -301,24 +301,24 @@ NSArray *icons;
 }
 
 
-- (void) hideBarThenShare {
-    [UIView animateWithDuration:0.6 delay:0.4 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        self.isAnimating = YES;
-        self.alpha = 0;
-    } completion:^(BOOL finished) {
-        [self share];
-        [self hideIcons];
-        self.isVisible = NO;
-    }];
-}
-
-- (void) showBarAfterShare {
-    [UIView animateWithDuration:0.3 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-        self.alpha = 1;
-    } completion:^(BOOL finished) {
-        self.isAnimating = NO;
-    }];
-}
+//- (void) hideBarThenShare {
+//    [UIView animateWithDuration:0.6 delay:0.4 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+//        self.isAnimating = YES;
+//        self.alpha = 0;
+//    } completion:^(BOOL finished) {
+//        [self share];
+//        [self hideIcons];
+//        self.isVisible = NO;
+//    }];
+//}
+//
+//- (void) showBarAfterShare {
+//    [UIView animateWithDuration:0.3 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+//        self.alpha = 1;
+//    } completion:^(BOOL finished) {
+//        self.isAnimating = NO;
+//    }];
+//}
 
 
 
@@ -351,36 +351,36 @@ NSArray *icons;
 ///////////
 // SHARE //
 ///////////
-
-
-- (void) share {
-    
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
-        UIGraphicsBeginImageContextWithOptions(self.window.bounds.size, NO, [UIScreen mainScreen].scale);
-    else
-        UIGraphicsBeginImageContext(self.window.bounds.size);
-    
-    // [self.window.layer renderInContext:UIGraphicsGetCurrentContext()];
-    // CGRect mainBounds = mainViewController.view.bounds;
-
-    CGRect cropBounds = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
-    
-    [mainViewController.view drawViewHierarchyInRect:cropBounds afterScreenUpdates:NO];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    [self setHidden:NO];
-    
-    cropViewController = [[PECropViewController alloc] init];
-    cropViewController.delegate = self;
-    cropViewController.image = image;
-    
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cropViewController];
-    [mainViewController presentViewController:navigationController animated:YES completion:^(void) {
-        [self showBarAfterShare];
-    }];
-    
-}
+//
+//
+//- (void) share {
+//    
+//    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+//        UIGraphicsBeginImageContextWithOptions(self.window.bounds.size, NO, [UIScreen mainScreen].scale);
+//    else
+//        UIGraphicsBeginImageContext(self.window.bounds.size);
+//    
+//    // [self.window.layer renderInContext:UIGraphicsGetCurrentContext()];
+//    // CGRect mainBounds = mainViewController.view.bounds;
+//
+//    CGRect cropBounds = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+//    
+//    [mainViewController.view drawViewHierarchyInRect:cropBounds afterScreenUpdates:NO];
+//    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    
+//    [self setHidden:NO];
+//    
+////    cropViewController = [[PECropViewController alloc] init];
+////    cropViewController.delegate = self;
+////    cropViewController.image = image;
+//    
+////    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cropViewController];
+////    [mainViewController presentViewController:navigationController animated:YES completion:^(void) {
+//        [self showBarAfterShare];
+////    }];
+//    
+//}
 
 
 - (UIImage *) cropImage:(UIImage *)image rect:(CGRect)cropRect {
@@ -401,24 +401,24 @@ NSArray *icons;
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    cropViewController = [[PECropViewController alloc] init];
-    cropViewController.delegate = self;
-    cropViewController.image = image;
+//    cropViewController = [[PECropViewController alloc] init];
+//    cropViewController.delegate = self;
+//    cropViewController.image = image;
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cropViewController];
-    [mainViewController presentViewController:navigationController animated:YES completion:nil];
+//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cropViewController];
+//    [mainViewController presentViewController:navigationController animated:YES completion:nil];
     
     UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
 }
 
 
 
-- (void) cropViewControllerDidCancel:(PECropViewController *)controller {
-    [cropViewController dismissViewControllerAnimated:YES completion:NULL];
-}
-
-- (void) cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage {
-    [cropViewController dismissViewControllerAnimated:YES completion:NULL];
-}
+//- (void) cropViewControllerDidCancel:(PECropViewController *)controller {
+//    [cropViewController dismissViewControllerAnimated:YES completion:NULL];
+//}
+//
+//- (void) cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage {
+//    [cropViewController dismissViewControllerAnimated:YES completion:NULL];
+//}
 
 @end

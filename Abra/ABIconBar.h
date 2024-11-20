@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PECropViewController.h"
+//#import "PECropViewController.h"
 #import "ABMainViewController.h"
 
-@interface ABIconBar : UIView <PECropViewControllerDelegate, UIGestureRecognizerDelegate>
+@interface ABIconBar : UIView <UIGestureRecognizerDelegate>
 
 @property (nonatomic) BOOL isVisible;
 @property (nonatomic) BOOL isAnimating;

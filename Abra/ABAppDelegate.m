@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Ian Hatcher. All rights reserved.
 //
 
-#import <CocoaLumberjack/CocoaLumberjack.h>
+//#import <CocoaLumberjack/CocoaLumberjack.h>
 #import "ABAppDelegate.h"
 #import "ABClock.h"
 #import "ABMainViewController.h"
@@ -15,29 +15,29 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [self initCocoaLumberjack];
+//    [self initCocoaLumberjack];
     [self initKeyboard];    
     return YES;
 }
 
-- (void) initCocoaLumberjack {
-    [DDLog addLogger:[DDASLLogger sharedInstance]];
-    [DDLog addLogger:[DDTTYLogger sharedInstance]];
-    DDFileLogger *fileLogger = [[DDFileLogger alloc] init];
-    fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
-    fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
-    [DDLog addLogger:fileLogger];
-}
+//- (void) initCocoaLumberjack {
+//    [DDLog addLogger:[DDASLLogger sharedInstance]];
+//    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+//    DDFileLogger *fileLogger = [[DDFileLogger alloc] init];
+//    fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
+//    fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
+//    [DDLog addLogger:fileLogger];
+//}
 
 // Preloads keyboard so there's no lag on initial keyboard appearance.
 - (void) initKeyboard {
-    DDLogInfo(@"Keyboard loading ...");
+    NSLog(@"Keyboard loading ...");
     UITextField *lagFreeField = [[UITextField alloc] init];
     [self.window addSubview:lagFreeField];
     [lagFreeField becomeFirstResponder];
     [lagFreeField resignFirstResponder];
     [lagFreeField removeFromSuperview];
-    DDLogInfo(@"Keyboard loaded.");
+    NSLog(@"Keyboard loaded.");
 }
 
 

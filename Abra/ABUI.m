@@ -208,10 +208,10 @@ static ABUI *ABUIInstance = NULL;
     [button setBackgroundImage:[ABUI imageWithColor:[UIColor clearColor]] forState:UIControlStateNormal];
     [button setBackgroundImage:[ABUI imageWithColor:[ABUI darkGoldBackgroundColor]] forState:UIControlStateHighlighted];
     [button setBackgroundImage:[ABUI imageWithColor:[ABUI darkGoldBackgroundColor]] forState:UIControlStateSelected];
-    button.adjustsImageWhenHighlighted = NO;
+//    button.adjustsImageWhenHighlighted = NO;
     button.layer.cornerRadius = [ABUI iPadToUniversalH:10];
     button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+//    button.configuration!.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0); //UIEdgeInsetsMake(0, 10, 0, 0);
     button.clipsToBounds = YES;
     return button;
 }

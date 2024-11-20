@@ -20,7 +20,7 @@
 #import "ABIconBar.h"
 #import "ABCadabra.h"
 #import "iCarousel.h"
-#import "PECropViewController.h"
+//#import "PECropViewController.h"
 #import "emojis.h"
 
 @interface ABMainViewController () <iCarouselDataSource, iCarouselDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate>
@@ -78,7 +78,7 @@ CGPoint touchStart;
 
 
 - (void) initScreen {
-    DDLogInfo(@"Screen: %f x %f", kScreenWidth, kScreenHeight);
+    NSLog(@"Screen: %f x %f", kScreenWidth, kScreenHeight);
     self.view.backgroundColor = [UIColor blackColor];
     self.view.userInteractionEnabled = YES;
 }
@@ -454,11 +454,11 @@ CGPoint touchStart;
     self.carousel.dataSource = nil;
 }
 
-- (void) viewDidUnload {
-    [super viewDidUnload];
-    self.carousel = nil;
-    self.navItem = nil;
-}
+//- (void) viewDidUnload {
+//    [super viewDidUnload];
+//    self.carousel = nil;
+//    self.navItem = nil;
+//}
 
 - (void) initCarousel {
 
@@ -480,10 +480,14 @@ CGPoint touchStart;
 
     carouselIsAnimating = NO;
 
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:7.5];
-    [self.carousel setAlpha:0.85];
-    [UIView commitAnimations];
+    [UIView animateWithDuration:7.5 delay:0 options:(UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionBeginFromCurrentState) animations:^{
+        self.carousel.alpha = 0.85;
+    } completion:^(BOOL finished) {}];
+    
+//    [UIView beginAnimations:nil context:NULL];
+//    [UIView setAnimationDuration:7.5];
+//    [self.carousel setAlpha:0.85];
+//    [UIView commitAnimations];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(carouselRandomScroll) name:@"carouselRandomScroll" object:nil];
 
@@ -563,10 +567,10 @@ CGPoint touchStart;
 
 - (void) carouselFlash {
     [UIView animateWithDuration:0.4 animations:^() {
-        _carousel.alpha = 1.0;
+        self->_carousel.alpha = 1.0;
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.64 animations:^() {
-            _carousel.alpha = 0.75;
+            self->_carousel.alpha = 0.75;
         } completion:^(BOOL finished) {}];
     }];
 }
@@ -579,9 +583,9 @@ CGPoint touchStart;
 
 
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return NO;
-}
+//- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+//    return NO;
+//}
 
 - (void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
